@@ -1,8 +1,8 @@
 "use client";
 
 import { type FormEvent, useState } from "react";
-import { useNavigate, useLocation } from "react-router";
-import { useLoginMutation } from "@/store/api/apiSlice";
+import { useNavigate, useLocation, Link } from "react-router";
+import { useRegisterMutation } from "@/store/api/apiSlice";
 import { setCredentials } from "@/store/slices/authSlice";
 import { useAppDispatch } from "@/store/hooks";
 import { cn } from "@/lib/utils";
@@ -17,35 +17,48 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 
-export default function LoginPage() {
+export default function RegisterPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useAppDispatch();
-  const [login, { isLoading, error }] = useLoginMutation();
+  const [register, { isLoading, error }] = useRegisterMutation();
   
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [localError, setLocalError] = useState<string>("");
 
   // Determine redirect path based on URL
-  const isAdminLogin = location.pathname.includes('/admin/login');
-  const redirectPath = isAdminLogin ? '/admin/dashboard' : '/user/dashboard';
+  const isAdminRegister = location.pathname.includes('/admin/register');
+  const redirectPath = isAdminRegister ? '/admin/dashboard' : '/user/dashboard';
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setLocalError("");
 
+    // Validation
+    if (password !== confirmPassword) {
+      setLocalError("Passwords do not match");
+      return;
+    }
+
+    if (password.length < 6) {
+      setLocalError("Password must be at least 6 characters");
+      return;
+    }
+
     try {
-      const result = await login({ email, password }).unwrap();
+      const result = await register({ email, password, name }).unwrap();
       
       // Set credentials in Redux store
       dispatch(setCredentials(result));
       
-      // Navigate based on user role or URL path
+      // Navigate based on user role
       const finalPath = result.user.role === 'admin' ? '/admin/dashboard' : '/user/dashboard';
       navigate(finalPath, { replace: true });
     } catch (err: any) {
-      setLocalError(err?.data?.message || 'Login failed. Please try again.');
+      setLocalError(err?.data?.message || 'Registration failed. Please try again.');
     }
   };
 
@@ -56,9 +69,9 @@ export default function LoginPage() {
           <form className="p-6 md:p-8" onSubmit={handleSubmit}>
             <FieldGroup>
               <div className="flex flex-col items-center gap-2 text-center">
-                <h1 className="text-2xl font-bold">Welcome back</h1>
+                <h1 className="text-2xl font-bold">Create an account</h1>
                 <p className="text-muted-foreground text-balance">
-                  Login to your {isAdminLogin ? 'Admin' : 'User'} account
+                  Sign up for a new {isAdminRegister ? 'Admin' : 'User'} account
                 </p>
               </div>
 
@@ -68,13 +81,27 @@ export default function LoginPage() {
                 </div>
               )}
 
+              {/* Name Field */}
+              <Field>
+                <FieldLabel htmlFor="name">Full Name</FieldLabel>
+                <Input
+                  id="name"
+                  type="text"
+                  placeholder="John Doe"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  required
+                  disabled={isLoading}
+                />
+              </Field>
+
               {/* Email Field */}
               <Field>
                 <FieldLabel htmlFor="email">Email</FieldLabel>
                 <Input
                   id="email"
                   type="email"
-                  placeholder="admin@gmail.com"
+                  placeholder="you@example.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
@@ -84,21 +111,27 @@ export default function LoginPage() {
 
               {/* Password Field */}
               <Field>
-                <div className="flex items-center">
-                  <FieldLabel htmlFor="password">Password</FieldLabel>
-                  <a
-                    href={isAdminLogin ? "/admin/forgot-password" : "/user/forgot-password"}
-                    className="ml-auto text-sm underline-offset-2 hover:underline"
-                  >
-                    Forgot password?
-                  </a>
-                </div>
+                <FieldLabel htmlFor="password">Password</FieldLabel>
                 <Input
                   id="password"
                   type="password"
-                  placeholder="Enter your password"
+                  placeholder="At least 6 characters"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  required
+                  disabled={isLoading}
+                />
+              </Field>
+
+              {/* Confirm Password Field */}
+              <Field>
+                <FieldLabel htmlFor="confirmPassword">Confirm Password</FieldLabel>
+                <Input
+                  id="confirmPassword"
+                  type="password"
+                  placeholder="Confirm your password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
                   required
                   disabled={isLoading}
                 />
@@ -107,7 +140,7 @@ export default function LoginPage() {
               {/* Submit Button */}
               <Field>
                 <Button type="submit" className="w-full" disabled={isLoading}>
-                  {isLoading ? "Logging in..." : "Continue"}
+                  {isLoading ? "Creating account..." : "Create Account"}
                 </Button>
               </Field>
 
@@ -118,48 +151,39 @@ export default function LoginPage() {
               {/* Social Buttons */}
               <Field className="grid grid-cols-3 gap-4">
                 <Button variant="outline" type="button" disabled={isLoading}>
-                  <span className="sr-only">Login with Apple</span>
+                  <span className="sr-only">Sign up with Apple</span>
                   Apple
                 </Button>
                 <Button variant="outline" type="button" disabled={isLoading}>
-                  <span className="sr-only">Login with Google</span>
+                  <span className="sr-only">Sign up with Google</span>
                   Google
                 </Button>
                 <Button variant="outline" type="button" disabled={isLoading}>
-                  <span className="sr-only">Login with Meta</span>
+                  <span className="sr-only">Sign up with Meta</span>
                   Meta
                 </Button>
               </Field>
 
               <FieldDescription className="text-center">
-                Don&apos;t have an account?{" "}
-                <a
-                  href={isAdminLogin ? "/admin/register" : "/user/register"}
+                Already have an account?{" "}
+                <Link
+                  to={isAdminRegister ? "/admin/login" : "/user/login"}
                   className="underline underline-offset-2 hover:text-primary"
                 >
-                  Sign up
-                </a>
+                  Sign in
+                </Link>
               </FieldDescription>
             </FieldGroup>
           </form>
 
-          {/* Right side image */}
+          {/* Right side */}
           <div className="bg-muted relative hidden md:block">
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="text-center p-8">
-                <h2 className="text-2xl font-bold mb-4">Demo Credentials</h2>
-                <div className="space-y-2 text-sm">
-                  <div>
-                    <p className="font-semibold">Admin:</p>
-                    <p>admin@gmail.com</p>
-                    <p>Password: 123456</p>
-                  </div>
-                  <div className="mt-4">
-                    <p className="font-semibold">User:</p>
-                    <p>user@gmail.com</p>
-                    <p>Password: 123456</p>
-                  </div>
-                </div>
+            <div className="absolute inset-0 flex items-center justify-center p-8">
+              <div className="text-center">
+                <h2 className="text-2xl font-bold mb-4">Join Us Today</h2>
+                <p className="text-muted-foreground">
+                  Create your account and start managing your bus operations efficiently.
+                </p>
               </div>
             </div>
           </div>
@@ -168,9 +192,10 @@ export default function LoginPage() {
 
       {/* Footer Description */}
       <FieldDescription className="px-6 text-center">
-        By clicking continue, you agree to our <a href="#">Terms of Service</a> and{" "}
+        By creating an account, you agree to our <a href="#">Terms of Service</a> and{" "}
         <a href="#">Privacy Policy</a>.
       </FieldDescription>
     </div>
   );
 }
+

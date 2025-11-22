@@ -2,17 +2,21 @@
 
 import { NavLink } from "react-router";
 import { ModeToggle } from "@/components/mode-toggle";
-import { useAuthStore } from "@/stores/auth-store";
+import { useAppSelector, useAppDispatch } from "@/store/hooks";
+import { logout } from "@/store/slices/authSlice";
 import { Button } from "@/components/ui/button";
 import { Menu } from "lucide-react";
 import { useState } from "react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
 export function WebsiteNavbar() {
-  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
-  const user = useAuthStore((state) => state.user);
-  const logout = useAuthStore((state) => state.logout);
+  const dispatch = useAppDispatch();
+  const { isAuthenticated, user } = useAppSelector((state) => state.auth);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const handleLogout = () => {
+    dispatch(logout());
+  };
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -76,7 +80,7 @@ export function WebsiteNavbar() {
                 <span className="text-sm text-muted-foreground">
                   Hi, {user?.name ?? "Guest"}
                 </span>
-                <Button variant="outline" size="sm" onClick={logout}>
+                <Button variant="outline" size="sm" onClick={handleLogout}>
                   Logout
                 </Button>
               </div>
@@ -150,7 +154,7 @@ export function WebsiteNavbar() {
                       <span className="text-sm text-muted-foreground">
                         Hi, {user?.name ?? "Guest"}
                       </span>
-                      <Button variant="outline" onClick={logout}>
+                      <Button variant="outline" onClick={handleLogout}>
                         Logout
                       </Button>
                     </div>

@@ -1,6 +1,8 @@
 import { createBrowserRouter } from 'react-router'
 import HomePage from '../pages/home/home-page'
 import LoginPage from '../pages/auth/login-page'
+import RegisterPage from '../pages/auth/register-page'
+import ForgotPasswordPage from '../pages/auth/forgot-password-page'
 import DashboardPage from '../pages/dashboard/dashboard-page'
 import UserDashboardPage from '../pages/user/user-dashboard-page'
 import AdminPanelLayout from '@/components/admin-panel/admin-panel-layout'
@@ -17,10 +19,18 @@ const router = createBrowserRouter([
     ],
   },
 
-  // 🧭 Admin Login (no layout)
+  // 🧭 Admin Auth routes (no layout)
   {
     path: "/admin/login",
     element: <LoginPage />,
+  },
+  {
+    path: "/admin/register",
+    element: <RegisterPage />,
+  },
+  {
+    path: "/admin/forgot-password",
+    element: <ForgotPasswordPage />,
   },
 
   // 🧭 Admin Dashboard routes
@@ -32,10 +42,18 @@ const router = createBrowserRouter([
     ],
   },
 
-  // 👤 User Login (no layout)
+  // 👤 User Auth routes (no layout)
   {
     path: "/user/login",
     element: <LoginPage />,
+  },
+  {
+    path: "/user/register",
+    element: <RegisterPage />,
+  },
+  {
+    path: "/user/forgot-password",
+    element: <ForgotPasswordPage />,
   },
 
   // 👤 User Panel routes
