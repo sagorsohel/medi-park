@@ -1,21 +1,13 @@
 "use client";
 
 import { type FormEvent, useState } from "react";
-import { useNavigate, useLocation } from "react-router";
+import { useNavigate, useLocation, Link } from "react-router";
 import { useLoginMutation } from "@/store/api/apiSlice";
 import { setCredentials } from "@/store/slices/authSlice";
 import { useAppDispatch } from "@/store/hooks";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import {
-  Field,
-  FieldDescription,
-  FieldGroup,
-  FieldLabel,
-  FieldSeparator,
-} from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
+import { Lock, Eye, EyeOff } from "lucide-react";
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -26,6 +18,7 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [localError, setLocalError] = useState<string>("");
+  const [showPassword, setShowPassword] = useState(false);
 
   // Determine redirect path based on URL
   const isAdminLogin = location.pathname.includes('/admin/login');
@@ -49,127 +42,123 @@ export default function LoginPage() {
   };
 
   return (
-    <div className={cn("flex flex-col gap-6 items-center justify-center min-h-screen p-6")}>
-      <Card className="overflow-hidden w-full max-w-4xl">
-        <CardContent className="grid p-0 md:grid-cols-2">
-          <form className="p-6 md:p-8" onSubmit={handleSubmit}>
-            <FieldGroup>
-              <div className="flex flex-col items-center gap-2 text-center">
-                <h1 className="text-2xl font-bold">Welcome back</h1>
-                <p className="text-muted-foreground text-balance">
-                  Login to your {isAdminLogin ? 'Admin' : 'User'} account
-                </p>
-              </div>
+    <div className={cn("min-h-screen bg-[#2a2a2a] flex items-center justify-center p-4")}>
+      <div className="w-full max-w-6xl rounded-2xl overflow-hidden shadow-2xl">
+        <div className="grid md:grid-cols-2 bg-white rounded-2xl">
+          {/* Left side - Medical professional image */}
+          <div className="relative hidden md:block">
+            <img
+              src="/login.png"
+              alt="Medical professional"
+              className="w-full h-full object-cover"
+            />
+          </div>
 
+          {/* Right side - Login form */}
+          <div className="bg-white p-8 md:p-12 flex flex-col">
+            {/* Logo */}
+            <div className="flex justify-end mb-8">
+              <div className="flex items-center gap-2">
+                <img src="/logo.png" alt="MediPark" className="h-8 w-auto" />
+                <span className="text-2xl font-bold text-gray-800">MediPark</span>
+              </div>
+            </div>
+
+            {/* System Description */}
+            <div className="mb-8">
+              <h2 className="text-xl font-semibold text-gray-800 mb-4">
+                A. What the System Does (In Simple Terms)
+              </h2>
+              <ul className="space-y-2 text-sm text-gray-600">
+                <li>
+                  <strong>Admins</strong> control system settings and manage HR and Investors.
+                </li>
+                <li>
+                  <strong>Managers</strong> oversee investors and track investments.
+                </li>
+                <li>
+                  <strong>HR staff</strong> manage employee information and salaries.
+                </li>
+                <li>
+                  <strong>Support teams</strong> communicate with investors to solve problems quickly.
+                </li>
+                <li>
+                  <strong>Investors</strong> can see investments, pay dues, and contact support via the mobile app.
+                </li>
+              </ul>
+            </div>
+
+            {/* Login Form */}
+            <form onSubmit={handleSubmit} className="space-y-6">
               {localError && (
-                <div className="p-3 text-sm text-destructive bg-destructive/10 rounded-md border border-destructive/20">
+                <div className="p-3 text-sm text-red-600 bg-red-50 rounded-md border border-red-200">
                   {localError}
                 </div>
               )}
 
               {/* Email Field */}
-              <Field>
-                <FieldLabel htmlFor="email">Email</FieldLabel>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="admin@gmail.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  disabled={isLoading}
-                />
-              </Field>
-
-              {/* Password Field */}
-              <Field>
-                <div className="flex items-center">
-                  <FieldLabel htmlFor="password">Password</FieldLabel>
-                  <a
-                    href={isAdminLogin ? "/admin/forgot-password" : "/user/forgot-password"}
-                    className="ml-auto text-sm underline-offset-2 hover:underline"
-                  >
-                    Forgot password?
-                  </a>
-                </div>
-                <Input
-                  id="password"
-                  type="password"
-                  placeholder="Enter your password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  disabled={isLoading}
-                />
-              </Field>
-
-              {/* Submit Button */}
-              <Field>
-                <Button type="submit" className="w-full" disabled={isLoading}>
-                  {isLoading ? "Logging in..." : "Continue"}
-                </Button>
-              </Field>
-
-              <FieldSeparator className="*:data-[slot=field-separator-content]:bg-card">
-                Or continue with
-              </FieldSeparator>
-
-              {/* Social Buttons */}
-              <Field className="grid grid-cols-3 gap-4">
-                <Button variant="outline" type="button" disabled={isLoading}>
-                  <span className="sr-only">Login with Apple</span>
-                  Apple
-                </Button>
-                <Button variant="outline" type="button" disabled={isLoading}>
-                  <span className="sr-only">Login with Google</span>
-                  Google
-                </Button>
-                <Button variant="outline" type="button" disabled={isLoading}>
-                  <span className="sr-only">Login with Meta</span>
-                  Meta
-                </Button>
-              </Field>
-
-              <FieldDescription className="text-center">
-                Don&apos;t have an account?{" "}
-                <a
-                  href={isAdminLogin ? "/admin/register" : "/user/register"}
-                  className="underline underline-offset-2 hover:text-primary"
-                >
-                  Sign up
-                </a>
-              </FieldDescription>
-            </FieldGroup>
-          </form>
-
-          {/* Right side image */}
-          <div className="bg-muted relative hidden md:block">
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="text-center p-8">
-                <h2 className="text-2xl font-bold mb-4">Demo Credentials</h2>
-                <div className="space-y-2 text-sm">
-                  <div>
-                    <p className="font-semibold">Admin:</p>
-                    <p>admin@gmail.com</p>
-                    <p>Password: 123456</p>
-                  </div>
-                  <div className="mt-4">
-                    <p className="font-semibold">User:</p>
-                    <p>user@gmail.com</p>
-                    <p>Password: 123456</p>
-                  </div>
+              <div className="space-y-2">
+                <div className="relative">
+                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                  <input
+                    id="email"
+                    type="email"
+                    placeholder="Enter Email Id"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    disabled={isLoading}
+                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  />
                 </div>
               </div>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
 
-      {/* Footer Description */}
-      <FieldDescription className="px-6 text-center">
-        By clicking continue, you agree to our <a href="#">Terms of Service</a> and{" "}
-        <a href="#">Privacy Policy</a>.
-      </FieldDescription>
+              {/* Password Field */}
+              <div className="space-y-2">
+                <div className="relative">
+                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                  <input
+                    id="password"
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Enter Password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                    disabled={isLoading}
+                    className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  >
+                    {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                  </button>
+                </div>
+              </div>
+
+              {/* Login Button */}
+              <Button
+                type="submit"
+                disabled={isLoading}
+                className="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-3 rounded-lg"
+              >
+                {isLoading ? "Logging in..." : "Login"}
+              </Button>
+
+              {/* Forgot Password Link */}
+              <div className="text-center">
+                <Link
+                  to={isAdminLogin ? "/admin/forgot-password" : "/user/forgot-password"}
+                  className="text-sm text-gray-600 hover:text-gray-800 underline"
+                >
+                  Having Issues with your Password?
+                </Link>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

@@ -1,31 +1,36 @@
 "use client";
 
-import { type FormEvent, useState } from "react";
-import { useNavigate, useLocation, Link } from "react-router";
+import { type FormEvent, useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router";
 import { useForgotPasswordMutation, useVerifyCodeAndResetPasswordMutation } from "@/store/api/apiSlice";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import {
-  Field,
-  FieldDescription,
-  FieldGroup,
-  FieldLabel,
-} from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
+import { Lock, Eye, EyeOff, Mail } from "lucide-react";
 
 type Step = 'email' | 'verify' | 'reset';
+
+interface ApiError {
+  data?: {
+    message?: string;
+  };
+  status?: number;
+}
 
 export default function ForgotPasswordPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const [step, setStep] = useState<Step>('email');
-  const [email, setEmail] = useState("");
-  const [code, setCode] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [email, setEmail] = useState<string>("");
+  const [code, setCode] = useState<string>("");
+  const [newPassword, setNewPassword] = useState<string>("");
+  const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [localError, setLocalError] = useState<string>("");
   const [successMessage, setSuccessMessage] = useState<string>("");
+  const [showNewPassword, setShowNewPassword] = useState<boolean>(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
+  const [timer, setTimer] = useState<number>(60); // 60 seconds timer
+  const [canResend, setCanResend] = useState<boolean>(false);
+  const [storedVerificationCode, setStoredVerificationCode] = useState<string | null>(null);
 
   const [forgotPassword, { isLoading: isSendingCode }] = useForgotPasswordMutation();
   const [verifyAndReset, { isLoading: isResetting }] = useVerifyCodeAndResetPasswordMutation();
@@ -33,24 +38,76 @@ export default function ForgotPasswordPage() {
   const isAdminForgot = location.pathname.includes('/admin/forgot-password');
   const loginPath = isAdminForgot ? '/admin/login' : '/user/login';
 
-  const handleSendCode = async (event: FormEvent<HTMLFormElement>) => {
+  // Timer effect for OTP step
+  useEffect(() => {
+    if (step === 'verify' && timer > 0) {
+      const interval = setInterval(() => {
+        setTimer((prev) => {
+          if (prev <= 1) {
+            setCanResend(true);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+      return () => clearInterval(interval);
+    }
+  }, [step, timer]);
+
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  const handleResendCode = async (): Promise<void> => {
+    setTimer(60);
+    setCanResend(false);
+    setCode("");
+    try {
+      const result = await forgotPassword({ email }).unwrap();
+      setStoredVerificationCode(result.code);
+    } catch (err: unknown) {
+      const error = err as ApiError;
+      setLocalError(error?.data?.message || 'Failed to resend verification code. Please try again.');
+    }
+  };
+
+  const handleSendCode = async (event: FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault();
     setLocalError("");
     setSuccessMessage("");
 
     try {
       const result = await forgotPassword({ email }).unwrap();
+      setStoredVerificationCode(result.code);
       setSuccessMessage(result.message);
       setStep('verify');
+      setTimer(60);
+      setCanResend(false);
       // In production, code would be sent via email
       // For demo, we'll show it in console (already logged in apiSlice)
       console.log('Verification code:', result.code);
-    } catch (err: any) {
-      setLocalError(err?.data?.message || 'Failed to send verification code. Please try again.');
+    } catch (err: unknown) {
+      const error = err as ApiError;
+      setLocalError(error?.data?.message || 'Failed to send verification code. Please try again.');
     }
   };
 
-  const handleVerifyAndReset = async (event: FormEvent<HTMLFormElement>) => {
+  const handleVerifyCode = (event: FormEvent<HTMLFormElement>): void => {
+    event.preventDefault();
+    setLocalError("");
+
+    // Verify the code locally (in production, this would be done on the server)
+    if (code === storedVerificationCode) {
+      setStep('reset');
+      setLocalError("");
+    } else {
+      setLocalError('Invalid verification code. Please try again.');
+    }
+  };
+
+  const handleResetPassword = async (event: FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault();
     setLocalError("");
 
@@ -67,169 +124,204 @@ export default function ForgotPasswordPage() {
     try {
       const result = await verifyAndReset({ email, code, newPassword }).unwrap();
       setSuccessMessage(result.message);
-      setStep('reset');
       
       // Redirect to login after 2 seconds
       setTimeout(() => {
         navigate(loginPath, { replace: true });
       }, 2000);
-    } catch (err: any) {
-      setLocalError(err?.data?.message || 'Failed to reset password. Please try again.');
+    } catch (err: unknown) {
+      const error = err as ApiError;
+      setLocalError(error?.data?.message || 'Failed to reset password. Please try again.');
     }
   };
 
   return (
-    <div className={cn("flex flex-col gap-6 items-center justify-center min-h-screen p-6")}>
-      <Card className="overflow-hidden w-full max-w-md">
-        <CardContent className="p-6 md:p-8">
-          {step === 'email' && (
-            <form onSubmit={handleSendCode}>
-              <FieldGroup>
-                <div className="flex flex-col items-center gap-2 text-center mb-6">
-                  <h1 className="text-2xl font-bold">Forgot Password</h1>
-                  <p className="text-muted-foreground text-balance">
-                    Enter your email to receive a verification code
-                  </p>
-                </div>
+    <div className={cn("min-h-screen bg-[#2a2a2a] flex items-center justify-center p-4")}>
+      <div className="w-full max-w-6xl rounded-2xl overflow-hidden shadow-2xl">
+        <div className="grid md:grid-cols-2 bg-white rounded-2xl">
+          {/* Left side - Medical professional image */}
+          <div className="relative hidden md:block">
+            <img
+              src="/login.png"
+              alt="Medical professional"
+              className="w-full h-full object-cover"
+            />
+          </div>
+
+          {/* Right side - Form */}
+          <div className="bg-white p-8 md:p-12 flex flex-col">
+            {step === 'email' && (
+              <form onSubmit={handleSendCode} className="flex-1 flex flex-col">
+                <h2 className="text-xl font-semibold text-gray-800 mb-6 text-center">
+                  Text your user email in here
+                </h2>
 
                 {localError && (
-                  <div className="p-3 text-sm text-destructive bg-destructive/10 rounded-md border border-destructive/20 mb-4">
+                  <div className="p-3 text-sm text-red-600 bg-red-50 rounded-md border border-red-200 mb-4">
                     {localError}
                   </div>
                 )}
 
-                <Field>
-                  <FieldLabel htmlFor="email">Email</FieldLabel>
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder="you@example.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
+                <div className="flex-1 flex flex-col justify-center space-y-6">
+                  <div className="relative">
+                    <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                    <input
+                      id="email"
+                      type="email"
+                      placeholder="@emailaddress@gmail.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                      disabled={isSendingCode}
+                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    />
+                  </div>
+
+                  <Button
+                    type="submit"
                     disabled={isSendingCode}
-                  />
-                </Field>
-
-                <Field>
-                  <Button type="submit" className="w-full" disabled={isSendingCode}>
-                    {isSendingCode ? "Sending..." : "Send Verification Code"}
-                  </Button>
-                </Field>
-
-                <FieldDescription className="text-center">
-                  Remember your password?{" "}
-                  <Link
-                    to={loginPath}
-                    className="underline underline-offset-2 hover:text-primary"
+                    className="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-3 rounded-lg"
                   >
-                    Sign in
-                  </Link>
-                </FieldDescription>
-              </FieldGroup>
-            </form>
-          )}
-
-          {step === 'verify' && (
-            <form onSubmit={handleVerifyAndReset}>
-              <FieldGroup>
-                <div className="flex flex-col items-center gap-2 text-center mb-6">
-                  <h1 className="text-2xl font-bold">Verify Code</h1>
-                  <p className="text-muted-foreground text-balance">
-                    Enter the verification code sent to {email}
-                  </p>
+                    {isSendingCode ? "Sending..." : "Send OTP"}
+                  </Button>
                 </div>
+              </form>
+            )}
+
+            {step === 'verify' && (
+              <form onSubmit={handleVerifyCode} className="flex-1 flex flex-col">
+                <h2 className="text-xl font-semibold text-gray-800 mb-6">
+                  Type OTP code in below
+                </h2>
 
                 {successMessage && (
-                  <div className="p-3 text-sm text-green-600 bg-green-50 dark:bg-green-900/20 rounded-md border border-green-200 dark:border-green-800 mb-4">
+                  <div className="p-3 text-sm text-green-600 bg-green-50 rounded-md border border-green-200 mb-4">
                     {successMessage}
                   </div>
                 )}
 
                 {localError && (
-                  <div className="p-3 text-sm text-destructive bg-destructive/10 rounded-md border border-destructive/20 mb-4">
+                  <div className="p-3 text-sm text-red-600 bg-red-50 rounded-md border border-red-200 mb-4">
                     {localError}
                   </div>
                 )}
 
-                <Field>
-                  <FieldLabel htmlFor="code">Verification Code</FieldLabel>
-                  <Input
-                    id="code"
-                    type="text"
-                    placeholder="Enter 6-digit code"
-                    value={code}
-                    onChange={(e) => setCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
-                    maxLength={6}
-                    required
-                    disabled={isResetting}
-                    className="text-center text-2xl tracking-widest"
-                  />
-                  <FieldDescription>
-                    Check your email for the verification code. For demo, check the browser console.
-                  </FieldDescription>
-                </Field>
+                <div className="flex-1 flex flex-col justify-center space-y-6">
+                  <div className="relative">
+                    <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                    <input
+                      id="code"
+                      type="text"
+                      placeholder="OTP"
+                      value={code}
+                      onChange={(e) => setCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                      maxLength={6}
+                      required
+                      disabled={isResetting}
+                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    />
+                  </div>
 
-                <Field>
-                  <FieldLabel htmlFor="newPassword">New Password</FieldLabel>
-                  <Input
-                    id="newPassword"
-                    type="password"
-                    placeholder="At least 6 characters"
-                    value={newPassword}
-                    onChange={(e) => setNewPassword(e.target.value)}
-                    required
-                    disabled={isResetting}
-                  />
-                </Field>
+                  <div className="flex items-center justify-between text-sm text-gray-600">
+                    <span>Time: {formatTime(timer)}</span>
+                    {canResend ? (
+                      <button
+                        type="button"
+                        onClick={handleResendCode}
+                        className="text-blue-600 hover:text-blue-800 underline"
+                      >
+                        Sent again
+                      </button>
+                    ) : (
+                      <span className="text-gray-400">Sent again</span>
+                    )}
+                  </div>
 
-                <Field>
-                  <FieldLabel htmlFor="confirmPassword">Confirm New Password</FieldLabel>
-                  <Input
-                    id="confirmPassword"
-                    type="password"
-                    placeholder="Confirm your password"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    required
-                    disabled={isResetting}
-                  />
-                </Field>
-
-                <Field>
-                  <Button type="submit" className="w-full" disabled={isResetting}>
-                    {isResetting ? "Resetting..." : "Reset Password"}
-                  </Button>
-                </Field>
-
-                <FieldDescription className="text-center">
-                  <button
-                    type="button"
-                    onClick={() => setStep('email')}
-                    className="underline underline-offset-2 hover:text-primary"
+                  <Button
+                    type="submit"
+                    disabled={!code || code.length !== 6}
+                    className="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-3 rounded-lg ml-auto"
                   >
-                    Back to email
-                  </button>
-                </FieldDescription>
-              </FieldGroup>
-            </form>
-          )}
+                    Submit
+                  </Button>
+                </div>
+              </form>
+            )}
 
-          {step === 'reset' && (
-            <div className="text-center">
-              <div className="p-3 text-sm text-green-600 bg-green-50 dark:bg-green-900/20 rounded-md border border-green-200 dark:border-green-800 mb-4">
-                {successMessage}
-              </div>
-              <p className="text-muted-foreground mb-4">
-                Redirecting to login page...
-              </p>
-              <Button asChild>
-                <Link to={loginPath}>Go to Login</Link>
-              </Button>
-            </div>
-          )}
-        </CardContent>
-      </Card>
+            {step === 'reset' && (
+              <form onSubmit={handleResetPassword} className="flex-1 flex flex-col">
+                <h2 className="text-xl font-semibold text-gray-800 mb-6">
+                  Create new password
+                </h2>
+
+                {successMessage && (
+                  <div className="p-3 text-sm text-green-600 bg-green-50 rounded-md border border-green-200 mb-4">
+                    {successMessage}
+                  </div>
+                )}
+
+                {localError && (
+                  <div className="p-3 text-sm text-red-600 bg-red-50 rounded-md border border-red-200 mb-4">
+                    {localError}
+                  </div>
+                )}
+
+                <div className="flex-1 flex flex-col justify-center space-y-6">
+                  <div className="relative">
+                    <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                    <input
+                      id="newPassword"
+                      type={showNewPassword ? "text" : "password"}
+                      placeholder="Create password"
+                      value={newPassword}
+                      onChange={(e) => setNewPassword(e.target.value)}
+                      required
+                      disabled={isResetting}
+                      className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowNewPassword(!showNewPassword)}
+                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                    >
+                      {showNewPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                    </button>
+                  </div>
+
+                  <div className="relative">
+                    <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                    <input
+                      id="confirmPassword"
+                      type={showConfirmPassword ? "text" : "password"}
+                      placeholder="Confirm password"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      required
+                      disabled={isResetting}
+                      className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                    >
+                      {showConfirmPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                    </button>
+                  </div>
+
+                  <Button
+                    type="submit"
+                    disabled={isResetting}
+                    className="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-3 rounded-lg"
+                  >
+                    {isResetting ? "Resetting..." : "Reset"}
+                  </Button>
+                </div>
+              </form>
+            )}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
