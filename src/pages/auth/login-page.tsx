@@ -14,7 +14,7 @@ export default function LoginPage() {
   const location = useLocation();
   const dispatch = useAppDispatch();
   const [login, { isLoading }] = useLoginMutation();
-  
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [localError, setLocalError] = useState<string>("");
@@ -29,21 +29,22 @@ export default function LoginPage() {
 
     try {
       const result = await login({ email, password }).unwrap();
-      
+
       // Set credentials in Redux store
       dispatch(setCredentials(result));
-      
+
       // Navigate based on user role or URL path
       const finalPath = result.user.role === 'admin' ? '/admin/dashboard' : '/user/dashboard';
       navigate(finalPath, { replace: true });
-    } catch (err: any) {
-      setLocalError(err?.data?.message || 'Login failed. Please try again.');
+    } catch (err: unknown) {
+      console.log(err)
+      setLocalError('Login failed. Please try again.');
     }
   };
 
   return (
-    <div className={cn("min-h-screen bg-[#2a2a2a] flex items-center justify-center p-4")}>
-      <div className="w-full max-w-6xl rounded-2xl overflow-hidden shadow-2xl">
+    <div className={cn("min-h-screen bg-[#2a2a2a] flex items-center justify-center ")}>
+      <div className="w-full  overflow-hidden shadow-2xl">
         <div className="grid md:grid-cols-2 bg-white rounded-2xl">
           {/* Left side - Medical professional image */}
           <div className="relative hidden md:block">
@@ -60,7 +61,6 @@ export default function LoginPage() {
             <div className="flex justify-end mb-8">
               <div className="flex items-center gap-2">
                 <img src="/logo.png" alt="MediPark" className="h-8 w-auto" />
-                <span className="text-2xl font-bold text-gray-800">MediPark</span>
               </div>
             </div>
 
