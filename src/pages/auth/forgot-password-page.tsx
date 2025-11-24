@@ -136,8 +136,8 @@ export default function ForgotPasswordPage() {
   };
 
   return (
-    <div className={cn("min-h-screen bg-[#2a2a2a] flex items-center justify-center p-4")}>
-      <div className="w-full max-w-6xl rounded-2xl overflow-hidden shadow-2xl">
+    <div className={cn("min-h-screen bg-[#2a2a2a] flex items-center justify-center ")}>
+      <div className="w-full  overflow-hidden shadow-2xl">
         <div className="grid md:grid-cols-2 bg-white rounded-2xl">
           {/* Left side - Medical professional image */}
           <div className="relative hidden md:block">
@@ -152,17 +152,21 @@ export default function ForgotPasswordPage() {
           <div className="bg-white p-8 md:p-12 flex flex-col">
             {step === 'email' && (
               <form onSubmit={handleSendCode} className="flex-1 flex flex-col">
-                <h2 className="text-xl font-semibold text-gray-800 mb-6 text-center">
+                {/* <h2 className="text-xl font-semibold text-gray-800  text-center">
+                  Text your user email in here
+                </h2> */}
+
+               
+                <div className="flex-1 flex flex-col justify-center space-y-6">
+                <h2 className="text-xl font-semibold text-gray-800  pb-12 text-center">
                   Text your user email in here
                 </h2>
-
                 {localError && (
                   <div className="p-3 text-sm text-red-600 bg-red-50 rounded-md border border-red-200 mb-4">
                     {localError}
                   </div>
                 )}
 
-                <div className="flex-1 flex flex-col justify-center space-y-6">
                   <div className="relative">
                     <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
                     <input
@@ -190,6 +194,10 @@ export default function ForgotPasswordPage() {
 
             {step === 'verify' && (
               <form onSubmit={handleVerifyCode} className="flex-1 flex flex-col">
+              
+
+               
+                <div className="flex-1 flex flex-col justify-center space-y-6">
                 <h2 className="text-xl font-semibold text-gray-800 mb-6">
                   Type OTP code in below
                 </h2>
@@ -199,14 +207,12 @@ export default function ForgotPasswordPage() {
                     {successMessage}
                   </div>
                 )}
-
-                {localError && (
+                 {localError && (
                   <div className="p-3 text-sm text-red-600 bg-red-50 rounded-md border border-red-200 mb-4">
                     {localError}
                   </div>
                 )}
 
-                <div className="flex-1 flex flex-col justify-center space-y-6">
                   <div className="relative">
                     <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
                     <input
@@ -250,6 +256,9 @@ export default function ForgotPasswordPage() {
 
             {step === 'reset' && (
               <form onSubmit={handleResetPassword} className="flex-1 flex flex-col">
+               
+
+                <div className="flex-1 flex flex-col justify-center space-y-6">
                 <h2 className="text-xl font-semibold text-gray-800 mb-6">
                   Create new password
                 </h2>
@@ -265,8 +274,6 @@ export default function ForgotPasswordPage() {
                     {localError}
                   </div>
                 )}
-
-                <div className="flex-1 flex flex-col justify-center space-y-6">
                   <div className="relative">
                     <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
                     <input

@@ -1,168 +1,171 @@
 "use client";
 
 import { NavLink } from "react-router";
-import { ModeToggle } from "@/components/mode-toggle";
 import { useAppSelector, useAppDispatch } from "@/store/hooks";
 import { logout } from "@/store/slices/authSlice";
 import { Button } from "@/components/ui/button";
-import { Menu } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { useState } from "react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+
+const navLinks = [
+  { to: "/", label: "Home" },
+  { to: "/about", label: "About us" },
+  { to: "/awards", label: "Awards" },
+  { to: "/csr", label: "CSR" },
+  { to: "/careers", label: "Careers" },
+  { to: "/news", label: "News" },
+  { to: "/blogs", label: "Blogs" },
+  { to: "/contacts", label: "Contacts" },
+];
 
 export function WebsiteNavbar() {
   const dispatch = useAppDispatch();
   const { isAuthenticated, user } = useAppSelector((state) => state.auth);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
 
-  const handleLogout = () => {
+  const handleLogout = (): void => {
     dispatch(logout());
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex h-16 items-center justify-between">
-          {/* Logo */}
-          <div className="flex items-center">
-            <NavLink to="/" className="text-xl font-bold">
-              Project Setup
-            </NavLink>
+    <header className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-8xl px-4 sm:px-6 lg:px-8">
+      {/* Main Navbar Container - Pill Shaped with Glassmorphism */}
+      <div className="w-full  px-4 py-3 flex items-center justify-between">
+        {/* Logo Section - Pill Container */}
+        <NavLink to="/" className="flex items-center">
+          <div className="flex items-center gap-2 border border-white/50 rounded-full px-4 py-2 bg-white/10 backdrop-blur-sm">
+            <img
+              src="/navbar-logo.png"
+              alt="MediPark Logo"
+              className="h-6 w-6 md:h-[30px]  md:w-[153px]"
+              onError={(e) => {
+                const target = e.target as HTMLImageElement;
+                target.src = "/logo.png";
+              }}
+            />
+            {/* <div className="flex flex-col">
+              <span className="text-sm md:text-base font-bold text-white leading-tight">
+                MediPark
+              </span>
+              <span className="text-xs text-white/90 leading-tight hidden sm:block">
+                Specialized Hospital
+              </span>
+            </div> */}
           </div>
+        </NavLink>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-6">
+        {/* Desktop Navigation - Center */}
+        <nav className="hidden bg-white/10 backdrop-blur-md border px-4 py-4 border-white/30 rounded-full lg:flex items-center gap-4 xl:gap-6 ">
+          {navLinks.map((link) => (
             <NavLink
-              to="/"
-              end
+              key={link.to}
+              to={link.to}
+              end={link.to === "/"}
               className={({ isActive }) =>
-                `text-sm font-medium transition-colors hover:text-primary ${
-                  isActive ? "text-primary" : "text-muted-foreground"
+                `text-sm font-medium transition-colors whitespace-nowrap ${
+                  isActive
+                    ? "text-white font-semibold"
+                    : "text-white/90 hover:text-white"
                 }`
               }
             >
-              Home
+              {link.label}
             </NavLink>
-            <NavLink
-              to="/admin/dashboard"
-              className={({ isActive }) =>
-                `text-sm font-medium transition-colors hover:text-primary ${
-                  isActive ? "text-primary" : "text-muted-foreground"
-                }`
-              }
-            >
-              Dashboard
-            </NavLink>
-            {!isAuthenticated ? (
-              <>
-                <NavLink
-                  to="/admin/login"
-                  className={({ isActive }) =>
-                    `text-sm font-medium transition-colors hover:text-primary ${
-                      isActive ? "text-primary" : "text-muted-foreground"
-                    }`
-                  }
-                >
-                  Admin Login
-                </NavLink>
-                <NavLink
-                  to="/user/login"
-                  className={({ isActive }) =>
-                    `text-sm font-medium transition-colors hover:text-primary ${
-                      isActive ? "text-primary" : "text-muted-foreground"
-                    }`
-                  }
-                >
-                  User Login
-                </NavLink>
-              </>
-            ) : (
-              <div className="flex items-center gap-4">
-                <span className="text-sm text-muted-foreground">
-                  Hi, {user?.name ?? "Guest"}
-                </span>
-                <Button variant="outline" size="sm" onClick={handleLogout}>
-                  Logout
-                </Button>
-              </div>
-            )}
-          </nav>
+          ))}
+        </nav>
 
-          {/* Right side actions */}
-          <div className="flex items-center gap-4">
-            <ModeToggle />
-            
+        {/* Right side actions */}
+        <div className="flex items-center gap-2 border border-white/50 rounded-full p-1">
+          {/* Pricing Button - Pill Container */}
+          <Button
+            asChild
+            variant="outline"
+            className="hidden md:flex border border-white/50 text-white bg-white/10 backdrop-blur-sm hover:bg-white/20 rounded-full px-12 py-2"
+          >
+            <NavLink to="/pricing">Pricing</NavLink>
+          </Button>
+
             {/* Mobile menu button */}
             <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
-              <SheetTrigger asChild className="md:hidden">
-                <Button variant="ghost" size="icon">
+              <SheetTrigger asChild className="lg:hidden">
+                <Button variant="ghost" size="icon" className="text-white border border-white/50 rounded-full bg-white/10 backdrop-blur-sm hover:bg-white/20">
                   <Menu className="h-5 w-5" />
                   <span className="sr-only">Toggle menu</span>
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className="w-[300px] sm:w-[400px]">
-                <nav className="flex flex-col gap-4 mt-8">
-                  <NavLink
-                    to="/"
-                    end
-                    onClick={() => setMobileMenuOpen(false)}
-                    className={({ isActive }) =>
-                      `text-base font-medium transition-colors hover:text-primary ${
-                        isActive ? "text-primary" : "text-muted-foreground"
-                      }`
-                    }
-                  >
-                    Home
-                  </NavLink>
-                  <NavLink
-                    to="/admin/dashboard"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className={({ isActive }) =>
-                      `text-base font-medium transition-colors hover:text-primary ${
-                        isActive ? "text-primary" : "text-muted-foreground"
-                      }`
-                    }
-                  >
-                    Dashboard
-                  </NavLink>
-                  {!isAuthenticated ? (
-                    <>
-                      <NavLink
-                        to="/admin/login"
-                        onClick={() => setMobileMenuOpen(false)}
-                        className={({ isActive }) =>
-                          `text-base font-medium transition-colors hover:text-primary ${
-                            isActive ? "text-primary" : "text-muted-foreground"
-                          }`
-                        }
-                      >
-                        Admin Login
-                      </NavLink>
-                      <NavLink
-                        to="/user/login"
-                        onClick={() => setMobileMenuOpen(false)}
-                        className={({ isActive }) =>
-                          `text-base font-medium transition-colors hover:text-primary ${
-                            isActive ? "text-primary" : "text-muted-foreground"
-                          }`
-                        }
-                      >
-                        User Login
-                      </NavLink>
-                    </>
-                  ) : (
-                    <div className="flex flex-col gap-4 pt-4 border-t">
-                      <span className="text-sm text-muted-foreground">
-                        Hi, {user?.name ?? "Guest"}
+              <SheetContent side="right" className="w-[300px] sm:w-[400px] bg-white/95 backdrop-blur-md">
+                <div className="flex flex-col h-full">
+                  <div className="flex items-center justify-between mb-6">
+                    <div className="flex items-center gap-2">
+                      <img
+                        src="/navbar-logo.png"
+                        alt="MediPark Logo"
+                        className="h-8 w-auto"
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.src = "/logo.png";
+                        }}
+                      />
+                      <span className="text-lg font-bold text-gray-900">
+                        MediPark
                       </span>
-                      <Button variant="outline" onClick={handleLogout}>
-                        Logout
+                    </div>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      <X className="h-5 w-5" />
+                    </Button>
+                  </div>
+                  <nav className="flex flex-col gap-4">
+                    {navLinks.map((link) => (
+                      <NavLink
+                        key={link.to}
+                        to={link.to}
+                        end={link.to === "/"}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className={({ isActive }) =>
+                          `text-base font-medium transition-colors ${
+                            isActive
+                              ? "text-blue-600 border-l-4 border-blue-600 pl-4"
+                              : "text-gray-700 hover:text-blue-600 pl-4"
+                          }`
+                        }
+                      >
+                        {link.label}
+                      </NavLink>
+                    ))}
+                    <div className="pt-4 border-t ">
+                      <Button
+                        asChild
+                        variant="outline"
+                        className="w-full"
+                      >
+                        <NavLink to="/pricing" onClick={() => setMobileMenuOpen(false)}>
+                          Pricing
+                        </NavLink>
                       </Button>
                     </div>
-                  )}
-                </nav>
+                    {isAuthenticated && (
+                      <div className="pt-4 border-t">
+                        <span className="text-sm text-gray-600 block mb-2">
+                          Hi, {user?.name ?? "Guest"}
+                        </span>
+                        <Button
+                          variant="outline"
+                          onClick={handleLogout}
+                          className="w-full"
+                        >
+                          Logout
+                        </Button>
+                      </div>
+                    )}
+                  </nav>
+                </div>
               </SheetContent>
             </Sheet>
-          </div>
         </div>
       </div>
     </header>

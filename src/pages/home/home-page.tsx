@@ -1,3 +1,4 @@
+import { HeroSection } from '@/components/website/hero-section'
 import { Link } from 'react-router'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
@@ -5,30 +6,11 @@ import { LayoutGrid, Shield, Users, ArrowRight } from 'lucide-react'
 
 export default function HomePage() {
   return (
-    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
-      {/* Hero Section */}
-      <section className="text-center mb-16 md:mb-24">
-        <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
-          Welcome to Project Setup
-        </h1>
-        <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto mb-8">
-          A modern web application template with authentication, admin/user panels, and comprehensive project setup tools.
-        </p>
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Button asChild size="lg" className="text-base">
-            <Link to="/admin/login">
-              Admin Login
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </Link>
-          </Button>
-          <Button asChild variant="outline" size="lg" className="text-base">
-            <Link to="/user/login">
-              User Login
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </Link>
-          </Button>
-        </div>
-      </section>
+    <div className="w-full">
+      {/* Hero Section with Auto-Slider */}
+      <HeroSection />
+      
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
 
       {/* Features Section */}
       <section className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 mb-16">
@@ -106,6 +88,7 @@ export default function HomePage() {
           </div>
         </Card>
       </section>
+      </div>
     </div>
   )
 }
