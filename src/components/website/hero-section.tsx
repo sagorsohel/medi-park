@@ -111,7 +111,7 @@ export function HeroSection() {
       </div>
 
       {/* Slider Indicators */}
-      <div className="absolute bottom-24 left-1/2 transform -translate-x-1/2 z-20 flex gap-2">
+      {/* <div className="absolute bottom-24 left-1/2 transform -translate-x-1/2 z-20 flex gap-2">
         {heroImages.map((_, index) => (
           <button
             key={index}
@@ -124,7 +124,7 @@ export function HeroSection() {
             aria-label={`Go to slide ${index + 1}`}
           />
         ))}
-      </div>
+      </div> */}
     </div>
   );
 }
