@@ -72,7 +72,7 @@ export function PricingSection() {
         </div>
 
         {/* Pricing Cards - Horizontal scroll on mobile, no break on desktop */}
-        <div className="overflow-x-auto">
+        <div className="">
           <div className="flex gap-4 min-w-max lg:min-w-0 lg:grid lg:grid-cols-5 max-w-7xl mx-auto">
             {pricingPlans.map((plan, index) => (
               <div

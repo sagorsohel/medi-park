@@ -5,7 +5,7 @@ import { useAppSelector, useAppDispatch } from "@/store/hooks";
 import { logout } from "@/store/slices/authSlice";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
 const navLinks = [
@@ -23,6 +23,16 @@ export function WebsiteNavbar() {
   const dispatch = useAppDispatch();
   const { isAuthenticated, user } = useAppSelector((state) => state.auth);
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
+  const [isScrolled, setIsScrolled] = useState<boolean>(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const handleLogout = (): void => {
     dispatch(logout());
@@ -31,7 +41,9 @@ export function WebsiteNavbar() {
   return (
     <header className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-8xl px-4 sm:px-6 lg:px-8">
       {/* Main Navbar Container - Pill Shaped with Glassmorphism */}
-      <div className="w-full  px-4 py-3 flex items-center justify-between">
+      <div className={`w-full px-4 py-3 flex items-center justify-between  transition-all duration-300 ${
+        isScrolled ? 'bg-[#234687] backdrop-blur-sm border border-white/30 border border-white/50 rounded-full' : ''
+      }`}>
         {/* Logo Section - Pill Container */}
         <NavLink to="/" className="flex items-center">
           <div className="flex items-center gap-2 border border-white/50 rounded-full px-4 py-2 bg-white/10 backdrop-blur-sm">
