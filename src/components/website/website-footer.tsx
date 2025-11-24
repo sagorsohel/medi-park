@@ -2,7 +2,6 @@
 
 import { Link } from "react-router";
 import { Clock, Phone, Facebook, Twitter, Instagram, Linkedin, ChevronUp } from "lucide-react";
-import { Button } from "@/components/ui/button";
 
 export function WebsiteFooter() {
   const currentYear = new Date().getFullYear();
