@@ -2,27 +2,12 @@
 
 A comprehensive, production-ready web application template built with React, TypeScript, Redux Toolkit, and Tailwind CSS. Features admin and user panels with authentication, dark/light mode, and responsive design.
 
-## 🚀 Quick Start (One Command)
-
-### Install and Create New Project
-
-```bash
-npx create-project-setup my-app
-```
-
-Or install globally:
-
-```bash
-npm install -g project-setup
-create-project-setup my-app
-```
-
-### Or Use This Template Directly
+## 🚀 Quick Start
 
 ```bash
 # Clone this repository
 git clone <repository-url>
-cd project-setup
+cd medipark
 
 # Install dependencies
 npm install
@@ -40,33 +25,16 @@ The application will start on `http://localhost:5000`
 
 ## 🛠️ Installation Methods
 
-### Method 1: Using NPX (Recommended)
-
-```bash
-npx create-project-setup my-app
-cd my-app
-npm run dev
-```
-
-### Method 2: Using NPM Package
-
-```bash
-npm install -g project-setup
-create-project-setup my-app
-cd my-app
-npm run dev
-```
-
-### Method 3: Clone and Setup
+### Method 1: Clone and Setup
 
 ```bash
 git clone <repository-url>
-cd project-setup
+cd medipark
 npm install
 npm run dev
 ```
 
-### Method 4: Using Setup Scripts
+### Method 2: Using Setup Scripts
 
 **Windows:**
 ```powershell
@@ -124,7 +92,7 @@ npm run setup:unix
 ## 📁 Project Structure
 
 ```
-project-setup/
+medipark/
 ├── src/
 │   ├── components/          # Reusable UI components
 │   │   ├── admin-panel/     # Admin panel components
@@ -144,7 +112,6 @@ project-setup/
 │   ├── lib/                 # Utility functions
 │   └── main.tsx             # Application entry point
 ├── public/                   # Static assets
-├── bin/                      # CLI scripts
 ├── package.json              # Dependencies and scripts
 ├── tsconfig.json            # TypeScript configuration
 ├── vite.config.ts           # Vite configuration
@@ -180,7 +147,6 @@ The application uses demo data. In production, replace the demo endpoints in `sr
 - `npm run preview` - Preview production build
 - `npm run lint` - Run ESLint
 - `npm run setup` - Install dependencies and build
-- `npm run create` - Create new project from template
 
 ## 🌐 Routes
 
@@ -239,11 +205,6 @@ rm -rf node_modules package-lock.json
 npm install
 ```
 
-### NPX Command Not Found
-If `npx create-project-setup` doesn't work:
-1. Ensure Node.js 18+ is installed
-2. Update npm: `npm install -g npm@latest`
-3. Try: `npm install -g project-setup` then `create-project-setup my-app`
 
 ## 📝 Development Notes
 
@@ -255,41 +216,11 @@ If `npx create-project-setup` doesn't work:
 
 ## 🔄 Creating New Projects
 
-### Using the CLI
-
-```bash
-# Create a new project
-npx create-project-setup my-new-project
-
-# Or if installed globally
-create-project-setup my-new-project
-```
-
-### Manual Setup
-
 1. Clone this repository
 2. Copy all files to your new project directory
 3. Update `package.json` with your project name
 4. Run `npm install`
 5. Customize the codebase for your needs
-
-## 📦 Publishing as NPM Package
-
-To publish this as an npm package:
-
-```bash
-# Login to npm
-npm login
-
-# Publish
-npm publish
-```
-
-Then users can install it with:
-```bash
-npm install -g project-setup
-create-project-setup my-app
-```
 
 ## 🤝 Contributing
 
@@ -311,7 +242,7 @@ Built with ❤️ for better web experiences.
 ## 🎉 Getting Started Checklist
 
 - [ ] Install Node.js 18+
-- [ ] Run `npx create-project-setup my-app` or clone this repo
+- [ ] Clone this repository
 - [ ] Install dependencies: `npm install`
 - [ ] Start dev server: `npm run dev`
 - [ ] Open `http://localhost:5000`
