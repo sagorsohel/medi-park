@@ -64,7 +64,7 @@ const pricingPlans = [
 
 export function PricingSection() {
   return (
-    <div className="w-full bg-blue-50 py-16 md:py-24">
+    <div className="w-full bg-white py-16 md:py-24">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Title */}
         <div className="text-center mb-12">
