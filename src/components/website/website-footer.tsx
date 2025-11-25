@@ -12,13 +12,13 @@ export function WebsiteFooter() {
 
   return (
     <footer className="w-full bg-blue-900 text-white mt-auto">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="container mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
         {/* Main Footer Content */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12 justify-center items-center mb-8">
           {/* Leftmost Column - Medipark Tele Service */}
           <div className="space-y-6">
             <h3 className="text-lg font-semibold">Medipark Tele Service</h3>
-            
+
             {/* Contact Info Buttons */}
             <div className="space-y-3">
               <div className="flex items-center gap-3">
@@ -51,17 +51,7 @@ export function WebsiteFooter() {
             </nav>
 
             {/* Logo */}
-            <div className="border border-white rounded-lg p-3 inline-block">
-              <img
-                src="/navbar-logo.png"
-                alt="MediPark Logo"
-                className="h-8 w-auto"
-                onError={(e) => {
-                  const target = e.target as HTMLImageElement;
-                  target.src = "/logo.png";
-                }}
-              />
-            </div>
+
           </div>
 
           {/* Second Column - Navigation Links */}
@@ -105,7 +95,7 @@ export function WebsiteFooter() {
             {/* Logo and Tagline */}
             <div>
               <img
-                src="/navbar-logo.png"
+                src="/footer-logo-1.png"
                 alt="MediPark Specialized Hospital"
                 className="h-12 w-auto mb-2"
                 onError={(e) => {
@@ -113,16 +103,14 @@ export function WebsiteFooter() {
                   target.src = "/logo.png";
                 }}
               />
-              <p className="text-sm text-blue-200 mt-2">
-                World Class Healthcare, Right Here In Bangladesh
-              </p>
+
             </div>
 
             {/* Location */}
             <div>
               <h4 className="text-lg font-semibold mb-3">Dhaka</h4>
               <p className="text-sm text-blue-200 leading-relaxed">
-                Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
+                Lorem Ipsum is simply dummy text of the printing and typesetting industry.
                 Lorem Ipsum has been the industry's standard dummy text ever since the 1500s
               </p>
             </div>
@@ -170,7 +158,22 @@ export function WebsiteFooter() {
         </div>
 
         {/* Bottom Row - Copyright and Back to Top */}
+
+
         <div className="border-t border-blue-800 pt-6 flex flex-col sm:flex-row justify-between items-center gap-4">
+          <div className="border border-[#FAFAFA]  p-2 rounded-full inline-block">
+           <div className="bg-white p-3 rounded-full w-[145px] mx-auto flex justify-center">
+           <img
+              src="/footer-logo-2.png"
+              alt="MediPark Logo"
+              className="h-8 w-auto "
+              onError={(e) => {
+                const target = e.target as HTMLImageElement;
+                target.src = "/logo.png";
+              }}
+            />
+           </div>
+          </div>
           <p className="text-sm text-blue-200">
             © {currentYear} softinglobal. All rights reserved.
           </p>
