@@ -17,7 +17,7 @@ export function CTASection() {
 
           {/* Right Side - Button */}
           <Button
-            className="bg-white text-blue-900 hover:bg-gray-100 px-8 py-6 text-lg font-semibold rounded-lg whitespace-nowrap"
+            className="bg-white text-blue-900 hover:bg-gray-100 px-8 py-6 text-lg font-semibold rounded-[40px] whitespace-nowrap"
           >
             Send Query
           </Button>
