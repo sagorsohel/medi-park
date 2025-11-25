@@ -12,27 +12,28 @@ export default function HomePage() {
     <div className="w-full">
       {/* Hero Section with Auto-Slider */}
       <HeroSection />
-      
+
       {/* About Section */}
       <AboutSection />
-      
+
       {/* Doctors Section */}
       <DoctorsSection />
-      
-      {/* Investor Section */}
-      <InvestorSection />
-      
+
+
+
       {/* Pricing Section */}
       <PricingSection />
-      
+
       {/* Media/News Section */}
       <MediaSection />
-      
+
       {/* CTA Section */}
       <CTASection />
-      
+
       {/* Blog Section */}
       <BlogSection />
+      {/* Investor Section */}
+      <InvestorSection />
     </div>
   )
 }

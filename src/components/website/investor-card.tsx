@@ -9,13 +9,13 @@ interface InvestorCardProps {
 
 export function InvestorCard({ image, name, designation, description }: InvestorCardProps) {
   return (
-    <div className="border border-blue-900 rounded-lg overflow-hidden min-w-[280px] lg:min-w-0">
+    <div className="border border-blue-900 rounded-[22px] overflow-hidden min-w-[280px] lg:min-w-0">
       {/* Image Section - White Background */}
-      <div className="bg-white p-4">
+      <div className="bg-primary p-0.5">
         <img
           src={image}
           alt={name}
-          className="w-full h-auto object-cover rounded-lg"
+          className="w-full h-[222px] object-cover rounded-[22px]"
           onError={(e) => {
             const target = e.target as HTMLImageElement;
             target.src = "/vite.svg";
