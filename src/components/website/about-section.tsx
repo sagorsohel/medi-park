@@ -3,33 +3,39 @@
 export function AboutSection() {
   return (
     <div className="relative w-full bg-white py-16 md:py-24 overflow-hidden">
-      {/* Background Curved Lines - SVG */}
-      <svg
-        className="absolute top-0 left-0 w-full h-full pointer-events-none"
-        viewBox="0 0 1200 1000"
-        preserveAspectRatio="none"
-        style={{ zIndex: 0 }}
-      >
-        {/* Subtle background curved lines */}
-        <path
-          d="M0,150 Q300,120 600,140 Q900,160 1200,150"
-          fill="none"
-          stroke="#e5e7eb"
-          strokeWidth="2"
-          className="opacity-40"
+      {/* Background Circular Lines - Div (Bottom Half Only) */}
+      <div className="absolute bottom-0 left-0 w-full h-2/3 pointer-events-none" style={{ zIndex: 0 }}>
+        {/* First circular line - bottom half */}
+        <div 
+          className="absolute border border-[#848484] opacity-40 rounded-full"
+          style={{
+            width: '1200px',
+            height: '1900px',
+            left: '50%',
+            bottom: '30%',
+            transform: 'translateX(-50%)',
+            borderWidth: '2px',
+            clipPath: 'inset(50% 0 0 0) '
+          }}
         />
-        <path
-          d="M0,200 Q400,180 800,200 Q1000,220 1200,210"
-          fill="none"
-          stroke="#e5e7eb"
-          strokeWidth="2"
-          className="opacity-30"
+        {/* Second circular line - bottom half */}
+        <div 
+          className="absolute border border-[#848484] opacity-30 rounded-full"
+          style={{
+            width: '1000px',
+            height: '1300px',
+            left: '50%',
+            bottom: '50%',
+            transform: 'translateX(-50%)',
+            borderWidth: '2px',
+            clipPath: 'inset(45% 0 0 0)'
+          }}
         />
-      </svg>
+      </div>
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* About Us Navigation Button */}
-        <div className="flex flex-col items-center mb-12 md:mb-16">
+        <div className="flex flex-col items-center mb-12 md:mb-8">
           <button className="bg-gray-100 border border-gray-400 rounded-lg px-6 py-2 text-gray-800 font-medium text-sm md:text-base hover:bg-gray-200 transition-colors">
             About Us
           </button>
@@ -37,7 +43,7 @@ export function AboutSection() {
         </div>
 
         {/* Mission Statement - Left Aligned */}
-        <div className="max-w-4xl mx-auto mb-16 md:mb-20 px-4">
+        <div className="max-w-xl mx-auto mb-16 md:mb-20 px-4">
           <p className="text-base md:text-lg text-gray-700 leading-relaxed text-left">
             <span className="font-bold text-gray-900">At Medipark, our mission is simple:</span>{" "}
             to provide the highest quality medical care in an environment of genuine compassion and respect. 
@@ -49,8 +55,8 @@ export function AboutSection() {
         <div className="relative max-w-6xl mx-auto px-4">
           {/* SVG for S-curve pattern connecting images */}
           <svg
-            className="absolute top-0 left-0 w-full h-full pointer-events-none hidden md:block"
-            viewBox="0 0 1000 600"
+            className="absolute -top-44 left-0 w-full h-full pointer-events-none hidden md:block"
+            viewBox="0 0 1000 1000"
             preserveAspectRatio="xMidYMid meet"
             style={{ zIndex: 1, height: '100%' }}
           >
@@ -91,7 +97,7 @@ export function AboutSection() {
           {/* Images in arc layout - same positions as image */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 relative z-10 pb-20">
             {/* Left Image Card - Lower left position */}
-            <div className="relative group transform md:translate-y-8">
+            <div className="relative group transform md:translate-y-3 translate-x-6">
               <div className="bg-white border inline-flex justify-center p-2  border-gray-300 rounded-lg  shadow-sm">
                 <img
                   src="/about1.png"
@@ -106,7 +112,7 @@ export function AboutSection() {
             </div>
 
             {/* Middle Image Card - Center position (higher) */}
-            <div className="relative group transform md:translate-y-20 translate-x-12">
+            <div className="relative group transform md:translate-y-16 translate-x-12">
               <div className="bg-white border inline-flex justify-center p-2  border-gray-300 rounded-lg  overflow-hidden shadow-sm">
                 <img
                   src="/about-2.png"
@@ -121,7 +127,7 @@ export function AboutSection() {
             </div>
 
             {/* Right Image Card - Lower right position */}
-            <div className="relative group transform md:translate-y-10 translate-x-12">
+            <div className="relative group transform md:translate-y-3 translate-x-12">
               <div className="bg-white border inline-flex justify-center p-2  border-gray-300 rounded-lg  overflow-hidden shadow-sm">
                 <img
                   src="/about3.png"
