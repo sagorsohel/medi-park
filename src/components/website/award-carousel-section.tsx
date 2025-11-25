@@ -72,7 +72,7 @@ export function AwardCarouselSection({ title, text, certificates }: AwardCarouse
         </div>
 
         {/* Carousel */}
-        <div className="relative max-w-5xl mx-auto">
+        <div className="relative max-w-7xl mx-auto">
           <Carousel
             setApi={setApi}
             className="w-full"
@@ -86,7 +86,7 @@ export function AwardCarouselSection({ title, text, certificates }: AwardCarouse
                 <CarouselItem key={certificate.id} className="pl-2 md:pl-4 basis-3/5">
                   <Card
                     className={cn(
-                      "!P-0 border-0 shadow-lg transition-all duration-500",
+                      "!P-0 border-0   transition-all duration-500",
                       {
                         "opacity-30": index !== current - 1,
                       }

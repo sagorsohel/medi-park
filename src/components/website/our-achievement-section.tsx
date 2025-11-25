@@ -21,11 +21,11 @@ export function OurAchievementSection({ title, images, text }: OurAchievementSec
         {/* Image Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 mb-12 md:mb-16">
           {images.map((image, index) => (
-            <div key={index} className="bg-white rounded-lg overflow-hidden shadow-sm border border-gray-200">
+            <div key={index} className="bg-white rounded-lg overflow-hidden shadow-sm border p-3 border-gray-200">
               <img
                 src={image}
                 alt={`${title} ${index + 1}`}
-                className="w-full h-auto object-cover"
+                className="w-full rounded-lg h-auto object-cover"
                 onError={(e) => {
                   const target = e.target as HTMLImageElement;
                   target.src = "/vite.svg";
