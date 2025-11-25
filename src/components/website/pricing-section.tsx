@@ -79,9 +79,9 @@ export function PricingSection() {
                 key={index}
                 className={`relative rounded-[24px] p-6 min-w-[280px] lg:min-w-0 flex flex-col ${
                   plan.popular
-                    ? "bg-blue-900 text-white scale-105 z-10 min-h-[500px]"
-                    : "bg-white text-blue-900 border-[3px] border-blue-900 h-fit"
-                } shadow-md`}
+                    ? "bg-blue-900 text-white scale-105 z-10 min-h-[500px] shadow-2xl"
+                    : "bg-white text-blue-900 border-[3px] border-blue-900 h-fit shadow-md"
+                } `}
               >
                 {plan.popular && (
                   <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 z-20">
