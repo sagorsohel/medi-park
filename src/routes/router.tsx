@@ -1,6 +1,7 @@
 import { createBrowserRouter } from 'react-router'
 import HomePage from '../pages/home/home-page'
 import AboutPage from '../pages/about/about-page'
+import AwardsPage from '../pages/awards/awards-page'
 import LoginPage from '../pages/auth/login-page'
 import RegisterPage from '../pages/auth/register-page'
 import ForgotPasswordPage from '../pages/auth/forgot-password-page'
@@ -18,6 +19,7 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <HomePage /> },
       { path: "about", element: <AboutPage /> },
+      { path: "awards", element: <AwardsPage /> },
     ],
   },
 

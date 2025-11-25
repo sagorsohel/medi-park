@@ -9,7 +9,7 @@ interface MissionVisionItemProps {
 
 function MissionVisionItem({ title, image, text, alt }: MissionVisionItemProps) {
   return (
-    <div className="w-full mb-16 md:mb-20">
+    <div className="w-full mb-16 md:mb-20 max-w-7xl">
       {/* Title */}
       <div className="text-center mb-4">
         <h2 className="text-4xl md:text-5xl font-bold text-blue-900 mb-2">
@@ -24,7 +24,7 @@ function MissionVisionItem({ title, image, text, alt }: MissionVisionItemProps) 
           <img
             src={image}
             alt={alt || title}
-            className="w-full max-w-4xl h-auto object-cover"
+            className="w-full max-w-7xl h-auto object-cover"
             onError={(e) => {
               const target = e.target as HTMLImageElement;
               target.src = "/vite.svg";
