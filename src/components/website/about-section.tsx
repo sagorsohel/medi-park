@@ -89,14 +89,14 @@ export function AboutSection() {
           </svg>
 
           {/* Images in arc layout - same positions as image */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 relative z-10">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 relative z-10 pb-20">
             {/* Left Image Card - Lower left position */}
             <div className="relative group transform md:translate-y-8">
-              <div className="bg-white border border-gray-300 rounded-lg overflow-hidden shadow-sm">
+              <div className="bg-white border inline-flex justify-center p-2  border-gray-300 rounded-lg  shadow-sm">
                 <img
                   src="/about1.png"
                   alt="Medical professionals in operating room"
-                  className="w-full h-64 md:h-80 object-cover"
+                  className="w-[262px] h-[144px]  object-cover"
                   onError={(e) => {
                     const target = e.target as HTMLImageElement;
                     target.src = "/vite.svg";
@@ -106,12 +106,12 @@ export function AboutSection() {
             </div>
 
             {/* Middle Image Card - Center position (higher) */}
-            <div className="relative group">
-              <div className="bg-white border border-gray-300 rounded-lg overflow-hidden shadow-sm">
+            <div className="relative group transform md:translate-y-20 translate-x-12">
+              <div className="bg-white border inline-flex justify-center p-2  border-gray-300 rounded-lg  overflow-hidden shadow-sm">
                 <img
                   src="/about-2.png"
                   alt="Doctor with patient"
-                  className="w-full h-64 md:h-80 object-cover"
+                  className="w-[262px] h-[144px]  object-cover"
                   onError={(e) => {
                     const target = e.target as HTMLImageElement;
                     target.src = "/vite.svg";
@@ -121,12 +121,12 @@ export function AboutSection() {
             </div>
 
             {/* Right Image Card - Lower right position */}
-            <div className="relative group transform md:translate-y-8">
-              <div className="bg-white border border-gray-300 rounded-lg overflow-hidden shadow-sm">
+            <div className="relative group transform md:translate-y-10 translate-x-12">
+              <div className="bg-white border inline-flex justify-center p-2  border-gray-300 rounded-lg  overflow-hidden shadow-sm">
                 <img
                   src="/about3.png"
                   alt="Medical items and equipment"
-                  className="w-full h-64 md:h-80 object-cover"
+                  className="w-[262px] h-[144px]  object-cover"
                   onError={(e) => {
                     const target = e.target as HTMLImageElement;
                     target.src = "/vite.svg";
