@@ -21,7 +21,7 @@ export default function AboutPage() {
   return (
     <div className="w-full">
       {/* Hero Section - Only Image */}
-      <PageHeroSection image="/hero1.png" alt="About Us Hero" />
+      <PageHeroSection image="/hero1.png" heading="About Us" alt="About Us Hero" />
       
       {/* Breadcrumb Section */}
       <BreadcrumbSection currentPage="About Us" />
