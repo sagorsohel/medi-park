@@ -8,14 +8,14 @@ import { MRCPPACESSection } from '@/components/website/mrcp-paces-section'
 export default function AboutPage() {
   const missionData = {
     title: "Our Mission",
-    image: "/about3.png",
+    image: "/mission.png",
     text: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
     alt: "Our Mission"
   };
 
   const visionData = {
     title: "Our Vision",
-    image: "/about-2.png",
+    image: "/vission.png",
     text: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
     alt: "Our Vision"
   };
@@ -43,7 +43,7 @@ export default function AboutPage() {
           "/about3.png",
           "/about1.png"
         ]}
-        text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."
+        text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
       />
       
       {/* MRCP PACES Section */}
