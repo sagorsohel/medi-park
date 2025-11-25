@@ -1,7 +1,7 @@
 "use client";
 
 import { Link } from "react-router";
-import { Clock, Phone, Facebook, Twitter, Instagram, Linkedin, ChevronUp } from "lucide-react";
+import { Clock, Phone, Facebook, Twitter, Instagram, Linkedin, Mouse } from "lucide-react";
 
 export function WebsiteFooter() {
   const currentYear = new Date().getFullYear();
@@ -20,15 +20,15 @@ export function WebsiteFooter() {
             <h3 className="text-lg font-semibold">Medipark Tele Service</h3>
 
             {/* Contact Info Buttons */}
-            <div className="space-y-3">
-              <div className="flex items-center gap-3">
-                <div className="border border-white rounded-lg px-4 py-2 flex items-center gap-2">
+            <div className="space-y-3 ">
+              <div className="flex items-center justify-between gap-3 p-1 font-bold border border-white rounded-[22px] ">
+                <div className=" rounded-lg px-4 py-2 flex items-center gap-2">
                   <Clock className="h-4 w-4" />
                   <span className="text-sm">24 hours</span>
                 </div>
-                <div className="border border-white rounded-lg px-4 py-2 flex items-center gap-2">
+                <div className=" rounded-[22px] px-4 py-2 bg-white text-blue-900 flex justify-end items-center gap-2">
                   <Phone className="h-4 w-4" />
-                  <span className="text-sm">00000</span>
+                  <span className="text-sm">01782948545</span>
                 </div>
               </div>
               <p className="text-sm">info@mediparkbd.com</p>
@@ -162,7 +162,7 @@ export function WebsiteFooter() {
 
         <div className="border-t border-blue-800 pt-6 flex flex-col sm:flex-row justify-between items-center gap-4">
           <div className="border border-[#FAFAFA]  p-2 rounded-full inline-block">
-           <div className="bg-white p-3 rounded-full w-[145px] mx-auto flex justify-center">
+           <div className="bg-white p-3 rounded-full w-[175px] mx-auto flex justify-center">
            <img
               src="/footer-logo-2.png"
               alt="MediPark Logo"
@@ -183,8 +183,8 @@ export function WebsiteFooter() {
           >
             <span>Back to top</span>
             <div className="w-12 h-0.5 bg-white"></div>
-            <div className="w-8 h-8 rounded-full border border-white flex items-center justify-center">
-              <ChevronUp className="h-4 w-4" />
+            <div className="w-8 h-8 rounded-full border bg-white border-white flex items-center justify-center">
+              <Mouse className="h-4 w-4" />
             </div>
           </button>
         </div>
