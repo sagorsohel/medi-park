@@ -80,7 +80,7 @@ export function PricingSection() {
                 className={`relative rounded-[24px] p-6 min-w-[280px] lg:min-w-0 flex flex-col ${
                   plan.popular
                     ? "bg-blue-900 text-white scale-105 z-10 min-h-[500px]"
-                    : "bg-white text-blue-900 border-2 border-blue-900 h-fit"
+                    : "bg-white text-blue-900 border-[3px] border-blue-900 h-fit"
                 } shadow-md`}
               >
                 {plan.popular && (
@@ -92,12 +92,14 @@ export function PricingSection() {
                 )}
 
               <div className={`mb-6 ${plan.popular ? "" : "flex-1"}`}>
-                <div className="text-3xl font-bold mb-1">{plan.price}</div>
-                <div className={`text-sm mb-3 ${plan.popular ? "text-blue-200" : "text-gray-500"}`}>
+                <div className="flex gap-1 items-center">
+                <div className="text-[32px] font-bold ">{plan.price}</div>
+                <div className={`text-sm font-medium mt-2 ${plan.popular ? "text-blue-200" : "text-gray-500"}`}>
                   /month
                 </div>
+                </div>
                 <h3 className="text-xl font-semibold mb-2">{plan.name}</h3>
-                <p className={`text-sm ${plan.popular ? "text-blue-200" : "text-gray-600"}`}>
+                <p className={`text-md  font-semibold ${plan.popular ? " text-white" : "text-primary"}`}>
                   {plan.tagline}
                 </p>
               </div>
@@ -105,17 +107,19 @@ export function PricingSection() {
               <ul className={`space-y-3 mb-6 ${plan.popular ? "" : "flex-1"}`}>
                 {plan.features.map((feature, featureIndex) => (
                   <li key={featureIndex} className="flex items-start gap-2">
-                    <Check className={`h-5 w-5 shrink-0 ${plan.popular ? "text-white" : "text-blue-600"}`} />
-                    <span className="text-sm">{feature}</span>
+                    <div >
+                    <Check className={`h-5 w-5 rounded-full  shrink-0 ${plan.popular ? "text-white bg-[#234687]" : "bg-[#234687] text-white"}`} />
+                    </div>
+                    <span className={`text-sm ${plan.popular ? "text-white" : "text-[#234687]"} `}>{feature}</span>
                   </li>
                 ))}
               </ul>
 
               <button
-                className={`w-full rounded-lg py-2 px-4 font-medium transition-colors mt-auto ${
+                className={`w-full rounded-[22px] py-2 px-4 font-medium transition-colors mt-auto ${
                   plan.popular
-                    ? "bg-blue-900 text-white border-2 border-white hover:bg-blue-800"
-                    : "bg-white text-blue-900 border-2 border-blue-900 hover:bg-blue-50"
+                    ? "bg-white text-blue-900 border-2 border-white hover:border-white hover:bg-primary hover:text-white"
+                    : "bg-primary text-white border-2 border-blue-900 hover:bg-blue-50 hover:text-primary"
                 }`}
               >
                 Choose plan

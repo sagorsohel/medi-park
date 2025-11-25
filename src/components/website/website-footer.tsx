@@ -182,8 +182,8 @@ export function WebsiteFooter() {
             className="flex items-center gap-2 text-sm hover:text-blue-300 transition-colors"
           >
             <span>Back to top</span>
-            <div className="w-12 h-0.5 bg-white"></div>
-            <div className="w-8 h-8 rounded-full border bg-white border-white flex items-center justify-center">
+            <div className="w-16 h-0.5  bg-white"></div>
+            <div className="w-8 h-8 rounded-full border bg-white border-white text-blue-900 flex items-center justify-center">
               <Mouse className="h-4 w-4" />
             </div>
           </button>
