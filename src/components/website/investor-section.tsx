@@ -38,6 +38,41 @@ const investors = [
     name: "GEN MAMUN MOSTAFI (RTD)",
     designation: "Designation",
     description: "Lorem ipsum is simply dummy text of the printing and typesetting industry."
+  },
+  {
+    id: 154353,
+    image: "/about1.png",
+    name: "GEN MAMUN MOSTAFI (RTD)",
+    designation: "Designation",
+    description: "Lorem ipsum is simply dummy text of the printing and typesetting industry."
+  },
+  {
+    id: 223,
+    image: "/about-2.png",
+    name: "GEN MAMUN MOSTAFI (RTD)",
+    designation: "Designation",
+    description: "Lorem ipsum is simply dummy text of the printing and typesetting industry."
+  },
+  {
+    id: 3657,
+    image: "/about3.png",
+    name: "GEN MAMUN MOSTAFI (RTD)",
+    designation: "Designation",
+    description: "Lorem ipsum is simply dummy text of the printing and typesetting industry."
+  },
+  {
+    id: 456757,
+    image: "/about1.png",
+    name: "GEN MAMUN MOSTAFI (RTD)",
+    designation: "Designation",
+    description: "Lorem ipsum is simply dummy text of the printing and typesetting industry."
+  },
+  {
+    id: 556464,
+    image: "/about-2.png",
+    name: "GEN MAMUN MOSTAFI (RTD)",
+    designation: "Designation",
+    description: "Lorem ipsum is simply dummy text of the printing and typesetting industry."
   }
 ];
 
@@ -51,18 +86,33 @@ export function InvestorSection() {
           <div className="w-0.5 h-8 bg-blue-900 mx-auto mt-2" />
         </div>
 
-        {/* Investor Cards */}
-        <div className="overflow-x-auto mb-12">
-          <div className="flex gap-6 min-w-max lg:min-w-0 lg:grid lg:grid-cols-5 max-w-7xl mx-auto">
-            {investors.map((investor) => (
-              <InvestorCard
-                key={investor.id}
-                image={investor.image}
-                name={investor.name}
-                designation={investor.designation}
-                description={investor.description}
-              />
-            ))}
+        {/* Investor Cards - Infinite Auto Scroll */}
+        <div className="mb-12 overflow-hidden">
+          <div className="scroll-group">
+            <div className="flex gap-6 animate-scroll-left" style={{ width: 'max-content' }}>
+              {/* First set of cards */}
+              {investors.map((investor) => (
+                <div key={investor.id} className="shrink-0" style={{ width: '280px' }}>
+                  <InvestorCard
+                    image={investor.image}
+                    name={investor.name}
+                    designation={investor.designation}
+                    description={investor.description}
+                  />
+                </div>
+              ))}
+              {/* Duplicate set for seamless infinite loop */}
+              {investors.map((investor) => (
+                <div key={`duplicate-${investor.id}`} className="shrink-0" style={{ width: '280px' }}>
+                  <InvestorCard
+                    image={investor.image}
+                    name={investor.name}
+                    designation={investor.designation}
+                    description={investor.description}
+                  />
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 

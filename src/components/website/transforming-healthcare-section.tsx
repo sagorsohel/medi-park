@@ -40,7 +40,7 @@ export function TransformingHealthcareSection({
 
         {/* Descriptive Paragraph */}
         <div className="max-w-4xl mx-auto">
-          <p className="text-base md:text-lg text-gray-700 leading-relaxed text-justify">
+          <p className="text-base md:text-lg text-[#234687] leading-relaxed text-justify">
             {text}
           </p>
         </div>
