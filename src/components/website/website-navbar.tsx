@@ -51,7 +51,7 @@ export function WebsiteNavbar() {
             <img
               src="/navbar-logo.png"
               alt="MediPark Logo"
-              className="md:h-[30px] h-6 w-auto flex justify-center"
+              className="md:h-[30px] h-6 w-auto object-cover flex justify-center"
               onError={(e) => {
                 const target = e.target as HTMLImageElement;
                 target.src = "/logo.png";

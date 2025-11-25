@@ -1,8 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { User, Calendar, FileText, Phone, Users } from "lucide-react";
-import { Button } from "@/components/ui/button";
+
 
 const heroImages = [
   "/hero1.png",
@@ -11,33 +10,8 @@ const heroImages = [
   "/hero4.png",
 ];
 
-const ctaButtons = [
-  {
-    label: "Find a doctor",
-    icon: User,
-    link: "#",
-  },
-  {
-    label: "Request an appointment",
-    icon: Calendar,
-    link: "#",
-  },
-  {
-    label: "Online report",
-    icon: FileText,
-    link: "#",
-  },
-  {
-    label: "Online consult",
-    icon: Phone,
-    link: "#",
-  },
-  {
-    label: "Patient & visitors guide",
-    icon: Users,
-    link: "#",
-  },
-];
+
+
 
 export function HeroSection() {
   const [currentIndex, setCurrentIndex] = useState<number>(0);
@@ -87,7 +61,7 @@ export function HeroSection() {
         </div>
 
         {/* Call-to-Action Buttons - Bottom */}
-        <div className="px-4 sm:px-6 lg:px-8 pb-8 md:pb-12">
+        {/* <div className="px-4 sm:px-6 lg:px-8 pb-8 md:pb-12">
           <div className="flex flex-wrap justify-center gap-3 md:gap-4">
             {ctaButtons.map((button, index) => {
               const Icon = button.icon;
@@ -107,7 +81,7 @@ export function HeroSection() {
               );
             })}
           </div>
-        </div>
+        </div> */}
       </div>
 
       {/* Slider Indicators */}

@@ -7,7 +7,7 @@ export function AboutSection() {
       <div className="absolute bottom-0 left-0 w-full h-2/3 pointer-events-none" style={{ zIndex: 0 }}>
         {/* First circular line - bottom half */}
         <div 
-          className="absolute border border-[#848484] opacity-40 rounded-full"
+          className="absolute border border-[#848484] opacity-20 rounded-full"
           style={{
             width: '1200px',
             height: '1900px',
@@ -20,7 +20,7 @@ export function AboutSection() {
         />
         {/* Second circular line - bottom half */}
         <div 
-          className="absolute border border-[#848484] opacity-30 rounded-full"
+          className="absolute border border-[#848484] opacity-20 rounded-full"
           style={{
             width: '1000px',
             height: '1300px',
@@ -97,7 +97,7 @@ export function AboutSection() {
           {/* Images in arc layout - same positions as image */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 relative z-10 pb-20">
             {/* Left Image Card - Lower left position */}
-            <div className="relative group transform md:translate-y-3 translate-x-6">
+            <div className="relative group transform md:translate-y-8 translate-x-6">
               <div className="bg-white border inline-flex justify-center p-2  border-gray-300 rounded-lg  shadow-sm">
                 <img
                   src="/about1.png"
@@ -112,7 +112,7 @@ export function AboutSection() {
             </div>
 
             {/* Middle Image Card - Center position (higher) */}
-            <div className="relative group transform md:translate-y-16 translate-x-12">
+            <div className="relative group transform md:-translate-y-2 translate-x-12">
               <div className="bg-white border inline-flex justify-center p-2  border-gray-300 rounded-lg  overflow-hidden shadow-sm">
                 <img
                   src="/about-2.png"
@@ -127,7 +127,7 @@ export function AboutSection() {
             </div>
 
             {/* Right Image Card - Lower right position */}
-            <div className="relative group transform md:translate-y-3 translate-x-12">
+            <div className="relative group transform md:translate-y-8 translate-x-12">
               <div className="bg-white border inline-flex justify-center p-2  border-gray-300 rounded-lg  overflow-hidden shadow-sm">
                 <img
                   src="/about3.png"
