@@ -17,7 +17,7 @@ export function BreadcrumbSection({ currentPage }: BreadcrumbSectionProps) {
             <span>Home</span>
           </Link>
           <span className="text-gray-400">/</span>
-          <span className="font-bold text-gray-900">{currentPage}</span>
+          <span className="font-bold text-text">{currentPage}</span>
         </nav>
       </div>
     </div>

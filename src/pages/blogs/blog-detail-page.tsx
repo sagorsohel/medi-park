@@ -28,7 +28,7 @@ export default function BlogDetailPage() {
   return (
     <div className="w-full">
       {/* Hero Section */}
-      <PageHeroSection image="/hero1.png" heading={blogPost.title} alt={`${blogPost.title} Hero`} />
+      <PageHeroSection image="/hero1.png" heading={'Blog'} alt={`${blogPost.title} Hero`} />
       
       {/* Breadcrumb Section */}
       <BreadcrumbSection currentPage={blogPost.title} />
@@ -36,8 +36,8 @@ export default function BlogDetailPage() {
       {/* Blog Detail Content */}
       <section className="w-full bg-white">
         {/* Dark Blue Header */}
-        <div className="w-full bg-blue-900 py-8">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="w-full bg-blue-900 h-[300px] pt-20 overflow-auto ">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <h1 className="text-2xl md:text-3xl font-bold text-white text-center">
               {blogPost.title}
             </h1>
@@ -45,11 +45,11 @@ export default function BlogDetailPage() {
         </div>
 
         {/* Main Image Section */}
-        <div className="w-full">
+        <div className="max-w-7xl mx-auto -mt-28 px-8 sm:px-0">
           <img
             src={blogPost.mainImage}
             alt={blogPost.title}
-            className="w-full h-auto object-cover"
+            className="w-full h-auto max-h-[300px] rounded-lg object-cover"
             onError={(e) => {
               const target = e.target as HTMLImageElement;
               target.src = "/vite.svg";
@@ -59,11 +59,11 @@ export default function BlogDetailPage() {
 
         {/* Author Byline */}
         <div className="w-full bg-white py-8">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <Card className="w-fit">
-              <CardContent className="p-4">
+          <div className="max-w-7xl mx-auto ">
+            <Card className="w-fit p-0! border border-text">
+              <CardContent className="p-2">
                 <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-gray-200">
+                  <div className="w-16 h-16 rounded-lg overflow-hidden border-2 border-gray-200">
                     <img
                       src={blogPost.author.image}
                       alt={blogPost.author.name}
@@ -75,8 +75,8 @@ export default function BlogDetailPage() {
                     />
                   </div>
                   <div>
-                    <p className="font-bold text-gray-900">{blogPost.author.name}</p>
-                    <p className="text-sm text-gray-600">{blogPost.author.role}</p>
+                    <p className="font-bold text-lg  text-gray-900">{blogPost.author.name}</p>
+                    <p className="text-sm text-text">{blogPost.author.role}</p>
                   </div>
                 </div>
               </CardContent>
@@ -86,7 +86,7 @@ export default function BlogDetailPage() {
 
         {/* Content Section */}
         <div className="w-full bg-white pb-16">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-7xl mx-auto px-4 sm:px-0 lg:px-0">
             <div className="space-y-6 text-gray-700">
               {blogPost.content.map((paragraph, index) => (
                 <p key={index} className="text-justify">
