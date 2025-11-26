@@ -204,16 +204,13 @@ export default function CareerPage() {
             {jobs.map((job) => (
               <JobCard
                 key={job.id}
+                id={job.id}
                 image={job.image}
                 title={job.title}
                 vacancy={job.vacancy}
                 deadline={job.deadline}
                 location={job.location}
                 type={job.type}
-                onApply={() => {
-                  // Handle apply action
-                  console.log(`Applying for ${job.title}`)
-                }}
               />
             ))}
           </div>

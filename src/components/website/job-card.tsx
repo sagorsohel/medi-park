@@ -1,10 +1,12 @@
 "use client";
 
+import { useNavigate } from "react-router";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Clock, Calendar, MapPin, Briefcase } from "lucide-react";
 
 interface JobCardProps {
+  id: string | number;
   image: string;
   title: string;
   vacancy: string;
@@ -15,6 +17,7 @@ interface JobCardProps {
 }
 
 export function JobCard({ 
+  id,
   image, 
   title, 
   vacancy, 
@@ -23,6 +26,16 @@ export function JobCard({
   type,
   onApply 
 }: JobCardProps) {
+  const navigate = useNavigate();
+
+  const handleApply = () => {
+    if (onApply) {
+      onApply();
+    } else {
+      navigate(`/careers/job/${id}`);
+    }
+  };
+
   return (
     <Card className="overflow-hidden hover:shadow-lg transition-shadow">
       <div className="relative w-full h-48 overflow-hidden">
@@ -55,7 +68,7 @@ export function JobCard({
         </div>
         <Button 
           className="w-full bg-blue-900 hover:bg-blue-800 text-white"
-          onClick={onApply}
+          onClick={handleApply}
         >
           Apply Now
         </Button>

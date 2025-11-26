@@ -3,6 +3,7 @@ import HomePage from '../pages/home/home-page'
 import AboutPage from '../pages/about/about-page'
 import AwardsPage from '../pages/awards/awards-page'
 import CareerPage from '../pages/career/career-page'
+import JobDetailPage from '../pages/career/job-detail-page'
 import LoginPage from '../pages/auth/login-page'
 import RegisterPage from '../pages/auth/register-page'
 import ForgotPasswordPage from '../pages/auth/forgot-password-page'
@@ -22,6 +23,7 @@ const router = createBrowserRouter([
       { path: "about", element: <AboutPage /> },
       { path: "awards", element: <AwardsPage /> },
       { path: "careers", element: <CareerPage /> },
+      { path: "careers/job/:id", element: <JobDetailPage /> },
     ],
   },
 
