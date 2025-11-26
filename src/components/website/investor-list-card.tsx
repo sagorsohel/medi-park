@@ -10,11 +10,11 @@ interface InvestorListCardProps {
 
 export function InvestorListCard({ image, name, role }: InvestorListCardProps) {
   return (
-    <Card className="border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
+    <Card className="border !p-0 border-gray-200 rounded-lg hover:shadow-md transition-shadow">
       <CardContent className="p-4">
         <div className="flex items-center gap-4">
           {/* Profile Picture */}
-          <div className="w-16 h-16 rounded-full overflow-hidden bg-gray-200 shrink-0">
+          <div className="w-16 h-16 rounded-lg overflow-hidden bg-gray-200 shrink-0">
             <img
               src={image}
               alt={name}
@@ -31,7 +31,7 @@ export function InvestorListCard({ image, name, role }: InvestorListCardProps) {
             <h3 className="text-base font-bold text-gray-900 mb-1 truncate">
               {name}
             </h3>
-            <p className="text-sm text-blue-600 truncate">
+            <p className="text-sm text-text truncate">
               {role}
             </p>
           </div>

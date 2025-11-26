@@ -24,7 +24,7 @@ export default function InvestorsPage() {
   return (
     <div className="w-full bg-gray-100 min-h-screen">
       {/* Hero Section */}
-      <PageHeroSection image="/hero1.png" heading="Investor List" alt="Investor List Hero" />
+      <PageHeroSection image="/investor-page.png" heading="Investor List" alt="Investor List Hero" />
       
       {/* Breadcrumb Section */}
       <BreadcrumbSection currentPage="Investor List" />
@@ -33,7 +33,7 @@ export default function InvestorsPage() {
       <section className="w-full bg-white py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Title */}
-          <h1 className="text-4xl font-bold text-blue-900 mb-12">
+          <h1 className="text-4xl font-bold text-blue-900 mb-12 text-center">
             Investor List
           </h1>
 
