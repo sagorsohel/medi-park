@@ -28,7 +28,7 @@ export function InvestorListCard({ image, name, role }: InvestorListCardProps) {
           
           {/* Text Content */}
           <div className="flex-1 min-w-0">
-            <h3 className="text-base font-bold text-gray-900 mb-1 truncate">
+            <h3 className="text-lg font-semibold text-gray-900 mb-1 truncate">
               {name}
             </h3>
             <p className="text-sm text-text truncate">
