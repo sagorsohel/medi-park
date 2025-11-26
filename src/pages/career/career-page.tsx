@@ -120,7 +120,7 @@ export default function CareerPage() {
       {/* Want to Join Our Team Section */}
       <section className="w-full bg-white py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-4xl font-bold text-blue-900 mb-6 text-center">
+          <h2 className="text-4xl font-bold text-blue-900 mb-6 text-center block mx-auto border-b-2 pb-2 w-fit">
             Want to join our team?
           </h2>
           <p className="text-gray-700 text-justify mb-8 max-w-4xl mx-auto">
@@ -134,19 +134,21 @@ export default function CareerPage() {
           {/* HR Message Section */}
           <div className="flex flex-col md:flex-row gap-8 items-start mb-8">
             {/* Image */}
-            <div className="w-full md:w-80 shrink-0">
-              <div className="relative rounded-lg overflow-hidden border-2 border-blue-600">
+            <div className="w-full md:w-60  shrink-0">
+              <div className="relative rounded-[22px] overflow-hidden border-2 bg-blue-900 border-blue-600">
+                <div className='border rounded-b-[22px] bg-blue-900 '>
                 <img
                   src="/hero1.png"
                   alt="GEN MAMUN MOSTAFI (RTD)"
-                  className="w-full h-auto object-cover"
+                  className="w-full h-[200px] object-cover border rounded-b-[22px] "
                   onError={(e) => {
                     const target = e.target as HTMLImageElement;
                     target.src = "/vite.svg";
                   }}
                 />
-                <div className="bg-blue-900 text-white p-4">
-                  <p className="font-bold text-lg">GEN MAMUN MOSTAFI (RTD)</p>
+                </div>
+                <div className="bg-blue-900 text-white p-4 text-center">
+                  <p className="font-bold text-md">GEN MAMUN MOSTAFI (RTD)</p>
                   <p className="text-sm mt-1">
                     Lorem Ipsum is simply dummy text of the printing and typesetting industry.
                   </p>

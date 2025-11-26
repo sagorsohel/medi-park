@@ -11,8 +11,8 @@ export function WebsiteFooter() {
   };
 
   return (
-    <footer className="w-full bg-blue-900 text-white mt-auto">
-      <div className="container mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
+    <footer className="w-full overflow-hidden bg-blue-900 text-white ">
+      <div className=" mx-auto w-full max-w-7xl  py-12">
         {/* Main Footer Content */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12 justify-center items-center mb-8">
           {/* Leftmost Column - Medipark Tele Service */}
