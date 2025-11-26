@@ -3,7 +3,7 @@
 import { useNavigate } from "react-router";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Clock, Calendar, MapPin, Briefcase } from "lucide-react";
+import { Calendar, MapPin, Briefcase } from "lucide-react";
 
 interface JobCardProps {
   id: string | number;
@@ -16,15 +16,15 @@ interface JobCardProps {
   onApply?: () => void;
 }
 
-export function JobCard({ 
+export function JobCard({
   id,
-  image, 
-  title, 
-  vacancy, 
-  deadline, 
-  location, 
+  image,
+  title,
+  vacancy,
+  deadline,
+  location,
   type,
-  onApply 
+  onApply
 }: JobCardProps) {
   const navigate = useNavigate();
 
@@ -37,23 +37,23 @@ export function JobCard({
   };
 
   return (
-    <Card className="overflow-hidden hover:shadow-lg transition-shadow">
-      <div className="relative w-full h-48 overflow-hidden">
+    <Card className="overflow-hidden hover:shadow-lg transition-shadow p-0">
+      <div className="relative w-full p-3  rounded-[16px] h-48 overflow-hidden">
         <img
           src={image}
           alt={title}
-          className="w-full h-full object-cover"
+          className="w-full h-full rounded-[16px] object-cover"
           onError={(e) => {
             const target = e.target as HTMLImageElement;
             target.src = "/vite.svg";
           }}
         />
       </div>
-      <CardContent className="p-6">
+      <CardContent className="p-3">
         <h3 className="text-xl font-bold text-blue-900 mb-4">{title}</h3>
         <div className="space-y-2 mb-4">
           <div className="flex items-center gap-2 text-gray-600">
-            <Clock className="h-4 w-4" />
+            <Briefcase className="h-4 w-4" />
             <span className="text-sm">Vacancy: {vacancy}</span>
           </div>
           <div className="flex items-center gap-2 text-gray-600">
@@ -62,12 +62,12 @@ export function JobCard({
           </div>
           <div className="flex items-center gap-2 text-gray-600">
             <MapPin className="h-4 w-4" />
-            <Briefcase className="h-4 w-4" />
+
             <span className="text-sm">{location} • {type}</span>
           </div>
         </div>
-        <Button 
-          className="w-full bg-blue-900 hover:bg-blue-800 text-white"
+        <Button
+          className="w-full bg-blue-900 rounded-[40px] hover:bg-blue-800 text-white"
           onClick={handleApply}
         >
           Apply Now
