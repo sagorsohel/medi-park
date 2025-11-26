@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useNavigate } from "react-router";
 
 const newsItems = [
   {
@@ -30,7 +31,7 @@ const newsItems = [
 
 export function MediaSection() {
   const [currentIndex, setCurrentIndex] = useState(0);
-
+  const navigate=useNavigate()
   const nextSlide = () => {
     setCurrentIndex((prev) => (prev + 1) % newsItems.length);
   };
@@ -106,7 +107,9 @@ export function MediaSection() {
 
         {/* View All Button */}
         <div className="text-center">
-          <Button className="bg-blue-900 text-white hover:bg-blue-800 px-8 py-6 text-lg rounded-lg">
+          <Button onClick={()=>{
+            navigate('news')
+          }} className="bg-blue-900 text-white hover:bg-blue-800 px-8 py-6 text-lg rounded-lg">
             View all Medipark News
           </Button>
         </div>

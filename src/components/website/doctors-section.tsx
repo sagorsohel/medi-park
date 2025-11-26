@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { DoctorCard } from "./doctor-card";
+import { useNavigate } from "react-router";
 
 const doctors = [
   {
@@ -42,6 +43,7 @@ const doctors = [
 ];
 
 export function DoctorsSection() {
+  const navigate=useNavigate()
   return (
     <div className="w-full bg-blue-50 py-16 md:py-24">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -69,6 +71,9 @@ export function DoctorsSection() {
         {/* View All Doctors Button */}
         <div className="text-center">
           <Button
+          onClick={()=>{
+            navigate('/doctors')
+          }}
             className="bg-transparant text-blue-900 border-2 border-blue-900 hover:bg-blue-200 px-8 py-7 text-lg font-semibold rounded-full"
           >
             View All Doctors
