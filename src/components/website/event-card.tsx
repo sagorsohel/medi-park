@@ -12,7 +12,7 @@ interface EventCardProps {
 
 export function EventCard({ image, date, title, link = "#" }: EventCardProps) {
   return (
-    <Card className="overflow-hidden hover:shadow-lg transition-shadow">
+    <Card className="overflow-hidden hover:shadow-lg transition-shadow p-0">
       <div className="relative w-full h-48 overflow-hidden">
         <img
           src={image}
@@ -24,8 +24,8 @@ export function EventCard({ image, date, title, link = "#" }: EventCardProps) {
           }}
         />
       </div>
-      <CardContent className="p-6">
-        <p className="text-sm text-gray-600 mb-2">{date}</p>
+      <CardContent className="p-3">
+        <p className="text-sm text-text mb-2 border  inline-flex p-2 rounded-full border-text ">{date}</p>
         <h3 className="text-lg font-semibold text-gray-900 mb-3 line-clamp-2">
           {title}
         </h3>
