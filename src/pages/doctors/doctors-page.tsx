@@ -92,7 +92,7 @@ export default function DoctorsPage() {
           {departments.map((department) => (
             <div key={department.id} className="mb-16 last:mb-0">
               {/* Department Header */}
-              <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center justify-between mb-6 pb-6 border-b-2 border-gray-200">
                 <div className="flex items-center gap-3">
                   <div className="text-blue-900">
                     {department.icon}
@@ -109,7 +109,7 @@ export default function DoctorsPage() {
               </div>
 
               {/* Doctors Grid */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
                 {department.doctors.map((doctor) => (
                   <DoctorProfileCard
                     key={doctor.id}

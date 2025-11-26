@@ -30,12 +30,12 @@ export function DoctorProfileCard({
   };
 
   return (
-    <Card className="overflow-hidden hover:shadow-lg transition-shadow">
-      <CardContent className="p-6">
+    <Card className="overflow-hidden hover:shadow-lg transition-shadow p-0">
+      <CardContent className="p-2">
         <div className="flex flex-col md:flex-row gap-6">
           {/* Image */}
-          <div className="shrink-0">
-            <div className="w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden border-4 border-gray-200">
+          <div className="">
+            <div className="w-44 h-44 md:w-40 md:h-40 rounded-lg overflow-hidden border-4 border-gray-200">
               <img
                 src={image}
                 alt={name}
@@ -49,20 +49,20 @@ export function DoctorProfileCard({
           </div>
           
           {/* Content */}
-          <div className="flex-1 flex flex-col justify-between">
+          <div className= "grow flex flex-col justify-between">
             <div>
-              <h3 className="text-xl font-bold text-blue-900 mb-2">{name}</h3>
+              <h3 className="text-xl font-bold text-text mb-2">{name}</h3>
               <p className="text-sm text-gray-600 mb-2">{qualifications}</p>
               <p className="text-base font-semibold text-gray-900 mb-2">{role}</p>
               <Link 
                 to={`/doctors/${id}`}
-                className="text-blue-600 hover:text-blue-800 underline text-sm inline-block mb-4"
+                className="text-text hover:text-blue-800 underline text-sm inline-block mb-4"
               >
                 {department}
               </Link>
             </div>
             <Button
-              className="bg-blue-900 hover:bg-blue-800 text-white w-full md:w-auto"
+              className="bg-blue-900 hover:bg-blue-800 rounded-[40px] text-white w-full md:w-auto"
               onClick={handleViewProfile}
               asChild
             >
