@@ -1,5 +1,6 @@
 "use client";
 
+import { Link } from "react-router";
 import { Button } from "@/components/ui/button";
 import { InvestorCard } from "./investor-card";
 
@@ -120,8 +121,9 @@ export function InvestorSection() {
         <div className="text-center">
           <Button
             className="bg-blue-100 text-blue-900 border border-blue-900 hover:bg-blue-200 px-8 py-6 text-lg font-semibold rounded-lg"
+            asChild
           >
-            View All Investor
+            <Link to="/investors">View All Investor</Link>
           </Button>
         </div>
       </div>

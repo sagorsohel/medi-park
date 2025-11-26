@@ -10,6 +10,7 @@ import DoctorsPage from '../pages/doctors/doctors-page'
 import DoctorDetailPage from '../pages/doctors/doctor-detail-page'
 import BlogsPage from '../pages/blogs/blogs-page'
 import BlogDetailPage from '../pages/blogs/blog-detail-page'
+import InvestorsPage from '../pages/investors/investors-page'
 import LoginPage from '../pages/auth/login-page'
 import RegisterPage from '../pages/auth/register-page'
 import ForgotPasswordPage from '../pages/auth/forgot-password-page'
@@ -36,6 +37,7 @@ const router = createBrowserRouter([
       { path: "doctors/:id", element: <DoctorDetailPage /> },
       { path: "blogs", element: <BlogsPage /> },
       { path: "blogs/:id", element: <BlogDetailPage /> },
+      { path: "investors", element: <InvestorsPage /> },
     ],
   },
 
