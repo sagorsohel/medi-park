@@ -65,7 +65,7 @@ export default function NewsPage() {
             <h2 className="text-4xl md:text-5xl font-bold text-blue-900 mb-4">
               News & Media
             </h2>
-            <div className="w-1 h-8 bg-blue-900 mx-auto"></div>
+            <div className="w-44 h-1 bg-blue-900 mx-auto"></div>
           </div>
           
           {/* Description */}

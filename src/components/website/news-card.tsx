@@ -12,7 +12,7 @@ interface NewsCardProps {
 
 export function NewsCard({ image, date, title, link = "#" }: NewsCardProps) {
   return (
-    <Card className="overflow-hidden hover:shadow-lg transition-shadow">
+    <Card className="overflow-hidden hover:shadow-lg transition-shadow p-0">
       <div className="relative w-full h-48 overflow-hidden">
         <img
           src={image}
@@ -24,14 +24,14 @@ export function NewsCard({ image, date, title, link = "#" }: NewsCardProps) {
           }}
         />
       </div>
-      <CardContent className="p-6">
+      <CardContent className="p-3 bg-[#E3F0FF]">
         <p className="text-sm text-gray-600 mb-2">{date}</p>
-        <h3 className="text-lg font-semibold text-gray-900 mb-3 line-clamp-2">
+        <h3 className="text-lg font-semibold text-text mb-3 line-clamp-2">
           {title}
         </h3>
         <Link 
           to={link}
-          className="text-blue-600 hover:text-blue-800 font-medium text-sm inline-flex items-center gap-1"
+          className="text-blue-600 hover:text-text font-medium text-sm inline-flex items-center gap-1"
         >
           Read more
           <span>→</span>
