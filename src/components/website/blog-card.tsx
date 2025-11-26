@@ -15,7 +15,7 @@ export function BlogCard({ id, image, date, title, link }: BlogCardProps) {
   const blogLink = link || `/blogs/${id}`;
 
   return (
-    <Card className="overflow-hidden hover:shadow-lg transition-shadow">
+    <Card className="overflow-hidden p-0! hover:shadow-lg transition-shadow">
       <div className="relative w-full h-48 overflow-hidden">
         <img
           src={image}
@@ -27,7 +27,7 @@ export function BlogCard({ id, image, date, title, link }: BlogCardProps) {
           }}
         />
       </div>
-      <CardContent className="p-6">
+      <CardContent className="p-0 px-3 pb-3">
         {/* Date Badge */}
         <div className="inline-block border-2 border-blue-200 rounded-full px-4 py-1 mb-3">
           <span className="text-sm text-blue-900 font-medium">{date}</span>
@@ -41,7 +41,7 @@ export function BlogCard({ id, image, date, title, link }: BlogCardProps) {
         {/* Read More Link */}
         <Link
           to={blogLink}
-          className="text-blue-600 underline hover:text-blue-800 transition-colors"
+          className="text-text underline  hover:text-text transition-colors"
         >
           Read more
         </Link>
