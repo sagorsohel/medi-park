@@ -41,7 +41,6 @@ export function ContactFormSection() {
         {/* Title */}
         <div className="text-center mb-12">
           <h2 className="text-4xl md:text-5xl font-bold text-blue-900 mb-2">Submit Your Query</h2>
-          <div className="w-0.5 h-8 bg-blue-900 mx-auto mt-2" />
         </div>
 
         {/* Contact Form */}
@@ -113,6 +112,7 @@ export function ContactFormSection() {
                       onChange={handleInputChange}
                       required
                       rows={4}
+                      cols={12}
                       className="w-full rounded-md border border-input bg-transparent px-3 py-2 text-base shadow-xs transition-[color,box-shadow] outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] md:text-sm resize-none"
                     />
                   </FieldContent>
