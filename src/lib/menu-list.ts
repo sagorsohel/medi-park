@@ -1,6 +1,5 @@
 import {
   LayoutGrid,
-  Users,
   Settings,
   FileText,
   Building2,

@@ -66,7 +66,10 @@ export function Sidebar() {
                   : "translate-x-0 opacity-100"
               )}
             >
-              <img src="/public/dashboard-logo.png" alt="" className="w-[197px] h-[53px]" />
+               <img src="/dashboard-logo.png" alt="MediPark Logo" className="w-[197px] h-[53px]" onError={(e) => {
+                 const target = e.target as HTMLImageElement;
+                 target.src = "/logo.png";
+               }} />
             </div>
           </Link>
         </div>
