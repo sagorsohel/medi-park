@@ -1,11 +1,16 @@
 import {
-  Tag,
+  LayoutGrid,
   Users,
   Settings,
-  Bookmark,
-  SquarePen,
-  LayoutGrid,
- type LucideIcon
+  FileText,
+  Building2,
+  Briefcase,
+  UserCog,
+  Wrench,
+  Home,
+  Phone,
+  Package,
+  type LucideIcon
 } from "lucide-react";
 
 type Submenu = {
@@ -37,51 +42,83 @@ export function getMenuList(_pathname: string): Group[] {
           label: "Dashboard",
           icon: LayoutGrid,
           submenus: []
+        },
+        {
+          href: "/admin/investors",
+          label: "Investors",
+          icon: Building2,
+          submenus: []
+        },
+        {
+          href: "/admin/hr",
+          label: "HR",
+          icon: Briefcase,
+          submenus: []
+        },
+        {
+          href: "/admin/staff",
+          label: "Staff",
+          icon: UserCog,
+          submenus: []
+        },
+        {
+          href: "/admin/equipment",
+          label: "Equipment",
+          icon: Wrench,
+          submenus: []
+        },
+        {
+          href: "/admin/settings",
+          label: "Settings",
+          icon: Settings,
+          submenus: []
+        },
+        {
+          href: "/terms-conditions",
+          label: "Terms & Conditions",
+          icon: FileText,
+          submenus: []
+        },
+        {
+          href: "/privacy-policy",
+          label: "Privacy Policy",
+          icon: FileText,
+          submenus: []
         }
       ]
     },
     {
-      groupLabel: "Contents",
+      groupLabel: "Website Manage",
       menus: [
         {
-          href: "",
-          label: "Posts",
-          icon: SquarePen,
-          submenus: [
-            {
-              href: "/posts",
-              label: "All Posts"
-            },
-            {
-              href: "/posts/new",
-              label: "New Post"
-            }
-          ]
+          href: "/admin/website/home",
+          label: "Home Page",
+          icon: Home,
+          submenus: []
         },
         {
-          href: "/categories",
-          label: "Categories",
-          icon: Bookmark
+          href: "/admin/website/contact",
+          label: "Contact Us",
+          icon: Phone,
+          submenus: []
         },
         {
-          href: "/tags",
-          label: "Tags",
-          icon: Tag
-        }
-      ]
-    },
-    {
-      groupLabel: "Settings",
-      menus: [
-        {
-          href: "/users",
-          label: "Users",
-          icon: Users
+          href: "/admin/website/inventory-1",
+          label: "Inventory",
+          icon: Package,
+          submenus: []
         },
         {
-          href: "/account",
-          label: "Account",
-          icon: Settings
+          href: "/admin/website/inventory-2",
+          label: "Inventory",
+          icon: Package,
+          submenus: []
+        },
+        {
+          href: "/admin/website/inventory-3",
+          label: "Inventory",
+          icon: Package,
+          submenus: []
         }
       ]
     }

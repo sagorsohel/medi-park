@@ -1,9 +1,7 @@
 "use client";
 
-import { Link, useLocation, useNavigate } from "react-router";
-import { Ellipsis, LogOut } from "lucide-react";
-import { useAppDispatch } from "@/store/hooks";
-import { logout } from "@/store/slices/authSlice";
+import { Link, useLocation } from "react-router";
+import { Ellipsis } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { getMenuList } from "@/lib/menu-list";
@@ -23,23 +21,16 @@ interface MenuProps {
 
 export function Menu({ isOpen }: MenuProps) {
   const { pathname } = useLocation();
-  const navigate = useNavigate();
-  const dispatch = useAppDispatch();
   const menuList = getMenuList(pathname);
 
-  const handleLogout = () => {
-    dispatch(logout());
-    navigate('/');
-  };
-
   return (
-    <ScrollArea className="[&>div>div[style]]:!block">
-      <nav className="mt-8 h-full w-full">
-        <ul className="flex flex-col min-h-[calc(100vh-48px-36px-16px-32px)] lg:min-h-[calc(100vh-32px-40px-32px)] items-start space-y-1 px-2">
+    <ScrollArea className="h-full [&>div>div[style]]:!block">
+      <nav className="h-full w-full">
+        <ul className="flex flex-col items-start space-y-1 px-2 py-2">
           {menuList.map(({ groupLabel, menus }, index) => (
             <li className={cn("w-full", groupLabel ? "pt-5" : "")} key={index}>
               {(isOpen && groupLabel) || isOpen === undefined ? (
-                <p className="text-sm font-medium text-muted-foreground px-4 pb-2 max-w-[248px] truncate">
+                <p className="text-sm font-semibold text-gray-700 px-2 pb-2 max-w-[248px] truncate">
                   {groupLabel}
                 </p>
               ) : !isOpen && isOpen !== undefined && groupLabel ? (
@@ -73,7 +64,7 @@ export function Menu({ isOpen }: MenuProps) {
                                   ? "secondary"
                                   : "ghost"
                               }
-                              className="w-full justify-start h-10 mb-1"
+                              className="w-full justify-start h-10 mb-1 rounded-lg"
                               asChild
                             >
                               <Link to={href}>
@@ -121,34 +112,6 @@ export function Menu({ isOpen }: MenuProps) {
               )}
             </li>
           ))}
-          <li className="w-full grow flex items-end">
-            <TooltipProvider disableHoverableContent>
-              <Tooltip delayDuration={100}>
-                <TooltipTrigger asChild>
-                  <Button
-                    onClick={handleLogout}
-                    variant="outline"
-                    className="w-full justify-center h-10 mt-5"
-                  >
-                    <span className={cn(isOpen === false ? "" : "mr-4")}>
-                      <LogOut size={18} />
-                    </span>
-                    <p
-                      className={cn(
-                        "whitespace-nowrap",
-                        isOpen === false ? "opacity-0 hidden" : "opacity-100"
-                      )}
-                    >
-                      Sign out
-                    </p>
-                  </Button>
-                </TooltipTrigger>
-                {isOpen === false && (
-                  <TooltipContent side="right">Sign out</TooltipContent>
-                )}
-              </Tooltip>
-            </TooltipProvider>
-          </li>
         </ul>
       </nav>
     </ScrollArea>
