@@ -241,11 +241,7 @@ export function AboutSectionManage() {
                         />
                       </div>
                     )}
-                    {section.image_1 && !imagePreviews.image_1 && !editableData.image_1 && (
-                      <p className="text-xs text-gray-500 mt-1">
-                        Current: {section.image_1}
-                      </p>
-                    )}
+                   
                     {editableData.image_1 instanceof File && (
                       <p className="text-xs text-green-600 mt-1">
                         New image selected: {editableData.image_1.name}
@@ -284,11 +280,7 @@ export function AboutSectionManage() {
                         />
                       </div>
                     )}
-                    {section.image_2 && !imagePreviews.image_2 && !editableData.image_2 && (
-                      <p className="text-xs text-gray-500 mt-1">
-                        Current: {section.image_2}
-                      </p>
-                    )}
+                    
                     {editableData.image_2 instanceof File && (
                       <p className="text-xs text-green-600 mt-1">
                         New image selected: {editableData.image_2.name}
@@ -327,11 +319,7 @@ export function AboutSectionManage() {
                         />
                       </div>
                     )}
-                    {section.image_3 && !imagePreviews.image_3 && !editableData.image_3 && (
-                      <p className="text-xs text-gray-500 mt-1">
-                        Current: {section.image_3}
-                      </p>
-                    )}
+                   
                     {editableData.image_3 instanceof File && (
                       <p className="text-xs text-green-600 mt-1">
                         New image selected: {editableData.image_3.name}
