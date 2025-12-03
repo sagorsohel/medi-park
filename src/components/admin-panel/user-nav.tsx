@@ -7,8 +7,8 @@ export function UserNav() {
   const { user } = useAppSelector((state) => state.auth);
 
   return (
-    <div className="bg-[#e0f2f7] rounded-lg p-1 shadow-sm border border-gray-200/50">
-      <div className="flex items-center gap-3">
+    <div className="bg-white rounded-lg p-1 shadow-sm border border-gray-200/50">
+      <div className="flex items-center gap-1">
         {/* Avatar Icon Section */}
         <div className="bg-[#a7d9f7] rounded-lg p-2 shrink-0">
           <User className="w-6 h-6 text-white" />
