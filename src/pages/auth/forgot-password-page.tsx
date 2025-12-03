@@ -2,7 +2,14 @@
 
 import { type FormEvent, useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router";
-import { useForgotPasswordMutation, useVerifyCodeAndResetPasswordMutation } from "@/store/api/apiSlice";
+import { 
+  useSendUserOtpMutation, 
+  useResetUserPasswordMutation,
+  useSendAdminOtpMutation,
+  useResetAdminPasswordMutation,
+  useVerifyUserOtpMutation,
+  useVerifyAdminOtpMutation
+} from "@/services/authApi";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Lock, Eye, EyeOff, Mail } from "lucide-react";
@@ -30,13 +37,22 @@ export default function ForgotPasswordPage() {
   const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
   const [timer, setTimer] = useState<number>(60); // 60 seconds timer
   const [canResend, setCanResend] = useState<boolean>(false);
-  const [storedVerificationCode, setStoredVerificationCode] = useState<string | null>(null);
-
-  const [forgotPassword, { isLoading: isSendingCode }] = useForgotPasswordMutation();
-  const [verifyAndReset, { isLoading: isResetting }] = useVerifyCodeAndResetPasswordMutation();
 
   const isAdminForgot = location.pathname.includes('/admin/forgot-password');
   const loginPath = isAdminForgot ? '/admin/login' : '/user/login';
+  
+  const [sendUserOtp, { isLoading: isSendingUserOtp }] = useSendUserOtpMutation();
+  const [resetUserPassword, { isLoading: isResettingUser }] = useResetUserPasswordMutation();
+  const [sendAdminOtp, { isLoading: isSendingAdminOtp }] = useSendAdminOtpMutation();
+  const [resetAdminPassword, { isLoading: isResettingAdmin }] = useResetAdminPasswordMutation();
+  const [verifyUserOtp] = useVerifyUserOtpMutation();
+  const [verifyAdminOtp] = useVerifyAdminOtpMutation();
+  
+  const forgotPassword = isAdminForgot ? sendAdminOtp : sendUserOtp;
+  const verifyOtp = isAdminForgot ? verifyAdminOtp : verifyUserOtp;
+  const verifyAndReset = isAdminForgot ? resetAdminPassword : resetUserPassword;
+  const isSendingCode = isAdminForgot ? isSendingAdminOtp : isSendingUserOtp;
+  const isResetting = isAdminForgot ? isResettingAdmin : isResettingUser;
 
   // Timer effect for OTP step
   useEffect(() => {
@@ -66,7 +82,7 @@ export default function ForgotPasswordPage() {
     setCode("");
     try {
       const result = await forgotPassword({ email }).unwrap();
-      setStoredVerificationCode(result.code);
+      setSuccessMessage(result.message);
     } catch (err: unknown) {
       const error = err as ApiError;
       setLocalError(error?.data?.message || 'Failed to resend verification code. Please try again.');
@@ -80,30 +96,30 @@ export default function ForgotPasswordPage() {
 
     try {
       const result = await forgotPassword({ email }).unwrap();
-      setStoredVerificationCode(result.code);
       setSuccessMessage(result.message);
       setStep('verify');
       setTimer(60);
       setCanResend(false);
-      // In production, code would be sent via email
-      // For demo, we'll show it in console (already logged in apiSlice)
-      console.log('Verification code:', result.code);
+      // Note: In production, OTP is sent via email, not returned in response
     } catch (err: unknown) {
       const error = err as ApiError;
       setLocalError(error?.data?.message || 'Failed to send verification code. Please try again.');
     }
   };
 
-  const handleVerifyCode = (event: FormEvent<HTMLFormElement>): void => {
+  const handleVerifyCode = async (event: FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault();
     setLocalError("");
 
-    // Verify the code locally (in production, this would be done on the server)
-    if (code === storedVerificationCode) {
+    try {
+      // Verify OTP with the server
+      const result = await verifyOtp({ email, otp: code }).unwrap();
+      setSuccessMessage(result.message);
       setStep('reset');
       setLocalError("");
-    } else {
-      setLocalError('Invalid verification code. Please try again.');
+    } catch (err: unknown) {
+      const error = err as ApiError;
+      setLocalError(error?.data?.message || 'Invalid verification code. Please try again.');
     }
   };
 
@@ -122,7 +138,12 @@ export default function ForgotPasswordPage() {
     }
 
     try {
-      const result = await verifyAndReset({ email, code, newPassword }).unwrap();
+      const result = await verifyAndReset({ 
+        email, 
+        otp: code, 
+        password: newPassword, 
+        password_confirmation: confirmPassword 
+      }).unwrap();
       setSuccessMessage(result.message);
       
       // Redirect to login after 2 seconds

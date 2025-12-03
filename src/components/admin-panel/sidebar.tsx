@@ -100,7 +100,7 @@ export function Sidebar() {
                 </p>
 
                 <p className="text-sm text-gray-800 font-medium capitalize">
-                  {user?.role || "Admin"}
+                  {user?.roles?.[0]?.name || "Admin"}
                 </p>
               </div>
             </div>

@@ -2,8 +2,8 @@
 
 import { type FormEvent, useState } from "react";
 import { useNavigate, useLocation, Link } from "react-router";
-import { useRegisterMutation } from "@/store/api/apiSlice";
-import { setCredentials } from "@/store/slices/authSlice";
+import { useRegisterUserMutation } from "@/services/authApi";
+import { setCredentials, getUserRoleSlug } from "@/store/slices/authSlice";
 import { useAppDispatch } from "@/store/hooks";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -21,7 +21,7 @@ export default function RegisterPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useAppDispatch();
-  const [register, { isLoading }] = useRegisterMutation();
+  const [register, { isLoading }] = useRegisterUserMutation();
   
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -51,10 +51,14 @@ export default function RegisterPage() {
       const result = await register({ email, password, name }).unwrap();
       
       // Set credentials in Redux store
-      dispatch(setCredentials(result));
+      dispatch(setCredentials({
+        user: result.user,
+        token: result.token,
+      }));
       
-      // Navigate based on user role
-      const finalPath = result.user.role === 'admin' ? '/admin/dashboard' : '/user/dashboard';
+      // Navigate based on user role slug
+      const roleSlug = getUserRoleSlug(result.user);
+      const finalPath = roleSlug === 'admin' ? '/admin/dashboard' : '/user/dashboard';
       navigate(finalPath, { replace: true });
     } catch (err: any) {
       setLocalError(err?.data?.message || 'Registration failed. Please try again.');

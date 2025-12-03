@@ -1,11 +1,37 @@
-import { createSlice } from '@reduxjs/toolkit'
-import type { PayloadAction } from '@reduxjs/toolkit'
+import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
+import { tokenManager } from '@/lib/tokenManager'
+
+export interface Role {
+  id: number
+  name: string
+  slug: string
+}
 
 export interface User {
-  id: string
-  email: string
+  id: number
   name: string
-  role: 'admin' | 'user'
+  email: string
+  email_verified_at: string | null
+  suspended_at: string | null
+  suspension_reason: string | null
+  is_suspended: boolean
+  roles: Role[]
+  created_at: string
+  updated_at: string
+}
+
+// Helper function to get role slug from user
+export const getUserRoleSlug = (user: User | null): string | null => {
+  if (!user || !user.roles || user.roles.length === 0) {
+    return null
+  }
+  return user.roles[0].slug
+}
+
+// Helper function to check if user is admin
+export const isAdmin = (user: User | null): boolean => {
+  const roleSlug = getUserRoleSlug(user)
+  return roleSlug === 'admin'
 }
 
 interface AuthState {
@@ -14,32 +40,22 @@ interface AuthState {
   isAuthenticated: boolean
 }
 
-// Load initial state from localStorage
-const loadAuthState = (): AuthState => {
+const storedUser = (() => {
+  const raw = localStorage.getItem('user')
+  if (!raw) return null
   try {
-    const token = localStorage.getItem('token')
-    const userStr = localStorage.getItem('user')
-    
-    if (token && userStr) {
-      const user = JSON.parse(userStr)
-      return {
-        token,
-        user,
-        isAuthenticated: true,
-      }
-    }
-  } catch (error) {
-    console.error('Error loading auth state:', error)
+    return JSON.parse(raw) as User
+  } catch {
+    localStorage.removeItem('user')
+    return null
   }
-  
-  return {
-    user: null,
-    token: null,
-    isAuthenticated: false,
-  }
-}
+})()
 
-const initialState: AuthState = loadAuthState()
+const initialState: AuthState = {
+  user: storedUser,
+  token: tokenManager.getAccessToken(),
+  isAuthenticated: !!(storedUser && tokenManager.getAccessToken()),
+}
 
 const authSlice = createSlice({
   name: 'auth',
@@ -47,25 +63,25 @@ const authSlice = createSlice({
   reducers: {
     setCredentials: (
       state,
-      action: PayloadAction<{ user: User; token: string }>
+      action: PayloadAction<{ user: User | null; token: string }>
     ) => {
-      const { user, token } = action.payload
-      state.user = user
-      state.token = token
-      state.isAuthenticated = true
-      
-      // Save to localStorage
-      localStorage.setItem('token', token)
-      localStorage.setItem('user', JSON.stringify(user))
+      state.user = action.payload.user
+      state.token = action.payload.token
+      state.isAuthenticated = !!(action.payload.user && action.payload.token)
+     
+      if (action.payload.user) {
+        localStorage.setItem('user', JSON.stringify(action.payload.user))
+      } else {
+        localStorage.removeItem('user')
+      }
+      tokenManager.setAccessToken(action.payload.token)
     },
     logout: (state) => {
       state.user = null
       state.token = null
       state.isAuthenticated = false
-      
-      // Clear localStorage
-      localStorage.removeItem('token')
       localStorage.removeItem('user')
+      tokenManager.clearTokens()
     },
     updateUser: (state, action: PayloadAction<Partial<User>>) => {
       if (state.user) {

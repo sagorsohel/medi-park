@@ -2,8 +2,8 @@
 
 import { type FormEvent, useState } from "react";
 import { useNavigate, useLocation, Link } from "react-router";
-import { useLoginMutation } from "@/store/api/apiSlice";
-import { setCredentials } from "@/store/slices/authSlice";
+import { useAdminLoginMutation, useUserLoginMutation } from "@/services/authApi";
+import { setCredentials, getUserRoleSlug } from "@/store/slices/authSlice";
 import { useAppDispatch } from "@/store/hooks";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -13,15 +13,18 @@ export default function LoginPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useAppDispatch();
-  const [login, { isLoading }] = useLoginMutation();
+  
+  // Determine redirect path based on URL
+  const isAdminLogin = location.pathname.includes('/admin/login');
+  const [adminLogin, { isLoading: isAdminLoading }] = useAdminLoginMutation();
+  const [userLogin, { isLoading: isUserLoading }] = useUserLoginMutation();
+  const isLoading = isAdminLoading || isUserLoading;
+  const login = isAdminLogin ? adminLogin : userLogin;
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [localError, setLocalError] = useState<string>("");
   const [showPassword, setShowPassword] = useState(false);
-
-  // Determine redirect path based on URL
-  const isAdminLogin = location.pathname.includes('/admin/login');
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -31,14 +34,24 @@ export default function LoginPage() {
       const result = await login({ email, password }).unwrap();
 
       // Set credentials in Redux store
-      dispatch(setCredentials(result));
+      dispatch(setCredentials({
+        user: result.user,
+        token: result.token,
+      }));
 
-      // Navigate based on user role or URL path
-      const finalPath = result.user.role === 'admin' ? '/admin/dashboard' : '/user/dashboard';
+      // Navigate based on user role slug
+      const roleSlug = getUserRoleSlug(result.user);
+      const finalPath = roleSlug === 'admin' ? '/admin/dashboard' : '/user/dashboard';
       navigate(finalPath, { replace: true });
     } catch (err: unknown) {
-      console.log(err)
-      setLocalError('Login failed. Please try again.');
+      console.error('Login error:', err);
+      // Extract error message from API response
+      if (err && typeof err === 'object' && 'data' in err) {
+        const errorData = err.data as { message?: string };
+        setLocalError(errorData?.message || 'Login failed. Please try again.');
+      } else {
+        setLocalError('Login failed. Please check your credentials and try again.');
+      }
     }
   };
 

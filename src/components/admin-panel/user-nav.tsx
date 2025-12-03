@@ -3,7 +3,7 @@
 import { Link, useNavigate } from "react-router";
 import { LayoutGrid, LogOut, User } from "lucide-react";
 import { useAppSelector, useAppDispatch } from "@/store/hooks";
-import { logout } from "@/store/slices/authSlice";
+import { logout, getUserRoleSlug } from "@/store/slices/authSlice";
 
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -43,7 +43,8 @@ export function UserNav() {
       .slice(0, 2);
   };
 
-  const dashboardPath = user?.role === 'admin' ? '/admin/dashboard' : '/user/dashboard';
+  const roleSlug = getUserRoleSlug(user);
+  const dashboardPath = roleSlug === 'admin' ? '/admin/dashboard' : '/user/dashboard';
 
   return (
     <DropdownMenu>
