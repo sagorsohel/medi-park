@@ -9,6 +9,7 @@ import {
   Home,
   Phone,
   Package,
+  Stethoscope,
   type LucideIcon
 } from "lucide-react";
 
@@ -58,6 +59,12 @@ export function getMenuList(_pathname: string): Group[] {
           href: "/admin/staff",
           label: "Staff",
           icon: UserCog,
+          submenus: []
+        },
+        {
+          href: "/admin/doctor",
+          label: "Doctor",
+          icon: Stethoscope,
           submenus: []
         },
         {
