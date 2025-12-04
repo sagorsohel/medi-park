@@ -11,6 +11,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 
 export default function AddStaffPage() {
     const navigate = useNavigate();
@@ -150,9 +151,9 @@ export default function AddStaffPage() {
                     {/* Present Address */}
                     <div className="space-y-2">
                         <Label htmlFor="presentAddress">Present Address</Label>
-                        <textarea
+                        <Textarea
                             id="presentAddress"
-                            className="flex min-h-[80px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+                            className="min-h-[80px]"
                             placeholder="Enter here"
                         />
                     </div>
@@ -160,9 +161,9 @@ export default function AddStaffPage() {
                     {/* Permanent Address */}
                     <div className="space-y-2">
                         <Label htmlFor="permanentAddress">Permanent Address</Label>
-                        <textarea
+                        <Textarea
                             id="permanentAddress"
-                            className="flex min-h-[80px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+                            className="min-h-[80px]"
                             placeholder="Enter here"
                         />
                     </div>
