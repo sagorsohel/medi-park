@@ -19,6 +19,7 @@ import ForgotPasswordPage from '../pages/auth/forgot-password-page'
 import DashboardPage from '../pages/dashboard/dashboard-page'
 import WebHomeManagePage from '../pages/admin/web-home-manage-page'
 import StaffPage from '../pages/admin/staff-page'
+import AddStaffPage from '../pages/admin/add-staff-page'
 import UserDashboardPage from '../pages/user/user-dashboard-page'
 import AdminPanelLayout from '@/components/admin-panel/admin-panel-layout'
 import UserPanelLayout from '@/components/user-panel/user-panel-layout'
@@ -69,6 +70,7 @@ const router = createBrowserRouter([
       { path: "dashboard", element: <DashboardPage /> },
       { path: "website/home", element: <WebHomeManagePage /> },
       { path: "staff", element: <StaffPage /> },
+      { path: "staff/new", element: <AddStaffPage /> },
     ],
   },
 

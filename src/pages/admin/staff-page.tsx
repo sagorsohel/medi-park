@@ -1,9 +1,11 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import { useNavigate } from "react-router";
 import { DataTableFilters } from "@/components/ui/data-table-filters";
 import { DataTablePagination } from "@/components/ui/data-table-pagination";
 import { StaffTable, type StaffMember } from "@/components/admin/staff-table";
+import { Button } from "@/components/ui/button";
 
 // Mock data - replace with API call
 const mockStaff: StaffMember[] = [
@@ -142,6 +144,7 @@ const mockStaff: StaffMember[] = [
 ];
 
 export default function StaffPage() {
+  const navigate = useNavigate();
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
@@ -222,9 +225,15 @@ export default function StaffPage() {
   return (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">HR</h1>
-        <p className="text-gray-600">Here's what happening in your update</p>
+      <div className="mb-8 flex justify-between items-center">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">HR</h1>
+          <p className="text-gray-600">Here's what happening in your update</p>
+
+        </div>
+        <Button variant="default" className="bg-primary text-white" onClick={() => navigate("/admin/staff/new")}>
+          Add New
+        </Button>
       </div>
 
       {/* Filters */}
