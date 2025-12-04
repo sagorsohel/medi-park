@@ -131,9 +131,21 @@ export default function AddDoctorPage() {
 
             <div className="bg-white rounded-lg p-6">
                 <Tabs defaultValue="basic" className="w-full">
-                    <TabsList className="mb-6">
-                        <TabsTrigger value="basic">Basic Information</TabsTrigger>
-                        <TabsTrigger value="extra">Extra Information</TabsTrigger>
+                    <TabsList className="mb-6 bg-transparent gap-4 p-0 h-auto">
+                        <TabsTrigger
+                            value="basic"
+                            className="data-[state=active]:bg-primary data-[state=active]:text-white data-[state=inactive]:bg-white data-[state=inactive]:text-primary border border-primary rounded-md px-6 py-2.5 font-medium"
+                        >
+                            <Plus className="h-4 w-4 mr-2" />
+                            Basic Information
+                        </TabsTrigger>
+                        <TabsTrigger
+                            value="extra"
+                            className="data-[state=active]:bg-primary data-[state=active]:text-white data-[state=inactive]:bg-white data-[state=inactive]:text-primary border border-primary rounded-md px-6 py-2.5 font-medium"
+                        >
+                            <Plus className="h-4 w-4 mr-2" />
+                            Extra Information
+                        </TabsTrigger>
                     </TabsList>
 
                     <TabsContent value="basic">
