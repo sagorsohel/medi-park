@@ -137,8 +137,185 @@ export default function AddDoctorPage() {
                     </TabsList>
 
                     <TabsContent value="basic">
-                        {/* Basic Information content can be added here */}
-                        <p className="text-gray-500">Basic information form fields go here</p>
+                        <div className="space-y-6">
+                            {/* Doctor Identity Number */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div className="space-y-2">
+                                    <Label htmlFor="doctorId">Doctor Identity Number</Label>
+                                    <Input id="doctorId" value="Auto Generate" readOnly className="bg-blue-50/50 text-gray-500 border-blue-100" />
+                                </div>
+                            </div>
+
+                            {/* Doctor Name and Department */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div className="space-y-2">
+                                    <Label htmlFor="doctorName">Doctor Name</Label>
+                                    <Input id="doctorName" placeholder="Enter here" />
+                                </div>
+                                <div className="space-y-2">
+                                    <Label htmlFor="department">Department</Label>
+                                    <Select>
+                                        <SelectTrigger id="department" className="w-full">
+                                            <SelectValue placeholder="Select here" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="anesthesiology">Anesthesiology</SelectItem>
+                                            <SelectItem value="cardiology">Cardiology</SelectItem>
+                                            <SelectItem value="dermatology">Dermatology</SelectItem>
+                                            <SelectItem value="ent">ENT Surgery</SelectItem>
+                                            <SelectItem value="general">General Medicine</SelectItem>
+                                            <SelectItem value="ophthalmology">Ophthalmology</SelectItem>
+                                            <SelectItem value="orthopedics">Orthopedics</SelectItem>
+                                            <SelectItem value="pediatrics">Pediatrics</SelectItem>
+                                            <SelectItem value="radiology">Radiology</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                            </div>
+
+                            {/* Specialist and Mobile Number */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div className="space-y-2">
+                                    <Label htmlFor="specialist">Specialist</Label>
+                                    <Select>
+                                        <SelectTrigger id="specialist" className="w-full">
+                                            <SelectValue placeholder="Select here" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="surgeon">Surgeon</SelectItem>
+                                            <SelectItem value="physician">Physician</SelectItem>
+                                            <SelectItem value="consultant">Consultant</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                                <div className="space-y-2">
+                                    <Label htmlFor="mobile">Mobile Number</Label>
+                                    <Input id="mobile" placeholder="Enter here" />
+                                </div>
+                            </div>
+
+                            {/* Email Address and Date of Birth */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div className="space-y-2">
+                                    <Label htmlFor="email">Email Address</Label>
+                                    <Input id="email" type="email" placeholder="Enter here" />
+                                </div>
+                                <div className="space-y-2">
+                                    <Label htmlFor="dob">Date of Birth</Label>
+                                    <Input id="dob" type="date" placeholder="mm/dd/yyyy" />
+                                </div>
+                            </div>
+
+                            {/* Gender and Registration Number */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div className="space-y-2">
+                                    <Label htmlFor="gender">Gender</Label>
+                                    <Select>
+                                        <SelectTrigger id="gender" className="w-full">
+                                            <SelectValue placeholder="Select here" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="male">Male</SelectItem>
+                                            <SelectItem value="female">Female</SelectItem>
+                                            <SelectItem value="other">Other</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                                <div className="space-y-2">
+                                    <Label htmlFor="registration">Registration Number</Label>
+                                    <Input id="registration" placeholder="Enter here" />
+                                </div>
+                            </div>
+
+                            {/* Known Languages and Image */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div className="space-y-2">
+                                    <Label htmlFor="languages">Known Languages</Label>
+                                    <Select>
+                                        <SelectTrigger id="languages" className="w-full">
+                                            <SelectValue placeholder="Select here" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="english">English</SelectItem>
+                                            <SelectItem value="bengali">Bengali</SelectItem>
+                                            <SelectItem value="hindi">Hindi</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                                <div className="space-y-2">
+                                    <Label htmlFor="image">Image</Label>
+                                    <div className="flex w-full items-center justify-between rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm">
+                                        <span className="text-muted-foreground">Choose File No File Chosen</span>
+                                        <Input id="image" type="file" className="hidden" accept="image/*" />
+                                        <Button
+                                            type="button"
+                                            variant="secondary"
+                                            size="sm"
+                                            className="h-6 bg-gray-200 hover:bg-gray-300 text-gray-700"
+                                            onClick={() => document.getElementById('image')?.click()}
+                                        >
+                                            Choose File
+                                        </Button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* About and Image Preview */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div className="space-y-2">
+                                    <Label htmlFor="about">About</Label>
+                                    <Input id="about" placeholder="Enter here" />
+                                </div>
+                                <div className="space-y-2">
+                                    <Label>Image Preview</Label>
+                                    <div className="border rounded-md p-4 h-[100px] flex items-center justify-center bg-gray-50">
+                                        <div className="h-16 w-16 bg-gray-200 rounded-md flex items-center justify-center">
+                                            <svg className="h-8 w-8 text-gray-400" fill="currentColor" viewBox="0 0 24 24">
+                                                <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Address Information */}
+                            <div>
+                                <h3 className="text-lg font-semibold mb-4">Address Information</h3>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div className="space-y-2">
+                                        <Label htmlFor="presentAddress">Present Address</Label>
+                                        <Input id="presentAddress" placeholder="Enter here" />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <Label htmlFor="permanentAddress">Permanent Address</Label>
+                                        <Input id="permanentAddress" placeholder="Enter here" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Account Details */}
+                            <div>
+                                <h3 className="text-lg font-semibold mb-4">Account Details</h3>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div className="space-y-2">
+                                        <Label htmlFor="displayName">Display Name</Label>
+                                        <Input id="displayName" placeholder="Enter here" />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <Label htmlFor="username">User Name</Label>
+                                        <Input id="username" placeholder="Enter here" />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <Label htmlFor="password">Password</Label>
+                                        <Input id="password" type="password" placeholder="Enter here" />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <Label htmlFor="confirmPassword">Confirm Password</Label>
+                                        <Input id="confirmPassword" type="password" placeholder="Enter here" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </TabsContent>
 
                     <TabsContent value="extra">
