@@ -29,14 +29,14 @@ export default function BlogDetailPage() {
     <div className="w-full">
       {/* Hero Section */}
       <PageHeroSection image="/hero1.png" heading={'Blog'} alt={`${blogPost.title} Hero`} />
-      
+
       {/* Breadcrumb Section */}
       <BreadcrumbSection currentPage={blogPost.title} />
-      
+
       {/* Blog Detail Content */}
       <section className="w-full bg-white">
         {/* Dark Blue Header */}
-        <div className="w-full bg-blue-900 h-[300px] pt-20 overflow-auto ">
+        <div className="w-full bg-primary h-[300px] pt-20 overflow-auto ">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <h1 className="text-2xl md:text-3xl font-bold text-white text-center">
               {blogPost.title}

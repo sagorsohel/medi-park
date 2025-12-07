@@ -12,7 +12,7 @@ function MissionVisionItem({ title, image, text, alt }: MissionVisionItemProps) 
     <div className="w-full mb-16 md:mb-20 max-w-7xl ">
       {/* Title */}
       <div className="text-center mb-4">
-        <h2 className="text-4xl md:text-5xl font-bold text-blue-900 mb-2">
+        <h2 className="text-4xl md:text-5xl font-bold text-primary mb-2">
           {title}
         </h2>
         <div className="w-0.5 h-8 bg-gray-600 mx-auto mt-2" />

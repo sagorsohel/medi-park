@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 
 export function CTASection() {
   return (
-    <div className="w-full bg-blue-900 py-12 md:py-16">
+    <div className="w-full bg-primary py-12 md:py-16">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row items-center justify-between gap-6 max-w-6xl mx-auto">
           {/* Left Side - Text */}
@@ -17,7 +17,7 @@ export function CTASection() {
 
           {/* Right Side - Button */}
           <Button
-            className="bg-white text-blue-900 hover:bg-gray-100 px-8 py-6 text-lg font-semibold rounded-[40px] whitespace-nowrap"
+            className="bg-white text-primary hover:bg-gray-100 px-8 py-6 text-lg font-semibold rounded-[40px] whitespace-nowrap"
           >
             Send Query
           </Button>

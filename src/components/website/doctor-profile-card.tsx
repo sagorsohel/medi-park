@@ -14,12 +14,12 @@ interface DoctorProfileCardProps {
   onViewProfile?: () => void;
 }
 
-export function DoctorProfileCard({ 
+export function DoctorProfileCard({
   id,
-  image, 
-  name, 
-  qualifications, 
-  role, 
+  image,
+  name,
+  qualifications,
+  role,
   department,
   onViewProfile
 }: DoctorProfileCardProps) {
@@ -47,14 +47,14 @@ export function DoctorProfileCard({
               />
             </div>
           </div>
-          
+
           {/* Content */}
-          <div className= "grow flex flex-col justify-between">
+          <div className="grow flex flex-col justify-between">
             <div>
               <h3 className="text-xl font-bold text-text mb-2">{name}</h3>
               <p className="text-sm text-gray-600 mb-2">{qualifications}</p>
               <p className="text-base font-semibold text-gray-900 mb-2">{role}</p>
-              <Link 
+              <Link
                 to={`/doctors/${id}`}
                 className="text-text hover:text-blue-800 underline text-sm inline-block mb-4"
               >
@@ -62,7 +62,7 @@ export function DoctorProfileCard({
               </Link>
             </div>
             <Button
-              className="bg-blue-900 hover:bg-blue-800 rounded-[40px] text-white w-full md:w-auto"
+              className="bg-primary hover:bg-blue-800 rounded-[40px] text-white w-full md:w-auto"
               onClick={handleViewProfile}
               asChild
             >

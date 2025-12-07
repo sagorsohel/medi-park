@@ -27,10 +27,10 @@ export default function JobDetailPage() {
     <div className="w-full">
       {/* Hero Section */}
       <PageHeroSection image="/hero1.png" heading={job.title} alt={`${job.title} Hero`} />
-      
+
       {/* Breadcrumb Section */}
       <BreadcrumbSection currentPage={job.title} />
-      
+
       {/* Job Detail Content */}
       <section className="w-full bg-white py-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -45,23 +45,23 @@ export default function JobDetailPage() {
           </Button>
 
           {/* Job Title */}
-          <h1 className="text-4xl font-bold text-blue-900 mb-8">
+          <h1 className="text-4xl font-bold text-primary mb-8">
             {job.title}
           </h1>
 
           {/* PURPOSE */}
           <div className="mb-8">
-            <h2 className="text-2xl font-bold text-blue-900 mb-4">PURPOSE</h2>
+            <h2 className="text-2xl font-bold text-primary mb-4">PURPOSE</h2>
             <p className="text-gray-700 leading-relaxed">
-              A Resident Medical Officer (RMO) provides essential medical care under the supervision of senior doctors and Consultant in the department. 
-              They are responsible for patient care, including initial assessments, treatment plans, and emergency responses. 
+              A Resident Medical Officer (RMO) provides essential medical care under the supervision of senior doctors and Consultant in the department.
+              They are responsible for patient care, including initial assessments, treatment plans, and emergency responses.
               RMOs also play a crucial role in monitoring patient progress and collaborating with the healthcare team.
             </p>
           </div>
 
           {/* GENERAL JOB DESCRIPTION */}
           <div className="mb-8">
-            <h2 className="text-2xl font-bold text-blue-900 mb-4">GENERAL JOB DESCRIPTION</h2>
+            <h2 className="text-2xl font-bold text-primary mb-4">GENERAL JOB DESCRIPTION</h2>
             <ul className="space-y-3 text-gray-700">
               <li className="flex items-start">
                 <span className="mr-2">•</span>
@@ -132,7 +132,7 @@ export default function JobDetailPage() {
 
           {/* DEPARTMENT SPECIFIC JOB DESCRIPTION */}
           <div className="mb-8">
-            <h2 className="text-2xl font-bold text-blue-900 mb-4">DEPARTMENT SPECIFIC JOB DESCRIPTION</h2>
+            <h2 className="text-2xl font-bold text-primary mb-4">DEPARTMENT SPECIFIC JOB DESCRIPTION</h2>
             <ul className="space-y-3 text-gray-700">
               <li className="flex items-start">
                 <span className="mr-2">•</span>
@@ -151,7 +151,7 @@ export default function JobDetailPage() {
 
           {/* TRAINING & DEVELOPMENT */}
           <div className="mb-8">
-            <h2 className="text-2xl font-bold text-blue-900 mb-4">TRAINING & DEVELOPMENT</h2>
+            <h2 className="text-2xl font-bold text-primary mb-4">TRAINING & DEVELOPMENT</h2>
             <p className="text-gray-700 mb-3">To participate in the academic activities of the department and Hospital by taking part in:</p>
             <ul className="space-y-2 text-gray-700 ml-4">
               <li className="flex items-start">
@@ -179,9 +179,9 @@ export default function JobDetailPage() {
 
           {/* Prevention And Control of Infections */}
           <div className="mb-8">
-            <h2 className="text-2xl font-bold text-blue-900 mb-4">Prevention And Control of Infections (PCI):</h2>
+            <h2 className="text-2xl font-bold text-primary mb-4">Prevention And Control of Infections (PCI):</h2>
             <p className="text-gray-700 mb-3">
-              To follow the standard precautions for all patients as per hospital protocol for prevention and control of infections. 
+              To follow the standard precautions for all patients as per hospital protocol for prevention and control of infections.
               Standard precautions include but are not limited to following:
             </p>
             <ul className="space-y-2 text-gray-700 ml-4 mb-4">
@@ -220,7 +220,7 @@ export default function JobDetailPage() {
 
           {/* Basic Competencies */}
           <div className="mb-8">
-            <h2 className="text-2xl font-bold text-blue-900 mb-4">Basic Competencies:</h2>
+            <h2 className="text-2xl font-bold text-primary mb-4">Basic Competencies:</h2>
             <ul className="space-y-3 text-gray-700">
               <li className="flex items-start">
                 <span className="mr-2">•</span>
@@ -239,7 +239,7 @@ export default function JobDetailPage() {
 
           {/* Behavioral Competencies */}
           <div className="mb-8">
-            <h2 className="text-2xl font-bold text-blue-900 mb-4">Behavioral Competencies:</h2>
+            <h2 className="text-2xl font-bold text-primary mb-4">Behavioral Competencies:</h2>
             <ul className="space-y-3 text-gray-700">
               <li className="flex items-start">
                 <span className="mr-2">•</span>
@@ -264,42 +264,42 @@ export default function JobDetailPage() {
           <div className="border-t pt-8 mt-8">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
               <div className="flex items-center gap-3">
-                <MapPin className="h-5 w-5 text-blue-900" />
+                <MapPin className="h-5 w-5 text-primary" />
                 <div>
                   <p className="text-sm text-gray-600">Job Location</p>
                   <p className="font-semibold text-gray-900">{job.location}</p>
                 </div>
               </div>
               <div className="flex items-center gap-3">
-                <Clock className="h-5 w-5 text-blue-900" />
+                <Clock className="h-5 w-5 text-primary" />
                 <div>
                   <p className="text-sm text-gray-600">Employment Status</p>
                   <p className="font-semibold text-gray-900">{job.type}</p>
                 </div>
               </div>
               <div className="flex items-center gap-3">
-                <Briefcase className="h-5 w-5 text-blue-900" />
+                <Briefcase className="h-5 w-5 text-primary" />
                 <div>
                   <p className="text-sm text-gray-600">Experience</p>
                   <p className="font-semibold text-gray-900">{job.experience || "Not specified"}</p>
                 </div>
               </div>
               <div className="flex items-center gap-3">
-                <Users className="h-5 w-5 text-blue-900" />
+                <Users className="h-5 w-5 text-primary" />
                 <div>
                   <p className="text-sm text-gray-600">Vacancy</p>
                   <p className="font-semibold text-gray-900">{job.vacancy}</p>
                 </div>
               </div>
               <div className="flex items-center gap-3">
-                <DollarSign className="h-5 w-5 text-blue-900" />
+                <DollarSign className="h-5 w-5 text-primary" />
                 <div>
                   <p className="text-sm text-gray-600">Salary Range</p>
                   <p className="font-semibold text-gray-900">{job.salary}</p>
                 </div>
               </div>
               <div className="flex items-center gap-3">
-                <Calendar className="h-5 w-5 text-blue-900" />
+                <Calendar className="h-5 w-5 text-primary" />
                 <div>
                   <p className="text-sm text-gray-600">Deadline</p>
                   <p className="font-semibold text-gray-900">{job.deadline}</p>
@@ -310,14 +310,14 @@ export default function JobDetailPage() {
             {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row gap-4">
               <Button
-                className="bg-blue-900 hover:bg-blue-800 text-white px-8 py-6 text-lg rounded-lg flex-1 sm:flex-none"
+                className="bg-primary hover:bg-blue-800 text-white px-8 py-6 text-lg rounded-lg flex-1 sm:flex-none"
                 onClick={() => setIsModalOpen(true)}
               >
                 Apply Now
               </Button>
               <Button
                 variant="outline"
-                className="border-blue-900 text-blue-900 hover:bg-blue-50 px-8 py-6 text-lg rounded-lg flex-1 sm:flex-none"
+                className="border-blue-900 text-primary hover:bg-blue-50 px-8 py-6 text-lg rounded-lg flex-1 sm:flex-none"
                 onClick={() => navigate("/careers")}
               >
                 ← See All Positions

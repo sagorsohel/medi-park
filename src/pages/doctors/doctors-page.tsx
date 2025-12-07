@@ -82,10 +82,10 @@ export default function DoctorsPage() {
     <div className="w-full">
       {/* Hero Section */}
       <PageHeroSection image="/hero1.png" heading="Our Doctors" alt="Our Doctors Hero" />
-      
+
       {/* Breadcrumb Section */}
       <BreadcrumbSection currentPage="Our Doctors" />
-      
+
       {/* Doctors by Department */}
       <section className="w-full bg-white py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -94,15 +94,15 @@ export default function DoctorsPage() {
               {/* Department Header */}
               <div className="flex items-center justify-between mb-6 pb-6 border-b-2 border-gray-200">
                 <div className="flex items-center gap-3">
-                  <div className="text-blue-900">
+                  <div className="text-primary">
                     {department.icon}
                   </div>
-                  <h2 className="text-3xl md:text-4xl font-bold text-blue-900">
+                  <h2 className="text-3xl md:text-4xl font-bold text-primary">
                     {department.name}
                   </h2>
                 </div>
                 <div className="px-4 py-2 rounded-full border-2 border-blue-900 bg-blue-50">
-                  <span className="text-blue-900 font-semibold">
+                  <span className="text-primary font-semibold">
                     {department.doctors.length} {department.doctors.length === 1 ? 'Doctor' : 'Doctors'}
                   </span>
                 </div>

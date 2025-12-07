@@ -26,7 +26,7 @@ export function InvestorCard({ image, name, designation, description }: Investor
         </div>
 
         {/* Back Face - Details */}
-        <div className="absolute inset-0 w-full h-full backface-hidden bg-blue-900 text-white p-6 flex flex-col items-center justify-center space-y-2 rounded-[22px] rotate-y-180">
+        <div className="absolute inset-0 w-full h-full backface-hidden bg-primary text-white p-6 flex flex-col items-center justify-center space-y-2 rounded-[22px] rotate-y-180">
           <h3 className="text-base font-bold uppercase text-center leading-tight">
             {name}
           </h3>

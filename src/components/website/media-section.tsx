@@ -31,7 +31,7 @@ const newsItems = [
 
 export function MediaSection() {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const navigate=useNavigate()
+  const navigate = useNavigate()
   const nextSlide = () => {
     setCurrentIndex((prev) => (prev + 1) % newsItems.length);
   };
@@ -45,8 +45,8 @@ export function MediaSection() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Title */}
         <div className="text-center mb-12">
-          <h2 className="text-4xl md:text-5xl font-bold text-blue-900 mb-2">News & Media</h2>
-          <div className="w-0.5 h-8 bg-blue-900 mx-auto mt-2" />
+          <h2 className="text-4xl md:text-5xl font-bold text-primary mb-2">News & Media</h2>
+          <div className="w-0.5 h-8 bg-primary mx-auto mt-2" />
         </div>
 
         {/* News Carousel */}
@@ -54,7 +54,7 @@ export function MediaSection() {
           {/* Navigation Arrows */}
           <button
             onClick={prevSlide}
-            className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-4 z-10 w-12 h-12 rounded-full bg-blue-100 text-blue-900 flex items-center justify-center hover:bg-blue-200 transition-colors shadow-lg"
+            className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-4 z-10 w-12 h-12 rounded-full bg-blue-100 text-primary flex items-center justify-center hover:bg-blue-200 transition-colors shadow-lg"
             aria-label="Previous news"
           >
             <ChevronLeft className="h-6 w-6" />
@@ -62,7 +62,7 @@ export function MediaSection() {
 
           <button
             onClick={nextSlide}
-            className="absolute right-0 top-1/2 transform -translate-y-1/2 translate-x-4 z-10 w-12 h-12 rounded-full bg-blue-100 text-blue-900 flex items-center justify-center hover:bg-blue-200 transition-colors shadow-lg"
+            className="absolute right-0 top-1/2 transform -translate-y-1/2 translate-x-4 z-10 w-12 h-12 rounded-full bg-blue-100 text-primary flex items-center justify-center hover:bg-blue-200 transition-colors shadow-lg"
             aria-label="Next news"
           >
             <ChevronRight className="h-6 w-6" />
@@ -73,9 +73,8 @@ export function MediaSection() {
             {newsItems.map((item, index) => (
               <div
                 key={item.id}
-                className={`transition-opacity duration-300 ${
-                  index === currentIndex ? "opacity-100" : "opacity-100"
-                }`}
+                className={`transition-opacity duration-300 ${index === currentIndex ? "opacity-100" : "opacity-100"
+                  }`}
               >
                 <div className="bg-white rounded-lg overflow-hidden shadow-md">
                   <div className="relative h-48 overflow-hidden">
@@ -89,7 +88,7 @@ export function MediaSection() {
                       }}
                     />
                   </div>
-                  <div className="bg-blue-900 text-white p-6">
+                  <div className="bg-primary text-white p-6">
                     <p className="text-sm text-blue-200 mb-2">{item.date}</p>
                     <h3 className="text-lg font-semibold mb-3">{item.title}</h3>
                     <a
@@ -107,9 +106,9 @@ export function MediaSection() {
 
         {/* View All Button */}
         <div className="text-center">
-          <Button onClick={()=>{
+          <Button onClick={() => {
             navigate('news')
-          }} className="bg-blue-900 text-white hover:bg-blue-800 px-8 py-6 text-lg rounded-lg">
+          }} className="bg-primary text-white hover:bg-blue-800 px-8 py-6 text-lg rounded-lg">
             View all Medipark News
           </Button>
         </div>

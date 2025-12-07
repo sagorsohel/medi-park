@@ -59,7 +59,7 @@ export function AwardCarouselSection({ title, text, certificates }: AwardCarouse
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Title */}
         <div className="text-center mb-8">
-          <h2 className="text-4xl md:text-5xl font-bold text-blue-900 mb-4">
+          <h2 className="text-4xl md:text-5xl font-bold text-primary mb-4">
             {title}
           </h2>
         </div>
@@ -76,7 +76,7 @@ export function AwardCarouselSection({ title, text, certificates }: AwardCarouse
           <Carousel
             setApi={setApi}
             className="w-full"
-            opts={{ 
+            opts={{
               loop: true,
               align: "center",
             }}
@@ -116,7 +116,7 @@ export function AwardCarouselSection({ title, text, certificates }: AwardCarouse
                                 Achievement
                               </h3>
                             </div>
-                            
+
                             <div className="my-6">
                               <p className="text-sm text-gray-500 mb-2">
                                 This is proudly presented to

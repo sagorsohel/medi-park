@@ -56,14 +56,14 @@ export function JobApplicationModal({ open, onOpenChange, jobTitle }: JobApplica
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="text-2xl font-bold text-blue-900 text-center">
+          <DialogTitle className="text-2xl font-bold text-primary text-center">
             Apply Here
           </DialogTitle>
           <DialogDescription className="text-center text-gray-600">
             Whether you're looking for solutions or want to explore opportunities, we're here to collaborate with you.
           </DialogDescription>
         </DialogHeader>
-        
+
         <form onSubmit={handleSubmit} className="space-y-6 mt-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Full Name */}
@@ -185,7 +185,7 @@ export function JobApplicationModal({ open, onOpenChange, jobTitle }: JobApplica
           <div className="flex justify-center pt-4">
             <Button
               type="submit"
-              className="bg-blue-900 hover:bg-blue-800 text-white px-8 py-6 text-lg rounded-lg w-full md:w-auto"
+              className="bg-primary hover:bg-blue-800 text-white px-8 py-6 text-lg rounded-lg w-full md:w-auto"
             >
               Submit Application
             </Button>

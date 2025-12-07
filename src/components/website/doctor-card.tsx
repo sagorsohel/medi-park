@@ -9,7 +9,7 @@ interface DoctorCardProps {
 
 export function DoctorCard({ image, name, specialization, description }: DoctorCardProps) {
   return (
-    <div className="bg-blue-900 rounded-[22px] overflow-hidden shadow-md min-w-[320px] lg:min-w-0">
+    <div className="bg-primary rounded-[22px] overflow-hidden shadow-md min-w-[320px] lg:min-w-0">
       {/* Image Section */}
       <div className="relative  ">
         <img
@@ -24,7 +24,7 @@ export function DoctorCard({ image, name, specialization, description }: DoctorC
       </div>
 
       {/* Text Section - Dark Blue Background */}
-      <div className="bg-blue-900 text-white p-6 flex flex-col items-center">
+      <div className="bg-primary text-white p-6 flex flex-col items-center">
         <h3 className="text-sm font-semibold mb-2 text-center leading-tight">
           {name}
         </h3>

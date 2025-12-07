@@ -19,7 +19,7 @@ export default function DoctorDetailPage() {
       "Obtained his MBBS from Dhaka Medical College and completed his Internship in Dhaka Medical College Hospital.",
       "Worked in UK (London, Essex, Kent) after completion of PLAB examination and worked in different hospitals in Acute Medicine, General Internal Medicine and Intensive care as Senior Clinical Fellow and Specialist Registrar under National Health Service. He also worked in different medical positions in Bangladesh.",
       "Worked in Emergency Medicine for about a decade.",
-     
+
     ]
   };
 
@@ -27,10 +27,10 @@ export default function DoctorDetailPage() {
     <div className="w-full">
       {/* Hero Section */}
       <PageHeroSection image="/hero1.png" heading={'Doctor'} alt={`${doctor.name} Hero`} />
-      
+
       {/* Breadcrumb Section */}
       <BreadcrumbSection currentPage={doctor.name} />
-      
+
       {/* Doctor Detail Content */}
       <section className="w-full bg-white py-16">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -51,12 +51,12 @@ export default function DoctorDetailPage() {
                     />
                   </div>
                 </div>
-                
+
                 {/* Content */}
                 <div className="flex-1">
                   <div className="flex justify-between items-start mb-4">
                     <div>
-                      <h1 className="text-3xl font-bold text-blue-900 mb-3">
+                      <h1 className="text-3xl font-bold text-primary mb-3">
                         {doctor.name}
                       </h1>
                       <p className="text-gray-600 mb-2">{doctor.qualifications}</p>
@@ -66,7 +66,7 @@ export default function DoctorDetailPage() {
                     {/* Logo */}
                     <div className="hidden md:block">
                       <div className="flex items-center gap-2">
-                       <img src="/color-logo.png" className="object-cover " alt="" />
+                        <img src="/color-logo.png" className="object-cover " alt="" />
                       </div>
                     </div>
                   </div>
@@ -77,7 +77,7 @@ export default function DoctorDetailPage() {
                     <ul className="flex flex-col gap-1 text-gray-700">
                       {doctor.areasOfExpertise.map((expertise, index) => (
                         <li key={index} className="flex items-start">
-                          <span className="mr-2 text-blue-900">•</span>
+                          <span className="mr-2 text-primary">•</span>
                           <span>{expertise}</span>
                         </li>
                       ))}

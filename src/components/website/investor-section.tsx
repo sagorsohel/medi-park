@@ -83,8 +83,8 @@ export function InvestorSection() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Title */}
         <div className="text-center mb-12">
-          <h2 className="text-4xl md:text-5xl font-bold text-blue-900 mb-2">Investor</h2>
-          <div className="w-0.5 h-8 bg-blue-900 mx-auto mt-2" />
+          <h2 className="text-4xl md:text-5xl font-bold text-primary mb-2">Investor</h2>
+          <div className="w-0.5 h-8 bg-primary mx-auto mt-2" />
         </div>
 
         {/* Investor Cards - Infinite Auto Scroll */}
@@ -120,7 +120,7 @@ export function InvestorSection() {
         {/* View All Investor Button */}
         <div className="text-center">
           <Button
-            className="bg-blue-100 text-blue-900 border border-blue-900 hover:bg-blue-200 px-8 py-6 text-lg font-semibold rounded-lg"
+            className="bg-blue-100 text-primary border border-blue-900 hover:bg-blue-200 px-8 py-6 text-lg font-semibold rounded-lg"
             asChild
           >
             <Link to="/investors">View All Investor</Link>

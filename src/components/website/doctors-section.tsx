@@ -43,14 +43,14 @@ const doctors = [
 ];
 
 export function DoctorsSection() {
-  const navigate=useNavigate()
+  const navigate = useNavigate()
   return (
     <div className="w-full bg-blue-50 py-16 md:py-24">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Title */}
         <div className="text-center mb-12">
-          <h2 className="text-4xl md:text-5xl font-bold text-blue-900 mb-2">Our Doctors</h2>
-          <div className="w-0.5 h-8 bg-blue-900 mx-auto mt-2" />
+          <h2 className="text-4xl md:text-5xl font-bold text-primary mb-2">Our Doctors</h2>
+          <div className="w-0.5 h-8 bg-primary mx-auto mt-2" />
         </div>
 
         {/* Doctor Cards */}
@@ -71,10 +71,10 @@ export function DoctorsSection() {
         {/* View All Doctors Button */}
         <div className="text-center">
           <Button
-          onClick={()=>{
-            navigate('/doctors')
-          }}
-            className="bg-transparant text-blue-900 border-2 border-blue-900 hover:bg-blue-200 px-8 py-7 text-lg font-semibold rounded-full"
+            onClick={() => {
+              navigate('/doctors')
+            }}
+            className="bg-transparant text-primary border-2 border-blue-900 hover:bg-blue-200 px-8 py-7 text-lg font-semibold rounded-full"
           >
             View All Doctors
           </Button>

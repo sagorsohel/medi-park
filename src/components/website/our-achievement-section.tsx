@@ -12,10 +12,10 @@ export function OurAchievementSection({ title, images, text }: OurAchievementSec
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Title */}
         <div className="text-center mb-12 md:mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-blue-900 mb-2">
+          <h2 className="text-4xl md:text-5xl font-bold text-primary mb-2">
             {title}
           </h2>
-          <div className="w-0.5 h-8 bg-blue-900 mx-auto mt-2" />
+          <div className="w-0.5 h-8 bg-primary mx-auto mt-2" />
         </div>
 
         {/* Image Cards */}

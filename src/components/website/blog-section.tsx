@@ -53,8 +53,8 @@ export function BlogSection() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Title */}
         <div className="text-center mb-12">
-          <h2 className="text-4xl md:text-5xl font-bold text-blue-900 mb-2">Blog</h2>
-          <div className="w-0.5 h-8 bg-blue-900 mx-auto mt-2" />
+          <h2 className="text-4xl md:text-5xl font-bold text-primary mb-2">Blog</h2>
+          <div className="w-0.5 h-8 bg-primary mx-auto mt-2" />
         </div>
 
         {/* Blog Grid */}
@@ -78,7 +78,7 @@ export function BlogSection() {
               <div className="p-6">
                 {/* Date Badge */}
                 <div className="inline-block border-2 border-blue-200 rounded-full px-4 py-1 mb-3">
-                  <span className="text-sm text-blue-900 font-medium">{post.date}</span>
+                  <span className="text-sm text-primary font-medium">{post.date}</span>
                 </div>
 
                 {/* Title */}

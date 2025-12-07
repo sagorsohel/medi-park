@@ -25,15 +25,15 @@ export default function InvestorsPage() {
     <div className="w-full bg-gray-100 min-h-screen">
       {/* Hero Section */}
       <PageHeroSection image="/investor-page.png" heading="Investor List" alt="Investor List Hero" />
-      
+
       {/* Breadcrumb Section */}
       <BreadcrumbSection currentPage="Investor List" />
-      
+
       {/* Investor List Section */}
       <section className="w-full bg-white py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Title */}
-          <h1 className="text-4xl font-bold text-blue-900 mb-12 text-center">
+          <h1 className="text-4xl font-bold text-primary mb-12 text-center">
             Investor List
           </h1>
 
@@ -53,7 +53,7 @@ export default function InvestorsPage() {
           {displayCount < allInvestors.length && (
             <div className="text-center mt-8">
               <Button
-                className="bg-blue-900 hover:bg-blue-800 text-white px-8 py-6 text-lg font-semibold rounded-lg"
+                className="bg-primary hover:bg-blue-800 text-white px-8 py-6 text-lg font-semibold rounded-lg"
                 onClick={handleLoadMore}
               >
                 Load More Investor

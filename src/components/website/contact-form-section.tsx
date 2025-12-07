@@ -40,7 +40,7 @@ export function ContactFormSection() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Title */}
         <div className="text-center mb-12">
-          <h2 className="text-4xl md:text-5xl font-bold text-blue-900 mb-2">Submit Your Query</h2>
+          <h2 className="text-4xl md:text-5xl font-bold text-primary mb-2">Submit Your Query</h2>
         </div>
 
         {/* Contact Form */}
@@ -189,7 +189,7 @@ export function ContactFormSection() {
             <div className="flex justify-center pt-4">
               <Button
                 type="submit"
-                className="bg-blue-900 hover:bg-blue-800 text-white px-12 py-6 text-lg rounded-lg"
+                className="bg-primary hover:bg-blue-800 text-white px-12 py-6 text-lg rounded-lg"
               >
                 Submit
               </Button>

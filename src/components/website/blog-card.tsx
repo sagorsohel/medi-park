@@ -30,7 +30,7 @@ export function BlogCard({ id, image, date, title, link }: BlogCardProps) {
       <CardContent className="p-0 px-3 pb-3">
         {/* Date Badge */}
         <div className="inline-block border-2 border-blue-200 rounded-full px-4 py-1 mb-3">
-          <span className="text-sm text-blue-900 font-medium">{date}</span>
+          <span className="text-sm text-primary font-medium">{date}</span>
         </div>
 
         {/* Title */}
