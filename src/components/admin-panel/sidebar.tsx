@@ -35,7 +35,7 @@ export function Sidebar() {
   return (
     <aside
       className={cn(
-        "fixed top-0 left-0 z-20 h-screen -translate-x-full bg-[#D7EBFB] lg:translate-x-0 transition-[width] ease-in-out duration-300",
+        "fixed top-0 left-0 z-20 h-screen -translate-x-full bg-sidebar lg:translate-x-0 transition-[width] ease-in-out duration-300",
         !getOpenState() ? "w-[90px]" : "w-72",
         settings.disabled && "hidden"
       )}
@@ -44,10 +44,10 @@ export function Sidebar() {
       <div
         onMouseEnter={() => setIsHover(true)}
         onMouseLeave={() => setIsHover(false)}
-        className="relative h-full flex flex-col shadow-md rounded-r-lg bg-[#D7EBFB] p-3"
+        className="relative h-full flex flex-col shadow-md rounded-r-lg bg-sidebar p-3"
       >
         {/* Logo Section - Fixed at top */}
-        <div className="shrink-0 px-4  p-3 border-4 border-white bg-[#D7EBFB] rounded-[12px]">
+        <div className="shrink-0 px-4  p-3 border-4 border-sidebar-border bg-sidebar rounded-[12px]">
           <Link
             to="/admin/dashboard"
             className={cn(
@@ -56,7 +56,7 @@ export function Sidebar() {
             )}
           >
             <div className="relative shrink-0">
-              
+
             </div>
             <div
               className={cn(
@@ -66,22 +66,22 @@ export function Sidebar() {
                   : "translate-x-0 opacity-100"
               )}
             >
-               <img src="/dashboard-logo.png" alt="MediPark Logo" className="w-[197px] h-[53px]" onError={(e) => {
-                 const target = e.target as HTMLImageElement;
-                 target.src = "/logo.png";
-               }} />
+              <img src="/dashboard-logo.png" alt="MediPark Logo" className="w-[197px] h-[53px]" onError={(e) => {
+                const target = e.target as HTMLImageElement;
+                target.src = "/logo.png";
+              }} />
             </div>
           </Link>
         </div>
 
         {/* Menu Section - Scrollable */}
-        <div className="flex-1 overflow-hidden min-h-0 border-4 border-white py-4 rounded-[12px] mt-6">
+        <div className="flex-1 overflow-hidden min-h-0 border-4 border-sidebar-border py-4 rounded-[12px] mt-6">
           <Menu isOpen={getOpenState()} />
         </div>
 
         {/* Profile Section - Fixed at bottom */}
         <div className={cn(
-          "shrink-0 pt-4 pb-3 px-2 rounded-[12px] bg-[#D7EBFB]",
+          "shrink-0 pt-4 pb-3 px-2 rounded-[12px] bg-sidebar",
           !getOpenState() && "px-2"
         )}>
           <div className={cn(
@@ -90,20 +90,20 @@ export function Sidebar() {
               ? "-translate-x-96 opacity-0 hidden"
               : "translate-x-0 opacity-100"
           )}>
-            <p className="text-sm font-semibold text-gray-700 mb-3 px-2">Profile</p>
-            <div className="bg-white rounded-lg p-3  shadow-sm border border-gray-200">
-            <div className="flex items-center gap-4">
-            <img src="https://cdn-icons-png.flaticon.com/512/9187/9187604.png" alt="" className="size-[47px] object-cover rounded-lg border p-1" />
-              <div>
-                <p className="text-sm text-gray-800 font-medium truncate mb-1">
-                  {user?.email || "user@example.com"}
-                </p>
+            <p className="text-sm font-semibold text-muted-foreground mb-3 px-2">Profile</p>
+            <div className="bg-sidebar-accent/10 rounded-lg p-3  shadow-sm border border-sidebar-border">
+              <div className="flex items-center gap-4">
+                <img src="https://cdn-icons-png.flaticon.com/512/9187/9187604.png" alt="" className="size-[47px] object-cover rounded-lg border p-1" />
+                <div>
+                  <p className="text-sm text-sidebar-foreground font-medium truncate mb-1">
+                    {user?.email || "user@example.com"}
+                  </p>
 
-                <p className="text-sm text-gray-800 font-medium capitalize">
-                  {user?.roles?.[0]?.name || "Admin"}
-                </p>
+                  <p className="text-sm text-sidebar-foreground font-medium capitalize">
+                    {user?.roles?.[0]?.name || "Admin"}
+                  </p>
+                </div>
               </div>
-            </div>
               <div className="flex items-center gap-2 px-2 pt-2">
                 <TooltipProvider disableHoverableContent>
                   <Tooltip delayDuration={100}>

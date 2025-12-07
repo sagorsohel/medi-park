@@ -53,14 +53,14 @@ export function DoctorTable({
         <div className="overflow-x-auto">
             <table className="w-full border-collapse min-w-[1200px]">
                 <thead>
-                    <tr className="bg-[#e0f2f7]">
+                    <tr className="bg-muted/50">
                         <th className="px-4 py-3 text-left border-b">
                             <input
                                 ref={checkboxRef}
                                 type="checkbox"
                                 checked={allSelected}
                                 onChange={(e) => onSelectAll(e.target.checked)}
-                                className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                                className="w-4 h-4 text-primary border-input rounded focus:ring-primary"
                             />
                         </th>
                         <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700 border-b whitespace-nowrap">
@@ -94,13 +94,13 @@ export function DoctorTable({
                 </thead>
                 <tbody>
                     {doctors.map((doctor) => (
-                        <tr key={doctor.id} className="bg-white hover:bg-gray-50 border-b">
+                        <tr key={doctor.id} className="bg-card hover:bg-muted/50 border-b">
                             <td className="px-4 py-3">
                                 <input
                                     type="checkbox"
                                     checked={selectedIds.includes(doctor.id)}
                                     onChange={(e) => onSelectOne(doctor.id, e.target.checked)}
-                                    className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                                    className="w-4 h-4 text-primary border-input rounded focus:ring-primary"
                                 />
                             </td>
                             <td className="px-4 py-3 text-sm text-gray-700 whitespace-nowrap">
@@ -109,7 +109,7 @@ export function DoctorTable({
                             <td className="px-4 py-3 whitespace-nowrap">
                                 <Avatar className="w-10 h-10">
                                     <AvatarImage src={doctor.image} alt={doctor.name} />
-                                    <AvatarFallback className="bg-blue-100 text-blue-600">
+                                    <AvatarFallback className="bg-secondary text-primary">
                                         {doctor.name
                                             .split(" ")
                                             .map((n) => n[0])
@@ -142,7 +142,7 @@ export function DoctorTable({
                                         onChange={(e) => onStatusChange(doctor.id, e.target.checked)}
                                         className="sr-only peer"
                                     />
-                                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                                    <div className="w-11 h-6 bg-input peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/50 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
                                 </label>
                             </td>
                             <td className="px-4 py-3 whitespace-nowrap">

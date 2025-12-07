@@ -6,17 +6,17 @@ interface TransformingHealthcareSectionProps {
   text: string;
 }
 
-export function TransformingHealthcareSection({ 
-  title, 
-  images, 
-  text 
+export function TransformingHealthcareSection({
+  title,
+  images,
+  text
 }: TransformingHealthcareSectionProps) {
   return (
-    <div className="w-full bg-blue-100 py-16 md:py-24">
+    <div className="w-full bg-secondary/30 py-16 md:py-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Main Title */}
         <div className="text-center mb-12 md:mb-16">
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-blue-900">
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-primary">
             {title}
           </h2>
         </div>
@@ -40,7 +40,7 @@ export function TransformingHealthcareSection({
 
         {/* Descriptive Paragraph */}
         <div className="max-w-4xl mx-auto">
-          <p className="text-base md:text-lg text-[#234687] leading-relaxed text-justify">
+          <p className="text-base md:text-lg text-primary leading-relaxed text-justify">
             {text}
           </p>
         </div>

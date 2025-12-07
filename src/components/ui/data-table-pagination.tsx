@@ -42,17 +42,16 @@ export function DataTablePagination({
       <div className="text-sm text-gray-600">
         Showing {String(from).padStart(2, "0")} to {String(to).padStart(2, "0")} of {totalEntries} entries
       </div>
-      
+
       <div className="flex items-center gap-2">
         <Button
           variant="outline"
           onClick={handlePrevious}
           disabled={currentPage === 1}
-          className={`${
-            currentPage === 1
+          className={`${currentPage === 1
               ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-              : "bg-[#e0f2f7] text-gray-700 hover:bg-[#d0e2f7]"
-          } rounded-lg px-4 py-2`}
+              : "bg-muted text-muted-foreground hover:bg-muted/80"
+            } rounded-lg px-4 py-2`}
         >
           <ChevronLeft className="w-4 h-4" />
           Previous
@@ -64,11 +63,10 @@ export function DataTablePagination({
             <button
               key={page}
               onClick={() => onPageChange(page)}
-              className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium transition-colors ${
-                page === currentPage
-                  ? "bg-[#1e40af] text-white"
-                  : "bg-white text-[#1e40af] border border-[#1e40af] hover:bg-[#e0f2f7]"
-              }`}
+              className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium transition-colors ${page === currentPage
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-background text-primary border border-primary hover:bg-muted"
+                }`}
             >
               {String(page).padStart(2, "0")}
             </button>
@@ -79,11 +77,10 @@ export function DataTablePagination({
           variant="outline"
           onClick={handleNext}
           disabled={currentPage === totalPages}
-          className={`${
-            currentPage === totalPages
+          className={`${currentPage === totalPages
               ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-              : "bg-[#1e40af] text-white hover:bg-[#1e3a8a]"
-          } rounded-lg px-4 py-2`}
+              : "bg-primary text-primary-foreground hover:bg-primary/90"
+            } rounded-lg px-4 py-2`}
         >
           Next
           <ChevronRight className="w-4 h-4" />

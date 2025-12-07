@@ -24,14 +24,14 @@ export function NewsCard({ image, date, title, link = "#" }: NewsCardProps) {
           }}
         />
       </div>
-      <CardContent className="p-3 bg-[#E3F0FF]">
+      <CardContent className="p-3 bg-secondary">
         <p className="text-sm text-gray-600 mb-2">{date}</p>
         <h3 className="text-lg font-semibold text-text mb-3 line-clamp-2">
           {title}
         </h3>
-        <Link 
+        <Link
           to={link}
-          className="text-blue-600 hover:text-text font-medium text-sm inline-flex items-center gap-1"
+          className="text-primary hover:text-text font-medium text-sm inline-flex items-center gap-1"
         >
           Read more
           <span>→</span>

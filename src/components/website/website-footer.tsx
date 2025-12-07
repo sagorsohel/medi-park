@@ -11,7 +11,7 @@ export function WebsiteFooter() {
   };
 
   return (
-    <footer className="w-full overflow-hidden bg-blue-900 text-white ">
+    <footer className="w-full overflow-hidden bg-primary text-primary-foreground ">
       <div className=" mx-auto w-full max-w-7xl  py-12">
         {/* Main Footer Content */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12 justify-center items-center mb-8">
@@ -21,12 +21,12 @@ export function WebsiteFooter() {
 
             {/* Contact Info Buttons */}
             <div className="space-y-3 ">
-              <div className="flex items-center justify-between gap-3 p-1 font-bold border border-white rounded-[22px] ">
+              <div className="flex items-center justify-between gap-3 p-1 font-bold border border-primary-foreground rounded-[22px] ">
                 <div className=" rounded-lg px-4 py-2 flex items-center gap-2">
                   <Clock className="h-4 w-4" />
                   <span className="text-sm">24 hours</span>
                 </div>
-                <div className=" rounded-[22px] px-4 py-2 bg-white text-blue-900 flex justify-end items-center gap-2">
+                <div className=" rounded-[22px] px-4 py-2 bg-primary-foreground text-primary flex justify-end items-center gap-2">
                   <Phone className="h-4 w-4" />
                   <span className="text-sm">01782948545</span>
                 </div>
@@ -109,7 +109,7 @@ export function WebsiteFooter() {
             {/* Location */}
             <div>
               <h4 className="text-lg font-semibold mb-3">Dhaka</h4>
-              <p className="text-sm text-blue-200 leading-relaxed">
+              <p className="text-sm text-primary-foreground/80 leading-relaxed">
                 Lorem Ipsum is simply dummy text of the printing and typesetting industry.
                 Lorem Ipsum has been the industry's standard dummy text ever since the 1500s
               </p>
@@ -121,7 +121,7 @@ export function WebsiteFooter() {
                 href="https://facebook.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-white hover:text-blue-300 transition-colors"
+                className="text-primary-foreground hover:text-blue-300 transition-colors"
                 aria-label="Facebook"
               >
                 <Facebook className="h-5 w-5" />
@@ -130,7 +130,7 @@ export function WebsiteFooter() {
                 href="https://twitter.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-white hover:text-blue-300 transition-colors"
+                className="text-primary-foreground hover:text-blue-300 transition-colors"
                 aria-label="Twitter"
               >
                 <Twitter className="h-5 w-5" />
@@ -139,7 +139,7 @@ export function WebsiteFooter() {
                 href="https://instagram.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-white hover:text-blue-300 transition-colors"
+                className="text-primary-foreground hover:text-blue-300 transition-colors"
                 aria-label="Instagram"
               >
                 <Instagram className="h-5 w-5" />
@@ -148,7 +148,7 @@ export function WebsiteFooter() {
                 href="https://linkedin.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-white hover:text-blue-300 transition-colors"
+                className="text-primary-foreground hover:text-blue-300 transition-colors"
                 aria-label="LinkedIn"
               >
                 <Linkedin className="h-5 w-5" />
@@ -160,21 +160,21 @@ export function WebsiteFooter() {
         {/* Bottom Row - Copyright and Back to Top */}
 
 
-        <div className="border-t border-blue-800 pt-6 flex flex-col sm:flex-row justify-between items-center gap-4">
-          <div className="border border-[#FAFAFA]  p-2 rounded-full inline-block">
-           <div className="bg-white p-3 rounded-full w-[175px] mx-auto flex justify-center">
-           <img
-              src="/footer-logo-2.png"
-              alt="MediPark Logo"
-              className="h-8 w-auto "
-              onError={(e) => {
-                const target = e.target as HTMLImageElement;
-                target.src = "/logo.png";
-              }}
-            />
-           </div>
+        <div className="border-t border-primary-foreground/20 pt-6 flex flex-col sm:flex-row justify-between items-center gap-4">
+          <div className="border border-primary-foreground/10  p-2 rounded-full inline-block">
+            <div className="bg-white p-3 rounded-full w-[175px] mx-auto flex justify-center">
+              <img
+                src="/footer-logo-2.png"
+                alt="MediPark Logo"
+                className="h-8 w-auto "
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  target.src = "/logo.png";
+                }}
+              />
+            </div>
           </div>
-          <p className="text-sm text-blue-200">
+          <p className="text-sm text-primary-foreground/80">
             © {currentYear} softinglobal. All rights reserved.
           </p>
           <button
@@ -182,8 +182,8 @@ export function WebsiteFooter() {
             className="flex items-center gap-2 text-sm hover:text-blue-300 transition-colors"
           >
             <span>Back to top</span>
-            <div className="w-16 h-0.5  bg-white"></div>
-            <div className="w-8 h-8 rounded-full border bg-white border-white text-blue-900 flex items-center justify-center">
+            <div className="w-16 h-0.5  bg-primary-foreground"></div>
+            <div className="w-8 h-8 rounded-full border bg-primary-foreground border-primary-foreground text-primary flex items-center justify-center">
               <Mouse className="h-4 w-4" />
             </div>
           </button>

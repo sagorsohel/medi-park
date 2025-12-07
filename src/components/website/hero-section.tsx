@@ -31,9 +31,8 @@ export function HeroSection() {
         {heroImages.map((image, index) => (
           <div
             key={index}
-            className={`absolute inset-0 transition-opacity duration-1000 ${
-              index === currentIndex ? "opacity-100" : "opacity-0"
-            }`}
+            className={`absolute inset-0 transition-opacity duration-1000 ${index === currentIndex ? "opacity-100" : "opacity-0"
+              }`}
           >
             <img
               src={image}
@@ -41,7 +40,7 @@ export function HeroSection() {
               className="w-full h-full object-cover "
             />
             {/* Blue gradient overlay */}
-            <div className="absolute inset-0 bg-gray-950/40" />
+            <div className="absolute inset-0 bg-black/40" />
           </div>
         ))}
       </div>
@@ -69,7 +68,7 @@ export function HeroSection() {
                 <Button
                   key={index}
                   asChild
-                  className="bg-[#FAFAFA4D] hover:bg-[#FAFAFA4D] text-white border border-[#FAFAFA4D] rounded-[38.34px] px-4 py-3 md:px-8 md:py-6 backdrop-blur-sm transition-all"
+                  className="bg-primary-foreground/30 hover:bg-primary-foreground/30 text-white border border-primary-foreground/30 rounded-[38.34px] px-4 py-3 md:px-8 md:py-6 backdrop-blur-sm transition-all"
                 >
                   <a href={button.link} className="flex items-center gap-2">
                     <Icon className="h-4 w-4 md:h-5 md:w-5" />

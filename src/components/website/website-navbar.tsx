@@ -41,22 +41,21 @@ export function WebsiteNavbar() {
   return (
     <header className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-8xl px-4 sm:px-6 lg:px-8">
       {/* Main Navbar Container - Pill Shaped with Glassmorphism */}
-      <div className={`w-full px-4 py-3 flex items-center justify-between  transition-all duration-300 ${
-        isScrolled ? 'bg-[#234687] backdrop-blur-sm border border-white/30   rounded-full' : ''
-      }`}>
+      <div className={`w-full px-4 py-3 flex items-center justify-between  transition-all duration-300 ${isScrolled ? 'bg-primary backdrop-blur-sm border border-primary-foreground/30   rounded-full' : ''
+        }`}>
         {/* Logo Section - Pill Container */}
         <NavLink to="/" className="flex items-center">
-          <div className="flex items-center gap-2 border border-white/50 rounded-full px-4 py-2 bg-white/10 backdrop-blur-sm">
+          <div className="flex items-center gap-2 border border-primary-foreground/50 rounded-full px-4 py-2 bg-primary-foreground/10 backdrop-blur-sm">
             <div className="   flex  justify-center md:w-[133px]">
-            <img
-              src="/navbar-logo.png"
-              alt="MediPark Logo"
-              className="md:h-[30px] h-6 w-auto object-cover flex justify-center"
-              onError={(e) => {
-                const target = e.target as HTMLImageElement;
-                target.src = "/logo.png";
-              }}
-            />
+              <img
+                src="/navbar-logo.png"
+                alt="MediPark Logo"
+                className="md:h-[30px] h-6 w-auto object-cover flex justify-center"
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  target.src = "/logo.png";
+                }}
+              />
             </div>
             {/* <div className="flex flex-col">
               <span className="text-sm md:text-base font-bold text-white leading-tight">
@@ -70,17 +69,16 @@ export function WebsiteNavbar() {
         </NavLink>
 
         {/* Desktop Navigation - Center */}
-        <nav className="hidden bg-white/10 backdrop-blur-md border px-4 py-4 border-white/30 rounded-full lg:flex items-center gap-4 xl:gap-6 ">
+        <nav className="hidden bg-primary-foreground/10 backdrop-blur-md border px-4 py-4 border-primary-foreground/30 rounded-full lg:flex items-center gap-4 xl:gap-6 ">
           {navLinks.map((link) => (
             <NavLink
               key={link.to}
               to={link.to}
               end={link.to === "/"}
               className={({ isActive }) =>
-                `text-sm font-medium transition-colors whitespace-nowrap ${
-                  isActive
-                    ? "text-white font-semibold"
-                    : "text-white/90 hover:text-white"
+                `text-sm font-medium transition-colors whitespace-nowrap ${isActive
+                  ? "text-primary-foreground font-semibold"
+                  : "text-primary-foreground/90 hover:text-primary-foreground"
                 }`
               }
             >
@@ -90,96 +88,95 @@ export function WebsiteNavbar() {
         </nav>
 
         {/* Right side actions */}
-        <div className="flex items-center gap-2 border border-white/50 rounded-full p-1">
+        <div className="flex items-center gap-2 border border-primary-foreground/50 rounded-full p-1">
           {/* Pricing Button - Pill Container */}
           <Button
             asChild
             variant="outline"
-            className="hidden md:flex border border-white/50 text-white bg-white/10 backdrop-blur-sm hover:bg-white/20 rounded-full px-12 py-2"
+            className="hidden md:flex border border-primary-foreground/50 text-white bg-primary-foreground/10 backdrop-blur-sm hover:bg-primary-foreground/20 rounded-full px-12 py-2"
           >
             <NavLink to="/pricing">Pricing</NavLink>
           </Button>
 
-            {/* Mobile menu button */}
-            <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
-              <SheetTrigger asChild className="lg:hidden">
-                <Button variant="ghost" size="icon" className="text-white border border-white/50 rounded-full bg-white/10 backdrop-blur-sm hover:bg-white/20">
-                  <Menu className="h-5 w-5" />
-                  <span className="sr-only">Toggle menu</span>
-                </Button>
-              </SheetTrigger>
-              <SheetContent side="right" className="w-[300px] sm:w-[400px] bg-white/95 backdrop-blur-md">
-                <div className="flex flex-col h-full">
-                  <div className="flex items-center justify-between mb-6">
-                    <div className="flex items-center gap-2">
-                      <img
-                        src="/navbar-logo.png"
-                        alt="MediPark Logo"
-                        className="h-8 w-auto"
-                        onError={(e) => {
-                          const target = e.target as HTMLImageElement;
-                          target.src = "/logo.png";
-                        }}
-                      />
-                      <span className="text-lg font-bold text-gray-900">
-                        MediPark
-                      </span>
-                    </div>
-                    <Button
-                      variant="ghost"
-                      size="icon"
+          {/* Mobile menu button */}
+          <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+            <SheetTrigger asChild className="lg:hidden">
+              <Button variant="ghost" size="icon" className="text-primary-foreground border border-primary-foreground/50 rounded-full bg-primary-foreground/10 backdrop-blur-sm hover:bg-primary-foreground/20">
+                <Menu className="h-5 w-5" />
+                <span className="sr-only">Toggle menu</span>
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="right" className="w-[300px] sm:w-[400px] bg-background/95 backdrop-blur-md">
+              <div className="flex flex-col h-full">
+                <div className="flex items-center justify-between mb-6">
+                  <div className="flex items-center gap-2">
+                    <img
+                      src="/navbar-logo.png"
+                      alt="MediPark Logo"
+                      className="h-8 w-auto"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.src = "/logo.png";
+                      }}
+                    />
+                    <span className="text-lg font-bold text-foreground">
+                      MediPark
+                    </span>
+                  </div>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <X className="h-5 w-5" />
+                  </Button>
+                </div>
+                <nav className="flex flex-col gap-4">
+                  {navLinks.map((link) => (
+                    <NavLink
+                      key={link.to}
+                      to={link.to}
+                      end={link.to === "/"}
                       onClick={() => setMobileMenuOpen(false)}
+                      className={({ isActive }) =>
+                        `text-base font-medium transition-colors ${isActive
+                          ? "text-primary border-l-4 border-primary pl-4"
+                          : "text-muted-foreground hover:text-primary pl-4"
+                        }`
+                      }
                     >
-                      <X className="h-5 w-5" />
+                      {link.label}
+                    </NavLink>
+                  ))}
+                  <div className="pt-4 border-t ">
+                    <Button
+                      asChild
+                      variant="outline"
+                      className="w-full"
+                    >
+                      <NavLink to="/pricing" onClick={() => setMobileMenuOpen(false)}>
+                        Pricing
+                      </NavLink>
                     </Button>
                   </div>
-                  <nav className="flex flex-col gap-4">
-                    {navLinks.map((link) => (
-                      <NavLink
-                        key={link.to}
-                        to={link.to}
-                        end={link.to === "/"}
-                        onClick={() => setMobileMenuOpen(false)}
-                        className={({ isActive }) =>
-                          `text-base font-medium transition-colors ${
-                            isActive
-                              ? "text-blue-600 border-l-4 border-blue-600 pl-4"
-                              : "text-gray-700 hover:text-blue-600 pl-4"
-                          }`
-                        }
-                      >
-                        {link.label}
-                      </NavLink>
-                    ))}
-                    <div className="pt-4 border-t ">
+                  {isAuthenticated && (
+                    <div className="pt-4 border-t">
+                      <span className="text-sm text-muted-foreground block mb-2">
+                        Hi, {user?.name ?? "Guest"}
+                      </span>
                       <Button
-                        asChild
                         variant="outline"
+                        onClick={handleLogout}
                         className="w-full"
                       >
-                        <NavLink to="/pricing" onClick={() => setMobileMenuOpen(false)}>
-                          Pricing
-                        </NavLink>
+                        Logout
                       </Button>
                     </div>
-                    {isAuthenticated && (
-                      <div className="pt-4 border-t">
-                        <span className="text-sm text-gray-600 block mb-2">
-                          Hi, {user?.name ?? "Guest"}
-                        </span>
-                        <Button
-                          variant="outline"
-                          onClick={handleLogout}
-                          className="w-full"
-                        >
-                          Logout
-                        </Button>
-                      </div>
-                    )}
-                  </nav>
-                </div>
-              </SheetContent>
-            </Sheet>
+                  )}
+                </nav>
+              </div>
+            </SheetContent>
+          </Sheet>
         </div>
       </div>
     </header>

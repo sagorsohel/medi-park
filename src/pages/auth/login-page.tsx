@@ -13,7 +13,7 @@ export default function LoginPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useAppDispatch();
-  
+
   // Determine redirect path based on URL
   const isAdminLogin = location.pathname.includes('/admin/login');
   const [adminLogin, { isLoading: isAdminLoading }] = useAdminLoginMutation();
@@ -56,9 +56,9 @@ export default function LoginPage() {
   };
 
   return (
-    <div className={cn("min-h-screen bg-[#2a2a2a] flex items-center justify-center ")}>
+    <div className={cn("min-h-screen bg-background flex items-center justify-center ")}>
       <div className="w-full  overflow-hidden shadow-2xl">
-        <div className="grid md:grid-cols-2 bg-white rounded-2xl">
+        <div className="grid md:grid-cols-2 bg-card rounded-2xl">
           {/* Left side - Medical professional image */}
           <div className="relative hidden md:block">
             <img
@@ -69,7 +69,7 @@ export default function LoginPage() {
           </div>
 
           {/* Right side - Login form */}
-          <div className="bg-white p-8 md:p-12 flex flex-col">
+          <div className="bg-card p-8 md:p-12 flex flex-col">
             {/* Logo */}
             <div className="flex justify-end mb-8">
               <div className="flex items-center gap-2">
@@ -79,10 +79,10 @@ export default function LoginPage() {
 
             {/* System Description */}
             <div className="mb-8">
-              <h2 className="text-xl font-semibold text-gray-800 mb-4">
+              <h2 className="text-xl font-semibold text-foreground mb-4">
                 A. What the System Does (In Simple Terms)
               </h2>
-              <ul className="space-y-2 text-sm text-gray-600">
+              <ul className="space-y-2 text-sm text-muted-foreground">
                 <li>
                   <strong>Admins</strong> control system settings and manage HR and Investors.
                 </li>
@@ -104,7 +104,7 @@ export default function LoginPage() {
             {/* Login Form */}
             <form onSubmit={handleSubmit} className="space-y-6">
               {localError && (
-                <div className="p-3 text-sm text-red-600 bg-red-50 rounded-md border border-red-200">
+                <div className="p-3 text-sm text-destructive bg-destructive/10 rounded-md border border-destructive/20">
                   {localError}
                 </div>
               )}
@@ -112,7 +112,7 @@ export default function LoginPage() {
               {/* Email Field */}
               <div className="space-y-2">
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
                   <input
                     id="email"
                     type="email"
@@ -121,7 +121,7 @@ export default function LoginPage() {
                     onChange={(e) => setEmail(e.target.value)}
                     required
                     disabled={isLoading}
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full pl-10 pr-4 py-3 border border-input rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                   />
                 </div>
               </div>
@@ -129,7 +129,7 @@ export default function LoginPage() {
               {/* Password Field */}
               <div className="space-y-2">
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
                   <input
                     id="password"
                     type={showPassword ? "text" : "password"}
@@ -138,12 +138,12 @@ export default function LoginPage() {
                     onChange={(e) => setPassword(e.target.value)}
                     required
                     disabled={isLoading}
-                    className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full pl-10 pr-12 py-3 border border-input rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground"
                   >
                     {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                   </button>
@@ -154,7 +154,7 @@ export default function LoginPage() {
               <Button
                 type="submit"
                 disabled={isLoading}
-                className="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-3 rounded-lg"
+                className="w-full bg-secondary hover:bg-secondary/80 text-secondary-foreground font-medium py-3 rounded-lg"
               >
                 {isLoading ? "Logging in..." : "Login"}
               </Button>
@@ -163,7 +163,7 @@ export default function LoginPage() {
               <div className="text-center">
                 <Link
                   to={isAdminLogin ? "/admin/forgot-password" : "/user/forgot-password"}
-                  className="text-sm text-gray-600 hover:text-gray-800 underline"
+                  className="text-sm text-muted-foreground hover:text-foreground underline"
                 >
                   Having Issues with your Password?
                 </Link>

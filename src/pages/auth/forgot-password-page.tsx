@@ -2,8 +2,8 @@
 
 import { type FormEvent, useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router";
-import { 
-  useSendUserOtpMutation, 
+import {
+  useSendUserOtpMutation,
   useResetUserPasswordMutation,
   useSendAdminOtpMutation,
   useResetAdminPasswordMutation,
@@ -40,14 +40,14 @@ export default function ForgotPasswordPage() {
 
   const isAdminForgot = location.pathname.includes('/admin/forgot-password');
   const loginPath = isAdminForgot ? '/admin/login' : '/user/login';
-  
+
   const [sendUserOtp, { isLoading: isSendingUserOtp }] = useSendUserOtpMutation();
   const [resetUserPassword, { isLoading: isResettingUser }] = useResetUserPasswordMutation();
   const [sendAdminOtp, { isLoading: isSendingAdminOtp }] = useSendAdminOtpMutation();
   const [resetAdminPassword, { isLoading: isResettingAdmin }] = useResetAdminPasswordMutation();
   const [verifyUserOtp] = useVerifyUserOtpMutation();
   const [verifyAdminOtp] = useVerifyAdminOtpMutation();
-  
+
   const forgotPassword = isAdminForgot ? sendAdminOtp : sendUserOtp;
   const verifyOtp = isAdminForgot ? verifyAdminOtp : verifyUserOtp;
   const verifyAndReset = isAdminForgot ? resetAdminPassword : resetUserPassword;
@@ -138,14 +138,14 @@ export default function ForgotPasswordPage() {
     }
 
     try {
-      const result = await verifyAndReset({ 
-        email, 
-        otp: code, 
-        password: newPassword, 
-        password_confirmation: confirmPassword 
+      const result = await verifyAndReset({
+        email,
+        otp: code,
+        password: newPassword,
+        password_confirmation: confirmPassword
       }).unwrap();
       setSuccessMessage(result.message);
-      
+
       // Redirect to login after 2 seconds
       setTimeout(() => {
         navigate(loginPath, { replace: true });
@@ -157,9 +157,9 @@ export default function ForgotPasswordPage() {
   };
 
   return (
-    <div className={cn("min-h-screen bg-[#2a2a2a] flex items-center justify-center ")}>
-      <div className="w-full  overflow-hidden shadow-2xl">
-        <div className="grid md:grid-cols-2 bg-white rounded-2xl">
+    <div className={cn("min-h-screen bg-background flex items-center justify-center p-4")}>
+      <div className="w-full max-w-4xl overflow-hidden shadow-2xl rounded-2xl">
+        <div className="grid md:grid-cols-2 bg-card">
           {/* Left side - Medical professional image */}
           <div className="relative hidden md:block">
             <img
@@ -170,42 +170,37 @@ export default function ForgotPasswordPage() {
           </div>
 
           {/* Right side - Form */}
-          <div className="bg-white p-8 md:p-12 flex flex-col">
+          <div className="bg-card p-8 md:p-12 flex flex-col justify-center min-h-[600px]">
             {step === 'email' && (
-              <form onSubmit={handleSendCode} className="flex-1 flex flex-col">
-                {/* <h2 className="text-xl font-semibold text-gray-800  text-center">
-                  Text your user email in here
-                </h2> */}
-
-               
-                <div className="flex-1 flex flex-col justify-center space-y-6">
-                <h2 className="text-xl font-semibold text-gray-800  pb-12 text-center">
-                  Text your user email in here
-                </h2>
-                {localError && (
-                  <div className="p-3 text-sm text-red-600 bg-red-50 rounded-md border border-red-200 mb-4">
-                    {localError}
-                  </div>
-                )}
+              <form onSubmit={handleSendCode} className="flex flex-col h-full justify-center">
+                <div className="space-y-6">
+                  <h2 className="text-xl font-semibold text-foreground pb-4 text-center">
+                    Text your user email in here
+                  </h2>
+                  {localError && (
+                    <div className="p-3 text-sm text-destructive bg-destructive/10 rounded-md border border-destructive/20">
+                      {localError}
+                    </div>
+                  )}
 
                   <div className="relative">
-                    <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                    <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
                     <input
                       id="email"
                       type="email"
-                      placeholder="@emailaddress@gmail.com"
+                      placeholder="emailaddress@gmail.com"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       required
                       disabled={isSendingCode}
-                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full pl-10 pr-4 py-3 border border-input rounded-lg focus:outline-none focus:ring-2 focus:ring-primary bg-background text-foreground"
                     />
                   </div>
 
                   <Button
                     type="submit"
                     disabled={isSendingCode}
-                    className="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-3 rounded-lg"
+                    className="w-full bg-secondary hover:bg-secondary/80 text-secondary-foreground font-medium py-3 rounded-lg"
                   >
                     {isSendingCode ? "Sending..." : "Send OTP"}
                   </Button>
@@ -214,28 +209,25 @@ export default function ForgotPasswordPage() {
             )}
 
             {step === 'verify' && (
-              <form onSubmit={handleVerifyCode} className="flex-1 flex flex-col">
-              
+              <form onSubmit={handleVerifyCode} className="flex flex-col h-full justify-center">
+                <div className="space-y-6">
+                  <h2 className="text-xl font-semibold text-foreground mb-6 text-center">
+                    Type OTP code in below
+                  </h2>
 
-               
-                <div className="flex-1 flex flex-col justify-center space-y-6">
-                <h2 className="text-xl font-semibold text-gray-800 mb-6">
-                  Type OTP code in below
-                </h2>
-
-                {successMessage && (
-                  <div className="p-3 text-sm text-green-600 bg-green-50 rounded-md border border-green-200 mb-4">
-                    {successMessage}
-                  </div>
-                )}
-                 {localError && (
-                  <div className="p-3 text-sm text-red-600 bg-red-50 rounded-md border border-red-200 mb-4">
-                    {localError}
-                  </div>
-                )}
+                  {successMessage && (
+                    <div className="p-3 text-sm text-green-600 bg-green-50 rounded-md border border-green-200">
+                      {successMessage}
+                    </div>
+                  )}
+                  {localError && (
+                    <div className="p-3 text-sm text-destructive bg-destructive/10 rounded-md border border-destructive/20">
+                      {localError}
+                    </div>
+                  )}
 
                   <div className="relative">
-                    <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                    <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
                     <input
                       id="code"
                       type="text"
@@ -245,29 +237,29 @@ export default function ForgotPasswordPage() {
                       maxLength={6}
                       required
                       disabled={isResetting}
-                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full pl-10 pr-4 py-3 border border-input rounded-lg focus:outline-none focus:ring-2 focus:ring-primary bg-background text-foreground"
                     />
                   </div>
 
-                  <div className="flex items-center justify-between text-sm text-gray-600">
+                  <div className="flex items-center justify-between text-sm text-muted-foreground">
                     <span>Time: {formatTime(timer)}</span>
                     {canResend ? (
                       <button
                         type="button"
                         onClick={handleResendCode}
-                        className="text-blue-600 hover:text-blue-800 underline"
+                        className="text-primary hover:text-primary/80 underline"
                       >
                         Sent again
                       </button>
                     ) : (
-                      <span className="text-gray-400">Sent again</span>
+                      <span className="text-muted-foreground cursor-not-allowed">Sent again</span>
                     )}
                   </div>
 
                   <Button
                     type="submit"
                     disabled={!code || code.length !== 6}
-                    className="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-3 rounded-lg ml-auto"
+                    className="w-full bg-secondary hover:bg-secondary/80 text-secondary-foreground font-medium py-3 rounded-lg"
                   >
                     Submit
                   </Button>
@@ -276,27 +268,25 @@ export default function ForgotPasswordPage() {
             )}
 
             {step === 'reset' && (
-              <form onSubmit={handleResetPassword} className="flex-1 flex flex-col">
-               
+              <form onSubmit={handleResetPassword} className="flex flex-col h-full justify-center">
+                <div className="space-y-6">
+                  <h2 className="text-xl font-semibold text-foreground mb-6 text-center">
+                    Create new password
+                  </h2>
 
-                <div className="flex-1 flex flex-col justify-center space-y-6">
-                <h2 className="text-xl font-semibold text-gray-800 mb-6">
-                  Create new password
-                </h2>
+                  {successMessage && (
+                    <div className="p-3 text-sm text-green-600 bg-green-50 rounded-md border border-green-200">
+                      {successMessage}
+                    </div>
+                  )}
 
-                {successMessage && (
-                  <div className="p-3 text-sm text-green-600 bg-green-50 rounded-md border border-green-200 mb-4">
-                    {successMessage}
-                  </div>
-                )}
-
-                {localError && (
-                  <div className="p-3 text-sm text-red-600 bg-red-50 rounded-md border border-red-200 mb-4">
-                    {localError}
-                  </div>
-                )}
+                  {localError && (
+                    <div className="p-3 text-sm text-destructive bg-destructive/10 rounded-md border border-destructive/20">
+                      {localError}
+                    </div>
+                  )}
                   <div className="relative">
-                    <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                    <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
                     <input
                       id="newPassword"
                       type={showNewPassword ? "text" : "password"}
@@ -305,19 +295,19 @@ export default function ForgotPasswordPage() {
                       onChange={(e) => setNewPassword(e.target.value)}
                       required
                       disabled={isResetting}
-                      className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full pl-10 pr-12 py-3 border border-input rounded-lg focus:outline-none focus:ring-2 focus:ring-primary bg-background text-foreground"
                     />
                     <button
                       type="button"
                       onClick={() => setShowNewPassword(!showNewPassword)}
-                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground"
                     >
                       {showNewPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                     </button>
                   </div>
 
                   <div className="relative">
-                    <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                    <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
                     <input
                       id="confirmPassword"
                       type={showConfirmPassword ? "text" : "password"}
@@ -326,12 +316,12 @@ export default function ForgotPasswordPage() {
                       onChange={(e) => setConfirmPassword(e.target.value)}
                       required
                       disabled={isResetting}
-                      className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full pl-10 pr-12 py-3 border border-input rounded-lg focus:outline-none focus:ring-2 focus:ring-primary bg-background text-foreground"
                     />
                     <button
                       type="button"
                       onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground"
                     >
                       {showConfirmPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                     </button>
@@ -340,7 +330,7 @@ export default function ForgotPasswordPage() {
                   <Button
                     type="submit"
                     disabled={isResetting}
-                    className="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-3 rounded-lg"
+                    className="w-full bg-secondary hover:bg-secondary/80 text-secondary-foreground font-medium py-3 rounded-lg"
                   >
                     {isResetting ? "Resetting..." : "Reset"}
                   </Button>
@@ -353,4 +343,3 @@ export default function ForgotPasswordPage() {
     </div>
   );
 }
-

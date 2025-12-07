@@ -76,15 +76,14 @@ interface PricingCardProps {
 function PricingCard({ plan }: PricingCardProps) {
   return (
     <div
-      className={`relative rounded-[24px] p-6 w-full flex flex-col ${
-        plan.popular
-          ? "bg-blue-900 text-white scale-105 z-10 min-h-[500px] shadow-2xl"
-          : "bg-white text-blue-900 border-[3px] border-blue-900 h-fit shadow-md"
-      } `}
+      className={`relative rounded-[24px] p-6 w-full flex flex-col ${plan.popular
+          ? "bg-primary text-primary-foreground scale-105 z-10 min-h-[500px] shadow-2xl"
+          : "bg-card text-primary border-[3px] border-primary h-fit shadow-md"
+        } `}
     >
       {plan.popular && (
         <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 z-20">
-          <span className="bg-white border border-blue-900 text-blue-900 text-xs font-semibold px-3 py-1 rounded-full whitespace-nowrap">
+          <span className="bg-background border border-primary text-primary text-xs font-semibold px-3 py-1 rounded-full whitespace-nowrap">
             MOST POPULAR
           </span>
         </div>
@@ -93,12 +92,12 @@ function PricingCard({ plan }: PricingCardProps) {
       <div className={`mb-6 ${plan.popular ? "" : "flex-1"}`}>
         <div className="flex gap-1 items-center">
           <div className="text-[32px] font-bold">{plan.price}</div>
-          <div className={`text-sm font-medium mt-2 ${plan.popular ? "text-blue-200" : "text-gray-500"}`}>
+          <div className={`text-sm font-medium mt-2 ${plan.popular ? "text-primary-foreground/80" : "text-muted-foreground"}`}>
             /month
           </div>
         </div>
         <h3 className="text-xl font-semibold mb-2">{plan.name}</h3>
-        <p className={`text-md font-semibold ${plan.popular ? "text-white" : "text-primary"}`}>
+        <p className={`text-md font-semibold ${plan.popular ? "text-primary-foreground" : "text-primary"}`}>
           {plan.tagline}
         </p>
       </div>
@@ -107,19 +106,18 @@ function PricingCard({ plan }: PricingCardProps) {
         {plan.features.map((feature, featureIndex) => (
           <li key={featureIndex} className="flex items-start gap-2">
             <div>
-              <Check className={`h-5 w-5 rounded-full shrink-0 ${plan.popular ? "text-white bg-[#234687]" : "bg-[#234687] text-white"}`} />
+              <Check className={`h-5 w-5 rounded-full shrink-0 ${plan.popular ? "text-primary-foreground bg-primary-foreground/20" : "bg-primary text-primary-foreground"}`} />
             </div>
-            <span className={`text-sm ${plan.popular ? "text-white" : "text-[#234687]"}`}>{feature}</span>
+            <span className={`text-sm ${plan.popular ? "text-primary-foreground" : "text-primary"}`}>{feature}</span>
           </li>
         ))}
       </ul>
 
       <button
-        className={`w-full rounded-[22px] py-2 px-4 font-medium transition-colors mt-auto ${
-          plan.popular
-            ? "bg-white text-blue-900 border-2 border-white hover:border-white hover:bg-primary hover:text-white"
-            : "bg-primary text-white border-2 border-blue-900 hover:bg-blue-50 hover:text-primary"
-        }`}
+        className={`w-full rounded-[22px] py-2 px-4 font-medium transition-colors mt-auto ${plan.popular
+            ? "bg-background text-primary border-2 border-background hover:border-background hover:bg-primary hover:text-primary-foreground"
+            : "bg-primary text-primary-foreground border-2 border-primary hover:bg-secondary hover:text-primary"
+          }`}
       >
         Choose plan
       </button>
@@ -133,7 +131,7 @@ export function PricingSection() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Title */}
         <div className="text-center mb-24">
-          <h2 className="text-4xl md:text-5xl font-bold text-blue-900 mb-12">Pricing</h2>
+          <h2 className="text-4xl md:text-5xl font-bold text-primary mb-12">Pricing</h2>
         </div>
 
         {/* Pricing Cards - Carousel on mobile, grid on desktop */}
