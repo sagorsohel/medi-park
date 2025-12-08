@@ -19,7 +19,7 @@ export interface HeroSectionResponse {
 export interface CreateHeroSectionPayload {
   title: string
   subtitle: string
-  background_image: string
+  background_image: string | File
   opacity: string
   serial: string
   status?: 'active' | 'inactive'

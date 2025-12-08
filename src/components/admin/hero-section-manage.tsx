@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Field, FieldLabel, FieldContent } from "@/components/ui/field";
-import { Plus, Trash2, MoveUp, MoveDown, Eye, X, Loader2, RefreshCw } from "lucide-react";
+import { Plus, Trash2, MoveUp, MoveDown, Eye, X, Loader2, RefreshCw, Check, XCircle } from "lucide-react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import {
   useGetHeroSectionsQuery,
@@ -26,6 +26,17 @@ interface HeroSlide {
   status: 'active' | 'inactive';
 }
 
+interface DraftSlide {
+  id: string; // temporary ID like 'draft-123'
+  image: string;
+  title: string;
+  subtitle: string;
+  overlayOpacity: number;
+  serial: string;
+  status: 'active' | 'inactive';
+  imageFile?: File;
+}
+
 export function HeroSectionManage() {
   const { data, isLoading, error, refetch } = useGetHeroSectionsQuery();
   const [createHeroSection] = useCreateHeroSectionMutation();
@@ -35,7 +46,6 @@ export function HeroSectionManage() {
 
   const [currentPreviewIndex, setCurrentPreviewIndex] = useState(0);
   const [showPreview, setShowPreview] = useState(false);
-  const [saving, setSaving] = useState(false);
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
   const [slideToDelete, setSlideToDelete] = useState<number | null>(null);
   const [newSlideId, setNewSlideId] = useState<number | null>(null);
@@ -44,6 +54,10 @@ export function HeroSectionManage() {
   // Local state for editable slides (pending changes)
   const [editableSlides, setEditableSlides] = useState<{ [key: number]: Partial<HeroSlide> & { imageFile?: File; originalImage?: string } }>({});
   const [updatingSlides, setUpdatingSlides] = useState<{ [key: number]: boolean }>({});
+  
+  // Draft slides (new slides not yet created)
+  const [draftSlides, setDraftSlides] = useState<DraftSlide[]>([]);
+  const [creatingSlides, setCreatingSlides] = useState<{ [key: string]: boolean }>({});
 
   // Map API data to component format
   const slides = useMemo<HeroSlide[]>(() => {
@@ -79,30 +93,32 @@ export function HeroSectionManage() {
     }
   }, [data]);
 
-  const addSlide = async () => {
-    try {
-      const newSerial = slides.length > 0 
-        ? (Math.max(...slides.map(s => parseInt(s.serial))) + 1).toString()
-        : "1";
-      
-      const result = await createHeroSection({
-        title: "",
-        subtitle: "",
-        background_image: "",
-        opacity: "0.5",
-        serial: newSerial,
-        status: "inactive",
-      }).unwrap();
-      
-      if (result.data?.id) {
-        setNewSlideId(result.data.id);
-      }
-      
-      refetch();
-    } catch (error) {
-      console.error("Failed to create slide:", error);
-      alert("Failed to create slide. Please try again.");
-    }
+  const addSlide = () => {
+    const newSerial = slides.length + draftSlides.length > 0 
+      ? (Math.max(
+          ...slides.map(s => parseInt(s.serial)),
+          ...draftSlides.map(s => parseInt(s.serial))
+        ) + 1).toString()
+      : "1";
+    
+    const draftId = `draft-${Date.now()}`;
+    const newDraft: DraftSlide = {
+      id: draftId,
+      image: "",
+      title: "",
+      subtitle: "",
+      overlayOpacity: 50,
+      serial: newSerial,
+      status: "inactive",
+    };
+    
+    setDraftSlides(prev => [...prev, newDraft]);
+    
+    // Scroll to the new draft after a brief delay
+    setTimeout(() => {
+      const element = document.getElementById(`slide-${draftId}`);
+      element?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 100);
   };
 
   const handleDeleteClick = (id: number) => {
@@ -217,6 +233,70 @@ export function HeroSectionManage() {
     }
   };
 
+  const handleCreateSlide = async (draft: DraftSlide) => {
+    setCreatingSlides(prev => ({ ...prev, [draft.id]: true }));
+
+    try {
+      const createData: {
+        title: string;
+        subtitle: string;
+        background_image: string | File;
+        opacity: string;
+        serial: string;
+        status: 'active' | 'inactive';
+      } = {
+        title: draft.title || "",
+        subtitle: draft.subtitle || "",
+        background_image: draft.imageFile || draft.image || "",
+        opacity: (draft.overlayOpacity / 100).toString(),
+        serial: draft.serial,
+        status: draft.status,
+      };
+
+      const result = await createHeroSection(createData).unwrap();
+      
+      if (result.data?.id) {
+        setNewSlideId(result.data.id);
+      }
+      
+      // Remove draft from list
+      setDraftSlides(prev => prev.filter(s => s.id !== draft.id));
+      
+      refetch();
+    } catch (error) {
+      console.error("Failed to create slide:", error);
+      alert("Failed to create slide. Please try again.");
+    } finally {
+      setCreatingSlides(prev => {
+        const newState = { ...prev };
+        delete newState[draft.id];
+        return newState;
+      });
+    }
+  };
+
+  const handleCancelDraft = (draftId: string) => {
+    setDraftSlides(prev => prev.filter(s => s.id !== draftId));
+  };
+
+  const handleDraftFieldChange = <T extends keyof DraftSlide>(draftId: string, field: T, value: DraftSlide[T]) => {
+    setDraftSlides(prev => prev.map(draft => 
+      draft.id === draftId ? { ...draft, [field]: value } : draft
+    ));
+  };
+
+  const handleDraftImageChange = (draftId: string, file: File | null) => {
+    if (!file) return;
+    
+    const previewUrl = URL.createObjectURL(file);
+    
+    setDraftSlides(prev => prev.map(draft => 
+      draft.id === draftId 
+        ? { ...draft, imageFile: file, image: previewUrl }
+        : draft
+    ));
+  };
+
   const handleStatusChange = async (id: number, status: 'active' | 'inactive') => {
     try {
       await setHeroSectionActive({ id, status }).unwrap();
@@ -299,7 +379,6 @@ export function HeroSectionManage() {
         <Button 
           onClick={addSlide} 
           className="flex items-center gap-2"
-          disabled={saving}
         >
           <Plus className="h-4 w-4" />
           Add New Slide
@@ -308,14 +387,14 @@ export function HeroSectionManage() {
           onClick={() => setShowPreview(true)} 
           variant="outline" 
           className="flex items-center gap-2"
-          disabled={slides.length === 0 || saving}
+          disabled={slides.length === 0 || draftSlides.length > 0}
         >
           <Eye className="h-4 w-4" />
           Preview Slider
         </Button>
       </div>
 
-      {slides.length === 0 ? (
+      {slides.length === 0 && draftSlides.length === 0 ? (
         <div className="text-center py-12">
           <p className="text-gray-500 mb-4">No hero sections found. Add your first slide to get started.</p>
           <Button onClick={addSlide} className="flex items-center gap-2 mx-auto">
@@ -325,6 +404,161 @@ export function HeroSectionManage() {
         </div>
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Render draft slides first */}
+          {draftSlides.map((draft) => (
+          <Card 
+            key={draft.id} 
+            id={`slide-${draft.id}`}
+            className="overflow-hidden border-2 border-dashed border-blue-300"
+          >
+            <CardHeader className="bg-blue-50">
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-lg text-blue-700">New Slide (Draft)</CardTitle>
+                <div className="flex items-center gap-2">
+                  <Button
+                    variant="default"
+                    size="sm"
+                    onClick={() => handleCreateSlide(draft)}
+                    disabled={creatingSlides[draft.id]}
+                    className="h-8 bg-green-600 hover:bg-green-700 text-white"
+                  >
+                    {creatingSlides[draft.id] ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <Check className="h-4 w-4" />
+                    )}
+                    <span className="ml-1">Create</span>
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => handleCancelDraft(draft.id)}
+                    disabled={creatingSlides[draft.id]}
+                    className="h-8 w-8 text-red-600 hover:text-red-700"
+                  >
+                    <XCircle className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent className="p-6">
+              <div className="mb-4">
+                <div className="relative w-full h-48 rounded-lg overflow-hidden border border-gray-200 bg-gray-100">
+                  {draft.image ? (
+                    <>
+                      <img
+                        src={draft.image}
+                        alt="Draft slide"
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.src = "/vite.svg";
+                        }}
+                      />
+                      <div 
+                        className="absolute inset-0 bg-gray-950"
+                        style={{ opacity: `${draft.overlayOpacity}%` }}
+                      />
+                      <div className="absolute inset-0 flex items-center justify-center z-10">
+                        <div className="text-center text-white">
+                          <h3 className="text-xl font-bold mb-2">{draft.title || "Title"}</h3>
+                          <p className="text-sm">{draft.subtitle || "Subtitle"}</p>
+                        </div>
+                      </div>
+                    </>
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-gray-400">
+                      <p>No image selected</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <Field>
+                  <FieldLabel>Background Image</FieldLabel>
+                  <FieldContent>
+                    <div className="space-y-2">
+                      <Input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) {
+                            handleDraftImageChange(draft.id, file);
+                          }
+                        }}
+                        disabled={creatingSlides[draft.id]}
+                        className="cursor-pointer"
+                      />
+                      {draft.imageFile && (
+                        <p className="text-xs text-green-600 mt-1">
+                          Image selected: {draft.imageFile.name}
+                        </p>
+                      )}
+                    </div>
+                  </FieldContent>
+                </Field>
+
+                <Field>
+                  <FieldLabel>Title</FieldLabel>
+                  <FieldContent>
+                    <Input
+                      value={draft.title}
+                      onChange={(e) => handleDraftFieldChange(draft.id, 'title', e.target.value)}
+                      placeholder="Trusted Medical Care"
+                      disabled={creatingSlides[draft.id]}
+                    />
+                  </FieldContent>
+                </Field>
+
+                <Field>
+                  <FieldLabel>Subtitle</FieldLabel>
+                  <FieldContent>
+                    <Input
+                      value={draft.subtitle}
+                      onChange={(e) => handleDraftFieldChange(draft.id, 'subtitle', e.target.value)}
+                      placeholder="Personalized Results"
+                      disabled={creatingSlides[draft.id]}
+                    />
+                  </FieldContent>
+                </Field>
+
+                <Field>
+                  <FieldLabel>Overlay Opacity: {draft.overlayOpacity}%</FieldLabel>
+                  <FieldContent>
+                    <input
+                      type="range"
+                      min="0"
+                      max="100"
+                      value={draft.overlayOpacity}
+                      onChange={(e) => handleDraftFieldChange(draft.id, 'overlayOpacity', parseInt(e.target.value))}
+                      className="w-full"
+                      disabled={creatingSlides[draft.id]}
+                    />
+                  </FieldContent>
+                </Field>
+
+                <Field>
+                  <FieldLabel>Status</FieldLabel>
+                  <FieldContent>
+                    <select
+                      value={draft.status}
+                      onChange={(e) => handleDraftFieldChange(draft.id, 'status', e.target.value as 'active' | 'inactive')}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      disabled={creatingSlides[draft.id]}
+                    >
+                      <option value="active">Active</option>
+                      <option value="inactive">Inactive</option>
+                    </select>
+                  </FieldContent>
+                </Field>
+              </div>
+            </CardContent>
+          </Card>
+          ))}
+          
+          {/* Render existing slides */}
           {slides.map((slide, index) => (
           <Card 
             key={slide.id} 
@@ -342,7 +576,7 @@ export function HeroSectionManage() {
                       variant="default"
                       size="sm"
                       onClick={() => handleUpdateSlide(slide)}
-                      disabled={updatingSlides[slide.id] || saving}
+                      disabled={updatingSlides[slide.id]}
                       className="h-8 bg-green-600 hover:bg-green-700 text-white"
                     >
                       {updatingSlides[slide.id] ? (
@@ -375,7 +609,7 @@ export function HeroSectionManage() {
                     variant="ghost"
                     size="icon"
                     onClick={() => handleDeleteClick(slide.id)}
-                    disabled={slides.length === 1 || saving}
+                    disabled={slides.length === 1}
                     className="h-8 w-8 text-red-600 hover:text-red-700"
                   >
                     <Trash2 className="h-4 w-4" />
@@ -422,7 +656,7 @@ export function HeroSectionManage() {
                             handleImageChange(slide.id, file);
                           }
                         }}
-                        disabled={saving || updatingSlides[slide.id]}
+                        disabled={updatingSlides[slide.id]}
                         className="cursor-pointer"
                       />
                       {slide.image && !editableSlides[slide.id]?.imageFile && (
@@ -446,7 +680,7 @@ export function HeroSectionManage() {
                       value={getSlideValue(slide, 'title') || slide.title}
                       onChange={(e) => handleFieldChange(slide.id, 'title', e.target.value)}
                       placeholder="Trusted Medical Care"
-                      disabled={saving || updatingSlides[slide.id]}
+                      disabled={updatingSlides[slide.id]}
                     />
                   </FieldContent>
                 </Field>
@@ -458,7 +692,7 @@ export function HeroSectionManage() {
                       value={getSlideValue(slide, 'subtitle') || slide.subtitle}
                       onChange={(e) => handleFieldChange(slide.id, 'subtitle', e.target.value)}
                       placeholder="Personalized Results"
-                      disabled={saving || updatingSlides[slide.id]}
+                      disabled={updatingSlides[slide.id]}
                     />
                   </FieldContent>
                 </Field>
@@ -473,7 +707,7 @@ export function HeroSectionManage() {
                       value={getSlideValue(slide, 'overlayOpacity') ?? slide.overlayOpacity}
                       onChange={(e) => handleFieldChange(slide.id, 'overlayOpacity', parseInt(e.target.value))}
                       className="w-full"
-                      disabled={saving || updatingSlides[slide.id]}
+                      disabled={updatingSlides[slide.id]}
                     />
                   </FieldContent>
                 </Field>
@@ -485,7 +719,7 @@ export function HeroSectionManage() {
                       value={slide.status}
                       onChange={(e) => handleStatusChange(slide.id, e.target.value as 'active' | 'inactive')}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      disabled={saving || updatingSlides[slide.id]}
+                      disabled={updatingSlides[slide.id]}
                     >
                       <option value="active">Active</option>
                       <option value="inactive">Inactive</option>
