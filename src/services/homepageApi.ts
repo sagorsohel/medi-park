@@ -67,6 +67,13 @@ export const homepageApi = api.injectEndpoints({
       }),
       providesTags: ['Banner'],
     }),
+    getHeroSectionsPublic: builder.query<HeroSectionResponse, void>({
+      query: () => ({
+        url: '/homepage-hero-sections/active',
+        method: 'GET',
+      }),
+      providesTags: ['Banner'],
+    }),
 
     // Create new hero section
     createHeroSection: builder.mutation<
@@ -219,6 +226,7 @@ export const homepageApi = api.injectEndpoints({
 
 export const {
   useGetHeroSectionsQuery,
+  useGetHeroSectionsPublicQuery,
   useCreateHeroSectionMutation,
   useUpdateHeroSectionMutation,
   useDeleteHeroSectionMutation,

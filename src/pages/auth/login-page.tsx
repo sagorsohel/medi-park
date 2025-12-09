@@ -56,11 +56,11 @@ export default function LoginPage() {
   };
 
   return (
-    <div className={cn("min-h-screen bg-background flex items-center justify-center ")}>
-      <div className="w-full  overflow-hidden shadow-2xl">
-        <div className="grid md:grid-cols-2 bg-card rounded-2xl">
+    <div className={cn("min-h-screen h-full bg-background flex items-center justify-center overflow-hidden")}>
+      <div className="w-full flex items-center justify-center overflow-hidden shadow-2xl">
+        <div className="grid md:grid-cols-2 bg-card rounded-2xl h-full overflow-hidden">
           {/* Left side - Medical professional image */}
-          <div className="relative hidden md:block">
+          <div className="relative hidden md:block h-full">
             <img
               src="/login.png"
               alt="Medical professional"
@@ -69,37 +69,16 @@ export default function LoginPage() {
           </div>
 
           {/* Right side - Login form */}
-          <div className="bg-card p-8 md:p-12 flex flex-col">
+          <div className="bg-card p-8 md:p-12 flex flex-col justify-center h-full">
             {/* Logo */}
             <div className="flex justify-end mb-8">
-              <div className="flex items-center gap-2">
+              <div className="flex absolute top-20 right-12 items-center gap-2">
                 <img src="/logo.png" alt="MediPark" className="h-8 w-auto" />
               </div>
             </div>
 
             {/* System Description */}
-            <div className="mb-8">
-              <h2 className="text-xl font-semibold text-foreground mb-4">
-                A. What the System Does (In Simple Terms)
-              </h2>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li>
-                  <strong>Admins</strong> control system settings and manage HR and Investors.
-                </li>
-                <li>
-                  <strong>Managers</strong> oversee investors and track investments.
-                </li>
-                <li>
-                  <strong>HR staff</strong> manage employee information and salaries.
-                </li>
-                <li>
-                  <strong>Support teams</strong> communicate with investors to solve problems quickly.
-                </li>
-                <li>
-                  <strong>Investors</strong> can see investments, pay dues, and contact support via the mobile app.
-                </li>
-              </ul>
-            </div>
+
 
             {/* Login Form */}
             <form onSubmit={handleSubmit} className="space-y-6">
