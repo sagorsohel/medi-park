@@ -63,6 +63,15 @@ export interface UpdateAboutUsSectionPayload {
   status?: 'active' | 'inactive'
 }
 
+export interface AboutUsBannerSection {
+  id: number
+  background_image: string
+  opacity: string
+  status: 'active' | 'inactive'
+  created_at: string
+  updated_at: string
+}
+
 export const homepageApi = api.injectEndpoints({
   endpoints: (builder) => ({
     // Get all hero sections
@@ -252,6 +261,47 @@ export const homepageApi = api.injectEndpoints({
       },
       invalidatesTags: ['Banner'],
     }),
+
+    getAboutUsBanner: builder.query<
+      { data: AboutUsBannerSection },
+      void
+    >({
+      query: () => ({
+        url: '/about-us-page-banner-sections',
+        method: 'GET',
+      }),
+      providesTags: ['Banner'],
+      transformResponse: (response: { data: AboutUsBannerSection } | { data: AboutUsBannerSection[] }) => {
+          if (Array.isArray(response.data)) {
+             return { ...response, data: response.data[0] };
+          }
+          return response as { data: AboutUsBannerSection };
+      }
+    }),
+
+    updateAboutUsBanner: builder.mutation<
+      { message: string; data: AboutUsBannerSection },
+      { id: number; data: { background_image?: File | string; opacity?: string } }
+    >({
+      query: ({ id, data }) => {
+        const formData = new FormData()
+        if (data.background_image !== undefined) {
+          if (data.background_image instanceof File) {
+            formData.append('background_image', data.background_image)
+          } else {
+             formData.append('background_image', data.background_image)
+          }
+        }
+        if (data.opacity !== undefined) formData.append('opacity', data.opacity)
+        
+        return {
+          url: `/about-us-page-banner-sections/${id}`,
+          method: 'POST',
+          body: formData,
+        }
+      },
+      invalidatesTags: ['Banner'],
+    }),
   }),
 })
 
@@ -266,6 +316,8 @@ export const {
   useGetAboutUsSectionQuery,
   useGetAboutUsSectionPublicQuery,
   useUpdateAboutUsSectionMutation,
+  useGetAboutUsBannerQuery,
+  useUpdateAboutUsBannerMutation,
 } = homepageApi
 
 

@@ -4,9 +4,10 @@ interface PageHeroSectionProps {
   image: string;
   heading?: string;
   alt?: string;
+  overlayOpacity?: number;
 }
 
-export function PageHeroSection({ image, heading, alt = "Hero" }: PageHeroSectionProps) {
+export function PageHeroSection({ image, heading, alt = "Hero", overlayOpacity = 0.4 }: PageHeroSectionProps) {
   return (
     <div className="relative w-full h-[250px] sm:h-[calc(100vh-200px)] overflow-hidden">
       {/* Background Image */}
@@ -21,7 +22,10 @@ export function PageHeroSection({ image, heading, alt = "Hero" }: PageHeroSectio
           }}
         />
         {/* Dark overlay */}
-        <div className="absolute inset-0 bg-gray-950/40" />
+        <div
+          className="absolute inset-0 bg-gray-950"
+          style={{ opacity: overlayOpacity }}
+        />
       </div>
 
       {/* Heading Overlay */}
@@ -33,6 +37,32 @@ export function PageHeroSection({ image, heading, alt = "Hero" }: PageHeroSectio
         </div>
       )}
     </div>
+  );
+}
+
+import { useGetAboutUsBannerQuery } from "@/services/homepageApi";
+import { Loader2 } from "lucide-react";
+
+export function AboutUsPageHero() {
+  const { data, isLoading } = useGetAboutUsBannerQuery();
+  const banner = data?.data;
+
+  if (isLoading) {
+    return (
+      <div className="w-full h-[250px] sm:h-[calc(100vh-200px)] flex items-center justify-center bg-gray-100">
+        <Loader2 className="h-8 w-8 animate-spin text-gray-400" />
+      </div>
+    );
+  }
+
+  if (!banner) return null;
+
+  return (
+    <PageHeroSection
+      image={banner.background_image}
+      heading="About Us"
+      overlayOpacity={parseFloat(banner.opacity)}
+    />
   );
 }
 

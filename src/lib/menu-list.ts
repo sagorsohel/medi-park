@@ -103,8 +103,8 @@ export function getMenuList(_pathname: string): Group[] {
           submenus: []
         },
         {
-          href: "/admin/website/contact",
-          label: "Contact Us",
+          href: "/admin/website/about",
+          label: "About Us",
           icon: Phone,
           submenus: []
         },

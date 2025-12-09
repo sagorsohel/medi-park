@@ -26,6 +26,7 @@ import UserDashboardPage from '../pages/user/user-dashboard-page'
 import AdminPanelLayout from '@/components/admin-panel/admin-panel-layout'
 import UserPanelLayout from '@/components/user-panel/user-panel-layout'
 import { WebsiteLayout } from '@/components/website/website-layout'
+import AboutPageManage from '@/pages/admin/about-page-manage/about-page-manage'
 
 const router = createBrowserRouter([
   // 🌐 Website routes (with website layout - sticky navbar & footer)
@@ -71,6 +72,7 @@ const router = createBrowserRouter([
     children: [
       { path: "dashboard", element: <DashboardPage /> },
       { path: "website/home", element: <WebHomeManagePage /> },
+      { path: "website/about", element: <AboutPageManage /> },
       { path: "staff", element: <StaffPage /> },
       { path: "staff/new", element: <AddStaffPage /> },
       { path: "doctor", element: <DoctorPage /> },
