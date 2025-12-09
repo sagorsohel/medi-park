@@ -22,7 +22,7 @@ export default function RegisterPage() {
   const location = useLocation();
   const dispatch = useAppDispatch();
   const [register, { isLoading }] = useRegisterUserMutation();
-  
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -49,15 +49,15 @@ export default function RegisterPage() {
 
     try {
       const result = await register({ email, password, name }).unwrap();
-      
+
       // Set credentials in Redux store
       dispatch(setCredentials({
-        user: result.user,
-        token: result.token,
+        user: result.data.user,
+        token: result.data.token,
       }));
-      
+
       // Navigate based on user role slug
-      const roleSlug = getUserRoleSlug(result.user);
+      const roleSlug = getUserRoleSlug(result.data.user);
       const finalPath = roleSlug === 'admin' ? '/admin/dashboard' : '/user/dashboard';
       navigate(finalPath, { replace: true });
     } catch (err: any) {
