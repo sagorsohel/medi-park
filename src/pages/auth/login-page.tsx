@@ -35,12 +35,13 @@ export default function LoginPage() {
 
       // Set credentials in Redux store
       dispatch(setCredentials({
-        user: result.user,
-        token: result.token,
+        user: result.data.user,
+        token: result.data.token,
       }));
 
+      console.log(result);
       // Navigate based on user role slug
-      const roleSlug = getUserRoleSlug(result.user);
+      const roleSlug = result?.data?.user?.roles[0].slug;
       const finalPath = roleSlug === 'admin' ? '/admin/dashboard' : '/user/dashboard';
       navigate(finalPath, { replace: true });
     } catch (err: unknown) {

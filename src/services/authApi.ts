@@ -32,17 +32,22 @@ export interface UserProfile {
   [key: string]: unknown
 }
 
+export interface AuthResponse {
+  success: boolean
+  message: string
+  data: {
+    user: User
+    token: string
+    token_type: string
+    expires_in: number
+  }
+}
+
 // Admin Auth API
 export const adminAuthApi = api.injectEndpoints({
   endpoints: (builder) => ({
     adminLogin: builder.mutation<
-      { 
-        message: string
-        user: User
-        token: string
-        token_type: string
-        expires_in: number
-      },
+      AuthResponse,
       { email: string; password: string }
     >({
       query: (credentials) => ({
@@ -97,13 +102,7 @@ export const adminAuthApi = api.injectEndpoints({
 export const userAuthApi = api.injectEndpoints({
   endpoints: (builder) => ({
     userLogin: builder.mutation<
-      { 
-        message: string
-        user: User
-        token: string
-        token_type: string
-        expires_in: number
-      },
+      AuthResponse,
       { email: string; password: string }
     >({
       query: (credentials) => ({
@@ -113,13 +112,7 @@ export const userAuthApi = api.injectEndpoints({
       }),
     }),
     registerUser: builder.mutation<
-      { 
-        message: string
-        user: User
-        token: string
-        token_type: string
-        expires_in: number
-      },
+      AuthResponse,
       { name: string; email: string; password: string }
     >({
       query: (credentials) => ({
