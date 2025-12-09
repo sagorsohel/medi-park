@@ -21,8 +21,8 @@ export default function LoginPage() {
   const isLoading = isAdminLoading || isUserLoading;
   const login = isAdminLogin ? adminLogin : userLogin;
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("admin@example.com");
+  const [password, setPassword] = useState("password");
   const [localError, setLocalError] = useState<string>("");
   const [showPassword, setShowPassword] = useState(false);
 

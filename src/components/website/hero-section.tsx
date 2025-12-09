@@ -5,7 +5,12 @@ import { useGetHeroSectionsPublicQuery } from "@/services/homepageApi";
 import { Loader2 } from "lucide-react";
 
 export function HeroSection() {
-  const { data, isLoading, error } = useGetHeroSectionsPublicQuery();
+  const { data, isLoading, error } = useGetHeroSectionsPublicQuery({}, {
+    refetchOnMountOrArgChange: true,
+    refetchOnFocus: true,
+    refetchOnReconnect: true,
+    refetchInterval: 5000,
+  });
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const slidesLengthRef = useRef<number>(0);
   // console.log(data); // Debugging output removed
