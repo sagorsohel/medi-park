@@ -44,7 +44,7 @@ export function AboutSectionManage() {
   const hasChanges = (): boolean => {
     if (!data?.data) return false;
     const section = data.data;
-    
+
     if (editableData.title !== undefined && editableData.title !== section.title) return true;
     if (editableData.sub_title !== undefined && editableData.sub_title !== section.sub_title) return true;
     if (editableData.content !== undefined && editableData.content !== section.content) return true;
@@ -52,7 +52,7 @@ export function AboutSectionManage() {
     if (editableData.image_2 instanceof File) return true;
     if (editableData.image_3 instanceof File) return true;
     if (editableData.status !== undefined && editableData.status !== section.status) return true;
-    
+
     return false;
   };
 
@@ -78,13 +78,13 @@ export function AboutSectionManage() {
 
   const handleImageChange = (field: 'image_1' | 'image_2' | 'image_3', file: File | null) => {
     if (!file) return;
-    
+
     const previewUrl = URL.createObjectURL(file);
     setImagePreviews(prev => ({
       ...prev,
       [field]: previewUrl,
     }));
-    
+
     setEditableData(prev => ({
       ...prev,
       [field]: file,
@@ -101,7 +101,7 @@ export function AboutSectionManage() {
         id: data.data.id,
         data: editableData,
       }).unwrap();
-      
+
       setEditableData({});
       setImagePreviews({});
       refetch();
@@ -241,7 +241,7 @@ export function AboutSectionManage() {
                         />
                       </div>
                     )}
-                   
+
                     {editableData.image_1 instanceof File && (
                       <p className="text-xs text-green-600 mt-1">
                         New image selected: {editableData.image_1.name}
@@ -280,7 +280,7 @@ export function AboutSectionManage() {
                         />
                       </div>
                     )}
-                    
+
                     {editableData.image_2 instanceof File && (
                       <p className="text-xs text-green-600 mt-1">
                         New image selected: {editableData.image_2.name}
@@ -319,7 +319,7 @@ export function AboutSectionManage() {
                         />
                       </div>
                     )}
-                   
+
                     {editableData.image_3 instanceof File && (
                       <p className="text-xs text-green-600 mt-1">
                         New image selected: {editableData.image_3.name}

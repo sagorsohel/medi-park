@@ -47,6 +47,12 @@ export interface AboutUsSection {
   updated_at: string
 }
 
+export interface AboutUsResponse {
+  success: boolean
+  message: string
+  data: AboutUsSection
+}
+
 export interface UpdateAboutUsSectionPayload {
   title?: string
   sub_title?: string
@@ -172,7 +178,7 @@ export const homepageApi = api.injectEndpoints({
 
     // About Us Sections
     getAboutUsSection: builder.query<
-      { data: AboutUsSection },
+      AboutUsResponse,
       void
     >({
       query: () => ({
@@ -180,10 +186,17 @@ export const homepageApi = api.injectEndpoints({
         method: 'GET',
       }),
       providesTags: ['Banner'],
+      transformResponse: (response: AboutUsResponse | { data: AboutUsSection[] }) => {
+        // Handle case where API returns array instead of single object
+        if (Array.isArray(response.data)) {
+           return { ...response, data: response.data[0] } as AboutUsResponse;
+        }
+        return response as AboutUsResponse;
+      }
     }),
 
     updateAboutUsSection: builder.mutation<
-      { message: string; data: AboutUsSection },
+      AboutUsResponse,
       { id: number; data: UpdateAboutUsSectionPayload }
     >({
       query: ({ id, data }) => {
@@ -215,7 +228,7 @@ export const homepageApi = api.injectEndpoints({
         if (data.status !== undefined) formData.append('status', data.status)
         return {
           url: `/homepage-about-us-sections/${id}`,
-          method: 'PUT',
+          method: 'POST',
           body: formData,
         }
       },
