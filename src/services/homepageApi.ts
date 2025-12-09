@@ -195,6 +195,24 @@ export const homepageApi = api.injectEndpoints({
       }
     }),
 
+    getAboutUsSectionPublic: builder.query<
+      AboutUsResponse,
+      void
+    >({
+      query: () => ({
+        url: '/homepage-about-us-sections/active',
+        method: 'GET',
+      }),
+      providesTags: ['Banner'],
+      transformResponse: (response: AboutUsResponse | { data: AboutUsSection[] }) => {
+        // Handle case where API returns array instead of single object
+        if (Array.isArray(response.data)) {
+           return { ...response, data: response.data[0] } as AboutUsResponse;
+        }
+        return response as AboutUsResponse;
+      }
+    }),
+
     updateAboutUsSection: builder.mutation<
       AboutUsResponse,
       { id: number; data: UpdateAboutUsSectionPayload }
@@ -246,6 +264,7 @@ export const {
   useSetHeroSectionActiveMutation,
   useReorderHeroSectionsMutation,
   useGetAboutUsSectionQuery,
+  useGetAboutUsSectionPublicQuery,
   useUpdateAboutUsSectionMutation,
 } = homepageApi
 

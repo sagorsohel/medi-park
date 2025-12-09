@@ -1,12 +1,27 @@
 "use client";
+import { useGetAboutUsSectionPublicQuery } from "@/services/homepageApi";
+import { Loader2 } from "lucide-react";
 
 export function AboutSection() {
+  const { data, isLoading } = useGetAboutUsSectionPublicQuery();
+  const section = data?.data;
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <Loader2 className="h-8 w-8 animate-spin text-gray-400" />
+      </div>
+    );
+  }
+
+  if (!section) return null;
+
   return (
     <div className="relative w-full bg-white py-16 md:py-24 overflow-hidden">
       {/* Background Circular Lines - Div (Bottom Half Only) */}
       <div className="absolute bottom-0 left-0 w-full h-2/3 pointer-events-none" style={{ zIndex: 0 }}>
         {/* First circular line - bottom half */}
-        <div 
+        <div
           className="absolute border border-[#848484] opacity-20 rounded-full"
           style={{
             width: '1200px',
@@ -19,7 +34,7 @@ export function AboutSection() {
           }}
         />
         {/* Second circular line - bottom half */}
-        <div 
+        <div
           className="absolute border border-[#848484] opacity-20 rounded-full"
           style={{
             width: '1000px',
@@ -37,7 +52,7 @@ export function AboutSection() {
         {/* About Us Navigation Button */}
         <div className="flex flex-col items-center mb-12 md:mb-8">
           <button className="bg-gray-100 border border-gray-400 rounded-lg px-6 py-2 text-gray-800 font-medium text-sm md:text-base hover:bg-gray-200 transition-colors">
-            About Us
+            {section.title || "About Us"}
           </button>
           <div className="w-0.5 h-8 bg-gray-600 mt-2" />
         </div>
@@ -45,9 +60,10 @@ export function AboutSection() {
         {/* Mission Statement - Left Aligned */}
         <div className="max-w-xl mx-auto mb-16 md:mb-20 px-4">
           <p className="text-base md:text-lg text-gray-700 leading-relaxed text-left">
-            <span className="font-bold text-gray-900">At Medipark, our mission is simple:</span>{" "}
-            to provide the highest quality medical care in an environment of genuine compassion and respect. 
-            We believe that true health care goes beyond treating symptoms—it involves understanding the person.
+            {section.sub_title && (
+              <span className="font-bold text-gray-900">{section.sub_title} </span>
+            )}
+            {section.content}
           </p>
         </div>
 
@@ -97,49 +113,55 @@ export function AboutSection() {
           {/* Images in arc layout - same positions as image */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 relative z-10 pb-20">
             {/* Left Image Card - Lower left position */}
-            <div className="relative group transform md:translate-y-8 translate-x-6">
-              <div className="bg-white border inline-flex justify-center p-2  border-gray-300 rounded-lg  shadow-sm">
-                <img
-                  src="/about1.png"
-                  alt="Medical professionals in operating room"
-                  className="w-[262px] h-[144px]  object-cover"
-                  onError={(e) => {
-                    const target = e.target as HTMLImageElement;
-                    target.src = "/vite.svg";
-                  }}
-                />
+            {section.image_1 && (
+              <div className="relative group transform md:translate-y-8 translate-x-6">
+                <div className="bg-white border inline-flex justify-center p-2  border-gray-300 rounded-lg  shadow-sm">
+                  <img
+                    src={section.image_1}
+                    alt="About visualization 1"
+                    className="w-[262px] h-[144px]  object-cover"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.src = "/vite.svg";
+                    }}
+                  />
+                </div>
               </div>
-            </div>
+            )}
 
             {/* Middle Image Card - Center position (higher) */}
-            <div className="relative group transform md:-translate-y-2 translate-x-12">
-              <div className="bg-white border inline-flex justify-center p-2  border-gray-300 rounded-lg  overflow-hidden shadow-sm">
-                <img
-                  src="/about-2.png"
-                  alt="Doctor with patient"
-                  className="w-[262px] h-[144px]  object-cover"
-                  onError={(e) => {
-                    const target = e.target as HTMLImageElement;
-                    target.src = "/vite.svg";
-                  }}
-                />
+            {section.image_2 && (
+              <div className="relative group transform md:-translate-y-2 translate-x-12">
+                <div className="bg-white border inline-flex justify-center p-2  border-gray-300 rounded-lg  overflow-hidden shadow-sm">
+                  <img
+                    src={section.image_2}
+                    alt="About visualization 2"
+                    className="w-[262px] h-[144px]  object-cover"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.src = "/vite.svg";
+                    }}
+                  />
+                </div>
               </div>
-            </div>
+            )}
 
             {/* Right Image Card - Lower right position */}
-            <div className="relative group transform md:translate-y-8 translate-x-12">
-              <div className="bg-white border inline-flex justify-center p-2  border-gray-300 rounded-lg  overflow-hidden shadow-sm">
-                <img
-                  src="/about3.png"
-                  alt="Medical items and equipment"
-                  className="w-[262px] h-[144px]  object-cover"
-                  onError={(e) => {
-                    const target = e.target as HTMLImageElement;
-                    target.src = "/vite.svg";
-                  }}
-                />
+            {section.image_3 && (
+              <div className="relative group transform md:translate-y-8 translate-x-12">
+                <div className="bg-white border inline-flex justify-center p-2  border-gray-300 rounded-lg  overflow-hidden shadow-sm">
+                  <img
+                    src={section.image_3}
+                    alt="About visualization 3"
+                    className="w-[262px] h-[144px]  object-cover"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.src = "/vite.svg";
+                    }}
+                  />
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       </div>
