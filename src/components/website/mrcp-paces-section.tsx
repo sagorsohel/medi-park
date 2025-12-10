@@ -80,7 +80,7 @@ export function MRCPPACESSection() {
               <img
                 src={section.image}
                 alt={section.title || "MRCP PACES"}
-                className="w-full h-auto object-cover"
+                className="w-full h-[400px] object-cover"
                 onError={(e) => {
                   const target = e.target as HTMLImageElement;
                   target.src = "/vite.svg";
