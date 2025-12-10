@@ -72,6 +72,45 @@ export interface AboutUsBannerSection {
   updated_at: string
 }
 
+export interface Facility {
+  id: number
+  title: string
+  short_description: string
+  image: string
+  status: 'active' | 'inactive'
+  created_at: string
+  updated_at: string
+}
+
+export interface FacilitiesResponse {
+  success: boolean
+  message: string
+  pagination: {
+    per_page: number
+    total_count: number
+    total_page: number
+    current_page: number
+    current_page_count: number
+    next_page: number | null
+    previous_page: number | null
+  }
+  data: Facility[]
+}
+
+export interface CreateFacilityPayload {
+  title: string
+  short_description: string
+  image: string | File
+  status?: 'active' | 'inactive'
+}
+
+export interface UpdateFacilityPayload {
+  title?: string
+  short_description?: string
+  image?: string | File
+  status?: 'active' | 'inactive'
+}
+
 export const homepageApi = api.injectEndpoints({
   endpoints: (builder) => ({
     // Get all hero sections
@@ -304,6 +343,74 @@ export const homepageApi = api.injectEndpoints({
       },
       invalidatesTags: ['Banner'],
     }),
+
+    // Facilities Management
+    getFacilities: builder.query<FacilitiesResponse, number>({
+      query: (page = 1) => ({
+        url: `/facilities?page=${page}`,
+        method: 'GET',
+      }),
+      providesTags: ['Banner'],
+    }),
+
+    createFacility: builder.mutation<
+      { success: boolean; message: string; data: Facility },
+      CreateFacilityPayload
+    >({
+      query: (body) => {
+        const formData = new FormData()
+        formData.append('title', body.title)
+        formData.append('short_description', body.short_description)
+        formData.append('image', body.image)
+        if (body.status) {
+          formData.append('status', body.status)
+        }
+        return {
+          url: '/facilities',
+          method: 'POST',
+          body: formData,
+        }
+      },
+      invalidatesTags: ['Banner'],
+    }),
+
+    updateFacility: builder.mutation<
+      { success: boolean; message: string; data: Facility },
+      { id: number; data: UpdateFacilityPayload }
+    >({
+      query: ({ id, data: body }) => {
+        const formData = new FormData()
+        if (body.title) {
+          formData.append('title', body.title)
+        }
+        if (body.short_description) {
+          formData.append('short_description', body.short_description)
+        }
+        if (body.image) {
+          formData.append('image', body.image)
+        }
+        if (body.status) {
+          formData.append('status', body.status)
+        }
+        return {
+          url: `/facilities/${id}`,
+          method: 'POST',
+          body: formData,
+        }
+      },
+      invalidatesTags: ['Banner'],
+    }),
+
+    deleteFacility: builder.mutation<
+      { success: boolean; message: string },
+      number
+    >({
+      query: (id) => ({
+        url: `/facilities/${id}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['Banner'],
+    }),
   }),
 })
 
@@ -320,6 +427,10 @@ export const {
   useUpdateAboutUsSectionMutation,
   useGetAboutUsBannerQuery,
   useUpdateAboutUsBannerMutation,
+  useGetFacilitiesQuery,
+  useCreateFacilityMutation,
+  useUpdateFacilityMutation,
+  useDeleteFacilityMutation,
 } = homepageApi
 
 
