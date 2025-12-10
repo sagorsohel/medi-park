@@ -316,25 +316,32 @@ export function NewsManage() {
                                 No news found. Click "Add News" to create one.
                             </div>
                         ) : (
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                                {newsList.map((news) => (
-                                    <Card key={news.id} className="border">
-                                        <CardHeader className="pb-4">
-                                            <div className="flex items-center justify-between">
-                                                <CardTitle className="text-lg line-clamp-1">{news.title}</CardTitle>
-                                                <div className="flex items-center gap-2">
-                                                    <Button variant="outline" size="sm" onClick={() => openEditModal(news)}>
-                                                        <Edit2 className="w-4 h-4 mr-1" />
-                                                        Edit
-                                                    </Button>
-                                                    <Button variant="destructive" size="sm" onClick={() => handleDeleteClick(news.id)}>
-                                                        <Trash2 className="w-4 h-4 mr-1" />
-                                                        Delete
-                                                    </Button>
-                                                </div>
-                                            </div>
-                                        </CardHeader>
-                                        <CardContent className="space-y-4 p-5">
+                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                 {newsList.map((news) => (
+                                     <Card 
+                                         key={news.id} 
+                                         className={`border ${
+                                             news.status === "active" 
+                                                 ? "bg-green-100 border-green-200" 
+                                                 : "bg-red-100 border-red-200"
+                                         }`}
+                                     >
+                                         <CardHeader className="pb-4">
+                                             <div className="flex items-center justify-between">
+                                                 <CardTitle className="text-lg line-clamp-1">{news.title}</CardTitle>
+                                                 <div className="flex items-center gap-2">
+                                                     <Button variant="outline" size="sm" onClick={() => openEditModal(news)}>
+                                                         <Edit2 className="w-4 h-4 mr-1" />
+                                                         Edit
+                                                     </Button>
+                                                     <Button variant="destructive" size="sm" onClick={() => handleDeleteClick(news.id)}>
+                                                         <Trash2 className="w-4 h-4 mr-1" />
+                                                         Delete
+                                                     </Button>
+                                                 </div>
+                                             </div>
+                                         </CardHeader>
+                                         <CardContent className="space-y-4 p-5">
 
 
 
@@ -367,19 +374,7 @@ export function NewsManage() {
                                                 </FieldContent>
                                             </Field>
 
-                                            <Field>
-                                               
-                                                <FieldContent>
-                                                    <span
-                                                        className={`px-2 py-1 rounded text-sm ${news.status === "active"
-                                                                ? "bg-green-100 text-green-800"
-                                                                : "bg-gray-100 text-gray-800"
-                                                            }`}
-                                                    >
-                                                        {news.status}
-                                                    </span>
-                                                </FieldContent>
-                                            </Field>
+                                         
                                         </CardContent>
                                     </Card>
                                 ))}
