@@ -88,6 +88,7 @@ export const homepageApi = api.injectEndpoints({
         method: 'GET',
       }),
       providesTags: ['Banner'],
+      keepUnusedDataFor: 3600, // Cache for 60 minutes (3600 seconds)
     }),
 
     // Create new hero section
@@ -213,6 +214,7 @@ export const homepageApi = api.injectEndpoints({
         method: 'GET',
       }),
       providesTags: ['Banner'],
+      keepUnusedDataFor: 3600, // Cache for 60 minutes (3600 seconds)
       transformResponse: (response: AboutUsResponse | { data: AboutUsSection[] }) => {
         // Handle case where API returns array instead of single object
         if (Array.isArray(response.data)) {

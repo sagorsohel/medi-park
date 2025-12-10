@@ -1,20 +1,58 @@
 "use client";
 import { useGetAboutUsSectionPublicQuery } from "@/services/homepageApi";
-import { Loader2 } from "lucide-react";
+import { motion, type Variants } from "framer-motion";
 
 export function AboutSection() {
-  const { data, isLoading } = useGetAboutUsSectionPublicQuery();
+  const { data } = useGetAboutUsSectionPublicQuery();
   const section = data?.data;
 
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <Loader2 className="h-8 w-8 animate-spin text-gray-400" />
-      </div>
-    );
-  }
-
+  // Only render if we have cached data
   if (!section) return null;
+
+  // Animation variants
+  const buttonVariants: Variants = {
+    hidden: { y: -30, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        duration: 0.6,
+        ease: "easeOut",
+      },
+    },
+  };
+
+  const textVariants: Variants = {
+    hidden: { x: -50, opacity: 0 },
+    visible: {
+      x: 0,
+      opacity: 1,
+      transition: {
+        duration: 0.6,
+        delay: 0.2,
+        ease: "easeOut",
+      },
+    },
+  };
+
+  const imageVariants: Variants = {
+    hidden: (index: number) => {
+      if (index === 0) return { x: -100, y: 50, opacity: 0 }; // Left image from left-bottom
+      if (index === 1) return { y: -50, opacity: 0 }; // Middle image from top
+      if (index === 2) return { x: 100, y: 50, opacity: 0 }; // Right image from right-bottom
+      return { opacity: 0 };
+    },
+    visible: (index: number) => ({
+      x: 0,
+      y: 0,
+      opacity: 1,
+      transition: {
+        duration: 0.6,
+        delay: 0.4 + index * 0.15,
+        ease: "easeOut",
+      },
+    }),
+  };
 
   return (
     <div className="relative w-full bg-white py-16 md:py-24 overflow-hidden">
@@ -50,22 +88,34 @@ export function AboutSection() {
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* About Us Navigation Button */}
-        <div className="flex flex-col items-center mb-12 md:mb-8">
+        <motion.div
+          className="flex flex-col items-center mb-12 md:mb-8"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-50px" }}
+          variants={buttonVariants}
+        >
           <button className="bg-gray-100 border border-gray-400 rounded-lg px-6 py-2 text-gray-800 font-medium text-sm md:text-base hover:bg-gray-200 transition-colors">
             {section.title || "About Us"}
           </button>
           <div className="w-0.5 h-8 bg-gray-600 mt-2" />
-        </div>
+        </motion.div>
 
         {/* Mission Statement - Left Aligned */}
-        <div className="max-w-xl mx-auto mb-16 md:mb-20 px-4">
+        <motion.div
+          className="max-w-xl mx-auto mb-16 md:mb-20 px-4"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-50px" }}
+          variants={textVariants}
+        >
           <p className="text-base md:text-lg text-gray-700 leading-relaxed text-left">
             {section.sub_title && (
               <span className="font-bold text-gray-900">{section.sub_title} </span>
             )}
             {section.content}
           </p>
-        </div>
+        </motion.div>
 
         {/* Image Cards in Arc with SVG S-Curve Connecting Lines */}
         <div className="relative max-w-6xl mx-auto px-4">
@@ -114,7 +164,14 @@ export function AboutSection() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 relative z-10 pb-20">
             {/* Left Image Card - Lower left position */}
             {section.image_1 && (
-              <div className="relative group transform md:translate-y-8 translate-x-6">
+              <motion.div
+                className="relative group transform md:translate-y-8 translate-x-6"
+                custom={0}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: "-100px" }}
+                variants={imageVariants}
+              >
                 <div className="bg-white border inline-flex justify-center p-2  border-gray-300 rounded-lg  shadow-sm">
                   <img
                     src={section.image_1}
@@ -126,12 +183,19 @@ export function AboutSection() {
                     }}
                   />
                 </div>
-              </div>
+              </motion.div>
             )}
 
             {/* Middle Image Card - Center position (higher) */}
             {section.image_2 && (
-              <div className="relative group transform md:-translate-y-2 translate-x-12">
+              <motion.div
+                className="relative group transform md:-translate-y-2 translate-x-12"
+                custom={1}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: "-100px" }}
+                variants={imageVariants}
+              >
                 <div className="bg-white border inline-flex justify-center p-2  border-gray-300 rounded-lg  overflow-hidden shadow-sm">
                   <img
                     src={section.image_2}
@@ -143,12 +207,19 @@ export function AboutSection() {
                     }}
                   />
                 </div>
-              </div>
+              </motion.div>
             )}
 
             {/* Right Image Card - Lower right position */}
             {section.image_3 && (
-              <div className="relative group transform md:translate-y-8 translate-x-12">
+              <motion.div
+                className="relative group transform md:translate-y-8 translate-x-12"
+                custom={2}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: "-100px" }}
+                variants={imageVariants}
+              >
                 <div className="bg-white border inline-flex justify-center p-2  border-gray-300 rounded-lg  overflow-hidden shadow-sm">
                   <img
                     src={section.image_3}
@@ -160,7 +231,7 @@ export function AboutSection() {
                     }}
                   />
                 </div>
-              </div>
+              </motion.div>
             )}
           </div>
         </div>
