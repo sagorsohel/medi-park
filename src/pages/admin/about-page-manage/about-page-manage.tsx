@@ -2,6 +2,7 @@
 
 
 import { AboutBannerManage } from "@/components/admin/about-banner-manage";
+import { WhoWeAreManage } from "@/components/admin/who-we-are-manage";
 
 export default function AboutPageManage() {
     return (
@@ -12,6 +13,9 @@ export default function AboutPageManage() {
 
             {/* About Banner Management */}
             <AboutBannerManage />
+            
+            {/* Who We Are Section */}
+            <WhoWeAreManage />
         </div>
     );
 }
