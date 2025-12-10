@@ -1,73 +1,130 @@
 "use client";
 
 import { useGetMissionActiveQuery, useGetVisionActiveQuery } from "@/services/aboutPageApi";
-import { Loader2 } from "lucide-react";
+import { motion, type Variants } from "framer-motion";
 
 interface MissionVisionItemProps {
   title: string;
   image: string;
   text: string;
   alt?: string;
+  delay?: number;
 }
 
-function MissionVisionItem({ title, image, text, alt }: MissionVisionItemProps) {
+function MissionVisionItem({ title, image, text, alt, delay = 0 }: MissionVisionItemProps) {
+  const itemVariants: Variants = {
+    hidden: { y: 50, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        duration: 0.6,
+        delay,
+        ease: "easeOut",
+      },
+    },
+  };
+
+  const titleVariants: Variants = {
+    hidden: { y: 30, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        duration: 0.5,
+        delay: delay + 0.2,
+        ease: "easeOut",
+      },
+    },
+  };
+
+  const imageVariants: Variants = {
+    hidden: { scale: 0.9, opacity: 0 },
+    visible: {
+      scale: 1,
+      opacity: 1,
+      transition: {
+        duration: 0.6,
+        delay: delay + 0.3,
+        ease: "easeOut",
+      },
+    },
+  };
+
+  const textVariants: Variants = {
+    hidden: { y: 30, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        duration: 0.6,
+        delay: delay + 0.5,
+        ease: "easeOut",
+      },
+    },
+  };
+
   return (
-    <div className="w-full mb-16 md:mb-20 max-w-7xl ">
+    <motion.div
+      className="w-full mb-16 md:mb-20 max-w-7xl"
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: "-100px" }}
+      variants={itemVariants}
+    >
       {/* Title */}
-      <div className="text-center mb-4">
+      <motion.div
+        className="text-center mb-4"
+        variants={titleVariants}
+      >
         <h2 className="text-4xl md:text-5xl font-bold text-primary mb-2">
           {title}
         </h2>
         <div className="w-0.5 h-8 bg-gray-600 mx-auto mt-2" />
-      </div>
+      </motion.div>
 
       {/* Image */}
-      <div className="flex justify-center mb-6 md:mb-8 -mx-4 sm:-mx-6 lg:-mx-8">
+      <motion.div
+        className="flex justify-center mb-6 md:mb-8 -mx-4 sm:-mx-6 lg:-mx-8"
+        variants={imageVariants}
+      >
         <div className="w-full max-w-7xl rounded-[12px] overflow-hidden shadow-sm border border-gray-200">
           <img
             src={image}
             alt={alt || title}
-            className="w-full h-[300px] p-4 rounded-[12px] border  object-cover"
+            className="w-full h-[300px] p-4 rounded-[12px] border object-cover"
             onError={(e) => {
               const target = e.target as HTMLImageElement;
               target.src = "/vite.svg";
             }}
           />
         </div>
-      </div>
+      </motion.div>
 
       {/* Text */}
-      <div className="max-w-4xl mx-auto px-4">
+      <motion.div
+        className="max-w-4xl mx-auto px-4"
+        variants={textVariants}
+      >
         <p className="text-base md:text-lg text-gray-700 leading-relaxed text-justify">
           {text}
         </p>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 }
 
 export function MissionVisionSection() {
-  const { data: missionData, isLoading: missionLoading, error: missionError } = useGetMissionActiveQuery();
-  const { data: visionData, isLoading: visionLoading, error: visionError } = useGetVisionActiveQuery();
+  const { data: missionData } = useGetMissionActiveQuery();
+  const { data: visionData } = useGetVisionActiveQuery();
 
-  if (missionLoading || visionLoading) {
-    return (
-      <div className="w-full bg-white py-16 md:py-24 flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-gray-500" />
-      </div>
-    );
+  const mission = missionData?.our_mission_section;
+  const vision = visionData?.our_vision_section;
+
+  // Only render if we have cached data
+  if (!mission || !vision) {
+    return null;
   }
-
-  if (missionError || visionError || !missionData?.data || !visionData?.data) {
-    return (
-      <div className="w-full bg-white py-16 md:py-24 flex items-center justify-center">
-        <p className="text-gray-500">Mission and Vision sections are not available.</p>
-      </div>
-    );
-  }
-
-  const mission = missionData.data;
-  const vision = visionData.data;
 
   return (
     <div className="w-full bg-white py-16 md:py-24">
@@ -78,6 +135,7 @@ export function MissionVisionSection() {
           image={mission.image}
           text={mission.paragraph || ""}
           alt={mission.title}
+          delay={0}
         />
 
         {/* Our Vision */}
@@ -86,6 +144,7 @@ export function MissionVisionSection() {
           image={vision.image}
           text={vision.paragraph || ""}
           alt={vision.title}
+          delay={0.2}
         />
       </div>
     </div>

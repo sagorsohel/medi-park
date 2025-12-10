@@ -47,6 +47,14 @@ export interface VisionResponse {
   data: MissionVisionBase;
 }
 
+export interface MissionActiveResponse {
+  our_mission_section: MissionVisionBase;
+}
+
+export interface VisionActiveResponse {
+  our_vision_section: MissionVisionBase;
+}
+
 export interface UpdateMissionVisionPayload {
   title?: string;
   paragraph?: string;
@@ -154,12 +162,13 @@ export const aboutPageApi = api.injectEndpoints({
       }),
       providesTags: ["AboutMission"],
     }),
-    getMissionActive: builder.query<MissionResponse, void>({
+    getMissionActive: builder.query<MissionActiveResponse, void>({
       query: () => ({
         url: "/about-us-page-our-mission-sections/active",
         method: "GET",
       }),
       providesTags: ["AboutMission"],
+      keepUnusedDataFor: 3600, // Cache for 60 minutes (3600 seconds)
     }),
     updateMission: builder.mutation<
       { message: string; data: MissionVisionBase },
@@ -189,12 +198,13 @@ export const aboutPageApi = api.injectEndpoints({
       }),
       providesTags: ["AboutVision"],
     }),
-    getVisionActive: builder.query<VisionResponse, void>({
+    getVisionActive: builder.query<VisionActiveResponse, void>({
       query: () => ({
         url: "/about-us-page-our-vision-sections/active",
         method: "GET",
       }),
       providesTags: ["AboutVision"],
+      keepUnusedDataFor: 3600, // Cache for 60 minutes (3600 seconds)
     }),
     updateVision: builder.mutation<
       { message: string; data: MissionVisionBase },
