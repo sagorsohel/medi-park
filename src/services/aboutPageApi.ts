@@ -356,6 +356,7 @@ export const aboutPageApi = api.injectEndpoints({
       { id: number; data: UpdateAboutPageBannerPayload }
     >({
       query: ({ id, data }) => {
+        console.log(id);
         const formData = new FormData();
         if (data.background_image !== undefined) {
           if (data.background_image instanceof File) {
@@ -372,7 +373,7 @@ export const aboutPageApi = api.injectEndpoints({
         }
 
         return {
-          url: `/about-us-page-banner-sections/${id}`,
+          url: `/about-us-page-banner-sections`,
           method: "POST",
           body: formData,
         };

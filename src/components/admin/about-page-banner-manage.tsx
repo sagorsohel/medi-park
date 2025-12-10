@@ -136,7 +136,7 @@ export function AboutPageBannerManage() {
     editableData.status !== undefined ? editableData.status : section.status;
 
   return (
-    <Card className="mt-8">
+    <Card className="mt-8 p-5">
       <CardHeader>
         <div className="flex items-center justify-between">
           <CardTitle>About Page Banner Management</CardTitle>
