@@ -3,6 +3,7 @@
 
 import { AboutBannerManage } from "@/components/admin/about-banner-manage";
 import { WhoWeAreManage } from "@/components/admin/who-we-are-manage";
+import { MissionVisionManage } from "@/components/admin/mission-vision-manage";
 
 export default function AboutPageManage() {
     return (
@@ -16,6 +17,9 @@ export default function AboutPageManage() {
             
             {/* Who We Are Section */}
             <WhoWeAreManage />
+
+            {/* Mission & Vision */}
+            <MissionVisionManage />
         </div>
     );
 }

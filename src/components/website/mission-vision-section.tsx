@@ -1,5 +1,8 @@
 "use client";
 
+import { useGetMissionActiveQuery, useGetVisionActiveQuery } from "@/services/aboutPageApi";
+import { Loader2 } from "lucide-react";
+
 interface MissionVisionItemProps {
   title: string;
   image: string;
@@ -43,39 +46,46 @@ function MissionVisionItem({ title, image, text, alt }: MissionVisionItemProps) 
   );
 }
 
-interface MissionVisionSectionProps {
-  mission: {
-    title: string;
-    image: string;
-    text: string;
-    alt?: string;
-  };
-  vision: {
-    title: string;
-    image: string;
-    text: string;
-    alt?: string;
-  };
-}
+export function MissionVisionSection() {
+  const { data: missionData, isLoading: missionLoading, error: missionError } = useGetMissionActiveQuery();
+  const { data: visionData, isLoading: visionLoading, error: visionError } = useGetVisionActiveQuery();
 
-export function MissionVisionSection({ mission, vision }: MissionVisionSectionProps) {
+  if (missionLoading || visionLoading) {
+    return (
+      <div className="w-full bg-white py-16 md:py-24 flex items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-gray-500" />
+      </div>
+    );
+  }
+
+  if (missionError || visionError || !missionData?.data || !visionData?.data) {
+    return (
+      <div className="w-full bg-white py-16 md:py-24 flex items-center justify-center">
+        <p className="text-gray-500">Mission and Vision sections are not available.</p>
+      </div>
+    );
+  }
+
+  const mission = missionData.data;
+  const vision = visionData.data;
+
   return (
     <div className="w-full bg-white py-16 md:py-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Our Mission */}
         <MissionVisionItem
-          title={mission.title}
+          title={mission.title || "Our Mission"}
           image={mission.image}
-          text={mission.text}
-          alt={mission.alt}
+          text={mission.paragraph || ""}
+          alt={mission.title}
         />
 
         {/* Our Vision */}
         <MissionVisionItem
-          title={vision.title}
+          title={vision.title || "Our Vision"}
           image={vision.image}
-          text={vision.text}
-          alt={vision.alt}
+          text={vision.paragraph || ""}
+          alt={vision.title}
         />
       </div>
     </div>
