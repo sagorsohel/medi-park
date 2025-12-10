@@ -112,6 +112,10 @@ export interface MRCPPACESCreateResponse {
   "2nd_after_our_vision_section": MRCPPACES;
 }
 
+export interface MRCPPACESActiveResponse {
+  "2nd_after_our_vision_section": MRCPPACES;
+}
+
 export interface UpdateMRCPPACESPayload {
   title?: string;
   paragraph?: string;
@@ -277,12 +281,13 @@ export const aboutPageApi = api.injectEndpoints({
       }),
       providesTags: ["AboutMRCPPACES"],
     }),
-    getMRCPPACESActive: builder.query<MRCPPACESResponse, void>({
+    getMRCPPACESActive: builder.query<MRCPPACESActiveResponse, void>({
       query: () => ({
         url: "/about-us-page-2nd-after-our-vision-sections/active",
         method: "GET",
       }),
       providesTags: ["AboutMRCPPACES"],
+      keepUnusedDataFor: 3600, // Cache for 60 minutes (3600 seconds)
     }),
     updateMRCPPACES: builder.mutation<
       { message: string; data: MRCPPACES },
