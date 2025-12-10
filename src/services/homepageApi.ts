@@ -353,6 +353,15 @@ export const homepageApi = api.injectEndpoints({
       providesTags: ['Banner'],
     }),
 
+    getFacilitiesPublic: builder.query<FacilitiesResponse, void>({
+      query: () => ({
+        url: '/facilities',
+        method: 'GET',
+      }),
+      providesTags: ['Banner'],
+      keepUnusedDataFor: 3600, // Cache for 60 minutes (3600 seconds)
+    }),
+
     createFacility: builder.mutation<
       { success: boolean; message: string; data: Facility },
       CreateFacilityPayload
@@ -428,6 +437,7 @@ export const {
   useGetAboutUsBannerQuery,
   useUpdateAboutUsBannerMutation,
   useGetFacilitiesQuery,
+  useGetFacilitiesPublicQuery,
   useCreateFacilityMutation,
   useUpdateFacilityMutation,
   useDeleteFacilityMutation,

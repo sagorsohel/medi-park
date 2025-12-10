@@ -1,5 +1,6 @@
 import { HeroSection } from '@/components/website/hero-section'
 import { AboutSection } from '@/components/website/about-section'
+import { SpecialitiesSection } from '@/components/website/specialities-section'
 import { DoctorsSection } from '@/components/website/doctors-section'
 import { InvestorSection } from '@/components/website/investor-section'
 import { PricingSection } from '@/components/website/pricing-section'
@@ -15,6 +16,9 @@ export default function HomePage() {
 
       {/* About Section */}
       <AboutSection />
+
+      {/* Specialities Section */}
+      <SpecialitiesSection />
 
       {/* Doctors Section */}
       <DoctorsSection />
