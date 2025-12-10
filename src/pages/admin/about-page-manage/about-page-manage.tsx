@@ -1,7 +1,6 @@
 "use client";
 
-
-import { AboutBannerManage } from "@/components/admin/about-banner-manage";
+import { AboutPageBannerManage } from "@/components/admin/about-page-banner-manage";
 import { WhoWeAreManage } from "@/components/admin/who-we-are-manage";
 import { MissionVisionManage } from "@/components/admin/mission-vision-manage";
 import { TransformingHealthcareManage } from "@/components/admin/transforming-healthcare-manage";
@@ -14,8 +13,8 @@ export default function AboutPageManage() {
 
 
 
-            {/* About Banner Management */}
-            <AboutBannerManage />
+            {/* About Page Banner Management */}
+            <AboutPageBannerManage />
             
             {/* Who We Are Section */}
             <WhoWeAreManage />

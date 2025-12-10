@@ -1,4 +1,4 @@
-import { PageHeroSection } from '@/components/website/page-hero-section'
+import { AboutPageHero } from '@/components/website/page-hero-section'
 import { BreadcrumbSection } from '@/components/website/breadcrumb-section'
 import { WhoWeAreSection } from '@/components/website/who-we-are-section'
 import { MissionVisionSection } from '@/components/website/mission-vision-section'
@@ -8,8 +8,8 @@ import { MRCPPACESSection } from '@/components/website/mrcp-paces-section'
 export default function AboutPage() {
   return (
     <div className="w-full">
-      {/* Hero Section - Only Image */}
-      <PageHeroSection image="/hero1.png" heading="About Us" alt="About Us Hero" />
+      {/* Hero Section - Dynamic from API */}
+      <AboutPageHero />
       
       {/* Breadcrumb Section */}
       <BreadcrumbSection currentPage="About Us" />

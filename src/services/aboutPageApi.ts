@@ -123,6 +123,27 @@ export interface UpdateMRCPPACESPayload {
   status?: "active" | "inactive";
 }
 
+export interface AboutPageBanner {
+  id: number;
+  background_image: string;
+  opacity: string;
+  status: "active" | "inactive";
+  created_at: string;
+  updated_at: string;
+}
+
+export interface AboutPageBannerResponse {
+  success: boolean;
+  message: string;
+  data: AboutPageBanner;
+}
+
+export interface UpdateAboutPageBannerPayload {
+  background_image?: File | string;
+  opacity?: string;
+  status?: "active" | "inactive";
+}
+
 export const aboutPageApi = api.injectEndpoints({
   endpoints: (builder) => ({
     getWhoWeAre: builder.query<WhoWeAreResponse, void>({
@@ -308,6 +329,56 @@ export const aboutPageApi = api.injectEndpoints({
       },
       invalidatesTags: ["AboutMRCPPACES"],
     }),
+
+    // About Page Banner
+    getAboutPageBanner: builder.query<AboutPageBannerResponse, void>({
+      query: () => ({
+        url: "/about-us-page-banner-sections",
+        method: "GET",
+      }),
+      providesTags: ["AboutPageBanner"],
+      transformResponse: (
+        response:
+          | AboutPageBannerResponse
+          | { data: AboutPageBanner[] }
+      ) => {
+        if (Array.isArray((response as { data: AboutPageBanner[] }).data)) {
+          return {
+            ...response,
+            data: (response as { data: AboutPageBanner[] }).data[0],
+          } as AboutPageBannerResponse;
+        }
+        return response as AboutPageBannerResponse;
+      },
+    }),
+    updateAboutPageBanner: builder.mutation<
+      AboutPageBannerResponse,
+      { id: number; data: UpdateAboutPageBannerPayload }
+    >({
+      query: ({ id, data }) => {
+        const formData = new FormData();
+        if (data.background_image !== undefined) {
+          if (data.background_image instanceof File) {
+            formData.append("background_image", data.background_image);
+          } else {
+            formData.append("background_image", data.background_image);
+          }
+        }
+        if (data.opacity !== undefined) {
+          formData.append("opacity", data.opacity);
+        }
+        if (data.status !== undefined) {
+          formData.append("status", data.status);
+        }
+
+        return {
+          url: `/about-us-page-banner-sections/${id}`,
+          method: "POST",
+          body: formData,
+        };
+      },
+      invalidatesTags: ["AboutPageBanner"],
+    }),
   }),
 });
 
@@ -327,5 +398,7 @@ export const {
   useGetMRCPPACESQuery,
   useGetMRCPPACESActiveQuery,
   useUpdateMRCPPACESMutation,
+  useGetAboutPageBannerQuery,
+  useUpdateAboutPageBannerMutation,
 } = aboutPageApi;
 

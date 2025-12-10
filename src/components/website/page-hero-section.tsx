@@ -40,29 +40,56 @@ export function PageHeroSection({ image, heading, alt = "Hero", overlayOpacity =
   );
 }
 
-import { useGetAboutUsBannerQuery } from "@/services/homepageApi";
-import { Loader2 } from "lucide-react";
+import { useGetAboutPageBannerQuery } from "@/services/aboutPageApi";
+import { motion } from "framer-motion";
 
-export function AboutUsPageHero() {
-  const { data, isLoading } = useGetAboutUsBannerQuery();
+export function AboutPageHero() {
+  const { data } = useGetAboutPageBannerQuery();
   const banner = data?.data;
 
-  if (isLoading) {
-    return (
-      <div className="w-full h-[250px] sm:h-[calc(100vh-200px)] flex items-center justify-center bg-gray-100">
-        <Loader2 className="h-8 w-8 animate-spin text-gray-400" />
-      </div>
-    );
-  }
-
+  // Only render if we have cached data
   if (!banner) return null;
 
   return (
-    <PageHeroSection
-      image={banner.background_image}
-      heading="About Us"
-      overlayOpacity={parseFloat(banner.opacity)}
-    />
+    <motion.div
+      className="relative w-full h-[250px] sm:h-[calc(100vh-200px)] overflow-hidden"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.6 }}
+    >
+      {/* Background Image */}
+      <div className="absolute inset-0">
+        <motion.img
+          src={banner.background_image}
+          alt="About Us Hero"
+          className="w-full h-full object-cover"
+          initial={{ scale: 1.1 }}
+          animate={{ scale: 1 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          onError={(e) => {
+            const target = e.target as HTMLImageElement;
+            target.src = "/vite.svg";
+          }}
+        />
+        {/* Dark overlay */}
+        <div
+          className="absolute inset-0 bg-gray-950"
+          style={{ opacity: parseFloat(banner.opacity) }}
+        />
+      </div>
+
+      {/* Heading Overlay */}
+      <motion.div
+        className="relative z-10 flex items-center justify-center h-full"
+        initial={{ y: 50, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
+      >
+        <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-white text-center">
+          About Us
+        </h1>
+      </motion.div>
+    </motion.div>
   );
 }
 
