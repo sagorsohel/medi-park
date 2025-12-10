@@ -1,69 +1,44 @@
+"use client";
+
 import { useParams } from "react-router";
 import { PageHeroSection } from '@/components/website/page-hero-section'
 import { BreadcrumbSection } from '@/components/website/breadcrumb-section'
 import { NewsCard } from '@/components/website/news-card'
+import { useGetNewsByIdQuery, useGetNewsPublicQuery } from "@/services/newsApi";
+import { motion, type Variants } from "framer-motion";
 
 export default function NewsDetailPage() {
   const { id } = useParams<{ id: string }>();
+  const newsId = id ? parseInt(id) : 0;
 
-  // In a real app, this would be fetched from an API based on the id
-  const newsItem = {
-    id: id || "1",
-    title: "MRCP PACES Examination Conducted in Bangladesh",
-    mainImage: "/hero1.png",
-    date: "20 November 2025",
+  const { data: newsData } = useGetNewsByIdQuery(newsId);
+  const { data: relatedNewsData } = useGetNewsPublicQuery(1);
+
+  const newsItem = newsData?.data;
+  const relatedNews = relatedNewsData?.data?.filter(n => n.id !== newsId).slice(0, 6) || [];
+
+  // Animation variants
+  const contentVariants: Variants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.6,
+        ease: "easeOut",
+      },
+    },
   };
 
-  // Related news items
-  const relatedNews = [
-    {
-      id: 1,
-      image: "/hero1.png",
-      date: "20 November 2025",
-      title: "MRCP PACES Examination Conducted in Bangladesh",
-      link: "/news/1"
-    },
-    {
-      id: 2,
-      image: "/hero2.png",
-      date: "20 November 2025",
-      title: "MRCP PACES Examination Conducted in Bangladesh",
-      link: "/news/2"
-    },
-    {
-      id: 3,
-      image: "/hero3.png",
-      date: "20 November 2025",
-      title: "MRCP PACES Examination Conducted in Bangladesh",
-      link: "/news/3"
-    },
-    {
-      id: 4,
-      image: "/hero4.png",
-      date: "20 November 2025",
-      title: "MRCP PACES Examination Conducted in Bangladesh",
-      link: "/news/4"
-    },
-    {
-      id: 5,
-      image: "/hero1.png",
-      date: "20 November 2025",
-      title: "MRCP PACES Examination Conducted in Bangladesh",
-      link: "/news/5"
-    },
-    {
-      id: 6,
-      image: "/hero2.png",
-      date: "20 November 2025",
-      title: "MRCP PACES Examination Conducted in Bangladesh",
-      link: "/news/6"
-    }
-  ];
+  // Only render if we have cached data
+  if (!newsItem) {
+    return null;
+  }
 
   return (
     <div className="w-full">
       {/* Hero Section */}
-      <PageHeroSection image="/hero1.png" heading={newsItem.title} alt={`${newsItem.title} Hero`} />
+      <PageHeroSection image={newsItem.feature_image} heading={newsItem.title} alt={`${newsItem.title} Hero`} />
 
       {/* Breadcrumb Section */}
       <BreadcrumbSection currentPage={newsItem.title} />
@@ -80,76 +55,98 @@ export default function NewsDetailPage() {
         </div>
 
         {/* Main Image Section */}
-        <div className="w-full">
+        <motion.div
+          className="w-full"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={contentVariants}
+        >
           <img
-            src={newsItem.mainImage}
+            src={newsItem.feature_image}
             alt={newsItem.title}
-            className="w-full h-auto object-cover"
+            className="w-[90%] mx-auto flex justify-center items-center h-120  object-cover"
             onError={(e) => {
               const target = e.target as HTMLImageElement;
               target.src = "/vite.svg";
             }}
           />
-        </div>
+        </motion.div>
 
-        {/* Content Cards Section */}
-        <div className="w-full bg-white py-16">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-              {relatedNews.map((news) => (
-                <NewsCard
-                  key={news.id}
-                  image={news.image}
-                  date={news.date}
-                  title={news.title}
-                  link={news.link}
-                />
-              ))}
+        {/* Author Info Section */}
+        {newsItem.author_name && (
+          <motion.div
+            className="w-full bg-gray-50 py-8"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={contentVariants}
+          >
+            <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="flex items-center gap-4">
+                {newsItem.author_image && (
+                  <img
+                    src={newsItem.author_image}
+                    alt={newsItem.author_name}
+                    className="w-16 h-16 rounded-full object-cover"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.src = "/vite.svg";
+                    }}
+                  />
+                )}
+                <div>
+                  <p className="font-semibold text-gray-900">{newsItem.author_name}</p>
+                  {newsItem.author_designation && (
+                    <p className="text-sm text-gray-600">{newsItem.author_designation}</p>
+                  )}
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
+          </motion.div>
+        )}
 
-        {/* Placeholder Text Sections */}
-        <div className="w-full bg-white pb-16">
+        {/* Content Section */}
+        <motion.div
+          className="w-full bg-white pb-16"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={contentVariants}
+        >
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="space-y-6 text-gray-700">
-              <p className="text-justify">
-                Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
-                when an unknown printer took a galley of type and scrambled it to make a type
-                specimen book. It has survived not only five centuries, but also the leap into
-                electronic typesetting, remaining essentially unchanged.
-              </p>
-              <p className="text-justify">
-                Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
-                when an unknown printer took a galley of type and scrambled it to make a type
-                specimen book. It has survived not only five centuries, but also the leap into
-                electronic typesetting, remaining essentially unchanged. It was popularised in
-                the 1960s with the release of Letraset sheets containing Lorem Ipsum passages,
-                and more recently with desktop publishing software like Aldus PageMaker including
-                versions of Lorem Ipsum.
-              </p>
-              <p className="text-justify">
-                Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
-                when an unknown printer took a galley of type and scrambled it to make a type
-                specimen book. It has survived not only five centuries, but also the leap into
-                electronic typesetting, remaining essentially unchanged.
-              </p>
-              <p className="text-justify">
-                Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
-                when an unknown printer took a galley of type and scrambled it to make a type
-                specimen book. It has survived not only five centuries, but also the leap into
-                electronic typesetting, remaining essentially unchanged. It was popularised in
-                the 1960s with the release of Letraset sheets containing Lorem Ipsum passages,
-                and more recently with desktop publishing software like Aldus PageMaker including
-                versions of Lorem Ipsum.
-              </p>
-            </div>
+            <div
+              className="space-y-6 text-gray-700 prose prose-lg max-w-none"
+              dangerouslySetInnerHTML={{ __html: newsItem.description }}
+            />
           </div>
-        </div>
+        </motion.div>
+
+        {/* Related News Section */}
+        {relatedNews.length > 0 && (
+          <motion.div
+            className="w-full bg-white py-16"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={contentVariants}
+          >
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <h2 className="text-3xl font-bold text-primary mb-8 text-center">Related News</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {relatedNews.map((news) => (
+                  <NewsCard
+                    key={news.id}
+                    id={news.id}
+                    image={news.feature_image}
+                    date={news.created_at}
+                    title={news.title}
+                  />
+                ))}
+              </div>
+            </div>
+          </motion.div>
+        )}
       </section>
     </div>
   )

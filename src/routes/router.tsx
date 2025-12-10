@@ -4,7 +4,6 @@ import AboutPage from '../pages/about/about-page'
 import AwardsPage from '../pages/awards/awards-page'
 import CareerPage from '../pages/career/career-page'
 import JobDetailPage from '../pages/career/job-detail-page'
-import NewsPage from '../pages/news/news-page'
 import NewsDetailPage from '../pages/news/news-detail-page'
 import DoctorsPage from '../pages/doctors/doctors-page'
 import DoctorDetailPage from '../pages/doctors/doctor-detail-page'
@@ -27,6 +26,8 @@ import AdminPanelLayout from '@/components/admin-panel/admin-panel-layout'
 import UserPanelLayout from '@/components/user-panel/user-panel-layout'
 import { WebsiteLayout } from '@/components/website/website-layout'
 import AboutPageManage from '@/pages/admin/about-page-manage/about-page-manage'
+import NewsPage from '@/pages/admin/news/news'
+import NewsPageManage from '@/pages/admin/news/news'
 
 const router = createBrowserRouter([
   // 🌐 Website routes (with website layout - sticky navbar & footer)
@@ -73,6 +74,7 @@ const router = createBrowserRouter([
       { path: "dashboard", element: <DashboardPage /> },
       { path: "website/home", element: <WebHomeManagePage /> },
       { path: "website/about", element: <AboutPageManage /> },
+      { path: "website/news", element: <NewsPageManage /> },
       { path: "staff", element: <StaffPage /> },
       { path: "staff/new", element: <AddStaffPage /> },
       { path: "doctor", element: <DoctorPage /> },

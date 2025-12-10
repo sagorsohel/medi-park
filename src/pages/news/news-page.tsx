@@ -1,53 +1,45 @@
+"use client";
+
+import { useState } from "react";
 import { PageHeroSection } from '@/components/website/page-hero-section'
 import { BreadcrumbSection } from '@/components/website/breadcrumb-section'
 import { NewsCard } from '@/components/website/news-card'
+import { useGetNewsPublicQuery } from "@/services/newsApi";
+import { DataTablePagination } from "@/components/ui/data-table-pagination";
+import { motion, type Variants } from "framer-motion";
 
 export default function NewsPage() {
-  // Sample news data
-  const newsItems = [
-    {
-      id: 1,
-      image: "/hero1.png",
-      date: "20 November 2025",
-      title: "MRCP PACES Examination Conducted in Bangladesh",
-      link: "/news/1"
+  const [currentPage, setCurrentPage] = useState(1);
+  const { data } = useGetNewsPublicQuery(currentPage);
+  
+  const newsItems = data?.data || [];
+  const pagination = data?.pagination;
+
+  // Animation variants
+  const containerVariants: Variants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.2,
+      },
     },
-    {
-      id: 2,
-      image: "/hero2.png",
-      date: "20 November 2025",
-      title: "MRCP PACES Examination Conducted in Bangladesh",
-      link: "/news/2"
-    },
-    {
-      id: 3,
-      image: "/hero3.png",
-      date: "20 November 2025",
-      title: "MRCP PACES Examination Conducted in Bangladesh",
-      link: "/news/3"
-    },
-    {
-      id: 4,
-      image: "/hero4.png",
-      date: "20 November 2025",
-      title: "MRCP PACES Examination Conducted in Bangladesh",
-      link: "/news/4"
-    },
-    {
-      id: 5,
-      image: "/hero1.png",
-      date: "20 November 2025",
-      title: "MRCP PACES Examination Conducted in Bangladesh",
-      link: "/news/5"
-    },
-    {
-      id: 6,
-      image: "/hero2.png",
-      date: "20 November 2025",
-      title: "MRCP PACES Examination Conducted in Bangladesh",
-      link: "/news/6"
-    }
-  ]
+  };
+
+  const cardVariants: Variants = {
+    hidden: { y: 50, opacity: 0, scale: 0.9 },
+    visible: (index: number) => ({
+      y: 0,
+      opacity: 1,
+      scale: 1,
+      transition: {
+        duration: 0.5,
+        delay: 0.1 * (index % 6),
+        ease: "easeOut",
+      },
+    }),
+  };
 
   return (
     <div className="w-full">
@@ -78,17 +70,43 @@ export default function NewsPage() {
           </p>
 
           {/* News Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {newsItems.map((news) => (
-              <NewsCard
-                key={news.id}
-                image={news.image}
-                date={news.date}
-                title={news.title}
-                link={news.link}
-              />
-            ))}
-          </div>
+          <motion.div
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-50px" }}
+            variants={containerVariants}
+          >
+            {newsItems.length === 0 ? (
+              <div className="col-span-full text-center py-12 text-gray-500">
+                No news available at the moment.
+              </div>
+            ) : (
+              newsItems.map((news, index) => (
+                <motion.div key={news.id} custom={index} variants={cardVariants}>
+                  <NewsCard
+                    id={news.id}
+                    image={news.feature_image}
+                    date={news.created_at}
+                    title={news.title}
+                  />
+                </motion.div>
+              ))
+            )}
+          </motion.div>
+
+          {/* Pagination */}
+          {pagination && pagination.total_page > 1 && (
+            <DataTablePagination
+              currentPage={pagination.current_page}
+              totalPages={pagination.total_page}
+              totalEntries={pagination.total_count}
+              entriesPerPage={pagination.per_page}
+              onPageChange={setCurrentPage}
+              showingFrom={(pagination.current_page - 1) * pagination.per_page + 1}
+              showingTo={Math.min(pagination.current_page * pagination.per_page, pagination.total_count)}
+            />
+          )}
         </div>
       </section>
     </div>
