@@ -4,6 +4,8 @@
 import { AboutBannerManage } from "@/components/admin/about-banner-manage";
 import { WhoWeAreManage } from "@/components/admin/who-we-are-manage";
 import { MissionVisionManage } from "@/components/admin/mission-vision-manage";
+import { TransformingHealthcareManage } from "@/components/admin/transforming-healthcare-manage";
+import { MRCPPACESManage } from "@/components/admin/mrcp-paces-manage";
 
 export default function AboutPageManage() {
     return (
@@ -20,6 +22,12 @@ export default function AboutPageManage() {
 
             {/* Mission & Vision */}
             <MissionVisionManage />
+
+            {/* Transforming Healthcare */}
+            <TransformingHealthcareManage />
+
+            {/* MRCP PACES */}
+            <MRCPPACESManage />
         </div>
     );
 }

@@ -45,7 +45,7 @@ function SectionCard({
 }) {
   if (loading) {
     return (
-      <Card>
+      <Card className="p-4">
         <CardContent className="flex items-center justify-center h-48">
           <Loader2 className="h-6 w-6 animate-spin text-gray-400" />
         </CardContent>
@@ -73,7 +73,7 @@ function SectionCard({
           Save
         </Button>
       </CardHeader>
-      <CardContent className="space-y-6 pt-6">
+      <CardContent className="space-y-6 pt-6 p-6">
         {/* Preview similar to website section */}
         <div className="w-full">
           <div className="text-center mb-4">

@@ -6,20 +6,6 @@ import { TransformingHealthcareSection } from '@/components/website/transforming
 import { MRCPPACESSection } from '@/components/website/mrcp-paces-section'
 
 export default function AboutPage() {
-  const missionData = {
-    title: "Our Mission",
-    image: "/mission.png",
-    text: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
-    alt: "Our Mission"
-  };
-
-  const visionData = {
-    title: "Our Vision",
-    image: "/vission.png",
-    text: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
-    alt: "Our Vision"
-  };
-
   return (
     <div className="w-full">
       {/* Hero Section - Only Image */}
@@ -32,27 +18,13 @@ export default function AboutPage() {
       <WhoWeAreSection />
       
       {/* Mission & Vision Section */}
-      <MissionVisionSection mission={missionData} vision={visionData} />
+      <MissionVisionSection />
       
       {/* Transforming Healthcare Section */}
-      <TransformingHealthcareSection
-        title="Transforming Healthcare in Bangladesh"
-        images={[
-          "/about1.png",
-          "/about-2.png",
-          "/about3.png",
-          "/about1.png"
-        ]}
-        text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
-      />
+      <TransformingHealthcareSection />
       
       {/* MRCP PACES Section */}
-      <MRCPPACESSection
-        title="The first MRCP (UK) PACES examination center in Bangladesh"
-        image="/about-2.png"
-        text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."
-        alt="MRCP PACES examination center"
-      />
+      <MRCPPACESSection />
     </div>
   )
 }
