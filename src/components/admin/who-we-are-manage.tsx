@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Field, FieldContent, FieldLabel } from "@/components/ui/field";
 import { Loader2, RefreshCw } from "lucide-react";
-import { useGetWhoWeAreQuery, useUpdateWhoWeAreMutation } from "@/services/aboutPageApi";
+import { useGetWhoWeAreQuery, useUpdateWhoWeAreMutation, type UpdateWhoWeArePayload } from "@/services/aboutPageApi";
 
 interface EditableState {
   title: string;
@@ -68,7 +68,7 @@ export function WhoWeAreManage() {
     if (!record || !editable) return;
     setSaving(true);
     try {
-      const payload: any = {};
+      const payload: UpdateWhoWeArePayload = {};
       if (editable.title !== record.title) payload.title = editable.title;
       if (editable.paragraph !== record.paragraph) payload.paragraph = editable.paragraph;
       if (editable.status !== record.status) payload.status = editable.status;
@@ -106,8 +106,8 @@ export function WhoWeAreManage() {
   }
 
   return (
-    <div className="mb-10">
-      <div className="mb-6">
+    <div className="mb-10 pt-8">
+      <div className="p-5 ">
         <h2 className="text-2xl font-bold text-gray-900 mb-2">Who We Are Section</h2>
         <p className="text-gray-600">Manage the About page hero ("Who We Are") content.</p>
       </div>
@@ -124,7 +124,7 @@ export function WhoWeAreManage() {
             Save Changes
           </Button>
         </CardHeader>
-        <CardContent className="space-y-6 pt-6">
+        <CardContent className="space-y-6 pt-6 p-6">
           {/* Preview similar to website section */}
           <div className="relative w-full bg-primary py-10 rounded-xl overflow-hidden">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
