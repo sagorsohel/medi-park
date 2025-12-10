@@ -176,7 +176,7 @@ export const homepageApi = api.injectEndpoints({
         if (data.status !== undefined) formData.append('status', data.status)
         return {
           url: `/homepage-hero-sections/${id}`,
-          method: 'PUT',
+          method: 'POST',
           body: formData,
         }
       },
