@@ -79,6 +79,10 @@ export interface TransformingHealthcareResponse {
   data: TransformingHealthcare;
 }
 
+export interface TransformingHealthcareActiveResponse {
+  after_our_vision_section: TransformingHealthcare;
+}
+
 export interface UpdateTransformingHealthcarePayload {
   title?: string;
   paragraph?: string;
@@ -234,12 +238,13 @@ export const aboutPageApi = api.injectEndpoints({
       }),
       providesTags: ["AboutTransformingHealthcare"],
     }),
-    getTransformingHealthcareActive: builder.query<TransformingHealthcareResponse, void>({
+    getTransformingHealthcareActive: builder.query<TransformingHealthcareActiveResponse, void>({
       query: () => ({
         url: "/about-us-page-after-our-vision-sections/active",
         method: "GET",
       }),
       providesTags: ["AboutTransformingHealthcare"],
+      keepUnusedDataFor: 3600, // Cache for 60 minutes (3600 seconds)
     }),
     updateTransformingHealthcare: builder.mutation<
       { message: string; data: TransformingHealthcare },
