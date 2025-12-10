@@ -4,6 +4,7 @@ import { HeroSectionManage } from "@/components/admin/hero-section-manage";
 import { AboutSectionManage } from "@/components/admin/about-section-manage";
 import { AboutBannerManage } from "@/components/admin/about-banner-manage";
 import { FacilitiesManage } from "@/components/admin/facilities-manage";
+import { CTASectionManage } from "@/components/admin/cta-section-manage";
 
 export default function WebHomeManagePage() {
   return (
@@ -21,6 +22,9 @@ export default function WebHomeManagePage() {
 
       {/* Facilities Management */}
       <FacilitiesManage />
+
+      {/* CTA Section Management */}
+      <CTASectionManage />
     </div>
   );
 }

@@ -111,6 +111,33 @@ export interface UpdateFacilityPayload {
   status?: 'active' | 'inactive'
 }
 
+export interface CTASection {
+  id: number
+  title: string
+  sub_title: string
+  content: string
+  button_text: string
+  button_link: string
+  status: 'active' | 'inactive'
+  created_at: string
+  updated_at: string
+}
+
+export interface CTASectionResponse {
+  success: boolean
+  message: string
+  data: CTASection
+}
+
+export interface UpdateCTASectionPayload {
+  title?: string
+  sub_title?: string
+  content?: string
+  button_text?: string
+  button_link?: string
+  status?: 'active' | 'inactive'
+}
+
 export const homepageApi = api.injectEndpoints({
   endpoints: (builder) => ({
     // Get all hero sections
@@ -420,6 +447,73 @@ export const homepageApi = api.injectEndpoints({
       }),
       invalidatesTags: ['Banner'],
     }),
+
+    // CTA Section Management
+    getCTASection: builder.query<CTASectionResponse, void>({
+      query: () => ({
+        url: '/homepage-cta-sections',
+        method: 'GET',
+      }),
+      providesTags: ['Banner'],
+      transformResponse: (response: CTASectionResponse | { data: CTASection[] }) => {
+        // Handle case where API returns array instead of single object
+        const responseWithArray = response as { data: CTASection[] };
+        if (Array.isArray(responseWithArray.data)) {
+          return { ...response, data: responseWithArray.data[0] } as CTASectionResponse;
+        }
+        return response as CTASectionResponse;
+      }
+    }),
+
+    getCTASectionPublic: builder.query<CTASectionResponse, void>({
+      query: () => ({
+        url: '/homepage-cta-sections/active',
+        method: 'GET',
+      }),
+      providesTags: ['Banner'],
+      keepUnusedDataFor: 3600, // Cache for 60 minutes (3600 seconds)
+      transformResponse: (response: CTASectionResponse | { data: CTASection[] }) => {
+        // Handle case where API returns array instead of single object
+        const responseWithArray = response as { data: CTASection[] };
+        if (Array.isArray(responseWithArray.data)) {
+          return { ...response, data: responseWithArray.data[0] } as CTASectionResponse;
+        }
+        return response as CTASectionResponse;
+      }
+    }),
+
+    updateCTASection: builder.mutation<
+      CTASectionResponse,
+      { id: number; data: UpdateCTASectionPayload }
+    >({
+      query: ({ id, data: body }) => {
+        const formData = new FormData()
+        if (body.title) {
+          formData.append('title', body.title)
+        }
+        if (body.sub_title) {
+          formData.append('sub_title', body.sub_title)
+        }
+        if (body.content) {
+          formData.append('content', body.content)
+        }
+        if (body.button_text) {
+          formData.append('button_text', body.button_text)
+        }
+        if (body.button_link) {
+          formData.append('button_link', body.button_link)
+        }
+        if (body.status) {
+          formData.append('status', body.status)
+        }
+        return {
+          url: `/homepage-cta-sections/${id}`,
+          method: 'PUT',
+          body: formData,
+        }
+      },
+      invalidatesTags: ['Banner'],
+    }),
   }),
 })
 
@@ -441,6 +535,9 @@ export const {
   useCreateFacilityMutation,
   useUpdateFacilityMutation,
   useDeleteFacilityMutation,
+  useGetCTASectionQuery,
+  useGetCTASectionPublicQuery,
+  useUpdateCTASectionMutation,
 } = homepageApi
 
 
