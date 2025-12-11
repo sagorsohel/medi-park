@@ -88,6 +88,8 @@ const router = createBrowserRouter([
       { path: "staff/new", element: <AddStaffPage /> },
       { path: "doctor", element: <DoctorPage /> },
       { path: "doctor/new", element: <AddDoctorPage /> },
+      { path: "doctor/edit/:id", element: <AddDoctorPage /> },
+      { path: "doctor/view/:id", element: <AddDoctorPage /> },
     ],
   },
 

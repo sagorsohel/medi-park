@@ -4,102 +4,12 @@ import { useState, useMemo } from "react";
 import { useNavigate } from "react-router";
 import { DataTableFilters } from "@/components/ui/data-table-filters";
 import { DataTablePagination } from "@/components/ui/data-table-pagination";
-import { DoctorTable, type Doctor } from "@/components/admin/doctor-table";
+import { DoctorTable, type Doctor as TableDoctor } from "@/components/admin/doctor-table";
 import { Button } from "@/components/ui/button";
-
-// Mock data based on the image
-const mockDoctors: Doctor[] = [
-    {
-        id: "HW0785543",
-        name: "Md Shakhawat Hossain",
-        department: "Anesthesiology",
-        qualification: "MBBS",
-        experience: "4+ years",
-        totalAppointments: 200,
-        status: true,
-    },
-    {
-        id: "HW0785543",
-        name: "Md Shakhawat Hossain",
-        department: "Dental Surgery",
-        qualification: "MDS",
-        experience: "3+ years",
-        totalAppointments: 200,
-        status: true,
-    },
-    {
-        id: "HW0785543",
-        name: "Md Shakhawat Hossain",
-        department: "Dermatology",
-        qualification: "MS",
-        experience: "6+ years",
-        totalAppointments: 498,
-        status: true,
-    },
-    {
-        id: "HW0785543",
-        name: "Md Shakhawat Hossain",
-        department: "ENT Surgery",
-        qualification: "MBBS",
-        experience: "2+ years",
-        totalAppointments: 300,
-        status: true,
-    },
-    {
-        id: "HW0785543",
-        name: "Md Shakhawat Hossain",
-        department: "General Medicine",
-        qualification: "MS",
-        experience: "2+ years",
-        totalAppointments: 839,
-        status: true,
-    },
-    {
-        id: "HW0785543",
-        name: "Md Shakhawat Hossain",
-        department: "Ophthalmology",
-        qualification: "MS",
-        experience: "2+ years",
-        totalAppointments: 837,
-        status: true,
-    },
-    {
-        id: "HW0785543",
-        name: "Md Shakhawat Hossain",
-        department: "Orthopedics",
-        qualification: "MBBS",
-        experience: "6+ years",
-        totalAppointments: 392,
-        status: true,
-    },
-    {
-        id: "HW0785543",
-        name: "Md Shakhawat Hossain",
-        department: "Pediatrics",
-        qualification: "MBBS",
-        experience: "6+ years",
-        totalAppointments: 283,
-        status: true,
-    },
-    {
-        id: "HW0785543",
-        name: "Md Shakhawat Hossain",
-        department: "Radiology",
-        qualification: "MDS",
-        experience: "2+ years",
-        totalAppointments: 342,
-        status: true,
-    },
-    {
-        id: "HW0785543",
-        name: "Md Shakhawat Hossain",
-        department: "Cardiology",
-        qualification: "MBBS",
-        experience: "3+ years",
-        totalAppointments: 743,
-        status: true,
-    },
-];
+import { Loader2 } from "lucide-react";
+import { useGetDoctorsQuery, useDeleteDoctorMutation, type Doctor } from "@/services/doctorApi";
+import { ConfirmDialog } from "@/components/ui/confirm-dialog";
+import toast from "react-hot-toast";
 
 export default function DoctorPage() {
     const navigate = useNavigate();
@@ -107,11 +17,32 @@ export default function DoctorPage() {
     const [currentPage, setCurrentPage] = useState(1);
     const [searchQuery, setSearchQuery] = useState("");
     const [filter, setFilter] = useState<string>("all");
-    const entriesPerPage = 12;
+    const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
+    const [doctorToDelete, setDoctorToDelete] = useState<string | null>(null);
+    const [actionDoctorId, setActionDoctorId] = useState<string | null>(null);
+    const [actionType, setActionType] = useState<string | null>(null);
+
+    const { data, isLoading, refetch } = useGetDoctorsQuery(currentPage);
+    const [deleteDoctor] = useDeleteDoctorMutation();
+
+    // Map API doctors to table format
+    const mappedDoctors: TableDoctor[] = useMemo(() => {
+        if (!data?.data) return [];
+        return data.data.map((doctor: Doctor) => ({
+            id: doctor.doctor_identity_number,
+            image: doctor.image || undefined,
+            name: doctor.doctor_name,
+            department: doctor.department,
+            qualification: doctor.specialist || "N/A",
+            experience: "N/A",
+            totalAppointments: 0,
+            status: true, // Default to true, can be updated if API provides status
+        }));
+    }, [data]);
 
     // Filter and search doctors
     const filteredDoctors = useMemo(() => {
-        let result = mockDoctors;
+        let result = mappedDoctors;
 
         // Apply search
         if (searchQuery) {
@@ -131,22 +62,18 @@ export default function DoctorPage() {
         }
 
         return result;
-    }, [searchQuery, filter]);
+    }, [searchQuery, filter, mappedDoctors]);
 
-    // Paginate doctors
-    const paginatedDoctors = useMemo(() => {
-        const start = (currentPage - 1) * entriesPerPage;
-        const end = start + entriesPerPage;
-        return filteredDoctors.slice(start, end);
-    }, [filteredDoctors, currentPage]);
-
-    const totalPages = Math.ceil(filteredDoctors.length / entriesPerPage);
-    const showingFrom = (currentPage - 1) * entriesPerPage + 1;
-    const showingTo = Math.min(currentPage * entriesPerPage, filteredDoctors.length);
+    const pagination = data?.pagination;
+    const totalPages = pagination?.total_page || 1;
+    const showingFrom = pagination ? (pagination.current_page - 1) * pagination.per_page + 1 : 0;
+    const showingTo = pagination
+        ? Math.min(pagination.current_page * pagination.per_page, pagination.total_count)
+        : 0;
 
     const handleSelectAll = (selected: boolean) => {
         if (selected) {
-            setSelectedIds(paginatedDoctors.map((d) => d.id));
+            setSelectedIds(filteredDoctors.map((d) => d.id));
         } else {
             setSelectedIds([]);
         }
@@ -161,13 +88,46 @@ export default function DoctorPage() {
     };
 
     const handleStatusChange = (id: string, status: boolean) => {
-        // Update status - replace with API call
+        // TODO: Implement status update API call
         console.log(`Status changed for ${id}: ${status}`);
     };
 
     const handleAction = (id: string, action: string) => {
-        console.log(`Action ${action} for ${id}`);
-        // Handle actions (edit, view, delete)
+        setActionDoctorId(id);
+        setActionType(action);
+        
+        if (action === "delete") {
+            setDoctorToDelete(id);
+            setDeleteConfirmOpen(true);
+        } else if (action === "edit") {
+            const doctor = data?.data?.find((d: Doctor) => d.doctor_identity_number === id);
+            if (doctor) {
+                navigate(`/admin/doctor/edit/${doctor.id}`);
+            }
+        } else if (action === "view") {
+            const doctor = data?.data?.find((d: Doctor) => d.doctor_identity_number === id);
+            if (doctor) {
+                navigate(`/admin/doctor/view/${doctor.id}`);
+            }
+        }
+    };
+
+    const handleDelete = async () => {
+        if (!doctorToDelete) return;
+        
+        const doctor = data?.data?.find((d: Doctor) => d.doctor_identity_number === doctorToDelete);
+        if (!doctor) return;
+
+        try {
+            await deleteDoctor(doctor.id).unwrap();
+            toast.success("Doctor deleted successfully!");
+            setDeleteConfirmOpen(false);
+            setDoctorToDelete(null);
+            refetch();
+        } catch (error) {
+            console.error("Failed to delete doctor:", error);
+            toast.error("Failed to delete doctor. Please try again.");
+        }
     };
 
     const handleBulkAction = (action: string) => {
@@ -177,7 +137,7 @@ export default function DoctorPage() {
 
     const handleFilterChange = (newFilter: string) => {
         setFilter(newFilter);
-        setCurrentPage(1); // Reset to first page when filter changes
+        setCurrentPage(1);
     };
 
     return (
@@ -189,7 +149,6 @@ export default function DoctorPage() {
                     <p className="text-gray-600">Here's what happening in your update</p>
                 </div>
                 <Button onClick={() => navigate("/admin/doctor/new")}>Add New</Button>
-                {/* Placeholder for Add New button if needed later */}
             </div>
 
             {/* Filters */}
@@ -201,26 +160,45 @@ export default function DoctorPage() {
             />
 
             {/* Table */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
-                <DoctorTable
-                    doctors={paginatedDoctors}
-                    selectedIds={selectedIds}
-                    onSelectAll={handleSelectAll}
-                    onSelectOne={handleSelectOne}
-                    onStatusChange={handleStatusChange}
-                    onAction={handleAction}
-                />
-            </div>
+            {isLoading ? (
+                <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-12 flex items-center justify-center">
+                    <Loader2 className="h-8 w-8 animate-spin text-gray-400" />
+                </div>
+            ) : (
+                <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+                    <DoctorTable
+                        doctors={filteredDoctors}
+                        selectedIds={selectedIds}
+                        onSelectAll={handleSelectAll}
+                        onSelectOne={handleSelectOne}
+                        onStatusChange={handleStatusChange}
+                        onAction={handleAction}
+                    />
+                </div>
+            )}
 
             {/* Pagination */}
-            <DataTablePagination
-                currentPage={currentPage}
-                totalPages={totalPages}
-                totalEntries={filteredDoctors.length}
-                entriesPerPage={entriesPerPage}
-                onPageChange={setCurrentPage}
-                showingFrom={showingFrom}
-                showingTo={showingTo}
+            {pagination && pagination.total_page > 1 && (
+                <DataTablePagination
+                    currentPage={pagination.current_page}
+                    totalPages={pagination.total_page}
+                    totalEntries={pagination.total_count}
+                    entriesPerPage={pagination.per_page}
+                    onPageChange={setCurrentPage}
+                    showingFrom={showingFrom}
+                    showingTo={showingTo}
+                />
+            )}
+
+            <ConfirmDialog
+                open={deleteConfirmOpen}
+                onOpenChange={setDeleteConfirmOpen}
+                onConfirm={handleDelete}
+                title="Delete Doctor"
+                description="Are you sure you want to delete this doctor? This action cannot be undone."
+                confirmText="Delete"
+                cancelText="Cancel"
+                variant="destructive"
             />
         </div>
     );
