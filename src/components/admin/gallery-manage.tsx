@@ -1,11 +1,10 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { DataTablePagination } from "@/components/ui/data-table-pagination";
@@ -123,7 +122,7 @@ export function GalleryManage() {
     }
   };
 
-  const totalPages = pagination?.total_page ?? 1;
+
   const showingFrom = pagination
     ? (pagination.current_page - 1) * pagination.per_page + 1
     : 0;
@@ -156,9 +155,9 @@ export function GalleryManage() {
           </div>
         ) : (
           galleries.map((item) => (
-            <Card key={item.id} className="flex flex-col overflow-hidden">
-              <CardHeader className="p-0">
-                <div className="relative h-48 bg-gray-100">
+            <Card key={item.id} className="flex flex-col overflow-hidden p-4">
+              <CardHeader className="">
+                <div className="relative h-48 w-full bg-gray-100">
                   {item.image ? (
                     <img
                       src={item.image}
@@ -179,13 +178,13 @@ export function GalleryManage() {
                   </span>
                 </div>
               </CardHeader>
-              <CardContent className="flex-1 space-y-1 pt-4">
+              <CardContent className="flex-1">
                 <p className="text-sm text-gray-500">{new Date(item.date).toLocaleDateString()}</p>
                 <CardTitle className="text-lg leading-tight line-clamp-2">{item.title}</CardTitle>
               </CardContent>
-              <CardFooter className="flex items-center justify-between">
+              <CardFooter className="flex items-center justify-between pt-3 ">
                 <Button variant="outline" size="sm" onClick={() => handleOpenEdit(item)}>
-                  <Pencil className="w-4 h-4 mr-1" />
+                  <Pencil className="w-4 h-4" />
                   Edit
                 </Button>
                 <Button
