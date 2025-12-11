@@ -6,7 +6,6 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useNavigate } from "react-router";
 import { useGetNewsPublicQuery } from "@/services/newsApi";
 import { motion, type Variants } from "framer-motion";
-import { NewsCard } from "@/components/website/news-card";
 
 export function MediaSection() {
   const { data } = useGetNewsPublicQuery(1);

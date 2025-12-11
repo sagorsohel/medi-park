@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { PageHeroSection } from '@/components/website/page-hero-section'
 import { BreadcrumbSection } from '@/components/website/breadcrumb-section'
-import { NewsCard } from '@/components/website/news-card'
+import { NewsPublicCard } from '@/components/website/news-public-card'
 import { useGetNewsPublicQuery } from "@/services/newsApi";
 import { DataTablePagination } from "@/components/ui/data-table-pagination";
 import { motion, type Variants } from "framer-motion";
@@ -84,7 +84,7 @@ export default function NewsPage() {
             ) : (
               newsItems.map((news, index) => (
                 <motion.div key={news.id} custom={index} variants={cardVariants}>
-                  <NewsCard
+                  <NewsPublicCard
                     id={news.id}
                     image={news.feature_image}
                     date={news.created_at}
