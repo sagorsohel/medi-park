@@ -31,6 +31,7 @@ import AboutPageManage from '@/pages/admin/about-page-manage/about-page-manage'
 import NewsPageManage from '@/pages/admin/news/news'
 import GelleryPageManage from '@/pages/admin/gellery/gellery'
 import NewsPage from '@/pages/news/news-page'
+import ContactAdminPage from '@/pages/admin/contact/contact'
 
 const router = createBrowserRouter([
   // 🌐 Website routes (with website layout - sticky navbar & footer)
@@ -80,6 +81,7 @@ const router = createBrowserRouter([
       { path: "website/about", element: <AboutPageManage /> },
       { path: "website/gellery", element: <GelleryPageManage /> },
       { path: "website/news", element: <NewsPageManage /> },
+      { path: "website/contact", element: <ContactAdminPage /> },
       { path: "staff", element: <StaffPage /> },
       { path: "staff/new", element: <AddStaffPage /> },
       { path: "doctor", element: <DoctorPage /> },
