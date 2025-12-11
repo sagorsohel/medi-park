@@ -95,6 +95,6 @@ export const api = createApi({
     return await rawBaseQuery(args, apiObj, extraOptions)
   },
 
-  tagTypes: ['User', 'Admin', 'Size', 'Color', 'Brand', 'Category', 'Product', 'Banner', 'Order', 'Branch', 'Country', 'Unit', 'Customer', 'Subcategory', 'Supplier', 'Expense', 'Purchase', 'Sale', 'Contact', 'Stock', 'ProfitLoss', 'Dashboard', 'AboutWhoWeAre', 'AboutMission', 'AboutVision', 'AboutTransformingHealthcare', 'AboutMRCPPACES', 'AboutPageBanner', 'News'],
+  tagTypes: ['User', 'Admin', 'Size', 'Color', 'Brand', 'Category', 'Product', 'Banner', 'Order', 'Branch', 'Country', 'Unit', 'Customer', 'Subcategory', 'Supplier', 'Expense', 'Purchase', 'Sale', 'Contact', 'Stock', 'ProfitLoss', 'Dashboard', 'AboutWhoWeAre', 'AboutMission', 'AboutVision', 'AboutTransformingHealthcare', 'AboutMRCPPACES', 'AboutPageBanner', 'News', 'GalleryPageBanner'],
   endpoints: () => ({}),
 })

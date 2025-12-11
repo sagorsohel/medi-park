@@ -12,6 +12,7 @@ import BlogDetailPage from '../pages/blogs/blog-detail-page'
 import InvestorsPage from '../pages/investors/investors-page'
 import ContactPage from '../pages/contact/contact-page'
 import PrivacyPage from '../pages/privacy/privacy-page'
+import GelleryPage from '../pages/gellery/gellery'
 import LoginPage from '../pages/auth/login-page'
 import RegisterPage from '../pages/auth/register-page'
 import ForgotPasswordPage from '../pages/auth/forgot-password-page'
@@ -28,6 +29,7 @@ import { WebsiteLayout } from '@/components/website/website-layout'
 import AboutPageManage from '@/pages/admin/about-page-manage/about-page-manage'
 
 import NewsPageManage from '@/pages/admin/news/news'
+import GelleryPageManage from '@/pages/admin/gellery/gellery'
 import NewsPage from '@/pages/news/news-page'
 
 const router = createBrowserRouter([
@@ -48,6 +50,7 @@ const router = createBrowserRouter([
       { path: "blogs", element: <BlogsPage /> },
       { path: "blogs/:id", element: <BlogDetailPage /> },
       { path: "investors", element: <InvestorsPage /> },
+      { path: "gellery", element: <GelleryPage /> },
       { path: "contacts", element: <ContactPage /> },
       { path: "privacy-policy", element: <PrivacyPage /> },
     ],
@@ -75,6 +78,7 @@ const router = createBrowserRouter([
       { path: "dashboard", element: <DashboardPage /> },
       { path: "website/home", element: <WebHomeManagePage /> },
       { path: "website/about", element: <AboutPageManage /> },
+      { path: "website/gellery", element: <GelleryPageManage /> },
       { path: "website/news", element: <NewsPageManage /> },
       { path: "staff", element: <StaffPage /> },
       { path: "staff/new", element: <AddStaffPage /> },

@@ -10,7 +10,8 @@ import {
   Phone,
   Package,
   Stethoscope,
-  type LucideIcon
+  type LucideIcon,
+  Image
 } from "lucide-react";
 
 type Submenu = {
@@ -112,6 +113,12 @@ export function getMenuList(_pathname: string): Group[] {
           href: "/admin/website/news",
           label: "News",
           icon: FileText,
+          submenus: []
+        },
+        {
+          href: "/admin/website/gellery",
+          label: "Gallery",
+          icon: Image,
           submenus: []
         },
         {
