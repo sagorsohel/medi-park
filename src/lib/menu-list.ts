@@ -128,8 +128,8 @@ export function getMenuList(_pathname: string): Group[] {
           submenus: []
         },
         {
-          href: "/admin/website/inventory-1",
-          label: "Inventory",
+          href: "/admin/website/blogs",
+          label: "Blogs",
           icon: Package,
           submenus: []
         },
