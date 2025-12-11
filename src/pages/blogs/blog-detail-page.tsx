@@ -1,34 +1,57 @@
+"use client";
+
 import { useParams } from "react-router";
 import { PageHeroSection } from '@/components/website/page-hero-section'
 import { BreadcrumbSection } from '@/components/website/breadcrumb-section'
 import { Card, CardContent } from '@/components/ui/card'
+import { useGetBlogByIdQuery } from "@/services/blogApi";
+import { Loader2 } from "lucide-react";
+import { motion, type Variants } from "framer-motion";
 
 export default function BlogDetailPage() {
   const { id } = useParams<{ id: string }>();
+  const blogId = id ? parseInt(id) : 0;
 
-  // In a real app, this would be fetched from an API based on the id
-  const blogPost = {
-    id: id || "1",
-    title: "Is COPD Curable? Understanding Treatments That Help Manage the Disease",
-    mainImage: "/hero1.png",
-    author: {
-      name: "Dr. SM Abdullah Al Mamun",
-      image: "/hero2.png",
-      role: "Author"
+  const { data: blogData, isLoading } = useGetBlogByIdQuery(blogId);
+  const blogPost = blogData?.data;
+
+  // Animation variants
+  const contentVariants: Variants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.6,
+        ease: "easeOut",
+      },
     },
-    content: [
-      "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
-      "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
-      "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
-      "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
-      "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged."
-    ]
   };
+
+  if (isLoading) {
+    return (
+      <div className="w-full flex items-center justify-center py-20">
+        <Loader2 className="h-8 w-8 animate-spin text-gray-400" />
+      </div>
+    );
+  }
+
+  if (!blogPost) {
+    return (
+      <div className="w-full text-center py-20 text-gray-500">
+        Blog not found.
+      </div>
+    );
+  }
 
   return (
     <div className="w-full">
       {/* Hero Section */}
-      <PageHeroSection image="/hero1.png" heading={'Blog'} alt={`${blogPost.title} Hero`} />
+      <PageHeroSection 
+        image={blogPost.feature_image} 
+        heading={'Blog'} 
+        alt={`${blogPost.title} Hero`} 
+      />
 
       {/* Breadcrumb Section */}
       <BreadcrumbSection currentPage={blogPost.title} />
@@ -36,18 +59,30 @@ export default function BlogDetailPage() {
       {/* Blog Detail Content */}
       <section className="w-full bg-white">
         {/* Dark Blue Header */}
-        <div className="w-full bg-primary h-[300px] pt-20 overflow-auto ">
+        <motion.div
+          className="w-full bg-primary h-[300px] pt-20 overflow-auto"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={contentVariants}
+        >
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <h1 className="text-2xl md:text-3xl font-bold text-white text-center">
               {blogPost.title}
             </h1>
           </div>
-        </div>
+        </motion.div>
 
         {/* Main Image Section */}
-        <div className="max-w-7xl mx-auto -mt-28 px-8 sm:px-0">
+        <motion.div
+          className="max-w-7xl mx-auto -mt-28 px-8 sm:px-0"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={contentVariants}
+        >
           <img
-            src={blogPost.mainImage}
+            src={blogPost.feature_image}
             alt={blogPost.title}
             className="w-full h-auto max-h-[300px] rounded-lg object-cover"
             onError={(e) => {
@@ -55,47 +90,62 @@ export default function BlogDetailPage() {
               target.src = "/vite.svg";
             }}
           />
-        </div>
+        </motion.div>
 
         {/* Author Byline */}
-        <div className="w-full bg-white py-8">
-          <div className="max-w-7xl mx-auto ">
-            <Card className="w-fit p-0! border border-text">
-              <CardContent className="p-2">
-                <div className="flex items-center gap-4">
-                  <div className="w-16 h-16 rounded-lg overflow-hidden border-2 border-gray-200">
-                    <img
-                      src={blogPost.author.image}
-                      alt={blogPost.author.name}
-                      className="w-full h-full object-cover"
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement;
-                        target.src = "/vite.svg";
-                      }}
-                    />
+        {blogPost.author_name && (
+          <motion.div
+            className="w-full bg-white py-8"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={contentVariants}
+          >
+            <div className="max-w-7xl mx-auto">
+              <Card className="w-fit p-0! border border-text">
+                <CardContent className="p-2">
+                  <div className="flex items-center gap-4">
+                    {blogPost.author_image && (
+                      <div className="w-16 h-16 rounded-lg overflow-hidden border-2 border-gray-200">
+                        <img
+                          src={blogPost.author_image}
+                          alt={blogPost.author_name}
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            const target = e.target as HTMLImageElement;
+                            target.src = "/vite.svg";
+                          }}
+                        />
+                      </div>
+                    )}
+                    <div>
+                      <p className="font-bold text-lg text-gray-900">{blogPost.author_name}</p>
+                      {blogPost.author_designation && (
+                        <p className="text-sm text-text">{blogPost.author_designation}</p>
+                      )}
+                    </div>
                   </div>
-                  <div>
-                    <p className="font-bold text-lg  text-gray-900">{blogPost.author.name}</p>
-                    <p className="text-sm text-text">{blogPost.author.role}</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
+                </CardContent>
+              </Card>
+            </div>
+          </motion.div>
+        )}
 
         {/* Content Section */}
-        <div className="w-full bg-white pb-16">
+        <motion.div
+          className="w-full bg-white pb-16"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={contentVariants}
+        >
           <div className="max-w-7xl mx-auto px-4 sm:px-0 lg:px-0">
-            <div className="space-y-6 text-gray-700">
-              {blogPost.content.map((paragraph, index) => (
-                <p key={index} className="text-justify">
-                  {paragraph}
-                </p>
-              ))}
-            </div>
+            <div
+              className="space-y-6 text-gray-700 prose prose-lg max-w-none"
+              dangerouslySetInnerHTML={{ __html: blogPost.description }}
+            />
           </div>
-        </div>
+        </motion.div>
       </section>
     </div>
   )
