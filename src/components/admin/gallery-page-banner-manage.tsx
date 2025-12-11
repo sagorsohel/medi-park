@@ -121,6 +121,9 @@ export function GalleryPageBannerManage() {
   const currentImage = imagePreview || section.background_image;
   const currentOpacity =
     editableData.opacity !== undefined ? editableData.opacity : section.opacity;
+  const numericOpacity = Number.isFinite(parseFloat(currentOpacity))
+    ? parseFloat(currentOpacity)
+    : 0.4;
   const currentStatus =
     editableData.status !== undefined ? editableData.status : section.status;
 
@@ -163,6 +166,13 @@ export function GalleryPageBannerManage() {
                       target.src = "/vite.svg";
                     }}
                   />
+                  <div
+                    className="absolute inset-0 bg-gray-950 transition-opacity duration-200"
+                    style={{ opacity: numericOpacity }}
+                  />
+                  <span className="absolute bottom-2 right-2 bg-white/80 text-xs px-2 py-1 rounded">
+                    Opacity: {numericOpacity.toFixed(1)}
+                  </span>
                 </div>
               )}
             </div>
