@@ -270,14 +270,14 @@ function GalleryShowcase({ items, isLoading }: ShowcaseProps) {
                       <div className="flex gap-2 pointer-events-auto">
                         <button
                           onClick={prev}
-                          className="h-10 w-10 rounded-full bg-white text-gray-700 shadow hover:bg-gray-50 flex items-center justify-center"
+                          className="h-10 w-10 rounded-full bg-white text-gray-700 shadow hover:bg-primary/30 rounded-t-lg flex items-center justify-center"
                           aria-label="Previous"
                         >
                           <ArrowLeft className="w-5 h-5" />
                         </button>
                         <button
                           onClick={next}
-                          className="h-10 w-10 rounded-full bg-white text-gray-700 shadow hover:bg-gray-50 flex items-center justify-center"
+                          className="h-10 w-10 rounded-full bg-white text-gray-700 shadow hover:bg-primary/30 rounded-t-lg flex items-center justify-center"
                           aria-label="Next"
                         >
                           <ArrowRight className="w-5 h-5" />

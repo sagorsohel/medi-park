@@ -113,7 +113,7 @@ export function WhoWeAreManage() {
       </div>
 
       <Card>
-        <CardHeader className="bg-gray-50 flex flex-row items-center justify-between">
+        <CardHeader className="bg-primary/30 rounded-t-lg flex flex-row items-center justify-between">
           <CardTitle>Content</CardTitle>
           <Button
             onClick={handleSave}
@@ -143,7 +143,7 @@ export function WhoWeAreManage() {
                           }}
                         />
                       ) : (
-                        <div className="w-full h-40 flex items-center justify-center text-gray-400 bg-gray-50">
+                        <div className="w-full h-40 flex items-center justify-center text-gray-400 bg-primary/30 rounded-t-lg">
                           No image
                         </div>
                       )}

@@ -71,7 +71,7 @@ export function WhoWeAreSection() {
                     }}
                   />
                 ) : (
-                  <div className="w-full h-40 flex items-center justify-center text-gray-400 bg-gray-50">
+                  <div className="w-full h-40 flex items-center justify-center text-gray-400 bg-primary/30 rounded-t-lg">
                     No image
                   </div>
                 )}

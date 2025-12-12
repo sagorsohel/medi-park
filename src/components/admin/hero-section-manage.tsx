@@ -572,7 +572,7 @@ export function HeroSectionManage() {
                 slideRefs.current[slide.id] = el;
               }}
             >
-              <CardHeader className="bg-gray-50">
+              <CardHeader className="bg-primary/30 rounded-t-lg">
                 <div className="flex items-center justify-between">
                   <CardTitle className="text-lg">Slide {index + 1}</CardTitle>
                   <div className="flex items-center gap-2">

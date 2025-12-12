@@ -8,7 +8,7 @@ interface OurAchievementSectionProps {
 
 export function OurAchievementSection({ title, images, text }: OurAchievementSectionProps) {
   return (
-    <div className="w-full bg-gray-50 py-16 md:py-24">
+    <div className="w-full bg-primary/30 rounded-t-lg py-16 md:py-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Title */}
         <div className="text-center mb-12 md:mb-16">

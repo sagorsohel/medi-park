@@ -260,7 +260,7 @@ export function ContactFormSection() {
                 <motion.div variants={itemVariants}>
                   <Field>
                     <FieldContent>
-                      <div className="flex items-center gap-2 p-4 border border-gray-300 rounded-md bg-gray-50 transition-all duration-300 hover:border-primary/50">
+                      <div className="flex items-center gap-2 p-4 border border-gray-300 rounded-md bg-primary/30 rounded-t-lg transition-all duration-300 hover:border-primary/50">
                         <input
                           type="checkbox"
                           id="recaptcha"

@@ -58,7 +58,7 @@ export function ContactMessages() {
                   <span>{msg.phone_number}</span>
                 </div>
                 <p className="text-xs uppercase tracking-wide text-gray-500">Gender: {msg.gender}</p>
-                <div className="mt-2 rounded-md bg-gray-50 p-3 border border-gray-200">
+                <div className="mt-2 rounded-md bg-primary/30 rounded-t-lg p-3 border border-gray-200">
                   <p className="font-semibold mb-1 text-gray-800">Message</p>
                   <p className="text-gray-700 leading-relaxed whitespace-pre-line">{msg.message}</p>
                 </div>

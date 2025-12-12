@@ -140,7 +140,7 @@ export default function DashboardPage() {
           <CardContent>
             <div className="space-y-4">
               {upcomingEvents.map((event) => (
-                <div key={event.id} className="p-4 border rounded-lg hover:bg-gray-50 transition-colors">
+                <div key={event.id} className="p-4 border rounded-lg hover:bg-primary/30 rounded-t-lg transition-colors">
                   <p className="font-semibold text-gray-900 mb-1">{event.title}</p>
                   <div className="space-y-1 text-sm text-gray-600">
                     <p className="flex items-center gap-2">

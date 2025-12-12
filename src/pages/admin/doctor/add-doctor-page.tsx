@@ -270,7 +270,7 @@ export default function AddDoctorPage() {
         );
     }
 
-    const readOnlyProps = isViewMode ? { readOnly: true, className: "bg-gray-50 cursor-not-allowed" } : {};
+    const readOnlyProps = isViewMode ? { readOnly: true, className: "bg-primary/30 rounded-t-lg cursor-not-allowed" } : {};
 
     return (
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -512,7 +512,7 @@ export default function AddDoctorPage() {
                                 </div>
                                 <div className="space-y-2">
                                     <Label>Image Preview</Label>
-                                    <div className="border rounded-md p-4 h-[100px] flex items-center justify-center bg-gray-50">
+                                    <div className="border rounded-md p-4 h-[100px] flex items-center justify-center bg-primary/30 rounded-t-lg">
                                         {imagePreview ? (
                                             <img src={imagePreview} alt="Preview" className="h-16 w-16 object-cover rounded-md" />
                                         ) : (

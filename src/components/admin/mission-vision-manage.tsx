@@ -66,7 +66,7 @@ function SectionCard({
 
   return (
     <Card>
-      <CardHeader className="bg-gray-50 flex flex-row items-center justify-between">
+      <CardHeader className="bg-primary/30 rounded-t-lg flex flex-row items-center justify-between">
         <CardTitle>{label}</CardTitle>
         <Button onClick={onSave} disabled={saving} className="flex items-center gap-2">
           {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <RefreshCw className="h-4 w-4" />}
@@ -95,7 +95,7 @@ function SectionCard({
                   }}
                 />
               ) : (
-                <div className="w-full h-[280px] flex items-center justify-center text-gray-400 bg-gray-50">
+                <div className="w-full h-[280px] flex items-center justify-center text-gray-400 bg-primary/30 rounded-t-lg">
                   No image
                 </div>
               )}

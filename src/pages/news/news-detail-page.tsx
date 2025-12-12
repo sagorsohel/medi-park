@@ -76,7 +76,7 @@ export default function NewsDetailPage() {
         {/* Author Info Section */}
         {newsItem.author_name && (
           <motion.div
-            className="w-full bg-gray-50 py-8"
+            className="w-full bg-primary/30 rounded-t-lg py-8"
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}

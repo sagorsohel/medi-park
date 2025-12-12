@@ -140,8 +140,8 @@ export function FooterContactManage() {
 
   return (
     <Card className="mt-10">
-      <CardHeader className="bg-gray-50 flex flex-row items-center justify-between">
-        <CardTitle className="flex items-center gap-2">
+      <CardHeader className="bg-primary/30 rounded-t-lg flex flex-row items-center justify-between">
+        <CardTitle className="flex items-center gap-2 ">
           <Phone className="w-5 h-5" />
           Footer Contact Management
         </CardTitle>
@@ -276,14 +276,7 @@ export function FooterContactManage() {
           )}
         </div>
 
-        {data?.data && (
-          <div className="mt-4 p-4 bg-gray-50 rounded-md">
-            <p className="text-sm text-gray-600">
-              <strong>Last updated:</strong>{" "}
-              {new Date(data.data.updated_at).toLocaleString()}
-            </p>
-          </div>
-        )}
+        
       </CardContent>
     </Card>
   );

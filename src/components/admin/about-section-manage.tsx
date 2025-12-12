@@ -150,7 +150,7 @@ export function AboutSectionManage() {
       </div>
 
       <Card>
-        <CardHeader className="bg-gray-50">
+        <CardHeader className="bg-primary/30 rounded-t-lg">
           <div className="flex items-center justify-between">
             <CardTitle className="text-lg">About Us Section</CardTitle>
             {hasChanges() && (

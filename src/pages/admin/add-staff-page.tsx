@@ -177,7 +177,7 @@ export default function AddStaffPage() {
                     {/* Image Preview Area - Spans 2 rows visually in the design, but here we can just put it in the right column */}
                     <div className="space-y-2 row-span-2">
                         <Label>Image Preview</Label>
-                        <div className="border rounded-md p-4 h-[140px] flex items-center justify-center bg-gray-50">
+                        <div className="border rounded-md p-4 h-[140px] flex items-center justify-center bg-primary/30 rounded-t-lg">
                             {imagePreview ? (
                                 <img src={imagePreview} alt="Preview" className="h-full object-contain" />
                             ) : (
@@ -218,7 +218,7 @@ export default function AddStaffPage() {
 
                 {/* Save Button */}
                 <div className="mt-8 flex justify-center">
-                    <Button className="w-full max-w-md bg-white border border-gray-300 text-gray-700 hover:bg-gray-50">
+                    <Button className="w-full max-w-md bg-white border border-gray-300 text-gray-700 hover:bg-primary/30 rounded-t-lg">
                         Save
                     </Button>
                 </div>

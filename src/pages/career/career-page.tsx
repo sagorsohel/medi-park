@@ -197,7 +197,7 @@ export default function CareerPage() {
       </section>
 
       {/* Apply for a Job Section */}
-      <section className="w-full bg-gray-50 py-16">
+      <section className="w-full bg-primary/30 rounded-t-lg py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-4xl font-bold text-primary mb-12 text-center">
             Apply for a job
