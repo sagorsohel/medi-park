@@ -1,10 +1,24 @@
 "use client";
 
 import { Link } from "react-router";
-import { Clock, Phone, Facebook, Twitter, Instagram, Linkedin, Mouse } from "lucide-react";
+import { Clock, Phone, Mouse } from "lucide-react";
+import { useGetFooterContactQuery, useGetSocialLinksQuery } from "@/services/contactPageApi";
+import { useMemo } from "react";
 
 export function WebsiteFooter() {
   const currentYear = new Date().getFullYear();
+  const { data: footerContactData } = useGetFooterContactQuery();
+  const { data: socialLinksData } = useGetSocialLinksQuery(1);
+
+  // Get active social links
+  const activeSocialLinks = useMemo(() => {
+    if (!socialLinksData?.data) return [];
+    return socialLinksData.data.filter((link) => link.status === "active");
+  }, [socialLinksData]);
+
+  const footerContact = footerContactData?.data;
+  const firstPhone = footerContact?.phone && footerContact.phone.length > 0 ? footerContact.phone[0] : null;
+  const email = footerContact?.email || null;
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -20,19 +34,23 @@ export function WebsiteFooter() {
             <h3 className="text-lg font-semibold">Medipark Tele Service</h3>
 
             {/* Contact Info Buttons */}
-            <div className="space-y-3 ">
-              <div className="flex items-center justify-between gap-3 p-1 font-bold border border-primary-foreground rounded-[22px] ">
-                <div className=" rounded-lg px-4 py-2 flex items-center gap-2">
-                  <Clock className="h-4 w-4" />
-                  <span className="text-sm">24 hours</span>
-                </div>
-                <div className=" rounded-[22px] px-4 py-2 bg-primary-foreground text-primary flex justify-end items-center gap-2">
-                  <Phone className="h-4 w-4" />
-                  <span className="text-sm">01782948545</span>
-                </div>
+            {(firstPhone || email) && (
+              <div className="space-y-3 ">
+                {firstPhone && (
+                  <div className="flex items-center justify-between gap-3 p-1 font-bold border border-primary-foreground rounded-[22px] ">
+                    <div className=" rounded-lg px-4 py-2 flex items-center gap-2">
+                      <Clock className="h-4 w-4" />
+                      <span className="text-sm">24 hours</span>
+                    </div>
+                    <div className=" rounded-[22px] px-4 py-2 bg-primary-foreground text-primary flex justify-end items-center gap-2">
+                      <Phone className="h-4 w-4" />
+                      <span className="text-sm">{firstPhone}</span>
+                    </div>
+                  </div>
+                )}
+                {email && <p className="text-sm">{email}</p>}
               </div>
-              <p className="text-sm">info@mediparkbd.com</p>
-            </div>
+            )}
 
             {/* Navigation Links */}
             <nav className="flex flex-col gap-2">
@@ -116,44 +134,34 @@ export function WebsiteFooter() {
             </div>
 
             {/* Social Media Icons */}
-            <div className="flex items-center gap-4">
-              <a
-                href="https://facebook.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-primary-foreground hover:text-blue-300 transition-colors"
-                aria-label="Facebook"
-              >
-                <Facebook className="h-5 w-5" />
-              </a>
-              <a
-                href="https://twitter.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-primary-foreground hover:text-blue-300 transition-colors"
-                aria-label="Twitter"
-              >
-                <Twitter className="h-5 w-5" />
-              </a>
-              <a
-                href="https://instagram.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-primary-foreground hover:text-blue-300 transition-colors"
-                aria-label="Instagram"
-              >
-                <Instagram className="h-5 w-5" />
-              </a>
-              <a
-                href="https://linkedin.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-primary-foreground hover:text-blue-300 transition-colors"
-                aria-label="LinkedIn"
-              >
-                <Linkedin className="h-5 w-5" />
-              </a>
-            </div>
+            {activeSocialLinks.length > 0 && (
+              <div className="flex items-center gap-4">
+                {activeSocialLinks.map((link) => (
+                  <a
+                    key={link.id}
+                    href={link.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-primary-foreground hover:text-blue-300 transition-colors"
+                    aria-label={link.name}
+                  >
+                    {link.image ? (
+                      <img
+                        src={link.image}
+                        alt={link.name}
+                        className="h-5 w-5 object-contain"
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.style.display = 'none';
+                        }}
+                      />
+                    ) : (
+                      <span className="text-sm">{link.name}</span>
+                    )}
+                  </a>
+                ))}
+              </div>
+            )}
           </div>
         </div>
 
