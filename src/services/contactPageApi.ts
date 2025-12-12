@@ -57,6 +57,15 @@ export interface CreateUpdateBranchPayload {
   status?: "active" | "inactive";
 }
 
+export interface CreateContactMessagePayload {
+  patient_name: string;
+  gender: string;
+  phone_number: string;
+  email: string;
+  date_of_birth: string;
+  message: string;
+}
+
 export interface ContactMessage {
   id: number;
   patient_name: string;
@@ -67,6 +76,12 @@ export interface ContactMessage {
   message: string;
   created_at: string;
   updated_at: string;
+}
+
+export interface ContactMessageResponse {
+  success: boolean;
+  message: string;
+  data?: ContactMessage;
 }
 
 export interface ContactMessagesResponse {
@@ -168,6 +183,14 @@ export const contactPageApi = api.injectEndpoints({
             ]
           : [{ type: "ContactMessage", id: "LIST" }],
     }),
+    createContactMessage: builder.mutation<ContactMessageResponse, CreateContactMessagePayload>({
+      query: (data) => ({
+        url: "/contacts",
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: [{ type: "ContactMessage", id: "LIST" }],
+    }),
   }),
 });
 
@@ -179,6 +202,7 @@ export const {
   useUpdateBranchMutation,
   useDeleteBranchMutation,
   useGetContactMessagesQuery,
+  useCreateContactMessageMutation,
 } = contactPageApi;
 
 
