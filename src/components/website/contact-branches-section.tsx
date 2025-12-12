@@ -5,7 +5,7 @@ import { Loader2, MapPin, Phone, Mail } from "lucide-react";
 
 export function ContactBranchesSection() {
   const { data, isLoading } = useGetBranchesQuery(1);
-  
+
   const branches = data?.data?.filter(branch => branch.status === "active") || [];
 
   if (isLoading) {
@@ -27,19 +27,18 @@ export function ContactBranchesSection() {
 
   return (
     <div className="w-full bg-white py-16">
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Title */}
+        <div className="text-center mb-8">
+          <h2 className="text-4xl md:text-5xl font-bold mb-2">
+            <span className="text-gray-800">Visit Our Branches </span>
+          </h2>
+
+        </div>
         {branches.map((branch, index) => (
           <div key={branch.id} className={index > 0 ? "mt-20" : ""}>
-            {/* Title */}
-            <div className="text-center mb-8">
-              <h2 className="text-4xl md:text-5xl font-bold mb-2">
-                <span className="text-gray-800">Visit Our </span>
-                <span className="text-primary">Office</span>
-              </h2>
-              <p className="text-gray-600 text-lg mt-2">
-                Located in the heart of {branch.name}
-              </p>
-            </div>
+           
 
             {/* Main Content - Two Columns */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-12">
@@ -70,30 +69,16 @@ export function ContactBranchesSection() {
                   </div>
                 </div>
 
-                {/* Getting Here Section */}
-                <div>
-                  <h3 className="text-xl font-bold text-gray-800 mb-3">Getting Here</h3>
-                  <p className="text-gray-700 text-base leading-relaxed">
-                    Easily accessible by public transport. Street parking available. Visitor parking in the building garage.
-                  </p>
-                </div>
 
-                {/* Nearby Landmarks Section */}
-                <div>
-                  <h3 className="text-xl font-bold text-gray-800 mb-3">Nearby Landmarks</h3>
-                  <ul className="space-y-2 text-gray-700">
-                    <li className="text-base">• Medical District (5 min walk)</li>
-                    <li className="text-base">• City Center (10 min walk)</li>
-                    <li className="text-base">• Shopping Mall (15 min walk)</li>
-                  </ul>
-                </div>
+
+
 
                 {/* Contact Information */}
                 <div className="pt-4 border-t border-gray-200">
                   <div className="space-y-3">
                     <div className="flex items-center gap-3">
                       <Phone className="w-5 h-5 text-primary shrink-0" />
-                      <a 
+                      <a
                         href={`tel:${branch.phone}`}
                         className="text-base text-gray-700 hover:text-primary transition-colors"
                       >
@@ -102,7 +87,7 @@ export function ContactBranchesSection() {
                     </div>
                     <div className="flex items-center gap-3">
                       <Mail className="w-5 h-5 text-primary shrink-0" />
-                      <a 
+                      <a
                         href={`mailto:${branch.email}`}
                         className="text-base text-gray-700 hover:text-primary transition-colors break-all"
                       >

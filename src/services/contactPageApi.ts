@@ -105,6 +105,7 @@ export const contactPageApi = api.injectEndpoints({
       { id: number; data: UpdateContactPageBannerPayload }
     >({
       query: ({ id, data }) => {
+        console.log(id);
         const formData = new FormData();
         if (data.background_image !== undefined) {
           formData.append("background_image", data.background_image);
@@ -116,7 +117,7 @@ export const contactPageApi = api.injectEndpoints({
           formData.append("status", data.status);
         }
         return {
-          url: `/contact-page-banner-sections/${id}`,
+          url: `/contact-page-banner-sections`,
           method: "POST",
           body: formData,
         };
