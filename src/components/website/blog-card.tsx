@@ -15,7 +15,7 @@ export function BlogCard({ id, image, date, title, link }: BlogCardProps) {
   const blogLink = link || `/blogs/${id}`;
 
   return (
-    <Card className="overflow-hidden p-0! hover:shadow-lg transition-shadow">
+    <Card className="overflow-hidden p-0! border hover:shadow-lg transition-shadow">
       <div className="relative w-full h-48 overflow-hidden">
         <img
           src={image}

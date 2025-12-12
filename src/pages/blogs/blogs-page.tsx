@@ -104,8 +104,7 @@ export default function BlogsPage() {
           <motion.div
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
             initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-50px" }}
+            animate="visible"
             variants={containerVariants}
           >
             {isLoading && currentPage === 1 ? (
@@ -118,10 +117,16 @@ export default function BlogsPage() {
               </div>
             ) : (
               blogItems.map((blog, index) => (
-                <motion.div key={blog.id} custom={index} variants={cardVariants}>
+                <motion.div 
+                  key={blog.id} 
+                  custom={index} 
+                  variants={cardVariants}
+                  initial="hidden"
+                  animate="visible"
+                >
                   <BlogCard
                     id={blog.id}
-                    image={blog.feature_image}
+                    image={blog.feature_image || "/vite.svg"}
                     date={formatDate(blog.created_at)}
                     title={blog.title}
                   />
@@ -157,14 +162,7 @@ export default function BlogsPage() {
             </motion.div>
           )}
 
-          {/* Pagination Info */}
-          {pagination && (
-            <div className="text-center mt-8 text-gray-600">
-              Showing {((pagination.current_page - 1) * pagination.per_page) + 1} to{" "}
-              {Math.min(pagination.current_page * pagination.per_page, pagination.total_count)} of{" "}
-              {pagination.total_count} blogs
-            </div>
-          )}
+         
         </div>
       </section>
     </div>
