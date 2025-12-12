@@ -7,8 +7,16 @@ import { PricingSection } from '@/components/website/pricing-section'
 import { MediaSection } from '@/components/website/media-section'
 import { CTASection } from '@/components/website/cta-section'
 import { BlogSection } from '@/components/website/blog-section'
+import { useEffect } from 'react'
+import { store } from '@/store'
+import { homepageApi } from '@/services/homepageApi'
 
 export default function HomePage() {
+  // Prefetch hero sections data on mount to show immediately
+  useEffect(() => {
+    store.dispatch(homepageApi.endpoints.getHeroSectionsPublic.initiate());
+  }, []);
+
   return (
     <div className="w-full">
       {/* Hero Section with Auto-Slider */}

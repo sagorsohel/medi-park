@@ -4,8 +4,16 @@ import { WhoWeAreSection } from '@/components/website/who-we-are-section'
 import { MissionVisionSection } from '@/components/website/mission-vision-section'
 import { TransformingHealthcareSection } from '@/components/website/transforming-healthcare-section'
 import { MRCPPACESSection } from '@/components/website/mrcp-paces-section'
+import { useEffect } from 'react'
+import { store } from '@/store'
+import { aboutPageApi } from '@/services/aboutPageApi'
 
 export default function AboutPage() {
+  // Prefetch about page banner data on mount to show immediately
+  useEffect(() => {
+    store.dispatch(aboutPageApi.endpoints.getAboutPageBanner.initiate());
+  }, []);
+
   return (
     <div className="w-full">
       {/* Hero Section - Dynamic from API */}
