@@ -1,5 +1,7 @@
 "use client";
 
+import { motion } from "framer-motion";
+
 interface PageHeroSectionProps {
   image: string;
   heading?: string;
@@ -9,13 +11,21 @@ interface PageHeroSectionProps {
 
 export function PageHeroSection({ image, heading, alt = "Hero", overlayOpacity = 0.4 }: PageHeroSectionProps) {
   return (
-    <div className="relative w-full h-[250px] sm:h-[calc(100vh-200px)] overflow-hidden">
+    <motion.div
+      className="relative w-full h-[250px] sm:h-[calc(100vh-200px)] overflow-hidden"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.6 }}
+    >
       {/* Background Image */}
       <div className="absolute inset-0">
-        <img
+        <motion.img
           src={image}
           alt={alt}
           className="w-full h-full object-cover"
+          initial={{ scale: 1.1 }}
+          animate={{ scale: 1 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
           onError={(e) => {
             const target = e.target as HTMLImageElement;
             target.src = "/vite.svg";
@@ -30,18 +40,22 @@ export function PageHeroSection({ image, heading, alt = "Hero", overlayOpacity =
 
       {/* Heading Overlay */}
       {heading && (
-        <div className="relative z-10 flex items-center justify-center h-full">
+        <motion.div
+          className="relative z-10 flex items-center justify-center h-full"
+          initial={{ y: 50, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
+        >
           <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-white text-center">
             {heading}
           </h1>
-        </div>
+        </motion.div>
       )}
-    </div>
+    </motion.div>
   );
 }
 
 import { useGetAboutPageBannerQuery } from "@/services/aboutPageApi";
-import { motion } from "framer-motion";
 
 export function AboutPageHero() {
   const { data } = useGetAboutPageBannerQuery();
