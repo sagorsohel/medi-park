@@ -91,6 +91,27 @@ export interface ContactMessagesResponse {
   data: ContactMessage[];
 }
 
+export interface FooterContact {
+  id: number;
+  email: string;
+  phone: string[];
+  status: "active" | "inactive";
+  created_at: string;
+  updated_at: string;
+}
+
+export interface FooterContactResponse {
+  success: boolean;
+  message: string;
+  data: FooterContact;
+}
+
+export interface CreateUpdateFooterContactPayload {
+  email: string;
+  phone: string[];
+  status?: "active" | "inactive";
+}
+
 export const contactPageApi = api.injectEndpoints({
   endpoints: (builder) => ({
     getContactPageBanner: builder.query<ContactPageBannerResponse, void>({
@@ -192,6 +213,22 @@ export const contactPageApi = api.injectEndpoints({
       }),
       invalidatesTags: [{ type: "ContactMessage", id: "LIST" }],
     }),
+
+    getFooterContact: builder.query<FooterContactResponse, void>({
+      query: () => ({
+        url: "/footer-contact",
+        method: "GET",
+      }),
+      providesTags: ["Contact"],
+    }),
+    createUpdateFooterContact: builder.mutation<FooterContactResponse, CreateUpdateFooterContactPayload>({
+      query: (data) => ({
+        url: "/footer-contact",
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["Contact"],
+    }),
   }),
 });
 
@@ -204,6 +241,8 @@ export const {
   useDeleteBranchMutation,
   useGetContactMessagesQuery,
   useCreateContactMessageMutation,
+  useGetFooterContactQuery,
+  useCreateUpdateFooterContactMutation,
 } = contactPageApi;
 
 

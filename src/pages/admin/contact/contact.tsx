@@ -1,6 +1,7 @@
 import { ContactPageBannerManage } from "@/components/admin/contact-page-banner-manage";
 import { BranchManage } from "@/components/admin/branch-manage";
 import { ContactMessages } from "@/components/admin/contact-messages";
+import { FooterContactManage } from "@/components/admin/footer-contact-manage";
 
 export default function ContactAdminPage() {
   return (
@@ -8,6 +9,7 @@ export default function ContactAdminPage() {
       <ContactPageBannerManage />
       <BranchManage />
       <ContactMessages />
+      <FooterContactManage />
     </div>
   );
 }
