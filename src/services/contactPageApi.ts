@@ -112,6 +112,30 @@ export interface CreateUpdateFooterContactPayload {
   status?: "active" | "inactive";
 }
 
+export interface SocialLinkItem {
+  id: number;
+  name: string;
+  image: string;
+  link: string;
+  status: "active" | "inactive";
+  created_at: string;
+  updated_at: string;
+}
+
+export interface SocialLinksResponse {
+  success: boolean;
+  message: string;
+  pagination: BranchPagination;
+  data: SocialLinkItem[];
+}
+
+export interface CreateUpdateSocialLinkPayload {
+  name: string;
+  image?: File | string;
+  link: string;
+  status?: "active" | "inactive";
+}
+
 export const contactPageApi = api.injectEndpoints({
   endpoints: (builder) => ({
     getContactPageBanner: builder.query<ContactPageBannerResponse, void>({
@@ -229,6 +253,74 @@ export const contactPageApi = api.injectEndpoints({
       }),
       invalidatesTags: ["Contact"],
     }),
+
+    getSocialLinks: builder.query<SocialLinksResponse, number | void>({
+      query: (page = 1) => ({
+        url: `/social-links?page=${page}`,
+        method: "GET",
+      }),
+      providesTags: (result) =>
+        result?.data
+          ? [
+              ...result.data.map(({ id }) => ({ type: "Contact" as const, id: `social-${id}` })),
+              { type: "Contact", id: "SOCIAL-LINKS-LIST" },
+            ]
+          : [{ type: "Contact", id: "SOCIAL-LINKS-LIST" }],
+    }),
+    createSocialLink: builder.mutation<SocialLinksResponse, CreateUpdateSocialLinkPayload>({
+      query: (data) => {
+        const formData = new FormData();
+        formData.append("name", data.name);
+        formData.append("link", data.link);
+        if (data.image !== undefined) {
+          formData.append("image", data.image);
+        }
+        if (data.status !== undefined) {
+          formData.append("status", data.status);
+        }
+        return {
+          url: "/social-links",
+          method: "POST",
+          body: formData,
+        };
+      },
+      invalidatesTags: [{ type: "Contact", id: "SOCIAL-LINKS-LIST" }],
+    }),
+    updateSocialLink: builder.mutation<
+      SocialLinksResponse,
+      { id: number; data: CreateUpdateSocialLinkPayload }
+    >({
+      query: ({ id, data }) => {
+        const formData = new FormData();
+        formData.append("name", data.name);
+        formData.append("link", data.link);
+        if (data.image !== undefined) {
+          formData.append("image", data.image);
+        }
+        if (data.status !== undefined) {
+          formData.append("status", data.status);
+        }
+        return {
+          url: `/social-links/${id}`,
+          method: "POST",
+          body: formData,
+        };
+      },
+      invalidatesTags: (result, error, arg) => [
+        { type: "Contact", id: `social-${arg.id}` },
+        { type: "Contact", id: "SOCIAL-LINKS-LIST" },
+      ],
+    }),
+    deleteSocialLink: builder.mutation<{ message: string }, number>({
+      query: (id) => ({
+        url: `/social-links/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: (result, error, id) => [
+        { type: "Contact", id: `social-${id}` },
+        { type: "Contact", id: "SOCIAL-LINKS-LIST" },
+      ],
+    }),
   }),
 });
 
@@ -243,6 +335,10 @@ export const {
   useCreateContactMessageMutation,
   useGetFooterContactQuery,
   useCreateUpdateFooterContactMutation,
+  useGetSocialLinksQuery,
+  useCreateSocialLinkMutation,
+  useUpdateSocialLinkMutation,
+  useDeleteSocialLinkMutation,
 } = contactPageApi;
 
 
