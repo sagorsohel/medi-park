@@ -1,9 +1,9 @@
+import React, { useMemo } from 'react'
 import { PageHeroSection } from '@/components/website/page-hero-section'
 import { BreadcrumbSection } from '@/components/website/breadcrumb-section'
 import { DoctorProfileCard } from '@/components/website/doctor-profile-card'
 import { User, Loader2 } from 'lucide-react'
 import { useGetDoctorsQuery } from '@/services/doctorApi'
-import { useMemo } from 'react'
 
 export default function DoctorsPage() {
   const { data, isLoading } = useGetDoctorsQuery(1);
@@ -15,7 +15,7 @@ export default function DoctorsPage() {
     const departmentMap = new Map<string, {
       id: number;
       name: string;
-      icon: JSX.Element;
+      icon: React.ReactElement;
       doctors: Array<{
         id: number;
         image: string;
@@ -26,7 +26,7 @@ export default function DoctorsPage() {
       }>;
     }>();
 
-    data.data.forEach((doctor, index) => {
+    data.data.forEach((doctor) => {
       const deptName = doctor.department || "Other";
       
       // Format qualifications from education array
