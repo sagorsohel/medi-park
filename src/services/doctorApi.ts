@@ -10,12 +10,17 @@ export interface Doctor {
   mobile_number: string;
   gender: string | null;
   date_of_birth: string | null;
-  known_languages: string | null;
+  known_languages: string | string[] | null;
   registration_number: string | null;
   about: string | null;
   image: string | null;
   present_address: string | null;
   permanent_address: string | null;
+  education?: Array<{ institute_name?: string; qualification?: string; year?: string }>;
+  experience?: Array<{ hospital_name?: string; no_of_years?: string; year?: string }>;
+  social_media?: Array<{ title?: string; link?: string }>;
+  membership?: Array<{ title?: string; description?: string; year?: string }>;
+  awards?: Array<{ title?: string; description?: string; year?: string }>;
   created_at: string;
   updated_at: string;
 }
@@ -51,7 +56,7 @@ export interface CreateDoctorPayload {
   mobile_number: string;
   gender?: string;
   date_of_birth?: string;
-  known_languages?: string;
+  known_languages?: string | string[];
   registration_number?: string;
   about?: string;
   image?: File | string;
@@ -61,6 +66,11 @@ export interface CreateDoctorPayload {
   username?: string;
   password?: string;
   password_confirmation?: string;
+  education?: Array<{ institute_name: string; qualification: string; year: string }>;
+  experience?: Array<{ hospital_name: string; no_of_years: string; year: string }>;
+  social_media?: Array<{ title: string; link: string }>;
+  membership?: Array<{ title: string; description: string; year: string }>;
+  awards?: Array<{ title: string; description: string; year: string }>;
 }
 
 export interface UpdateDoctorPayload {
@@ -71,7 +81,7 @@ export interface UpdateDoctorPayload {
   mobile_number?: string;
   gender?: string;
   date_of_birth?: string;
-  known_languages?: string;
+  known_languages?: string | string[];
   registration_number?: string;
   about?: string;
   image?: File | string;
@@ -81,6 +91,11 @@ export interface UpdateDoctorPayload {
   username?: string;
   password?: string;
   password_confirmation?: string;
+  education?: Array<{ institute_name: string; qualification: string; year: string }>;
+  experience?: Array<{ hospital_name: string; no_of_years: string; year: string }>;
+  social_media?: Array<{ title: string; link: string }>;
+  membership?: Array<{ title: string; description: string; year: string }>;
+  awards?: Array<{ title: string; description: string; year: string }>;
 }
 
 export const doctorApi = api.injectEndpoints({
@@ -115,7 +130,22 @@ export const doctorApi = api.injectEndpoints({
         formData.append("mobile_number", data.mobile_number);
         if (data.gender) formData.append("gender", data.gender);
         if (data.date_of_birth) formData.append("date_of_birth", data.date_of_birth);
-        if (data.known_languages) formData.append("known_languages", data.known_languages);
+        // Always send known_languages as indexed array
+        if (data.known_languages) {
+          if (Array.isArray(data.known_languages)) {
+            data.known_languages.forEach((lang, index) => {
+              formData.append(`known_languages[${index}]`, String(lang));
+            });
+          } else if (typeof data.known_languages === 'string') {
+            // If it's a string (comma-separated), split it and send as array
+            const languages = data.known_languages.split(',').map(l => l.trim()).filter(l => l);
+            languages.forEach((lang, index) => {
+              formData.append(`known_languages[${index}]`, lang);
+            });
+          } else {
+            formData.append("known_languages[0]", String(data.known_languages));
+          }
+        }
         if (data.registration_number) formData.append("registration_number", data.registration_number);
         if (data.about) formData.append("about", data.about);
         if (data.image) formData.append("image", data.image);
@@ -125,6 +155,46 @@ export const doctorApi = api.injectEndpoints({
         if (data.username) formData.append("username", data.username);
         if (data.password) formData.append("password", data.password);
         if (data.password_confirmation) formData.append("password_confirmation", data.password_confirmation);
+        
+        // Handle arrays
+        if (data.education && data.education.length > 0) {
+          data.education.forEach((edu, index) => {
+            formData.append(`education[${index}][institute_name]`, edu.institute_name);
+            formData.append(`education[${index}][qualification]`, edu.qualification);
+            formData.append(`education[${index}][year]`, edu.year);
+          });
+        }
+        
+        if (data.experience && data.experience.length > 0) {
+          data.experience.forEach((exp, index) => {
+            formData.append(`experience[${index}][hospital_name]`, exp.hospital_name);
+            formData.append(`experience[${index}][no_of_years]`, exp.no_of_years);
+            formData.append(`experience[${index}][year]`, exp.year);
+          });
+        }
+        
+        if (data.social_media && data.social_media.length > 0) {
+          data.social_media.forEach((sm, index) => {
+            formData.append(`social_media[${index}][title]`, sm.title);
+            formData.append(`social_media[${index}][link]`, sm.link);
+          });
+        }
+        
+        if (data.membership && data.membership.length > 0) {
+          data.membership.forEach((mem, index) => {
+            formData.append(`membership[${index}][title]`, mem.title);
+            formData.append(`membership[${index}][description]`, mem.description);
+            formData.append(`membership[${index}][year]`, mem.year);
+          });
+        }
+        
+        if (data.awards && data.awards.length > 0) {
+          data.awards.forEach((award, index) => {
+            formData.append(`awards[${index}][title]`, award.title);
+            formData.append(`awards[${index}][description]`, award.description);
+            formData.append(`awards[${index}][year]`, award.year);
+          });
+        }
 
         return {
           url: "/doctors",
@@ -147,7 +217,22 @@ export const doctorApi = api.injectEndpoints({
         if (data.mobile_number) formData.append("mobile_number", data.mobile_number);
         if (data.gender !== undefined) formData.append("gender", data.gender || "");
         if (data.date_of_birth) formData.append("date_of_birth", data.date_of_birth);
-        if (data.known_languages) formData.append("known_languages", data.known_languages);
+        // Always send known_languages as indexed array
+        if (data.known_languages) {
+          if (Array.isArray(data.known_languages)) {
+            data.known_languages.forEach((lang, index) => {
+              formData.append(`known_languages[${index}]`, String(lang));
+            });
+          } else if (typeof data.known_languages === 'string') {
+            // If it's a string (comma-separated), split it and send as array
+            const languages = data.known_languages.split(',').map(l => l.trim()).filter(l => l);
+            languages.forEach((lang, index) => {
+              formData.append(`known_languages[${index}]`, lang);
+            });
+          } else {
+            formData.append("known_languages[0]", String(data.known_languages));
+          }
+        }
         if (data.registration_number) formData.append("registration_number", data.registration_number);
         if (data.about) formData.append("about", data.about);
         if (data.image) formData.append("image", data.image);
@@ -157,6 +242,46 @@ export const doctorApi = api.injectEndpoints({
         if (data.username) formData.append("username", data.username);
         if (data.password) formData.append("password", data.password);
         if (data.password_confirmation) formData.append("password_confirmation", data.password_confirmation);
+        
+        // Handle arrays
+        if (data.education && data.education.length > 0) {
+          data.education.forEach((edu, index) => {
+            formData.append(`education[${index}][institute_name]`, edu.institute_name);
+            formData.append(`education[${index}][qualification]`, edu.qualification);
+            formData.append(`education[${index}][year]`, edu.year);
+          });
+        }
+        
+        if (data.experience && data.experience.length > 0) {
+          data.experience.forEach((exp, index) => {
+            formData.append(`experience[${index}][hospital_name]`, exp.hospital_name);
+            formData.append(`experience[${index}][no_of_years]`, exp.no_of_years);
+            formData.append(`experience[${index}][year]`, exp.year);
+          });
+        }
+        
+        if (data.social_media && data.social_media.length > 0) {
+          data.social_media.forEach((sm, index) => {
+            formData.append(`social_media[${index}][title]`, sm.title);
+            formData.append(`social_media[${index}][link]`, sm.link);
+          });
+        }
+        
+        if (data.membership && data.membership.length > 0) {
+          data.membership.forEach((mem, index) => {
+            formData.append(`membership[${index}][title]`, mem.title);
+            formData.append(`membership[${index}][description]`, mem.description);
+            formData.append(`membership[${index}][year]`, mem.year);
+          });
+        }
+        
+        if (data.awards && data.awards.length > 0) {
+          data.awards.forEach((award, index) => {
+            formData.append(`awards[${index}][title]`, award.title);
+            formData.append(`awards[${index}][description]`, award.description);
+            formData.append(`awards[${index}][year]`, award.year);
+          });
+        }
 
         return {
           url: `/doctors/${id}`,

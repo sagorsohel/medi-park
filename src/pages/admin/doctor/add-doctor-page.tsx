@@ -7,8 +7,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ChevronLeft, Plus, Trash2, Loader2 } from "lucide-react";
-import { useGetDoctorByIdQuery, useCreateDoctorMutation, useUpdateDoctorMutation } from "@/services/doctorApi";
+import { ChevronLeft, Plus, Trash2, Loader2, ChevronRight } from "lucide-react";
+import { useGetDoctorByIdQuery, useCreateDoctorMutation, useUpdateDoctorMutation, type Doctor } from "@/services/doctorApi";
 import toast from "react-hot-toast";
 
 interface EducationEntry {
@@ -67,7 +67,6 @@ export default function AddDoctorPage() {
         mobile_number: "",
         gender: "",
         date_of_birth: "",
-        known_languages: "",
         registration_number: "",
         about: "",
         present_address: "",
@@ -80,6 +79,13 @@ export default function AddDoctorPage() {
 
     const [imageFile, setImageFile] = useState<File | null>(null);
     const [imagePreview, setImagePreview] = useState<string | null>(null);
+    
+    // Known Languages as array
+    const [knownLanguages, setKnownLanguages] = useState<string[]>([]);
+    const [languageSelectKey, setLanguageSelectKey] = useState(0);
+    
+    // Tab state
+    const [activeTab, setActiveTab] = useState("basic");
 
     // Educational Details
     const [educationEntries, setEducationEntries] = useState<EducationEntry[]>([
@@ -120,7 +126,6 @@ export default function AddDoctorPage() {
                 mobile_number: doctor.mobile_number || "",
                 gender: doctor.gender || "",
                 date_of_birth: doctor.date_of_birth || "",
-                known_languages: doctor.known_languages || "",
                 registration_number: doctor.registration_number || "",
                 about: doctor.about || "",
                 present_address: doctor.present_address || "",
@@ -130,6 +135,71 @@ export default function AddDoctorPage() {
                 password: "",
                 password_confirmation: "",
             });
+            
+            // Handle known_languages as array
+            if (doctor.known_languages) {
+                if (Array.isArray(doctor.known_languages)) {
+                    setKnownLanguages(doctor.known_languages);
+                } else if (typeof doctor.known_languages === 'string') {
+                    // If it comes as comma-separated string, split it
+                    setKnownLanguages(doctor.known_languages.split(',').map(l => l.trim()).filter(l => l));
+                }
+            }
+            
+            // Handle arrays for education, experience, etc.
+            type DoctorWithArrays = Doctor & {
+                education?: Array<{ institute_name?: string; qualification?: string; year?: string }>;
+                experience?: Array<{ hospital_name?: string; no_of_years?: string; year?: string }>;
+                social_media?: Array<{ title?: string; link?: string }>;
+                membership?: Array<{ title?: string; description?: string; year?: string }>;
+                awards?: Array<{ title?: string; description?: string; year?: string }>;
+            };
+            
+            const doctorWithArrays = doctor as DoctorWithArrays;
+            
+            if (doctorWithArrays.education && Array.isArray(doctorWithArrays.education)) {
+                setEducationEntries(doctorWithArrays.education.map((edu: { institute_name?: string; qualification?: string; year?: string }, idx: number) => ({
+                    id: (idx + 1).toString(),
+                    instituteName: edu.institute_name || "",
+                    qualification: edu.qualification || "",
+                    year: edu.year || "",
+                })));
+            }
+            
+            if (doctorWithArrays.experience && Array.isArray(doctorWithArrays.experience)) {
+                setExperienceEntries(doctorWithArrays.experience.map((exp: { hospital_name?: string; no_of_years?: string; year?: string }, idx: number) => ({
+                    id: (idx + 1).toString(),
+                    hospitalName: exp.hospital_name || "",
+                    noOfYears: exp.no_of_years || "",
+                    year: exp.year || "",
+                })));
+            }
+            
+            if (doctorWithArrays.social_media && Array.isArray(doctorWithArrays.social_media)) {
+                setSocialMediaEntries(doctorWithArrays.social_media.map((sm: { title?: string; link?: string }, idx: number) => ({
+                    id: (idx + 1).toString(),
+                    title: sm.title || "",
+                    link: sm.link || "",
+                })));
+            }
+            
+            if (doctorWithArrays.membership && Array.isArray(doctorWithArrays.membership)) {
+                setMembershipEntries(doctorWithArrays.membership.map((mem: { title?: string; description?: string; year?: string }, idx: number) => ({
+                    id: (idx + 1).toString(),
+                    title: mem.title || "",
+                    description: mem.description || "",
+                    year: mem.year || "",
+                })));
+            }
+            
+            if (doctorWithArrays.awards && Array.isArray(doctorWithArrays.awards)) {
+                setAwardEntries(doctorWithArrays.awards.map((award: { title?: string; description?: string; year?: string }, idx: number) => ({
+                    id: (idx + 1).toString(),
+                    title: award.title || "",
+                    description: award.description || "",
+                    year: award.year || "",
+                })));
+            }
             if (doctor.image) {
                 setImagePreview(doctor.image);
             }
@@ -216,7 +286,7 @@ export default function AddDoctorPage() {
                 mobile_number: string;
                 gender?: string;
                 date_of_birth?: string;
-                known_languages?: string;
+                known_languages?: string[];
                 registration_number?: string;
                 about?: string;
                 image?: File | string;
@@ -226,6 +296,11 @@ export default function AddDoctorPage() {
                 username?: string;
                 password?: string;
                 password_confirmation?: string;
+                education?: Array<{ institute_name: string; qualification: string; year: string }>;
+                experience?: Array<{ hospital_name: string; no_of_years: string; year: string }>;
+                social_media?: Array<{ title: string; link: string }>;
+                membership?: Array<{ title: string; description: string; year: string }>;
+                awards?: Array<{ title: string; description: string; year: string }>;
             } = {
                 doctor_name: formData.doctor_name,
                 department: formData.department,
@@ -236,7 +311,10 @@ export default function AddDoctorPage() {
 
             if (formData.gender) payload.gender = formData.gender;
             if (formData.date_of_birth) payload.date_of_birth = formData.date_of_birth;
-            if (formData.known_languages) payload.known_languages = formData.known_languages;
+            // Always send known_languages as array
+            if (Array.isArray(knownLanguages) && knownLanguages.length > 0) {
+                payload.known_languages = knownLanguages;
+            }
             if (formData.registration_number) payload.registration_number = formData.registration_number;
             if (formData.about) payload.about = formData.about;
             if (imageFile) payload.image = imageFile;
@@ -246,6 +324,51 @@ export default function AddDoctorPage() {
             if (formData.username) payload.username = formData.username;
             if (formData.password) payload.password = formData.password;
             if (formData.password_confirmation) payload.password_confirmation = formData.password_confirmation;
+            
+            // Add arrays for education, experience, social_media, membership, awards
+            const validEducation = educationEntries.filter(edu => edu.instituteName || edu.qualification || edu.year);
+            if (validEducation.length > 0) {
+                payload.education = validEducation.map(edu => ({
+                    institute_name: edu.instituteName,
+                    qualification: edu.qualification,
+                    year: edu.year,
+                }));
+            }
+            
+            const validExperience = experienceEntries.filter(exp => exp.hospitalName || exp.noOfYears || exp.year);
+            if (validExperience.length > 0) {
+                payload.experience = validExperience.map(exp => ({
+                    hospital_name: exp.hospitalName,
+                    no_of_years: exp.noOfYears,
+                    year: exp.year,
+                }));
+            }
+            
+            const validSocialMedia = socialMediaEntries.filter(sm => sm.title || sm.link);
+            if (validSocialMedia.length > 0) {
+                payload.social_media = validSocialMedia.map(sm => ({
+                    title: sm.title,
+                    link: sm.link,
+                }));
+            }
+            
+            const validMembership = membershipEntries.filter(mem => mem.title || mem.description || mem.year);
+            if (validMembership.length > 0) {
+                payload.membership = validMembership.map(mem => ({
+                    title: mem.title,
+                    description: mem.description,
+                    year: mem.year,
+                }));
+            }
+            
+            const validAwards = awardEntries.filter(award => award.title || award.description || award.year);
+            if (validAwards.length > 0) {
+                payload.awards = validAwards.map(award => ({
+                    title: award.title,
+                    description: award.description,
+                    year: award.year,
+                }));
+            }
 
             if (isEditMode && doctorId) {
                 await updateDoctor({ id: doctorId, data: payload }).unwrap();
@@ -291,23 +414,35 @@ export default function AddDoctorPage() {
             </div>
 
             <div className="bg-white rounded-lg p-6">
-                <Tabs defaultValue="basic" className="w-full">
-                    <TabsList className="mb-6 bg-transparent gap-4 p-0 h-auto">
-                        <TabsTrigger
-                            value="basic"
-                            className="data-[state=active]:bg-primary data-[state=active]:text-white data-[state=inactive]:bg-white data-[state=inactive]:text-primary border border-primary rounded-md px-6 py-2.5 font-medium"
-                        >
-                            <Plus className="h-4 w-4 mr-2" />
-                            Basic Information
-                        </TabsTrigger>
-                        <TabsTrigger
-                            value="extra"
-                            className="data-[state=active]:bg-primary data-[state=active]:text-white data-[state=inactive]:bg-white data-[state=inactive]:text-primary border border-primary rounded-md px-6 py-2.5 font-medium"
-                        >
-                            <Plus className="h-4 w-4 mr-2" />
-                            Extra Information
-                        </TabsTrigger>
-                    </TabsList>
+                <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+                    <div className="flex items-center justify-between mb-6">
+                        <TabsList className="bg-transparent gap-4 p-0 h-auto">
+                            <TabsTrigger
+                                value="basic"
+                                className="data-[state=active]:bg-primary data-[state=active]:text-white data-[state=inactive]:bg-white data-[state=inactive]:text-primary border border-primary rounded-md px-6 py-2.5 font-medium"
+                            >
+                                <Plus className="h-4 w-4 mr-2" />
+                                Basic Information
+                            </TabsTrigger>
+                            <TabsTrigger
+                                value="extra"
+                                className="data-[state=active]:bg-primary data-[state=active]:text-white data-[state=inactive]:bg-white data-[state=inactive]:text-primary border border-primary rounded-md px-6 py-2.5 font-medium"
+                            >
+                                <Plus className="h-4 w-4 mr-2" />
+                                Extra Information
+                            </TabsTrigger>
+                        </TabsList>
+                        {!isViewMode && (
+                            <Button
+                                className="min-w-[120px]"
+                                onClick={handleSubmit}
+                                disabled={isCreating || isUpdating}
+                            >
+                                {(isCreating || isUpdating) && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+                                {isEditMode ? "Update" : "Save"}
+                            </Button>
+                        )}
+                    </div>
 
                     <TabsContent value="basic">
                         <div className="space-y-6">
@@ -453,20 +588,59 @@ export default function AddDoctorPage() {
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div className="space-y-2">
                                     <Label htmlFor="languages">Known Languages</Label>
-                                    <Select
-                                        value={formData.known_languages}
-                                        onValueChange={(value) => handleInputChange("known_languages", value)}
-                                        disabled={isViewMode}
-                                    >
-                                        <SelectTrigger id="languages" className="w-full" {...readOnlyProps}>
-                                            <SelectValue placeholder="Select here" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem value="English">English</SelectItem>
-                                            <SelectItem value="Bengali">Bengali</SelectItem>
-                                            <SelectItem value="Hindi">Hindi</SelectItem>
-                                        </SelectContent>
-                                    </Select>
+                                    <div className="space-y-2">
+                                        {!isViewMode && (
+                                            <Select
+                                                key={languageSelectKey}
+                                                value=""
+                                                onValueChange={(value) => {
+                                                    if (value && !knownLanguages.includes(value)) {
+                                                        setKnownLanguages([...knownLanguages, value]);
+                                                        // Force Select to reset by updating key
+                                                        setLanguageSelectKey(prev => prev + 1);
+                                                    }
+                                                }}
+                                                disabled={isViewMode}
+                                            >
+                                                <SelectTrigger id="languages" className="w-full" {...readOnlyProps}>
+                                                    <SelectValue placeholder="Select languages" />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    <SelectItem value="English">English</SelectItem>
+                                                    <SelectItem value="Bengali">Bengali</SelectItem>
+                                                    <SelectItem value="Hindi">Hindi</SelectItem>
+                                                    <SelectItem value="Urdu">Urdu</SelectItem>
+                                                    <SelectItem value="Arabic">Arabic</SelectItem>
+                                                </SelectContent>
+                                            </Select>
+                                        )}
+                                        {knownLanguages.length > 0 && (
+                                            <div className="flex flex-wrap gap-2 mt-2">
+                                                {knownLanguages.map((lang, index) => (
+                                                    <div
+                                                        key={index}
+                                                        className="inline-flex items-center gap-2 px-3 py-1 bg-primary/10 text-primary rounded-full text-sm"
+                                                    >
+                                                        <span>{lang}</span>
+                                                        {!isViewMode && (
+                                                            <button
+                                                                type="button"
+                                                                onClick={() => {
+                                                                    setKnownLanguages(knownLanguages.filter((_, i) => i !== index));
+                                                                }}
+                                                                className="hover:text-destructive transition-colors"
+                                                            >
+                                                                <Trash2 className="h-3 w-3" />
+                                                            </button>
+                                                        )}
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        )}
+                                        {isViewMode && knownLanguages.length === 0 && (
+                                            <p className="text-sm text-gray-500">No languages selected</p>
+                                        )}
+                                    </div>
                                 </div>
                                 <div className="space-y-2">
                                     <Label htmlFor="image">Image</Label>
@@ -597,6 +771,20 @@ export default function AddDoctorPage() {
                                             />
                                         </div>
                                     </div>
+                                </div>
+                            )}
+                            
+                            {/* Next Button */}
+                            {!isViewMode && (
+                                <div className="flex justify-end mt-8">
+                                    <Button
+                                        type="button"
+                                        onClick={() => setActiveTab("extra")}
+                                        className="flex items-center gap-2"
+                                    >
+                                        Next
+                                        <ChevronRight className="h-4 w-4" />
+                                    </Button>
                                 </div>
                             )}
                         </div>
@@ -954,20 +1142,6 @@ export default function AddDoctorPage() {
                         </div>
                     </TabsContent>
                 </Tabs>
-
-                {/* Save Button */}
-                {!isViewMode && (
-                    <div className="mt-8 flex justify-center">
-                        <Button
-                            className="w-full max-w-md"
-                            onClick={handleSubmit}
-                            disabled={isCreating || isUpdating}
-                        >
-                            {(isCreating || isUpdating) && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
-                            {isEditMode ? "Update" : "Save"}
-                        </Button>
-                    </div>
-                )}
             </div>
         </div>
     );
