@@ -9,13 +9,17 @@ interface DoctorCardProps {
 
 export function DoctorCard({ image, name, specialization, description }: DoctorCardProps) {
   return (
-    <div className="bg-primary rounded-[22px] overflow-hidden shadow-md min-w-[320px] lg:min-w-0">
-      {/* Image Section */}
-      <div className="relative  ">
+    <div className="relative flex min-w-[320px] lg:min-w-0 h-full overflow-visible flex-col rounded-xl bg-white bg-clip-border text-gray-700 shadow-md">
+      {/* Header Section with Gradient Background */}
+      <div className="relative mx-4 -mt-6 h-32 rounded-xl bg-linear-to-r from-primary/50 to-primary bg-clip-border text-white shadow-lg shadow-blue-500/40">
+      </div>
+      
+      {/* Image Overlay - positioned to overlap header and card body */}
+      <div className="relative -mt-20 mx-auto z-10">
         <img
           src={image}
           alt={name}
-          className="w-[207px] h-[211px] object-cover mx-auto mt-3 rounded-[22px]"
+          className="w-36 h-36 object-cover rounded-full border-4 border-white shadow-lg"
           onError={(e) => {
             const target = e.target as HTMLImageElement;
             target.src = "/vite.svg";
@@ -23,17 +27,24 @@ export function DoctorCard({ image, name, specialization, description }: DoctorC
         />
       </div>
 
-      {/* Text Section - Dark Blue Background */}
-      <div className="bg-primary text-white p-6 flex flex-col items-center">
-        <h3 className="text-sm font-semibold mb-2 text-center leading-tight">
+      {/* Content Section - flex-1 to take available space */}
+      <div className="p-6 flex-1 flex flex-col">
+        <h5 className="mb-2 block font-sans text-xl font-semibold leading-snug tracking-normal text-blue-gray-900 antialiased text-center">
           {name}
-        </h3>
-        <p className="text-xs text-blue-200 text-center mb-2 font-medium uppercase">
+        </h5>
+        <p className="block font-sans text-sm font-semibold text-primary mb-2 uppercase text-center">
           {specialization}
         </p>
-        <p className="text-xs text-blue-200 text-center leading-relaxed">
+        <p className="block font-sans text-base font-light leading-relaxed text-inherit antialiased text-center flex-1">
           {description}
         </p>
+      </div>
+
+      {/* Button Section - fixed at bottom */}
+      <div className="p-6 pt-0 mt-auto">
+        <button data-ripple-light="true" type="button" className="select-none rounded-lg bg-primary py-3 px-6 text-center align-middle font-sans text-xs font-bold uppercase text-white shadow-md shadow-primary/20 transition-all hover:shadow-lg hover:shadow-primary/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none w-full">
+          Read More
+        </button>
       </div>
     </div>
   );
