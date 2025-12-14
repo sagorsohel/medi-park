@@ -41,6 +41,11 @@ export default function ForgotPasswordPage() {
   const isAdminForgot = location.pathname.includes('/admin/forgot-password');
   const loginPath = isAdminForgot ? '/admin/login' : '/user/login';
 
+  // Scroll to top on mount
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const [sendUserOtp, { isLoading: isSendingUserOtp }] = useSendUserOtpMutation();
   const [resetUserPassword, { isLoading: isResettingUser }] = useResetUserPasswordMutation();
   const [sendAdminOtp, { isLoading: isSendingAdminOtp }] = useSendAdminOtpMutation();

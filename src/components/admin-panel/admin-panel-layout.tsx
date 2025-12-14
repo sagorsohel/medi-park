@@ -1,14 +1,22 @@
 "use client";
 
-import { Outlet } from "react-router";
+import { Outlet, useLocation } from "react-router";
 import { Sidebar } from "@/components/admin-panel/sidebar";
 import { useSidebar } from "@/hooks/use-sidebar";
 import { useStore } from "@/hooks/use-store";
 import { cn } from "@/lib/utils";
 import { Navbar } from "./navbar";
+import { useEffect } from "react";
 
 export default function AdminPanelLayout() {
+  const location = useLocation();
   const sidebar = useStore(useSidebar, (x) => x);
+  
+  // Scroll to top on route change
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
+
   if (!sidebar) return null;
   const { getOpenState, settings } = sidebar;
   return (

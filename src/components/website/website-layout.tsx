@@ -11,6 +11,11 @@ import { aboutPageApi } from "@/services/aboutPageApi";
 export function WebsiteLayout() {
   const location = useLocation();
 
+  // Scroll to top on route change
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
+
   // Prefetch data when on specific pages for instant display
   useEffect(() => {
     if (location.pathname === "/") {

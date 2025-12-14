@@ -1,6 +1,6 @@
 "use client";
 
-import { type FormEvent, useState } from "react";
+import { type FormEvent, useState, useEffect } from "react";
 import { useNavigate, useLocation, Link } from "react-router";
 import { useRegisterUserMutation } from "@/services/authApi";
 import { setCredentials, getUserRoleSlug } from "@/store/slices/authSlice";
@@ -22,6 +22,11 @@ export default function RegisterPage() {
   const location = useLocation();
   const dispatch = useAppDispatch();
   const [register, { isLoading }] = useRegisterUserMutation();
+
+  // Scroll to top on mount
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");

@@ -1,6 +1,6 @@
 "use client";
 
-import { type FormEvent, useState } from "react";
+import { type FormEvent, useState, useEffect } from "react";
 import { useNavigate, useLocation, Link } from "react-router";
 import { useAdminLoginMutation, useUserLoginMutation } from "@/services/authApi";
 import { setCredentials, getUserRoleSlug } from "@/store/slices/authSlice";
@@ -13,6 +13,11 @@ export default function LoginPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useAppDispatch();
+
+  // Scroll to top on mount
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   // Determine redirect path based on URL
   const isAdminLogin = location.pathname.includes('/admin/login');
