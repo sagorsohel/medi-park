@@ -13,6 +13,7 @@ import {
 
 export interface Investor {
     id: string;
+    investorId?: number; // Database ID for navigation
     image?: string;
     name: string;
     email: string;
@@ -102,12 +103,14 @@ export function InvestorTable({
                                 <Avatar className="w-10 h-10">
                                     <AvatarImage src={investor.image} alt={investor.name} />
                                     <AvatarFallback className="bg-secondary text-primary">
-                                        {investor.name
-                                            .split(" ")
-                                            .map((n) => n[0])
-                                            .join("")
-                                            .toUpperCase()
-                                            .slice(0, 2)}
+                                        {investor.name && investor.name.trim()
+                                            ? investor.name
+                                                .split(" ")
+                                                .map((n) => n[0])
+                                                .join("")
+                                                .toUpperCase()
+                                                .slice(0, 2)
+                                            : "IN"}
                                     </AvatarFallback>
                                 </Avatar>
                             </td>

@@ -29,11 +29,12 @@ export default function InvestorPage() {
     const mappedInvestors: TableInvestor[] = useMemo(() => {
         if (!data?.data) return [];
         return data.data.map((investor: Investor) => ({
-            id: investor.investor_identity_number,
+            id: investor.investor_identity_number || "",
+            investorId: investor.id, // Store the actual database ID
             image: investor.image || undefined,
-            name: investor.investor_name,
-            email: investor.email_address,
-            mobile: investor.mobile_number,
+            name: investor.investor_name || "N/A",
+            email: investor.email_address || "N/A",
+            mobile: investor.mobile_number || "N/A",
             status: true, // Default to true, can be updated if API provides status
         }));
     }, [data]);
@@ -44,12 +45,13 @@ export default function InvestorPage() {
 
         // Apply search
         if (searchQuery) {
+            const query = searchQuery.toLowerCase();
             result = result.filter(
                 (investor) =>
-                    investor.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                    investor.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                    investor.mobile.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                    investor.id.toLowerCase().includes(searchQuery.toLowerCase())
+                    (investor.name || "").toLowerCase().includes(query) ||
+                    (investor.email || "").toLowerCase().includes(query) ||
+                    (investor.mobile || "").toLowerCase().includes(query) ||
+                    (investor.id || "").toLowerCase().includes(query)
             );
         }
 
@@ -95,18 +97,35 @@ export default function InvestorPage() {
         setActionInvestorId(id);
         setActionType(action);
         
+        // Find investor in mapped investors (works with filtered data too)
+        const investor = mappedInvestors.find((i) => i.id === id);
+        
         if (action === "delete") {
             setInvestorToDelete(id);
             setDeleteConfirmOpen(true);
         } else if (action === "edit") {
-            const investor = data?.data?.find((i: Investor) => i.investor_identity_number === id);
-            if (investor) {
-                navigate(`/admin/investor/edit/${investor.id}`);
+            if (investor?.investorId) {
+                navigate(`/admin/investor/edit/${investor.investorId}`);
+            } else {
+                // Fallback: try to find in raw data
+                const rawInvestor = data?.data?.find((i: Investor) => i.investor_identity_number === id);
+                if (rawInvestor) {
+                    navigate(`/admin/investor/edit/${rawInvestor.id}`);
+                } else {
+                    toast.error("Investor not found");
+                }
             }
         } else if (action === "view") {
-            const investor = data?.data?.find((i: Investor) => i.investor_identity_number === id);
-            if (investor) {
-                navigate(`/admin/investor/view/${investor.id}`);
+            if (investor?.investorId) {
+                navigate(`/admin/investor/view/${investor.investorId}`);
+            } else {
+                // Fallback: try to find in raw data
+                const rawInvestor = data?.data?.find((i: Investor) => i.investor_identity_number === id);
+                if (rawInvestor) {
+                    navigate(`/admin/investor/view/${rawInvestor.id}`);
+                } else {
+                    toast.error("Investor not found");
+                }
             }
         }
     };
@@ -114,8 +133,24 @@ export default function InvestorPage() {
     const handleDelete = async () => {
         if (!investorToDelete) return;
         
-        const investor = data?.data?.find((i: Investor) => i.investor_identity_number === investorToDelete);
-        if (!investor) return;
+        // Try to find in mapped investors first
+        const mappedInvestor = mappedInvestors.find((i) => i.id === investorToDelete);
+        let investor: Investor | undefined;
+        
+        if (mappedInvestor?.investorId) {
+            // Find the raw investor data using the database ID
+            investor = data?.data?.find((i: Investor) => i.id === mappedInvestor.investorId);
+        } else {
+            // Fallback: find by identity number
+            investor = data?.data?.find((i: Investor) => i.investor_identity_number === investorToDelete);
+        }
+        
+        if (!investor) {
+            toast.error("Investor not found");
+            setDeleteConfirmOpen(false);
+            setInvestorToDelete(null);
+            return;
+        }
 
         try {
             await deleteInvestor(investor.id).unwrap();
