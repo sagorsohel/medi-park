@@ -45,7 +45,7 @@ export function getMenuList(_pathname: string): Group[] {
           submenus: []
         },
         {
-          href: "/admin/investors",
+          href: "/admin/investor",
           label: "Investors",
           icon: Building2,
           submenus: []

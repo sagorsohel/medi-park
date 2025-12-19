@@ -22,6 +22,8 @@ import StaffPage from '../pages/admin/staff-page'
 import AddStaffPage from '../pages/admin/add-staff-page'
 import DoctorPage from '../pages/admin/doctor/doctor-page'
 import AddDoctorPage from '../pages/admin/doctor/add-doctor-page'
+import InvestorPage from '../pages/admin/investor/investor-page'
+import AddInvestorPage from '../pages/admin/investor/add-investor-page'
 import UserDashboardPage from '../pages/user/user-dashboard-page'
 import AdminPanelLayout from '@/components/admin-panel/admin-panel-layout'
 import UserPanelLayout from '@/components/user-panel/user-panel-layout'
@@ -90,6 +92,10 @@ const router = createBrowserRouter([
       { path: "doctor/new", element: <AddDoctorPage /> },
       { path: "doctor/edit/:id", element: <AddDoctorPage /> },
       { path: "doctor/view/:id", element: <AddDoctorPage /> },
+      { path: "investor", element: <InvestorPage /> },
+      { path: "investor/new", element: <AddInvestorPage /> },
+      { path: "investor/edit/:id", element: <AddInvestorPage /> },
+      { path: "investor/view/:id", element: <AddInvestorPage /> },
     ],
   },
 
