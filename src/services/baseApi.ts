@@ -51,6 +51,27 @@ const PUBLIC_PATHS = [
   '/user/send-otp',
   '/user/verify-otp',
   '/user/reset-password',
+  // Public homepage endpoints
+  '/homepage-hero-sections/active',
+  '/homepage-about-us-sections/active',
+  '/homepage-facilities/active',
+  '/homepage-cta-sections/active',
+  // Public website endpoints
+  '/doctors',
+  '/blogs',
+  '/news',
+  '/investors',
+  '/gallery',
+  '/pricing',
+  '/contact',
+  '/homepage-hero-sections/active',
+  '/homepage-about-us-sections/active',
+  '/homepage-facilities/active',
+  '/homepage-cta-sections/active',
+  '/homepage-facilities/active',
+  '/homepage-hero-sections/active',
+  '/homepage-cta-sections/active',
+  
 ]
 
 export const api = createApi({
@@ -63,7 +84,10 @@ export const api = createApi({
     const isPublicEndpoint = typeof args === 'object' && args !== null && 
       typeof args.url === 'string' && PUBLIC_PATHS.some((path) => args.url.includes(path))
     
-    if (!token && !isLoginEndpoint && !isPublicEndpoint) {
+    // Also check if endpoint name contains "Public" (for public queries)
+    const isPublicQuery = typeof apiObj.endpoint === 'string' && apiObj.endpoint.toLowerCase().includes('public')
+    
+    if (!token && !isLoginEndpoint && !isPublicEndpoint && !isPublicQuery) {
       // Only redirect if it's an admin route, not public website routes
       const isAdminRoute = typeof window !== 'undefined' && window.location.pathname.startsWith('/admin')
       if (isAdminRoute) {

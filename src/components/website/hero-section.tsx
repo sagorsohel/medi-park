@@ -16,6 +16,7 @@ import "swiper/css/pagination";
 
 export function HeroSection() {
   const { data, isLoading,  } = useGetHeroSectionsPublicQuery();
+  console.log("hero section data", data);
   const [activeIndex, setActiveIndex] = useState(0);
 
   // Animation variants for text content (defined early for use in loading state)
