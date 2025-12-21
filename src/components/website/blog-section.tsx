@@ -1,53 +1,41 @@
 "use client";
 
 import { Link } from "react-router";
-
-const blogPosts = [
-  {
-    id: 1,
-    image: "/about1.png",
-    date: "09 November 2025",
-    title: "Successful Treatment of a Child's Congenital Heart Defect by Dr. Taher",
-    link: "#"
-  },
-  {
-    id: 2,
-    image: "/about-2.png",
-    date: "09 November 2025",
-    title: "Successful Treatment of a Child's Congenital Heart Defect by Dr. Taher",
-    link: "#"
-  },
-  {
-    id: 3,
-    image: "/about3.png",
-    date: "09 November 2025",
-    title: "Successful Treatment of a Child's Congenital Heart Defect by Dr. Taher",
-    link: "#"
-  },
-  {
-    id: 4,
-    image: "/about1.png",
-    date: "09 November 2025",
-    title: "Successful Treatment of a Child's Congenital Heart Defect by Dr. Taher",
-    link: "#"
-  },
-  {
-    id: 5,
-    image: "/about-2.png",
-    date: "09 November 2025",
-    title: "Successful Treatment of a Child's Congenital Heart Defect by Dr. Taher",
-    link: "#"
-  },
-  {
-    id: 6,
-    image: "/about3.png",
-    date: "09 November 2025",
-    title: "Successful Treatment of a Child's Congenital Heart Defect by Dr. Taher",
-    link: "#"
-  }
-];
+import { useMemo } from "react";
+import { useGetBlogsPublicQuery } from "@/services/blogApi";
+import { Loader2 } from "lucide-react";
 
 export function BlogSection() {
+  const { data, isLoading } = useGetBlogsPublicQuery(1);
+
+  // Get first 6 active blog posts
+  const blogPosts = useMemo(() => {
+    if (!data?.data) return [];
+    return data.data.slice(0, 6);
+  }, [data]);
+
+  // Show loading state
+  if (isLoading) {
+    return (
+      <div className="w-full bg-white py-16 md:py-24">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl md:text-5xl font-bold text-primary mb-2">Blog</h2>
+            <div className="w-0.5 h-8 bg-primary mx-auto mt-2" />
+          </div>
+          <div className="flex items-center justify-center py-12">
+            <Loader2 className="h-8 w-8 animate-spin text-primary" />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Only render if we have data
+  if (blogPosts.length === 0) {
+    return null;
+  }
+
   return (
     <div className="w-full bg-white py-16 md:py-24">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -64,7 +52,7 @@ export function BlogSection() {
               {/* Image */}
               <div className="relative h-48 overflow-hidden">
                 <img
-                  src={post.image}
+                  src={post.feature_image}
                   alt={post.title}
                   className="w-full h-full object-cover"
                   onError={(e) => {
@@ -78,7 +66,13 @@ export function BlogSection() {
               <div className="p-6">
                 {/* Date Badge */}
                 <div className="inline-block border-2 border-blue-200 rounded-full px-4 py-1 mb-3">
-                  <span className="text-sm text-primary font-medium">{post.date}</span>
+                  <span className="text-sm text-primary font-medium">
+                    {new Date(post.created_at).toLocaleDateString("en-US", {
+                      day: "numeric",
+                      month: "long",
+                      year: "numeric",
+                    })}
+                  </span>
                 </div>
 
                 {/* Title */}
@@ -88,7 +82,7 @@ export function BlogSection() {
 
                 {/* Read More Link */}
                 <Link
-                  to={post.link}
+                  to={`/blogs/${post.id}`}
                   className="text-blue-600 underline hover:text-blue-800 transition-colors"
                 >
                   Read more

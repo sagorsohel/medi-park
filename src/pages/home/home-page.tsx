@@ -3,7 +3,7 @@ import { AboutSection } from '@/components/website/about-section'
 import { SpecialitiesSection } from '@/components/website/specialities-section'
 import { DoctorsSection } from '@/components/website/doctors-section'
 import { InvestorSection } from '@/components/website/investor-section'
-import { PricingSection } from '@/components/website/pricing-section'
+// import { PricingSection } from '@/components/website/pricing-section'
 import { MediaSection } from '@/components/website/media-section'
 import { CTASection } from '@/components/website/cta-section'
 import { BlogSection } from '@/components/website/blog-section'
@@ -34,7 +34,7 @@ export default function HomePage() {
 
 
       {/* Pricing Section */}
-      <PricingSection />
+      {/* <PricingSection /> */}
 
       {/* Media/News Section */}
       <MediaSection />
