@@ -11,7 +11,8 @@ import {
   Package,
   Stethoscope,
   type LucideIcon,
-  Image
+  Image,
+  CreditCard
 } from "lucide-react";
 
 type Submenu = {
@@ -48,6 +49,12 @@ export function getMenuList(_pathname: string): Group[] {
           href: "/admin/investor",
           label: "Investors",
           icon: Building2,
+          submenus: []
+        },
+        {
+          href: "/admin/installment-rules",
+          label: "Installment Rules",
+          icon: CreditCard,
           submenus: []
         },
         {

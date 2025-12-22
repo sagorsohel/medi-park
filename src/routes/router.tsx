@@ -24,6 +24,8 @@ import DoctorPage from '../pages/admin/doctor/doctor-page'
 import AddDoctorPage from '../pages/admin/doctor/add-doctor-page'
 import InvestorPage from '../pages/admin/investor/investor-page'
 import AddInvestorPage from '../pages/admin/investor/add-investor-page'
+import InstallmentRulesPage from '../pages/admin/installment-rules/installment-rules-page'
+import AddInstallmentRulePage from '../pages/admin/installment-rules/add-installment-rule-page'
 import UserDashboardPage from '../pages/user/user-dashboard-page'
 import AdminPanelLayout from '@/components/admin-panel/admin-panel-layout'
 import UserPanelLayout from '@/components/user-panel/user-panel-layout'
@@ -96,6 +98,10 @@ const router = createBrowserRouter([
       { path: "investor/new", element: <AddInvestorPage /> },
       { path: "investor/edit/:id", element: <AddInvestorPage /> },
       { path: "investor/view/:id", element: <AddInvestorPage /> },
+      { path: "installment-rules", element: <InstallmentRulesPage /> },
+      { path: "installment-rules/new", element: <AddInstallmentRulePage /> },
+      { path: "installment-rules/edit/:id", element: <AddInstallmentRulePage /> },
+      { path: "installment-rules/view/:id", element: <AddInstallmentRulePage /> },
     ],
   },
 
