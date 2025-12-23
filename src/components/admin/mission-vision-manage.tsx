@@ -13,6 +13,42 @@ import {
   useUpdateVisionMutation,
   type UpdateMissionVisionPayload,
 } from "@/services/aboutPageApi";
+import ReactQuill from 'react-quill-new';
+import 'react-quill-new/dist/quill.snow.css';
+
+const quillModules = {
+    toolbar: [
+        [{ header: [1, 2, 3, 4, 5, 6, false] }],
+        [{ font: [] }],
+        [{ size: [] }],
+        ["bold", "italic", "underline", "strike", "blockquote"],
+        [{ list: "ordered" }, { list: "bullet" }, { indent: "-1" }, { indent: "+1" }],
+        ["link", "image", "video"],
+        [{ color: [] }, { background: [] }],
+        [{ align: [] }],
+        ["clean"],
+    ],
+};
+
+const quillFormats = [
+    "header",
+    "font",
+    "size",
+    "bold",
+    "italic",
+    "underline",
+    "strike",
+    "blockquote",
+    "list",
+    "bullet",
+    "indent",
+    "link",
+    "image",
+    "video",
+    "color",
+    "background",
+    "align",
+];
 
 interface EditableMVState {
   title: string;
@@ -102,9 +138,10 @@ function SectionCard({
             </div>
           </div>
           <div className="max-w-4xl mx-auto px-2">
-            <p className="text-base md:text-lg text-gray-700 leading-relaxed text-justify">
-              {editable.paragraph || "Add description here..."}
-            </p>
+            <div 
+              className="text-base md:text-lg text-gray-700 leading-relaxed text-justify prose prose-p:text-gray-700"
+              dangerouslySetInnerHTML={{ __html: editable.paragraph || "Add description here..." }}
+            />
           </div>
         </div>
 
@@ -139,13 +176,24 @@ function SectionCard({
         <Field>
           <FieldLabel>Paragraph</FieldLabel>
           <FieldContent>
-            <textarea
-              value={editable.paragraph}
-              onChange={(e) => onChange("paragraph", e.target.value)}
-              placeholder="Enter description"
-              className="w-full min-h-[120px] border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              disabled={saving}
-            />
+            <div className="bg-white">
+              <style>{`
+                .quill-editor .ql-container {
+                  min-height: 300px;
+                  height: 300px;
+                }
+              `}</style>
+              <div className="quill-editor">
+                <ReactQuill
+                  theme="snow"
+                  value={editable.paragraph}
+                  onChange={(value) => onChange("paragraph", value)}
+                  modules={quillModules}
+                  formats={quillFormats}
+                  placeholder="Enter description"
+                />
+              </div>
+            </div>
           </FieldContent>
         </Field>
 

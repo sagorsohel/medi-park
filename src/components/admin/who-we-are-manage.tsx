@@ -7,6 +7,42 @@ import { Input } from "@/components/ui/input";
 import { Field, FieldContent, FieldLabel } from "@/components/ui/field";
 import { Loader2, RefreshCw } from "lucide-react";
 import { useGetWhoWeAreQuery, useUpdateWhoWeAreMutation, type UpdateWhoWeArePayload } from "@/services/aboutPageApi";
+import ReactQuill from 'react-quill-new';
+import 'react-quill-new/dist/quill.snow.css';
+
+const quillModules = {
+    toolbar: [
+        [{ header: [1, 2, 3, 4, 5, 6, false] }],
+        [{ font: [] }],
+        [{ size: [] }],
+        ["bold", "italic", "underline", "strike", "blockquote"],
+        [{ list: "ordered" }, { list: "bullet" }, { indent: "-1" }, { indent: "+1" }],
+        ["link", "image", "video"],
+        [{ color: [] }, { background: [] }],
+        [{ align: [] }],
+        ["clean"],
+    ],
+};
+
+const quillFormats = [
+    "header",
+    "font",
+    "size",
+    "bold",
+    "italic",
+    "underline",
+    "strike",
+    "blockquote",
+    "list",
+    "bullet",
+    "indent",
+    "link",
+    "image",
+    "video",
+    "color",
+    "background",
+    "align",
+];
 
 interface EditableState {
   title: string;
@@ -153,9 +189,10 @@ export function WhoWeAreManage() {
               </div>
               <div className="text-center">
                 <h1 className="text-3xl md:text-4xl font-bold text-white mb-3">{editable.title || "Who We Are"}</h1>
-                <p className="text-base md:text-lg text-white leading-relaxed max-w-4xl mx-auto">
-                  {editable.paragraph || "Add your paragraph here..."}
-                </p>
+                <div 
+                  className="text-base md:text-lg text-white leading-relaxed max-w-4xl mx-auto prose prose-invert prose-p:text-white"
+                  dangerouslySetInnerHTML={{ __html: editable.paragraph || "Add your paragraph here..." }}
+                />
               </div>
             </div>
           </div>
@@ -192,13 +229,24 @@ export function WhoWeAreManage() {
           <Field>
             <FieldLabel>Paragraph</FieldLabel>
             <FieldContent>
-              <textarea
-                value={editable.paragraph}
-                onChange={(e) => handleChange("paragraph", e.target.value)}
-                placeholder="Enter description"
-                className="w-full min-h-[120px] border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                disabled={saving}
-              />
+              <div className="bg-white">
+                <style>{`
+                  .quill-editor .ql-container {
+                    min-height: 300px;
+                    height: 300px;
+                  }
+                `}</style>
+                <div className="quill-editor">
+                  <ReactQuill
+                    theme="snow"
+                    value={editable.paragraph}
+                    onChange={(value) => handleChange("paragraph", value)}
+                    modules={quillModules}
+                    formats={quillFormats}
+                    placeholder="Enter description"
+                  />
+                </div>
+              </div>
             </FieldContent>
           </Field>
 

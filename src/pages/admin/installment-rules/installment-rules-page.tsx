@@ -35,7 +35,7 @@ export default function InstallmentRulesPage() {
             offer_price: rule.offer_price || "0",
             emi_amount: rule.emi_amount || "0",
             duration_months: rule.duration_months || "0",
-            status: rule.status === "active" || rule.status === "1" || rule.status === 1,
+            status: rule.status === "active" || rule.status === "1",
         }));
     }, [data]);
 
@@ -66,7 +66,6 @@ export default function InstallmentRulesPage() {
     }, [searchQuery, filter, mappedRules]);
 
     const pagination = data?.pagination;
-    const totalPages = pagination?.total_page || 1;
     const showingFrom = pagination ? (pagination.current_page - 1) * pagination.per_page + 1 : 0;
     const showingTo = pagination
         ? Math.min(pagination.current_page * pagination.per_page, pagination.total_count)
