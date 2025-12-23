@@ -15,7 +15,7 @@ export interface Investor {
     id: string;
     investorId?: number; // Database ID for navigation
     image?: string;
-    name: string;
+    applicant_full_name: string;
     email: string;
     mobile: string;
     status: boolean;
@@ -47,6 +47,7 @@ export function InvestorTable({
             checkboxRef.current.indeterminate = someSelected;
         }
     }, [someSelected]);
+    console.log(investors);
 
     return (
         <div className="overflow-x-auto">
@@ -101,10 +102,10 @@ export function InvestorTable({
                             </td>
                             <td className="px-4 py-3 whitespace-nowrap">
                                 <Avatar className="w-10 h-10">
-                                    <AvatarImage src={investor.image} alt={investor.name} />
+                                    <AvatarImage src={investor.image} alt={investor.applicant_full_name} />
                                     <AvatarFallback className="bg-secondary text-primary">
-                                        {investor.name && investor.name.trim()
-                                            ? investor.name
+                                        {investor.applicant_full_name && investor.applicant_full_name.trim()
+                                            ? investor.applicant_full_name
                                                 .split(" ")
                                                 .map((n) => n[0])
                                                 .join("")
@@ -115,7 +116,7 @@ export function InvestorTable({
                                 </Avatar>
                             </td>
                             <td className="px-4 py-3 text-sm text-gray-700 whitespace-nowrap">
-                                {investor.name}
+                                {investor.applicant_full_name}
                             </td>
                             <td className="px-4 py-3 text-sm text-gray-700 whitespace-nowrap">
                                 {investor.email}

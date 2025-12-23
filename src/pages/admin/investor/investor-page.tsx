@@ -19,8 +19,6 @@ export default function InvestorPage() {
     const [filter, setFilter] = useState<string>("all");
     const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
     const [investorToDelete, setInvestorToDelete] = useState<string | null>(null);
-    const [actionInvestorId, setActionInvestorId] = useState<string | null>(null);
-    const [actionType, setActionType] = useState<string | null>(null);
 
     const { data, isLoading, refetch } = useGetInvestorsQuery(currentPage);
     const [deleteInvestor] = useDeleteInvestorMutation();
@@ -29,11 +27,11 @@ export default function InvestorPage() {
     const mappedInvestors: TableInvestor[] = useMemo(() => {
         if (!data?.data) return [];
         return data.data.map((investor: Investor) => ({
-            id: investor.investor_identity_number || "",
+            id: investor.id.toString(), // Use database ID as unique identifier
             investorId: investor.id, // Store the actual database ID
-            image: investor.image || undefined,
-            name: investor.investor_name || "N/A",
-            email: investor.email_address || "N/A",
+            image: investor.image || investor.applicant_image || undefined,
+            applicant_full_name: investor.applicant_full_name || investor.investor_name || "N/A",
+            email: ((investor as Investor & { email?: string }).email || investor.email_address) || "N/A",
             mobile: investor.mobile_number || "N/A",
             status: true, // Default to true, can be updated if API provides status
         }));
@@ -48,7 +46,7 @@ export default function InvestorPage() {
             const query = searchQuery.toLowerCase();
             result = result.filter(
                 (investor) =>
-                    (investor.name || "").toLowerCase().includes(query) ||
+                    (investor.applicant_full_name || "").toLowerCase().includes(query) ||
                     (investor.email || "").toLowerCase().includes(query) ||
                     (investor.mobile || "").toLowerCase().includes(query) ||
                     (investor.id || "").toLowerCase().includes(query)
@@ -66,7 +64,7 @@ export default function InvestorPage() {
     }, [searchQuery, filter, mappedInvestors]);
 
     const pagination = data?.pagination;
-    const totalPages = pagination?.total_page || 1;
+   
     const showingFrom = pagination ? (pagination.current_page - 1) * pagination.per_page + 1 : 0;
     const showingTo = pagination
         ? Math.min(pagination.current_page * pagination.per_page, pagination.total_count)
@@ -94,9 +92,6 @@ export default function InvestorPage() {
     };
 
     const handleAction = (id: string, action: string) => {
-        setActionInvestorId(id);
-        setActionType(action);
-        
         // Find investor in mapped investors (works with filtered data too)
         const investor = mappedInvestors.find((i) => i.id === id);
         
@@ -106,27 +101,27 @@ export default function InvestorPage() {
         } else if (action === "edit") {
             if (investor?.investorId) {
                 navigate(`/admin/investor/edit/${investor.investorId}`);
+        } else {
+            // Fallback: try to find in raw data by ID
+            const rawInvestor = data?.data?.find((i: Investor) => i.id.toString() === id);
+            if (rawInvestor) {
+                navigate(`/admin/investor/edit/${rawInvestor.id}`);
             } else {
-                // Fallback: try to find in raw data
-                const rawInvestor = data?.data?.find((i: Investor) => i.investor_identity_number === id);
-                if (rawInvestor) {
-                    navigate(`/admin/investor/edit/${rawInvestor.id}`);
-                } else {
-                    toast.error("Investor not found");
-                }
+                toast.error("Investor not found");
             }
-        } else if (action === "view") {
-            if (investor?.investorId) {
-                navigate(`/admin/investor/view/${investor.investorId}`);
+        }
+    } else if (action === "view") {
+        if (investor?.investorId) {
+            navigate(`/admin/investor/view/${investor.investorId}`);
+        } else {
+            // Fallback: try to find in raw data by ID
+            const rawInvestor = data?.data?.find((i: Investor) => i.id.toString() === id);
+            if (rawInvestor) {
+                navigate(`/admin/investor/view/${rawInvestor.id}`);
             } else {
-                // Fallback: try to find in raw data
-                const rawInvestor = data?.data?.find((i: Investor) => i.investor_identity_number === id);
-                if (rawInvestor) {
-                    navigate(`/admin/investor/view/${rawInvestor.id}`);
-                } else {
-                    toast.error("Investor not found");
-                }
+                toast.error("Investor not found");
             }
+        }
         }
     };
 
@@ -141,8 +136,8 @@ export default function InvestorPage() {
             // Find the raw investor data using the database ID
             investor = data?.data?.find((i: Investor) => i.id === mappedInvestor.investorId);
         } else {
-            // Fallback: find by identity number
-            investor = data?.data?.find((i: Investor) => i.investor_identity_number === investorToDelete);
+            // Fallback: find by ID string
+            investor = data?.data?.find((i: Investor) => i.id.toString() === investorToDelete);
         }
         
         if (!investor) {
