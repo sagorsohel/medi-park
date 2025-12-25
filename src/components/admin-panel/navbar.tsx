@@ -9,7 +9,7 @@ interface NavbarProps {
 
 export function Navbar({ title }: NavbarProps) {
   return (
-    <header className="sticky top-0 flex items-center z-10 w-full bg-sidebar/95 h-16 shadow backdrop-blur supports-backdrop-filter:bg-sidebar/95 dark:shadow-secondary">
+    <header className="sticky top-0 flex items-center z-10 w-full bg-sidebar/95 h-16 shadow backdrop-blur supports-backdrop-filter:bg-sidebar/95">
       <div className="mx-4 sm:mx-8 flex  items-center justify-between w-full">
         {/* Left Side - Shortcut Button */}
         <div className="flex items-center gap-4">

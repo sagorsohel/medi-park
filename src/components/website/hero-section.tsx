@@ -149,9 +149,9 @@ export function HeroSection() {
           delay: 5000,
           disableOnInteraction: false,
         }}
-        pagination={{
-          clickable: true,
-        }}
+        // pagination={{
+        //   clickable: false,
+        // }}
         loop={activeSlides.length > 1}
         speed={1000}
         className="h-full w-full"
@@ -209,7 +209,7 @@ export function HeroSection() {
         </div>
 
       {/* Custom Pagination Styling */}
-      <style dangerouslySetInnerHTML={{
+      {/* <style dangerouslySetInnerHTML={{
         __html: `
           .swiper-pagination {
             bottom: 96px !important;
@@ -228,7 +228,7 @@ export function HeroSection() {
             background: white;
           }
         `
-      }} />
+      }} /> */}
     </div>
   );
 }

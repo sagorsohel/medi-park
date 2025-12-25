@@ -1,11 +1,11 @@
 import {
   LayoutGrid,
-  Settings,
+  // Settings,
   FileText,
   Building2,
-  Briefcase,
-  UserCog,
-  Wrench,
+  // Briefcase,
+  // UserCog,
+  // Wrench,
   Home,
   Phone,
   Package,
@@ -57,48 +57,48 @@ export function getMenuList(_pathname: string): Group[] {
           icon: CreditCard,
           submenus: []
         },
-        {
-          href: "/admin/hr",
-          label: "HR",
-          icon: Briefcase,
-          submenus: []
-        },
-        {
-          href: "/admin/staff",
-          label: "Staff",
-          icon: UserCog,
-          submenus: []
-        },
+        // {
+        //   href: "/admin/hr",
+        //   label: "HR",
+        //   icon: Briefcase,
+        //   submenus: []
+        // },
+        // {
+        //   href: "/admin/staff",
+        //   label: "Staff",
+        //   icon: UserCog,
+        //   submenus: []
+        // },
         {
           href: "/admin/doctor",
           label: "Doctor",
           icon: Stethoscope,
           submenus: []
         },
-        {
-          href: "/admin/equipment",
-          label: "Equipment",
-          icon: Wrench,
-          submenus: []
-        },
-        {
-          href: "/admin/settings",
-          label: "Settings",
-          icon: Settings,
-          submenus: []
-        },
-        {
-          href: "/terms-conditions",
-          label: "Terms & Conditions",
-          icon: FileText,
-          submenus: []
-        },
-        {
-          href: "/privacy-policy",
-          label: "Privacy Policy",
-          icon: FileText,
-          submenus: []
-        }
+        // {
+        //   href: "/admin/equipment",
+        //   label: "Equipment",
+        //   icon: Wrench,
+        //   submenus: []
+        // },
+        // {
+        //   href: "/admin/settings",
+        //   label: "Settings",
+        //   icon: Settings,
+        //   submenus: []
+        // },
+        // {
+        //   href: "/terms-conditions",
+        //   label: "Terms & Conditions",
+        //   icon: FileText,
+        //   submenus: []
+        // },
+        // {
+        //   href: "/privacy-policy",
+        //   label: "Privacy Policy",
+        //   icon: FileText,
+        //   submenus: []
+        // }
       ]
     },
     {
@@ -140,18 +140,18 @@ export function getMenuList(_pathname: string): Group[] {
           icon: Package,
           submenus: []
         },
-        {
-          href: "/admin/website/inventory-2",
-          label: "Inventory",
-          icon: Package,
-          submenus: []
-        },
-        {
-          href: "/admin/website/inventory-3",
-          label: "Inventory",
-          icon: Package,
-          submenus: []
-        }
+        // {
+        //   href: "/admin/website/inventory-2",
+        //   label: "Inventory",
+        //   icon: Package,
+        //   submenus: []
+        // },
+        // {
+        //   href: "/admin/website/inventory-3",
+        //   label: "Inventory",
+        //   icon: Package,
+        //   submenus: []
+        // }
       ]
     }
   ];
