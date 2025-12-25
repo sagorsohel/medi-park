@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { PageHeroSection } from '@/components/website/page-hero-section'
+import { NewsPageHero } from '@/components/website/page-hero-section'
 import { BreadcrumbSection } from '@/components/website/breadcrumb-section'
 import { NewsPublicCard } from '@/components/website/news-public-card'
 import { useGetNewsPublicQuery } from "@/services/newsApi";
@@ -44,7 +44,7 @@ export default function NewsPage() {
   return (
     <div className="w-full">
       {/* Hero Section */}
-      <PageHeroSection image="/hero1.png" heading="News & Media" alt="News & Media Hero" />
+      <NewsPageHero />
 
       {/* Breadcrumb Section */}
       <BreadcrumbSection currentPage="News & Media" />

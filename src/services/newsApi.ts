@@ -54,6 +54,27 @@ export interface UpdateNewsPayload {
   author_designation?: string;
 }
 
+export interface NewsPageBanner {
+  id: number;
+  background_image: string;
+  opacity: string;
+  status: "active" | "inactive";
+  created_at: string;
+  updated_at: string;
+}
+
+export interface NewsPageBannerResponse {
+  success: boolean;
+  message: string;
+  data: NewsPageBanner;
+}
+
+export interface UpdateNewsPageBannerPayload {
+  background_image?: File | string;
+  opacity?: string;
+  status?: "active" | "inactive";
+}
+
 export const newsApi = api.injectEndpoints({
   endpoints: (builder) => ({
     // Get all news with pagination
@@ -160,6 +181,40 @@ export const newsApi = api.injectEndpoints({
       }),
       invalidatesTags: ["News"],
     }),
+
+    // Get news page banner
+    getNewsPageBanner: builder.query<NewsPageBannerResponse, void>({
+      query: () => ({
+        url: "/news-page-banner-sections",
+        method: "GET",
+      }),
+      providesTags: ["NewsPageBanner"],
+    }),
+
+    // Update news page banner
+    updateNewsPageBanner: builder.mutation<
+      NewsPageBannerResponse,
+      UpdateNewsPageBannerPayload
+    >({
+      query: (data) => {
+        const formData = new FormData();
+        if (data.background_image !== undefined) {
+          formData.append("background_image", data.background_image);
+        }
+        if (data.opacity !== undefined) {
+          formData.append("opacity", data.opacity);
+        }
+        if (data.status !== undefined) {
+          formData.append("status", data.status);
+        }
+        return {
+          url: "/news-page-banner-sections",
+          method: "POST",
+          body: formData,
+        };
+      },
+      invalidatesTags: ["NewsPageBanner"],
+    }),
   }),
 });
 
@@ -170,5 +225,7 @@ export const {
   useCreateNewsMutation,
   useUpdateNewsMutation,
   useDeleteNewsMutation,
+  useGetNewsPageBannerQuery,
+  useUpdateNewsPageBannerMutation,
 } = newsApi;
 

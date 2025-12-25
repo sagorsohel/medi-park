@@ -34,7 +34,8 @@ import UserPanelLayout from '@/components/user-panel/user-panel-layout'
 import { WebsiteLayout } from '@/components/website/website-layout'
 import AboutPageManage from '@/pages/admin/about-page-manage/about-page-manage'
 
-import NewsPageManage from '@/pages/admin/news/news'
+import NewsPageManage from '@/pages/admin/news/news-page'
+import AddNewsPage from '@/pages/admin/news/add-news-page'
 import GelleryPageManage from '@/pages/admin/gellery/gellery'
 import BlogsPageManage from '@/pages/admin/blogs/blogs'
 import NewsPage from '@/pages/news/news-page'
@@ -88,6 +89,9 @@ const router = createBrowserRouter([
       { path: "website/about", element: <AboutPageManage /> },
       { path: "website/gellery", element: <GelleryPageManage /> },
       { path: "website/news", element: <NewsPageManage /> },
+      { path: "news/new", element: <AddNewsPage /> },
+      { path: "news/edit/:id", element: <AddNewsPage /> },
+      { path: "news/view/:id", element: <AddNewsPage /> },
       { path: "website/blogs", element: <BlogsPageManage /> },
       { path: "website/contact", element: <ContactAdminPage /> },
       { path: "staff", element: <StaffPage /> },
