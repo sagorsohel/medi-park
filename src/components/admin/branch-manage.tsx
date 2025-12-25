@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState, startTransition } from "react";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -17,6 +17,7 @@ import {
   useDeleteBranchMutation,
   type BranchItem,
 } from "@/services/contactPageApi";
+import { Badge } from "../ui/badge";
 
 type FormState = {
   name: string;
@@ -24,6 +25,7 @@ type FormState = {
   phone: string;
   email: string;
   status: "active" | "inactive";
+  is_main: number;
 };
 
 const initialState: FormState = {
@@ -32,6 +34,7 @@ const initialState: FormState = {
   phone: "",
   email: "",
   status: "active",
+  is_main: 0,
 };
 
 export function BranchManage() {
@@ -53,8 +56,10 @@ export function BranchManage() {
 
   useEffect(() => {
     if (!dialogOpen) {
-      setFormState(initialState);
-      setEditingId(null);
+      startTransition(() => {
+        setFormState(initialState);
+        setEditingId(null);
+      });
     }
   }, [dialogOpen]);
 
@@ -71,6 +76,7 @@ export function BranchManage() {
       phone: item.phone,
       email: item.email,
       status: item.status,
+      is_main: item.is_main ?? 0,
     });
     setEditingId(item.id);
     setDialogOpen(true);
@@ -147,7 +153,9 @@ export function BranchManage() {
             <Card key={item.id} className="flex flex-col">
               <CardHeader className="pb-2">
                 <CardTitle className="text-lg">{item.name}</CardTitle>
-                <p className="text-sm text-gray-500">{item.status === "active" ? "Active" : "Inactive"}</p>
+                <Badge variant={item.is_main === 1 ? "default" : item.status === "active" ? "secondary" : "destructive"}>
+                  {item.is_main === 1 ? "Main Branch" : item.status === "active" ? "Active" : "Inactive"}
+                </Badge>
               </CardHeader>
               <CardContent className="space-y-2 text-sm px-6 py-2">
                 <div className="flex items-start gap-2 text-gray-700">
@@ -246,6 +254,24 @@ export function BranchManage() {
                 <option value="active">Active</option>
                 <option value="inactive">Inactive</option>
               </select>
+            </div>
+            <div className="space-y-1">
+              <Label className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  checked={formState.is_main === 1}
+                  onChange={(e) =>
+                    setFormState((prev) => ({ ...prev, is_main: e.target.checked ? 1 : 0 }))
+                  }
+                  className="w-4 h-4 rounded border-gray-300"
+                />
+                Set as Main Branch
+              </Label>
+              {formState.is_main === 1 && editingId && (
+                <p className="text-xs text-amber-600">
+                  Note: Setting this branch as main will update other branches automatically.
+                </p>
+              )}
             </div>
           </div>
           <DialogFooter className="gap-2">

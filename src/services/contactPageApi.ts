@@ -28,6 +28,7 @@ export interface BranchItem {
   phone: string;
   email: string;
   status: "active" | "inactive";
+  is_main: number;
   created_at: string;
   updated_at: string;
 }
@@ -55,6 +56,7 @@ export interface CreateUpdateBranchPayload {
   phone: string;
   email: string;
   status?: "active" | "inactive";
+  is_main?: number;
 }
 
 export interface CreateContactMessagePayload {
@@ -197,7 +199,7 @@ export const contactPageApi = api.injectEndpoints({
     >({
       query: ({ id, data }) => ({
         url: `/branches/${id}`,
-        method: "PUT",
+        method: "POST",
         body: data,
       }),
       invalidatesTags: (result, error, arg) => [

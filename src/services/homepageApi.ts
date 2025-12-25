@@ -523,7 +523,7 @@ export const homepageApi = api.injectEndpoints({
         }
         return {
           url: `/homepage-cta-sections/${id}`,
-          method: "PUT",
+          method: "POST",
           body: formData,
         };
       },
