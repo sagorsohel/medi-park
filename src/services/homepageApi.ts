@@ -76,8 +76,14 @@ export interface Facility {
   id: number;
   title: string;
   short_description: string;
+  description1?: string;
+  description2?: string;
+  footer?: string;
   image: string;
   status: "active" | "inactive";
+  accordions?: Array<{ title: string; description: string }>;
+  doctors?: number[] | Array<{ id: number; doctor_name: string; department: string; specialist: string; image?: string }>;
+  blogs?: number[] | Array<{ id: number; title: string; description: string; feature_image?: string }>;
   created_at: string;
   updated_at: string;
 }
@@ -97,18 +103,36 @@ export interface FacilitiesResponse {
   data: Facility[];
 }
 
+export interface SingleFacilityResponse {
+  success: boolean;
+  message: string;
+  data: Facility;
+}
+
 export interface CreateFacilityPayload {
   title: string;
   short_description: string;
+  description1?: string;
+  description2?: string;
+  footer?: string;
   image: string | File;
   status?: "active" | "inactive";
+  accordions?: Array<{ title: string; description: string }>;
+  doctors?: number[];
+  blogs?: number[];
 }
 
 export interface UpdateFacilityPayload {
   title?: string;
   short_description?: string;
+  description1?: string;
+  description2?: string;
+  footer?: string;
   image?: string | File;
   status?: "active" | "inactive";
+  accordions?: Array<{ title: string; description: string }>;
+  doctors?: number[];
+  blogs?: number[];
 }
 
 export interface CTASection {
@@ -394,6 +418,14 @@ export const homepageApi = api.injectEndpoints({
       keepUnusedDataFor: 3600, // Cache for 60 minutes (3600 seconds)
     }),
 
+    getFacilityById: builder.query<SingleFacilityResponse, number>({
+      query: (id) => ({
+        url: `/facilities/${id}`,
+        method: "GET",
+      }),
+      providesTags: (result, error, id) => [{ type: "Banner", id }],
+    }),
+
     createFacility: builder.mutation<
       { success: boolean; message: string; data: Facility },
       CreateFacilityPayload
@@ -403,8 +435,33 @@ export const homepageApi = api.injectEndpoints({
         formData.append("title", body.title);
         formData.append("short_description", body.short_description);
         formData.append("image", body.image);
+        if (body.description1) {
+          formData.append("description1", body.description1);
+        }
+        if (body.description2) {
+          formData.append("description2", body.description2);
+        }
+        if (body.footer) {
+          formData.append("footer", body.footer);
+        }
         if (body.status) {
           formData.append("status", body.status);
+        }
+        if (body.accordions && body.accordions.length > 0) {
+          body.accordions.forEach((accordion, index) => {
+            formData.append(`accordions[${index}][title]`, accordion.title);
+            formData.append(`accordions[${index}][description]`, accordion.description);
+          });
+        }
+        if (body.doctors && body.doctors.length > 0) {
+          body.doctors.forEach((doctorId, index) => {
+            formData.append(`doctors[${index}]`, String(doctorId));
+          });
+        }
+        if (body.blogs && body.blogs.length > 0) {
+          body.blogs.forEach((blogId, index) => {
+            formData.append(`blogs[${index}]`, String(blogId));
+          });
         }
         return {
           url: "/facilities",
@@ -427,11 +484,36 @@ export const homepageApi = api.injectEndpoints({
         if (body.short_description) {
           formData.append("short_description", body.short_description);
         }
+        if (body.description1 !== undefined) {
+          formData.append("description1", body.description1);
+        }
+        if (body.description2 !== undefined) {
+          formData.append("description2", body.description2);
+        }
+        if (body.footer !== undefined) {
+          formData.append("footer", body.footer);
+        }
         if (body.image) {
           formData.append("image", body.image);
         }
         if (body.status) {
           formData.append("status", body.status);
+        }
+        if (body.accordions !== undefined) {
+          body.accordions.forEach((accordion, index) => {
+            formData.append(`accordions[${index}][title]`, accordion.title);
+            formData.append(`accordions[${index}][description]`, accordion.description);
+          });
+        }
+        if (body.doctors !== undefined) {
+          body.doctors.forEach((doctorId, index) => {
+            formData.append(`doctors[${index}]`, String(doctorId));
+          });
+        }
+        if (body.blogs !== undefined) {
+          body.blogs.forEach((blogId, index) => {
+            formData.append(`blogs[${index}]`, String(blogId));
+          });
         }
         return {
           url: `/facilities/${id}`,
@@ -547,6 +629,7 @@ export const {
   useUpdateAboutUsBannerMutation,
   useGetFacilitiesQuery,
   useGetFacilitiesPublicQuery,
+  useGetFacilityByIdQuery,
   useCreateFacilityMutation,
   useUpdateFacilityMutation,
   useDeleteFacilityMutation,

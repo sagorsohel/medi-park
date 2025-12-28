@@ -5,8 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Field, FieldLabel, FieldContent } from "@/components/ui/field";
-import { Textarea } from "@/components/ui/textarea";
-import { Loader2, Plus, Trash2, Edit2, X, Check } from "lucide-react";
+import { Loader2, Plus, Trash2, Edit2, X, Check, GripVertical } from "lucide-react";
 import {
   useGetFacilitiesQuery,
   useCreateFacilityMutation,
@@ -14,28 +13,85 @@ import {
   useDeleteFacilityMutation,
   type Facility,
 } from "@/services/homepageApi";
+import { useGetDoctorsQuery } from "@/services/doctorApi";
+import { useGetBlogsQuery } from "@/services/blogApi";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { DataTablePagination } from "@/components/ui/data-table-pagination";
+import ReactQuill from 'react-quill-new';
+import 'react-quill-new/dist/quill.snow.css';
+
+const quillModules = {
+    toolbar: [
+        [{ header: [1, 2, 3, 4, 5, 6, false] }],
+        [{ font: [] }],
+        [{ size: [] }],
+        ["bold", "italic", "underline", "strike", "blockquote"],
+        [{ list: "ordered" }, { list: "bullet" }, { indent: "-1" }, { indent: "+1" }],
+        ["link", "image", "video"],
+        [{ color: [] }, { background: [] }],
+        [{ align: [] }],
+        ["clean"],
+    ],
+};
+
+const quillFormats = [
+    "header",
+    "font",
+    "size",
+    "bold",
+    "italic",
+    "underline",
+    "strike",
+    "blockquote",
+    "list",
+    "bullet",
+    "indent",
+    "link",
+    "image",
+    "video",
+    "color",
+    "background",
+    "align",
+];
+
+interface AccordionItem {
+  title: string;
+  description: string;
+}
 
 interface DraftFacility {
   id: string; // temporary ID like 'draft-123'
   title: string;
   short_description: string;
+  description1: string;
+  description2: string;
+  footer: string;
   image: string;
   status: 'active' | 'inactive';
   imageFile?: File;
+  accordions: AccordionItem[];
+  doctors: number[];
+  blogs: number[];
 }
 
 interface EditableFacility {
   title?: string;
   short_description?: string;
+  description1?: string;
+  description2?: string;
+  footer?: string;
   image?: string | File;
   status?: 'active' | 'inactive';
+  accordions?: AccordionItem[];
+  doctors?: number[];
+  blogs?: number[];
 }
 
 export function FacilitiesManage() {
   const [currentPage, setCurrentPage] = useState(1);
   const { data, isLoading, error, refetch } = useGetFacilitiesQuery(currentPage);
+  const { data: doctorsData } = useGetDoctorsQuery(1);
+  const { data: blogsData } = useGetBlogsQuery(1);
   const [createFacility] = useCreateFacilityMutation();
   const [updateFacility] = useUpdateFacilityMutation();
   const [deleteFacility] = useDeleteFacilityMutation();
@@ -63,8 +119,14 @@ export function FacilitiesManage() {
       id: draftId,
       title: "",
       short_description: "",
+      description1: "",
+      description2: "",
+      footer: "",
       image: "",
       status: "inactive",
+      accordions: [],
+      doctors: [],
+      blogs: [],
     };
 
     setDraftFacilities(prev => [...prev, newDraft]);
@@ -94,10 +156,44 @@ export function FacilitiesManage() {
     }
   };
 
-  const handleDraftFieldChange = (draftId: string, field: keyof DraftFacility, value: string) => {
+  const handleDraftFieldChange = (draftId: string, field: keyof DraftFacility, value: string | number[]) => {
     setDraftFacilities(prev =>
       prev.map(draft =>
         draft.id === draftId ? { ...draft, [field]: value } : draft
+      )
+    );
+  };
+
+  const handleDraftAccordionChange = (draftId: string, index: number, field: 'title' | 'description', value: string) => {
+    setDraftFacilities(prev =>
+      prev.map(draft => {
+        if (draft.id !== draftId) return draft;
+        const newAccordions = [...(draft.accordions || [])];
+        if (!newAccordions[index]) {
+          newAccordions[index] = { title: '', description: '' };
+        }
+        newAccordions[index][field] = value;
+        return { ...draft, accordions: newAccordions };
+      })
+    );
+  };
+
+  const addDraftAccordion = (draftId: string) => {
+    setDraftFacilities(prev =>
+      prev.map(draft =>
+        draft.id === draftId
+          ? { ...draft, accordions: [...(draft.accordions || []), { title: '', description: '' }] }
+          : draft
+      )
+    );
+  };
+
+  const removeDraftAccordion = (draftId: string, index: number) => {
+    setDraftFacilities(prev =>
+      prev.map(draft =>
+        draft.id === draftId
+          ? { ...draft, accordions: draft.accordions.filter((_, i) => i !== index) }
+          : draft
       )
     );
   };
@@ -123,7 +219,7 @@ export function FacilitiesManage() {
     if (!draft) return;
 
     if (!draft.title.trim() || !draft.short_description.trim() || !draft.imageFile) {
-      alert("Please fill in all fields and select an image.");
+      alert("Please fill in title, short description and select an image.");
       return;
     }
 
@@ -133,8 +229,14 @@ export function FacilitiesManage() {
       await createFacility({
         title: draft.title,
         short_description: draft.short_description,
+        description1: draft.description1 || undefined,
+        description2: draft.description2 || undefined,
+        footer: draft.footer || undefined,
         image: draft.imageFile,
         status: draft.status,
+        accordions: draft.accordions.length > 0 ? draft.accordions : undefined,
+        doctors: draft.doctors.length > 0 ? draft.doctors : undefined,
+        blogs: draft.blogs.length > 0 ? draft.blogs : undefined,
       }).unwrap();
 
       // Remove draft and preview
@@ -191,7 +293,7 @@ export function FacilitiesManage() {
     });
   };
 
-  const handleEditFieldChange = (id: number, field: keyof EditableFacility, value: string) => {
+  const handleEditFieldChange = (id: number, field: keyof EditableFacility, value: string | number[] | AccordionItem[]) => {
     setEditableFacilities(prev => ({
       ...prev,
       [id]: {
@@ -199,6 +301,60 @@ export function FacilitiesManage() {
         [field]: value,
       },
     }));
+  };
+
+  const handleEditAccordionChange = (id: number, index: number, field: 'title' | 'description', value: string) => {
+    setEditableFacilities(prev => {
+      const editable = prev[id] || {};
+      const accordions = editable.accordions || [];
+      const newAccordions = [...accordions];
+      if (!newAccordions[index]) {
+        newAccordions[index] = { title: '', description: '' };
+      }
+      newAccordions[index][field] = value;
+      return {
+        ...prev,
+        [id]: {
+          ...editable,
+          accordions: newAccordions,
+        },
+      };
+    });
+  };
+
+  const addEditAccordion = (id: number) => {
+    setEditableFacilities(prev => {
+      const editable = prev[id] || {};
+      const accordions = editable.accordions || [];
+      return {
+        ...prev,
+        [id]: {
+          ...editable,
+          accordions: [...accordions, { title: '', description: '' }],
+        },
+      };
+    });
+  };
+
+  const removeEditAccordion = (id: number, index: number) => {
+    setEditableFacilities(prev => {
+      const editable = prev[id] || {};
+      const accordions = editable.accordions || [];
+      return {
+        ...prev,
+        [id]: {
+          ...editable,
+          accordions: accordions.filter((_, i) => i !== index),
+        },
+      };
+    });
+  };
+
+  const getAccordions = (facility: Facility, editable: EditableFacility): AccordionItem[] => {
+    if (editable.accordions !== undefined) {
+      return editable.accordions;
+    }
+    return facility.accordions || [];
   };
 
   const handleEditImageChange = (id: number, file: File | null) => {
@@ -225,21 +381,58 @@ export function FacilitiesManage() {
 
     if (editable.title !== undefined && editable.title !== facility.title) return true;
     if (editable.short_description !== undefined && editable.short_description !== facility.short_description) return true;
+    if (editable.description1 !== undefined && editable.description1 !== (facility.description1 || '')) return true;
+    if (editable.description2 !== undefined && editable.description2 !== (facility.description2 || '')) return true;
+    if (editable.footer !== undefined && editable.footer !== (facility.footer || '')) return true;
     if (editable.image instanceof File) return true;
     if (editable.status !== undefined && editable.status !== facility.status) return true;
+    if (editable.accordions !== undefined) {
+      const currentAccordions = JSON.stringify(facility.accordions || []);
+      const newAccordions = JSON.stringify(editable.accordions);
+      if (currentAccordions !== newAccordions) return true;
+    }
+    if (editable.doctors !== undefined) {
+      const currentDoctors = JSON.stringify(facility.doctors || []);
+      const newDoctors = JSON.stringify(editable.doctors);
+      if (currentDoctors !== newDoctors) return true;
+    }
+    if (editable.blogs !== undefined) {
+      const currentBlogs = JSON.stringify(facility.blogs || []);
+      const newBlogs = JSON.stringify(editable.blogs);
+      if (currentBlogs !== newBlogs) return true;
+    }
 
     return false;
   };
 
-  const getFacilityValue = (facility: Facility, field: 'title' | 'short_description' | 'image' | 'status'): string => {
+  const getFacilityValue = (facility: Facility, field: 'title' | 'short_description' | 'description1' | 'description2' | 'footer' | 'image' | 'status'): string => {
     const editable = editableFacilities[facility.id];
     if (editable && field in editable) {
       if (field === 'image' && editable.image instanceof File) {
         return imagePreviews[`edit-${facility.id}`] || '';
       }
-      return editable[field] as string;
+      return editable[field] as string || '';
     }
-    return facility[field] as string;
+    return (facility[field] as string) || '';
+  };
+
+  const getFacilityArray = (facility: Facility, field: 'doctors' | 'blogs'): number[] => {
+    const editable = editableFacilities[facility.id];
+    if (editable && editable[field] !== undefined) {
+      return editable[field] || [];
+    }
+    const facilityArray = facility[field];
+    if (!facilityArray || !Array.isArray(facilityArray)) return [];
+    // Extract IDs if they're objects, otherwise return as-is
+    if (facilityArray.length === 0) return [];
+    if (typeof facilityArray[0] === 'number') {
+      return facilityArray as number[];
+    }
+    // Handle object arrays - extract IDs
+    return facilityArray.map((item: number | { id: number }) => {
+      if (typeof item === 'number') return item;
+      return item.id;
+    });
   };
 
   const handleUpdateFacility = async (id: number) => {
@@ -306,7 +499,7 @@ export function FacilitiesManage() {
           <>
             {/* Draft Facilities */}
             {draftFacilities.length > 0 && (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+              <div className="grid grid-cols-1 gap-4 mb-6">
                 {draftFacilities.map((draft) => (
                   <Card key={draft.id} id={`facility-${draft.id}`} className="border-2 p-4! border-dashed border-blue-300">
                 <CardHeader className=" p-4!">
@@ -337,11 +530,82 @@ export function FacilitiesManage() {
                   <Field>
                     <FieldLabel>Short Description *</FieldLabel>
                     <FieldContent>
-                      <Textarea
-                        value={draft.short_description}
-                        onChange={(e) => handleDraftFieldChange(draft.id, 'short_description', e.target.value)}
-                        placeholder="Enter short description"
-                        rows={3}
+                      <div className="bg-white">
+                        <style>{`
+                          .quill-editor .ql-container {
+                            min-height: 200px;
+                            height: 200px;
+                          }
+                        `}</style>
+                        <div className="quill-editor">
+                          <ReactQuill
+                            theme="snow"
+                            value={draft.short_description}
+                            onChange={(value) => handleDraftFieldChange(draft.id, 'short_description', value)}
+                            modules={quillModules}
+                            formats={quillFormats}
+                            placeholder="Enter short description"
+                          />
+                        </div>
+                      </div>
+                    </FieldContent>
+                  </Field>
+
+                  <Field>
+                    <FieldLabel>Description 1</FieldLabel>
+                    <FieldContent>
+                      <div className="bg-white">
+                        <style>{`
+                          .quill-editor .ql-container {
+                            min-height: 200px;
+                            height: 200px;
+                          }
+                        `}</style>
+                        <div className="quill-editor">
+                          <ReactQuill
+                            theme="snow"
+                            value={draft.description1}
+                            onChange={(value) => handleDraftFieldChange(draft.id, 'description1', value)}
+                            modules={quillModules}
+                            formats={quillFormats}
+                            placeholder="Enter description 1"
+                          />
+                        </div>
+                      </div>
+                    </FieldContent>
+                  </Field>
+
+                  <Field>
+                    <FieldLabel>Description 2</FieldLabel>
+                    <FieldContent>
+                      <div className="bg-white">
+                        <style>{`
+                          .quill-editor .ql-container {
+                            min-height: 200px;
+                            height: 200px;
+                          }
+                        `}</style>
+                        <div className="quill-editor">
+                          <ReactQuill
+                            theme="snow"
+                            value={draft.description2}
+                            onChange={(value) => handleDraftFieldChange(draft.id, 'description2', value)}
+                            modules={quillModules}
+                            formats={quillFormats}
+                            placeholder="Enter description 2"
+                          />
+                        </div>
+                      </div>
+                    </FieldContent>
+                  </Field>
+
+                  <Field>
+                    <FieldLabel>Footer</FieldLabel>
+                    <FieldContent>
+                      <Input
+                        value={draft.footer}
+                        onChange={(e) => handleDraftFieldChange(draft.id, 'footer', e.target.value)}
+                        placeholder="Enter footer text"
                       />
                     </FieldContent>
                   </Field>
@@ -363,6 +627,107 @@ export function FacilitiesManage() {
                           />
                         )}
                       </div>
+                    </FieldContent>
+                  </Field>
+
+                  <Field>
+                    <FieldLabel>Accordions</FieldLabel>
+                    <FieldContent>
+                      <div className="space-y-2">
+                        {(draft.accordions || []).map((accordion, index) => (
+                          <div key={index} className="border p-3 rounded space-y-2">
+                            <div className="flex items-center gap-2">
+                              <GripVertical className="w-4 h-4 text-gray-400" />
+                              <Input
+                                value={accordion.title}
+                                onChange={(e) => handleDraftAccordionChange(draft.id, index, 'title', e.target.value)}
+                                placeholder="Accordion title"
+                                className="flex-1"
+                              />
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => removeDraftAccordion(draft.id, index)}
+                                className="text-red-500"
+                              >
+                                <X className="w-4 h-4" />
+                              </Button>
+                            </div>
+                            <div className="bg-white">
+                              <style>{`
+                                .quill-editor-small .ql-container {
+                                  min-height: 150px;
+                                  height: 150px;
+                                }
+                              `}</style>
+                              <div className="quill-editor-small">
+                                <ReactQuill
+                                  theme="snow"
+                                  value={accordion.description}
+                                  onChange={(value) => handleDraftAccordionChange(draft.id, index, 'description', value)}
+                                  modules={quillModules}
+                                  formats={quillFormats}
+                                  placeholder="Accordion description"
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          onClick={() => addDraftAccordion(draft.id)}
+                          className="w-full"
+                        >
+                          <Plus className="w-4 h-4 mr-2" />
+                          Add Accordion
+                        </Button>
+                      </div>
+                    </FieldContent>
+                  </Field>
+
+                  <Field>
+                    <FieldLabel>Doctors</FieldLabel>
+                    <FieldContent>
+                      <select
+                        multiple
+                        value={draft.doctors.map(String)}
+                        onChange={(e) => {
+                          const selected = Array.from(e.target.selectedOptions, option => parseInt(option.value));
+                          handleDraftFieldChange(draft.id, 'doctors', selected);
+                        }}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md min-h-[100px]"
+                      >
+                        {doctorsData?.data?.map((doctor) => (
+                          <option key={doctor.id} value={doctor.id}>
+                            {doctor.doctor_name}
+                          </option>
+                        ))}
+                      </select>
+                      <p className="text-xs text-gray-500 mt-1">Hold Ctrl/Cmd to select multiple</p>
+                    </FieldContent>
+                  </Field>
+
+                  <Field>
+                    <FieldLabel>Blogs</FieldLabel>
+                    <FieldContent>
+                      <select
+                        multiple
+                        value={draft.blogs.map(String)}
+                        onChange={(e) => {
+                          const selected = Array.from(e.target.selectedOptions, option => parseInt(option.value));
+                          handleDraftFieldChange(draft.id, 'blogs', selected);
+                        }}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md min-h-[100px]"
+                      >
+                        {blogsData?.data?.map((blog) => (
+                          <option key={blog.id} value={blog.id}>
+                            {blog.title}
+                          </option>
+                        ))}
+                      </select>
+                      <p className="text-xs text-gray-500 mt-1">Hold Ctrl/Cmd to select multiple</p>
                     </FieldContent>
                   </Field>
 
@@ -409,7 +774,7 @@ export function FacilitiesManage() {
                 No facilities found. Click "Add Facility" to create one.
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6 p-5">
+              <div className="grid grid-cols-1 gap-4 mt-6 p-5">
                 {facilities.map((facility) => {
                   const isEditing = editingId === facility.id;
                   const editable = editableFacilities[facility.id] || {};
@@ -494,14 +859,106 @@ export function FacilitiesManage() {
                           <FieldLabel>Short Description</FieldLabel>
                           <FieldContent>
                             {isEditing ? (
-                              <Textarea
-                                value={getFacilityValue(facility, 'short_description')}
-                                onChange={(e) => handleEditFieldChange(facility.id, 'short_description', e.target.value)}
-                                placeholder="Enter short description"
-                                rows={3}
+                              <div className="bg-white">
+                                <style>{`
+                                  .quill-editor .ql-container {
+                                    min-height: 200px;
+                                    height: 200px;
+                                  }
+                                `}</style>
+                                <div className="quill-editor">
+                                  <ReactQuill
+                                    theme="snow"
+                                    value={getFacilityValue(facility, 'short_description')}
+                                    onChange={(value) => handleEditFieldChange(facility.id, 'short_description', value)}
+                                    modules={quillModules}
+                                    formats={quillFormats}
+                                    placeholder="Enter short description"
+                                  />
+                                </div>
+                              </div>
+                            ) : (
+                              <div 
+                                className="text-gray-700 prose max-w-none"
+                                dangerouslySetInnerHTML={{ __html: facility.short_description }}
+                              />
+                            )}
+                          </FieldContent>
+                        </Field>
+
+                        <Field>
+                          <FieldLabel>Description 1</FieldLabel>
+                          <FieldContent>
+                            {isEditing ? (
+                              <div className="bg-white">
+                                <style>{`
+                                  .quill-editor .ql-container {
+                                    min-height: 200px;
+                                    height: 200px;
+                                  }
+                                `}</style>
+                                <div className="quill-editor">
+                                  <ReactQuill
+                                    theme="snow"
+                                    value={getFacilityValue(facility, 'description1')}
+                                    onChange={(value) => handleEditFieldChange(facility.id, 'description1', value)}
+                                    modules={quillModules}
+                                    formats={quillFormats}
+                                    placeholder="Enter description 1"
+                                  />
+                                </div>
+                              </div>
+                            ) : (
+                              <div 
+                                className="text-gray-700 prose max-w-none"
+                                dangerouslySetInnerHTML={{ __html: facility.description1 || '' }}
+                              />
+                            )}
+                          </FieldContent>
+                        </Field>
+
+                        <Field>
+                          <FieldLabel>Description 2</FieldLabel>
+                          <FieldContent>
+                            {isEditing ? (
+                              <div className="bg-white">
+                                <style>{`
+                                  .quill-editor .ql-container {
+                                    min-height: 200px;
+                                    height: 200px;
+                                  }
+                                `}</style>
+                                <div className="quill-editor">
+                                  <ReactQuill
+                                    theme="snow"
+                                    value={getFacilityValue(facility, 'description2')}
+                                    onChange={(value) => handleEditFieldChange(facility.id, 'description2', value)}
+                                    modules={quillModules}
+                                    formats={quillFormats}
+                                    placeholder="Enter description 2"
+                                  />
+                                </div>
+                              </div>
+                            ) : (
+                              <div 
+                                className="text-gray-700 prose max-w-none"
+                                dangerouslySetInnerHTML={{ __html: facility.description2 || '' }}
+                              />
+                            )}
+                          </FieldContent>
+                        </Field>
+
+                        <Field>
+                          <FieldLabel>Footer</FieldLabel>
+                          <FieldContent>
+                            {isEditing ? (
+                              <Input
+                                value={getFacilityValue(facility, 'footer')}
+                                onChange={(e) => handleEditFieldChange(facility.id, 'footer', e.target.value)}
+                                placeholder="Enter footer text"
                               />
                             ) : (
-                              <p className="text-gray-700">{facility.short_description}</p>
+                              <p className="text-gray-700">{facility.footer || ''}</p>
                             )}
                           </FieldContent>
                         </Field>
@@ -535,6 +992,158 @@ export function FacilitiesManage() {
                                 }}
                               />
                             )}
+                          </FieldContent>
+                        </Field>
+
+                        <Field>
+                          <FieldLabel>Accordions</FieldLabel>
+                          <FieldContent>
+                            {isEditing ? (
+                              <div className="space-y-2">
+                                {getAccordions(facility, editable).map((accordion, index) => (
+                                  <div key={index} className="border p-3 rounded space-y-2">
+                                    <div className="flex items-center gap-2">
+                                      <GripVertical className="w-4 h-4 text-gray-400" />
+                                      <Input
+                                        value={accordion.title}
+                                        onChange={(e) => handleEditAccordionChange(facility.id, index, 'title', e.target.value)}
+                                        placeholder="Accordion title"
+                                        className="flex-1"
+                                      />
+                                      <Button
+                                        variant="ghost"
+                                        size="sm"
+                                        onClick={() => removeEditAccordion(facility.id, index)}
+                                        className="text-red-500"
+                                      >
+                                        <X className="w-4 h-4" />
+                                      </Button>
+                                    </div>
+                                    <div className="bg-white">
+                                      <style>{`
+                                        .quill-editor-small .ql-container {
+                                          min-height: 150px;
+                                          height: 150px;
+                                        }
+                                      `}</style>
+                                      <div className="quill-editor-small">
+                                        <ReactQuill
+                                          theme="snow"
+                                          value={accordion.description}
+                                          onChange={(value) => handleEditAccordionChange(facility.id, index, 'description', value)}
+                                          modules={quillModules}
+                                          formats={quillFormats}
+                                          placeholder="Accordion description"
+                                        />
+                                      </div>
+                                    </div>
+                                  </div>
+                                ))}
+                                <Button
+                                  type="button"
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={() => addEditAccordion(facility.id)}
+                                  className="w-full"
+                                >
+                                  <Plus className="w-4 h-4 mr-2" />
+                                  Add Accordion
+                                </Button>
+                              </div>
+                            ) : (
+                              <div className="space-y-2">
+                                {(facility.accordions || []).map((accordion, index) => (
+                                  <div key={index} className="border p-3 rounded">
+                                    <h4 className="font-semibold mb-2">{accordion.title}</h4>
+                                    <div 
+                                      className="text-gray-700 prose max-w-none text-sm"
+                                      dangerouslySetInnerHTML={{ __html: accordion.description }}
+                                    />
+                                  </div>
+                                ))}
+                                {(!facility.accordions || facility.accordions.length === 0) && (
+                                  <p className="text-gray-500 text-sm">No accordions</p>
+                                )}
+                              </div>
+                            )}
+                          </FieldContent>
+                        </Field>
+
+                        <Field>
+                          <FieldLabel>Doctors</FieldLabel>
+                          <FieldContent>
+                            {isEditing ? (
+                              <select
+                                multiple
+                                value={getFacilityArray(facility, 'doctors').map(String)}
+                                onChange={(e) => {
+                                  const selected = Array.from(e.target.selectedOptions, option => parseInt(option.value));
+                                  handleEditFieldChange(facility.id, 'doctors', selected);
+                                }}
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md min-h-[100px]"
+                              >
+                                {doctorsData?.data?.map((doctor) => (
+                                  <option key={doctor.id} value={doctor.id}>
+                                    {doctor.doctor_name}
+                                  </option>
+                                ))}
+                              </select>
+                            ) : (
+                              <div className="space-y-1">
+                                {getFacilityArray(facility, 'doctors').length > 0 ? (
+                                  getFacilityArray(facility, 'doctors').map((doctorId) => {
+                                    const doctor = doctorsData?.data?.find(d => d.id === doctorId);
+                                    return doctor ? (
+                                      <span key={doctorId} className="inline-block bg-blue-100 text-blue-800 px-2 py-1 rounded text-sm mr-2">
+                                        {doctor.doctor_name}
+                                      </span>
+                                    ) : null;
+                                  })
+                                ) : (
+                                  <p className="text-gray-500 text-sm">No doctors selected</p>
+                                )}
+                              </div>
+                            )}
+                            {isEditing && <p className="text-xs text-gray-500 mt-1">Hold Ctrl/Cmd to select multiple</p>}
+                          </FieldContent>
+                        </Field>
+
+                        <Field>
+                          <FieldLabel>Blogs</FieldLabel>
+                          <FieldContent>
+                            {isEditing ? (
+                              <select
+                                multiple
+                                value={getFacilityArray(facility, 'blogs').map(String)}
+                                onChange={(e) => {
+                                  const selected = Array.from(e.target.selectedOptions, option => parseInt(option.value));
+                                  handleEditFieldChange(facility.id, 'blogs', selected);
+                                }}
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md min-h-[100px]"
+                              >
+                                {blogsData?.data?.map((blog) => (
+                                  <option key={blog.id} value={blog.id}>
+                                    {blog.title}
+                                  </option>
+                                ))}
+                              </select>
+                            ) : (
+                              <div className="space-y-1">
+                                {getFacilityArray(facility, 'blogs').length > 0 ? (
+                                  getFacilityArray(facility, 'blogs').map((blogId) => {
+                                    const blog = blogsData?.data?.find(b => b.id === blogId);
+                                    return blog ? (
+                                      <span key={blogId} className="inline-block bg-green-100 text-green-800 px-2 py-1 rounded text-sm mr-2">
+                                        {blog.title}
+                                      </span>
+                                    ) : null;
+                                  })
+                                ) : (
+                                  <p className="text-gray-500 text-sm">No blogs selected</p>
+                                )}
+                              </div>
+                            )}
+                            {isEditing && <p className="text-xs text-gray-500 mt-1">Hold Ctrl/Cmd to select multiple</p>}
                           </FieldContent>
                         </Field>
 
