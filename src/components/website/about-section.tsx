@@ -89,7 +89,7 @@ export function AboutSection() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* About Us Navigation Button */}
         <motion.div
-          className="flex flex-col items-center mb-12 md:mb-8"
+          className="flex flex-col items-center mb-12 md:mb-0"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-50px" }}
@@ -109,7 +109,7 @@ export function AboutSection() {
           viewport={{ once: true, margin: "-50px" }}
           variants={textVariants}
         >
-          <p className="text-base md:text-lg text-gray-700 leading-relaxed text-left">
+          <p className="text-base md:text-lg text-gray-700 leading-relaxed text-center">
             {section.sub_title && (
               <span className="font-bold text-gray-900">{section.sub_title} </span>
             )}

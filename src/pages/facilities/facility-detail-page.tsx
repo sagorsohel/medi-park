@@ -1,14 +1,14 @@
 "use client";
 
 import { useParams, useNavigate } from "react-router";
-import { useGetFacilityByIdQuery, useGetFacilitiesPublicQuery } from "@/services/homepageApi";
+import { useGetFacilityByIdQuery } from "@/services/homepageApi";
 import { useGetDoctorsQuery } from "@/services/doctorApi";
 import { useGetBlogsPublicQuery } from "@/services/blogApi";
 import { PageHeroSection } from "@/components/website/page-hero-section";
 import { BreadcrumbSection } from "@/components/website/breadcrumb-section";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Loader2, ChevronDown, User } from "lucide-react";
+import { Loader2, ChevronDown } from "lucide-react";
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@/components/ui/collapsible";
 import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
@@ -30,19 +30,29 @@ export default function FacilityDetailPage() {
   const facilityDoctors = useMemo(() => {
     if (!doctorsData?.data || !facility) return [];
     
+    interface DoctorItem {
+      id: number;
+      image: string;
+      name: string;
+      role: string;
+      department: string;
+    }
+    
     // If facility has assigned doctors, use those
     if (facility.doctors && Array.isArray(facility.doctors) && facility.doctors.length > 0) {
-      return facility.doctors.map((doc: any) => {
-        const doctorObj = typeof doc === 'object' ? doc : null;
-        if (!doctorObj) return null;
-        return {
-          id: doctorObj.id,
-          image: doctorObj.image || "/vite.svg",
-          name: doctorObj.doctor_name || doctorObj.name,
-          role: doctorObj.role || "Consultant",
-          department: doctorObj.department || doctorObj.specialist || facility.title,
-        };
-      }).filter(Boolean);
+      return facility.doctors
+        .map((doc: unknown): DoctorItem | null => {
+          const doctorObj = typeof doc === 'object' && doc !== null ? doc as Record<string, unknown> : null;
+          if (!doctorObj || typeof doctorObj.id !== 'number') return null;
+          return {
+            id: doctorObj.id,
+            image: (typeof doctorObj.image === 'string' ? doctorObj.image : "/vite.svg"),
+            name: (typeof doctorObj.doctor_name === 'string' ? doctorObj.doctor_name : typeof doctorObj.name === 'string' ? doctorObj.name : ""),
+            role: (typeof doctorObj.role === 'string' ? doctorObj.role : "Consultant"),
+            department: (typeof doctorObj.department === 'string' ? doctorObj.department : typeof doctorObj.specialist === 'string' ? doctorObj.specialist : facility.title),
+          };
+        })
+        .filter((doctor): doctor is DoctorItem => doctor !== null);
     }
     
     // Otherwise, try to match by department
@@ -55,8 +65,8 @@ export default function FacilityDetailPage() {
       .map((doctor) => ({
         id: doctor.id,
         image: doctor.image || "/vite.svg",
-        name: doctor.doctor_name,
-        role: doctor.role || "Consultant",
+        name: doctor.doctor_name || "",
+        role: doctor.specialist || "Consultant",
         department: doctor.department || doctor.specialist || facility.title,
       }));
   }, [doctorsData, facility]);
@@ -65,26 +75,38 @@ export default function FacilityDetailPage() {
   const relatedBlogs = useMemo(() => {
     if (!blogsData?.data || !facility) return [];
     
+    interface BlogItem {
+      id: number;
+      title: string;
+      feature_image: string;
+      description: string;
+      author_name: string;
+      created_at: string;
+    }
+    
     // If facility has assigned blogs, use those
     if (facility.blogs && Array.isArray(facility.blogs) && facility.blogs.length > 0) {
-      return facility.blogs.map((blog: any) => {
-        const blogObj = typeof blog === 'object' ? blog : null;
-        if (!blogObj) return null;
-        return {
-          id: blogObj.id,
-          title: blogObj.title,
-          feature_image: blogObj.feature_image || "/vite.svg",
-          description: blogObj.description || "",
-          author_name: blogObj.author_name || "",
-          created_at: blogObj.created_at || "",
-        };
-      }).filter(Boolean).slice(0, 6);
+      return facility.blogs
+        .map((blog: unknown): BlogItem | null => {
+          const blogObj = typeof blog === 'object' && blog !== null ? blog as Record<string, unknown> : null;
+          if (!blogObj || typeof blogObj.id !== 'number') return null;
+          return {
+            id: blogObj.id,
+            title: (typeof blogObj.title === 'string' ? blogObj.title : ""),
+            feature_image: (typeof blogObj.feature_image === 'string' ? blogObj.feature_image : "/vite.svg"),
+            description: (typeof blogObj.description === 'string' ? blogObj.description : ""),
+            author_name: (typeof blogObj.author_name === 'string' ? blogObj.author_name : ""),
+            created_at: (typeof blogObj.created_at === 'string' ? blogObj.created_at : ""),
+          };
+        })
+        .filter((blog): blog is BlogItem => blog !== null)
+        .slice(0, 6);
     }
     
     // Otherwise, return recent blogs
     return blogsData.data.slice(0, 6).map((blog) => ({
       id: blog.id,
-      title: blog.title,
+      title: blog.title || "",
       feature_image: blog.feature_image || "/vite.svg",
       description: blog.description || "",
       author_name: blog.author_name || "",
@@ -139,7 +161,7 @@ export default function FacilityDetailPage() {
       <section className="w-full bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           {/* Title Section */}
-          <div className="mb-8">
+          <div className="mb-0 text-center">
             <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
               {facility.title}
             </h1>
@@ -171,16 +193,7 @@ export default function FacilityDetailPage() {
               </motion.div>
             )}
 
-            {facility.description2 && (
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
-                className="prose prose-lg max-w-none text-gray-700 leading-relaxed mt-6"
-              >
-                <div dangerouslySetInnerHTML={{ __html: facility.description2 }} />
-              </motion.div>
-            )}
+         
           </div>
 
           {/* Conditions Treated / Accordions Section */}
@@ -208,7 +221,7 @@ export default function FacilityDetailPage() {
                             {accordion.title}
                           </h3>
                           <ChevronDown
-                            className={`w-5 h-5 text-gray-500 transition-transform duration-200 flex-shrink-0 ${
+                            className={`w-5 h-5 text-gray-500 transition-transform duration-200 shrink-0 ${
                               openAccordions.has(index) ? 'transform rotate-180' : ''
                             }`}
                           />
@@ -237,7 +250,7 @@ export default function FacilityDetailPage() {
               transition={{ delay: 0.4 }}
               className="mb-12"
             >
-              <div className="mb-6">
+              <div className="mb-6 text-center py-5">
                 <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
                   List of Doctors
                 </h2>
@@ -245,13 +258,13 @@ export default function FacilityDetailPage() {
                   We can help you choose top specialists from our pool of expert doctors, physicians and surgeons.
                 </p>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {facilityDoctors.map((doctor) => (
                   <Card
                     key={doctor.id}
                     className="overflow-hidden hover:shadow-lg transition-shadow"
                   >
-                    <CardContent className="p-6 text-center">
+                    <CardContent className="p-3 text-center">
                       <div className="flex flex-col items-center">
                         <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-gray-200 mb-4">
                           <img
@@ -289,6 +302,19 @@ export default function FacilityDetailPage() {
               </div>
             </motion.div>
           )}
+
+          <div>
+          {facility.description2 && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+                className="prose prose-lg max-w-none text-gray-700 leading-relaxed mt-6"
+              >
+                <div dangerouslySetInnerHTML={{ __html: facility.description2 }} />
+              </motion.div>
+            )}
+          </div>
 
           {/* Important Points Section */}
           {facility.footer && (
