@@ -1,12 +1,20 @@
 "use client";
 
-import { NavLink } from "react-router";
+import { NavLink, Link } from "react-router";
 import { useAppSelector, useAppDispatch } from "@/store/hooks";
 import { logout } from "@/store/slices/authSlice";
 import { Button } from "@/components/ui/button";
-import { Menu, X } from "lucide-react";
+import { Menu, X, ChevronDown } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+ 
+} from "@/components/ui/dropdown-menu";
+import { useGetFacilitiesPublicQuery } from "@/services/homepageApi";
 
 const navLinks = [
   { to: "/", label: "Home" },
@@ -24,6 +32,9 @@ export function WebsiteNavbar() {
   const { isAuthenticated, user } = useAppSelector((state) => state.auth);
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
   const [isScrolled, setIsScrolled] = useState<boolean>(false);
+  const { data: facilitiesData } = useGetFacilitiesPublicQuery();
+  
+  const activeFacilities = facilitiesData?.data?.filter(f => f.status === 'active') || [];
 
   useEffect(() => {
     const handleScroll = () => {
@@ -85,6 +96,46 @@ export function WebsiteNavbar() {
               {link.label}
             </NavLink>
           ))}
+          
+          {/* Facilities Dropdown */}
+          <DropdownMenu>
+            <DropdownMenuTrigger className="text-sm font-medium transition-colors whitespace-nowrap text-primary-foreground/90 hover:text-primary-foreground focus:outline-none flex items-center gap-1">
+              Facilities
+              <ChevronDown className="w-4 h-4" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent 
+              align="center" 
+              className="max-h-[600px] overflow-y-auto w-[600px] max-w-none mt-5 p-4  -left-[225px]!"
+            >
+              <div className="space-y-4">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-lg font-bold text-primary">Our Facilities</h3>
+                  <Link 
+                    to="/facilities" 
+                    className="text-sm font-semibold text-primary hover:underline"
+                  >
+                    View All Facilities
+                  </Link>
+                </div>
+                {activeFacilities.length > 0 ? (
+                  <div className="grid grid-cols-4 gap-3">
+                    {activeFacilities.map((facility) => (
+                      <DropdownMenuItem key={facility.id} asChild className="p-0">
+                        <Link
+                          to={`/facilities/${facility.id}`}
+                          className="block px-3 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-primary rounded cursor-pointer transition-colors whitespace-normal"
+                        >
+                          {facility.title}
+                        </Link>
+                      </DropdownMenuItem>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="px-3 py-2 text-sm text-gray-500">No facilities available</p>
+                )}
+              </div>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </nav>
 
         {/* Right side actions */}
@@ -148,6 +199,40 @@ export function WebsiteNavbar() {
                       {link.label}
                     </NavLink>
                   ))}
+                  
+                  {/* Facilities in Mobile Menu */}
+                  <div className="pl-4">
+                    <Link
+                      to="/facilities"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="text-base font-medium transition-colors text-muted-foreground hover:text-primary"
+                    >
+                      Facilities
+                    </Link>
+                    {activeFacilities.length > 0 && (
+                      <div className="mt-2 ml-4 space-y-2">
+                        {activeFacilities.slice(0, 10).map((facility) => (
+                          <Link
+                            key={facility.id}
+                            to={`/facilities/${facility.id}`}
+                            onClick={() => setMobileMenuOpen(false)}
+                            className="block text-sm text-muted-foreground hover:text-primary transition-colors"
+                          >
+                            {facility.title}
+                          </Link>
+                        ))}
+                        {activeFacilities.length > 10 && (
+                          <Link
+                            to="/facilities"
+                            onClick={() => setMobileMenuOpen(false)}
+                            className="block text-sm text-primary font-semibold"
+                          >
+                            View All ({activeFacilities.length})
+                          </Link>
+                        )}
+                      </div>
+                    )}
+                  </div>
                   <div className="pt-4 border-t ">
                     <Button
                       asChild

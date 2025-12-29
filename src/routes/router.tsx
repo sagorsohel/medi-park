@@ -40,8 +40,10 @@ import GelleryPageManage from '@/pages/admin/gellery/gellery'
 import BlogsPageManage from '@/pages/admin/blogs/blogs'
 import NewsPage from '@/pages/news/news-page'
 import ContactAdminPage from '@/pages/admin/contact/contact'
-import FacilitiesPage from '@/pages/admin/facilities/facilities-page'
+import FacilitiesPageAdmin from '@/pages/admin/facilities/facilities-page'
 import AddFacilityPage from '@/pages/admin/facilities/add-facility-page'
+import FacilitiesPage from '@/pages/facilities/facilities-page'
+import FacilityDetailPage from '@/pages/facilities/facility-detail-page'
 
 const router = createBrowserRouter([
   // 🌐 Website routes (with website layout - sticky navbar & footer)
@@ -56,6 +58,8 @@ const router = createBrowserRouter([
       { path: "careers/job/:id", element: <JobDetailPage /> },
       { path: "news", element: <NewsPage /> },
       { path: "news/:id", element: <NewsDetailPage /> },
+      { path: "facilities", element: <FacilitiesPage /> },
+      { path: "facilities/:id", element: <FacilityDetailPage /> },
       { path: "doctors", element: <DoctorsPage /> },
       { path: "doctors/:id", element: <DoctorDetailPage /> },
       { path: "blogs", element: <BlogsPage /> },
@@ -89,7 +93,7 @@ const router = createBrowserRouter([
       { path: "dashboard", element: <DashboardPage /> },
       { path: "website/home", element: <WebHomeManagePage /> },
       { path: "website/about", element: <AboutPageManage /> },
-      { path: "website/facilities", element: <FacilitiesPage /> },
+      { path: "website/facilities", element: <FacilitiesPageAdmin /> },
       { path: "website/facilities/new", element: <AddFacilityPage /> },
       { path: "website/facilities/edit/:id", element: <AddFacilityPage /> },
       { path: "website/facilities/view/:id", element: <AddFacilityPage /> },

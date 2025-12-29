@@ -143,6 +143,15 @@
   .rotate-y-180 {
     transform: rotateY(180deg);
   }
+
+  /* Center facilities dropdown */
+  .facilities-dropdown[data-state="open"],
+  [data-slot="dropdown-menu-content"].facilities-dropdown[data-state="open"] {
+    position: fixed !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    right: auto !important;
+  }
 }
 
 @keyframes scroll-left {
