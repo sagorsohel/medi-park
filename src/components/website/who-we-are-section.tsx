@@ -101,9 +101,10 @@ export function WhoWeAreSection() {
           viewport={{ once: true, margin: "-50px" }}
           variants={contentVariants as unknown as Variants}
         >
-          <p className="text-base md:text-lg text-white leading-relaxed text-justify">
-            {record.paragraph || ""}
-          </p>
+          <div 
+            className="text-base md:text-lg text-white leading-relaxed text-justify prose prose-lg max-w-none prose-invert"
+            dangerouslySetInnerHTML={{ __html: record.paragraph || "" }}
+          />
         </motion.div>
       </div>
     </div>

@@ -108,9 +108,10 @@ export function MRCPPACESSection() {
               className="max-w-full"
               variants={textVariants}
             >
-              <p className="text-base md:text-lg text-gray-700 leading-relaxed text-justify">
-                {section.paragraph}
-              </p>
+              <div 
+                className="text-base md:text-lg text-gray-700 leading-relaxed text-justify prose prose-lg max-w-none"
+                dangerouslySetInnerHTML={{ __html: section.paragraph }}
+              />
             </motion.div>
           </motion.div>
         </div>

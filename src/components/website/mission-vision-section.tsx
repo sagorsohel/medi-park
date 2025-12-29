@@ -106,9 +106,10 @@ function MissionVisionItem({ title, image, text, alt, delay = 0 }: MissionVision
         className="max-w-4xl mx-auto px-4"
         variants={textVariants}
       >
-        <p className="text-base md:text-lg text-gray-700 leading-relaxed text-justify">
-          {text}
-        </p>
+        <div 
+          className="text-base md:text-lg text-gray-700 leading-relaxed text-justify prose prose-lg max-w-none"
+          dangerouslySetInnerHTML={{ __html: text }}
+        />
       </motion.div>
     </motion.div>
   );

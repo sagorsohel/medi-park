@@ -111,9 +111,10 @@ export function TransformingHealthcareSection() {
           viewport={{ once: true, margin: "-50px" }}
           variants={textVariants}
         >
-          <p className="text-base md:text-lg text-primary leading-relaxed text-justify">
-            {section.paragraph}
-          </p>
+          <div 
+            className="text-base md:text-lg text-primary leading-relaxed text-justify prose prose-lg max-w-none"
+            dangerouslySetInnerHTML={{ __html: section.paragraph }}
+          />
         </motion.div>
       </div>
     </div>
