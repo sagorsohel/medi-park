@@ -52,11 +52,11 @@ export function WebsiteNavbar() {
   return (
     <header className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-8xl px-4 sm:px-6 lg:px-8">
       {/* Main Navbar Container - Pill Shaped with Glassmorphism */}
-      <div className={`w-full px-4 py-3 flex items-center justify-between  transition-all duration-300 ${isScrolled ? 'bg-primary backdrop-blur-sm border border-primary-foreground/30   rounded-full' : ''
+      <div className={`w-full px-4 py-3 flex items-center justify-between  transition-all duration-300 ${isScrolled ? 'bg-primary/40 backdrop-blur-sm border border-primary-foreground/30   rounded-full' : ''
         }`}>
         {/* Logo Section - Pill Container */}
         <NavLink to="/" className="flex items-center">
-          <div className="flex items-center gap-2 border border-primary-foreground/50 rounded-full px-4 py-2 bg-primary-foreground/10 backdrop-blur-sm">
+          <div className="flex items-center gap-2 border border-primary-foreground/50 rounded-full px-4 py-2 bg-white backdrop-blur-sm">
             <div className="   flex  justify-center md:w-[133px]">
               <img
                 src="/navbar-logo.png"
@@ -80,7 +80,7 @@ export function WebsiteNavbar() {
         </NavLink>
 
         {/* Desktop Navigation - Center */}
-        <nav className="hidden bg-primary-foreground/10 backdrop-blur-md border px-4 py-4 border-primary-foreground/30 rounded-full lg:flex items-center gap-4 xl:gap-6 ">
+        <nav className={`hidden bg-white backdrop-blur-md border px-4 py-4 border-primary-foreground/30 rounded-full lg:flex items-center gap-4 xl:gap-6 ${isScrolled ? 'bg-blue-500' : 'bg-white'}`}>
           {navLinks.map((link) => (
             <NavLink
               key={link.to}
@@ -88,8 +88,8 @@ export function WebsiteNavbar() {
               end={link.to === "/"}
               className={({ isActive }) =>
                 `text-sm font-medium transition-colors whitespace-nowrap ${isActive
-                  ? "text-primary-foreground font-semibold"
-                  : "text-primary-foreground/90 hover:text-primary-foreground"
+                  ? "text-[#D83072] font-semibold"
+                  : "text-primary hover:text-primary"
                 }`
               }
             >
@@ -144,7 +144,7 @@ export function WebsiteNavbar() {
           <Button
             asChild
             variant="outline"
-            className="hidden md:flex border border-primary-foreground/50 text-white bg-primary-foreground/10 backdrop-blur-sm hover:bg-primary-foreground/20 rounded-full px-12 py-2"
+            className="hidden md:flex border border-primary-foreground/50 text-primary bg-white backdrop-blur-sm hover:bg-primary-foreground/20 rounded-full px-12 py-2"
           >
             <NavLink to="/pricing">Pricing</NavLink>
           </Button>

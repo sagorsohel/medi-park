@@ -92,7 +92,7 @@ export function TransformingHealthcareSection() {
                 <img
                   src={image}
                   alt={`${section.title} ${index + 1}`}
-                  className="w-full h-auto object-cover"
+                  className="w-full h-[300px] object-cover"
                   onError={(e) => {
                     const target = e.target as HTMLImageElement;
                     target.src = "/vite.svg";
