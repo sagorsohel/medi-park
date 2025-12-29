@@ -44,6 +44,7 @@ import FacilitiesPageAdmin from '@/pages/admin/facilities/facilities-page'
 import AddFacilityPage from '@/pages/admin/facilities/add-facility-page'
 import FacilitiesPage from '@/pages/facilities/facilities-page'
 import FacilityDetailPage from '@/pages/facilities/facility-detail-page'
+import MissionVisionPage from '@/pages/mission-vision/mission-vision-page'
 
 const router = createBrowserRouter([
   // 🌐 Website routes (with website layout - sticky navbar & footer)
@@ -53,6 +54,7 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <HomePage /> },
       { path: "about", element: <AboutPage /> },
+      { path: "mission-vision", element: <MissionVisionPage /> },
       { path: "awards", element: <AwardsPage /> },
       { path: "careers", element: <CareerPage /> },
       { path: "careers/job/:id", element: <JobDetailPage /> },

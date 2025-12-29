@@ -19,9 +19,9 @@ import { useGetFacilitiesPublicQuery } from "@/services/homepageApi";
 const navLinks = [
   { to: "/", label: "Home" },
   { to: "/about", label: "About us" },
-  { to: "/awards", label: "Awards" },
+  { to: "/mission-vision", label: "Mission & Vision" },
   { to: "/gellery", label: "Gallery" },
-  { to: "/careers", label: "Careers" },
+  // { to: "/careers", label: "Careers" },
   { to: "/news", label: "News" },
   { to: "/blogs", label: "Blogs" },
   { to: "/contacts", label: "Contacts" },
