@@ -50,6 +50,7 @@ export function BranchManage() {
   const [formState, setFormState] = useState<FormState>(initialState);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [pendingDeleteId, setPendingDeleteId] = useState<number | null>(null);
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 
   const branches = data?.data ?? [];
   const pagination = data?.pagination;
@@ -59,6 +60,7 @@ export function BranchManage() {
       startTransition(() => {
         setFormState(initialState);
         setEditingId(null);
+        setFieldErrors({});
       });
     }
   }, [dialogOpen]);
@@ -66,6 +68,7 @@ export function BranchManage() {
   const handleOpenCreate = () => {
     setFormState(initialState);
     setEditingId(null);
+    setFieldErrors({});
     setDialogOpen(true);
   };
 
@@ -79,6 +82,7 @@ export function BranchManage() {
       is_main: item.is_main ?? 0,
     });
     setEditingId(item.id);
+    setFieldErrors({});
     setDialogOpen(true);
   };
 
@@ -87,6 +91,9 @@ export function BranchManage() {
       toast.error("All fields are required.");
       return;
     }
+
+    // Clear previous errors
+    setFieldErrors({});
 
     try {
       if (editingId) {
@@ -98,9 +105,41 @@ export function BranchManage() {
       }
       setDialogOpen(false);
       refetch();
-    } catch (err) {
+    } catch (err: unknown) {
       console.error("Failed to save branch:", err);
-      toast.error("Failed to save branch. Please try again.");
+      
+      // Extract error message and field errors
+      const errorData = (err as { data?: { message?: string; errors?: Record<string, string | string[]> } })?.data;
+      let errorMessage = "Failed to save branch. Please try again.";
+      
+      if (errorData) {
+        // Get main error message
+        if (errorData.message) {
+          errorMessage = errorData.message;
+        }
+        
+        // Extract field-specific errors
+        const errorFields = errorData.errors;
+        if (errorFields && typeof errorFields === 'object') {
+          const errors: Record<string, string> = {};
+          Object.keys(errorFields).forEach((field) => {
+            const fieldError = errorFields[field];
+            if (Array.isArray(fieldError) && fieldError.length > 0) {
+              errors[field] = fieldError[0];
+            } else if (typeof fieldError === 'string') {
+              errors[field] = fieldError;
+            }
+          });
+          setFieldErrors(errors);
+          
+          // Show first field error in toast if no general message
+          if (!errorData.message && Object.keys(errors).length > 0) {
+            errorMessage = Object.values(errors)[0];
+          }
+        }
+      }
+      
+      toast.error(errorMessage);
     }
   };
 
@@ -217,30 +256,58 @@ export function BranchManage() {
               <Label>Name</Label>
               <Input
                 value={formState.name}
-                onChange={(e) => setFormState((prev) => ({ ...prev, name: e.target.value }))}
+                onChange={(e) => {
+                  setFormState((prev) => ({ ...prev, name: e.target.value }));
+                  if (fieldErrors.name) setFieldErrors((prev) => ({ ...prev, name: "" }));
+                }}
+                className={fieldErrors.name ? "border-destructive" : ""}
               />
+              {fieldErrors.name && (
+                <p className="text-sm text-destructive">{fieldErrors.name}</p>
+              )}
             </div>
             <div className="space-y-1">
               <Label>Address</Label>
               <Input
                 value={formState.address}
-                onChange={(e) => setFormState((prev) => ({ ...prev, address: e.target.value }))}
+                onChange={(e) => {
+                  setFormState((prev) => ({ ...prev, address: e.target.value }));
+                  if (fieldErrors.address) setFieldErrors((prev) => ({ ...prev, address: "" }));
+                }}
+                className={fieldErrors.address ? "border-destructive" : ""}
               />
+              {fieldErrors.address && (
+                <p className="text-sm text-destructive">{fieldErrors.address}</p>
+              )}
             </div>
             <div className="space-y-1">
               <Label>Phone</Label>
               <Input
                 value={formState.phone}
-                onChange={(e) => setFormState((prev) => ({ ...prev, phone: e.target.value }))}
+                onChange={(e) => {
+                  setFormState((prev) => ({ ...prev, phone: e.target.value }));
+                  if (fieldErrors.phone) setFieldErrors((prev) => ({ ...prev, phone: "" }));
+                }}
+                className={fieldErrors.phone ? "border-destructive" : ""}
               />
+              {fieldErrors.phone && (
+                <p className="text-sm text-destructive">{fieldErrors.phone}</p>
+              )}
             </div>
             <div className="space-y-1">
               <Label>Email</Label>
               <Input
                 type="email"
                 value={formState.email}
-                onChange={(e) => setFormState((prev) => ({ ...prev, email: e.target.value }))}
+                onChange={(e) => {
+                  setFormState((prev) => ({ ...prev, email: e.target.value }));
+                  if (fieldErrors.email) setFieldErrors((prev) => ({ ...prev, email: "" }));
+                }}
+                className={fieldErrors.email ? "border-destructive" : ""}
               />
+              {fieldErrors.email && (
+                <p className="text-sm text-destructive">{fieldErrors.email}</p>
+              )}
             </div>
             <div className="space-y-1">
               <Label>Status</Label>
