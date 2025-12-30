@@ -4,7 +4,7 @@ import { NavLink, Link } from "react-router";
 import { useAppSelector, useAppDispatch } from "@/store/hooks";
 import { logout } from "@/store/slices/authSlice";
 import { Button } from "@/components/ui/button";
-import { Menu, X, ChevronDown } from "lucide-react";
+import { Menu,  ChevronDown } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import {
@@ -50,9 +50,9 @@ export function WebsiteNavbar() {
   };
 
   return (
-    <header className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-8xl px-4 sm:px-6 lg:px-8">
+    <header className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 w-full sm:max-w-8xl px-4 sm:px-6 lg:px-8">
       {/* Main Navbar Container - Pill Shaped with Glassmorphism */}
-      <div className={`w-full px-4 py-3 flex items-center justify-between  transition-all duration-300 ${isScrolled ? 'bg-primary/40 backdrop-blur-sm border border-primary-foreground/30   rounded-full' : ''
+      <div className={`w-full  sm:px-4 py-3 flex items-center justify-between  transition-all duration-300 ${isScrolled ? 'bg-primary/40 px-3 backdrop-blur-sm border border-primary-foreground/30   rounded-full ' : ''
         }`}>
         {/* Logo Section - Pill Container */}
         <NavLink to="/" className="flex items-center">
@@ -61,7 +61,7 @@ export function WebsiteNavbar() {
               <img
                 src="/navbar-logo.png"
                 alt="MediPark Logo"
-                className="md:h-[30px] h-6 w-auto object-cover flex justify-center"
+                className="md:h-[30px] sm:h-6 w-auto px-5 sm:px-0 h-6 object-cover sm:w-auto sm:object-cover flex justify-center"
                 onError={(e) => {
                   const target = e.target as HTMLImageElement;
                   target.src = "/logo.png";
@@ -100,7 +100,7 @@ export function WebsiteNavbar() {
           {/* Facilities Dropdown */}
           <DropdownMenu>
             <DropdownMenuTrigger className="text-sm font-medium transition-colors whitespace-nowrap text-primary hover:text-primary focus:outline-none flex items-center gap-1">
-              Facilities
+              Departments
               <ChevronDown className="w-4 h-4" />
             </DropdownMenuTrigger>
             <DropdownMenuContent 
@@ -109,12 +109,12 @@ export function WebsiteNavbar() {
             >
               <div className="space-y-4">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg font-bold text-primary">Our Facilities</h3>
+                  <h3 className="text-lg font-bold text-primary">Our Departments</h3>
                   <Link 
                     to="/facilities" 
                     className="text-sm font-semibold text-primary hover:underline"
                   >
-                    View All Facilities
+                    View All Departments
                   </Link>
                 </div>
                 {activeFacilities.length > 0 ? (
@@ -157,7 +157,7 @@ export function WebsiteNavbar() {
                 <span className="sr-only">Toggle menu</span>
               </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="w-[300px] sm:w-[400px] bg-background/95 backdrop-blur-md">
+            <SheetContent side="right" className="w-[300px] sm:w-[400px] p-4 bg-background/95 backdrop-blur-md">
               <div className="flex flex-col h-full">
                 <div className="flex items-center justify-between mb-6">
                   <div className="flex items-center gap-2">
@@ -170,17 +170,15 @@ export function WebsiteNavbar() {
                         target.src = "/logo.png";
                       }}
                     />
-                    <span className="text-lg font-bold text-foreground">
-                      MediPark
-                    </span>
+                   
                   </div>
-                  <Button
+                  {/* <Button
                     variant="ghost"
                     size="icon"
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     <X className="h-5 w-5" />
-                  </Button>
+                  </Button> */}
                 </div>
                 <nav className="flex flex-col gap-4">
                   {navLinks.map((link) => (
@@ -207,7 +205,7 @@ export function WebsiteNavbar() {
                       onClick={() => setMobileMenuOpen(false)}
                       className="text-base font-medium transition-colors text-muted-foreground hover:text-primary"
                     >
-                      Facilities
+                      Departments
                     </Link>
                     {activeFacilities.length > 0 && (
                       <div className="mt-2 ml-4 space-y-2">
