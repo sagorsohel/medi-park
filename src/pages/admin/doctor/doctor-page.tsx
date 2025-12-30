@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { DataTableFilters } from "@/components/ui/data-table-filters";
 import { DataTablePagination } from "@/components/ui/data-table-pagination";
@@ -19,10 +19,14 @@ export default function DoctorPage() {
     const [filter, setFilter] = useState<string>("all");
     const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
     const [doctorToDelete, setDoctorToDelete] = useState<string | null>(null);
-    const [actionDoctorId, setActionDoctorId] = useState<string | null>(null);
-    const [actionType, setActionType] = useState<string | null>(null);
 
     const { data, isLoading, refetch } = useGetDoctorsQuery(currentPage);
+
+    // Refetch on mount and page change
+    useEffect(() => {
+        refetch();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [currentPage]);
     const [deleteDoctor] = useDeleteDoctorMutation();
 
     // Map API doctors to table format
@@ -65,7 +69,6 @@ export default function DoctorPage() {
     }, [searchQuery, filter, mappedDoctors]);
 
     const pagination = data?.pagination;
-    const totalPages = pagination?.total_page || 1;
     const showingFrom = pagination ? (pagination.current_page - 1) * pagination.per_page + 1 : 0;
     const showingTo = pagination
         ? Math.min(pagination.current_page * pagination.per_page, pagination.total_count)
@@ -93,9 +96,6 @@ export default function DoctorPage() {
     };
 
     const handleAction = (id: string, action: string) => {
-        setActionDoctorId(id);
-        setActionType(action);
-        
         if (action === "delete") {
             setDoctorToDelete(id);
             setDeleteConfirmOpen(true);
@@ -138,6 +138,7 @@ export default function DoctorPage() {
     const handleFilterChange = (newFilter: string) => {
         setFilter(newFilter);
         setCurrentPage(1);
+        refetch();
     };
 
     return (
