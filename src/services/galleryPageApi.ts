@@ -47,7 +47,7 @@ export const galleryPageApi = api.injectEndpoints({
       GalleryPageBannerResponse,
       { id: number; data: UpdateGalleryPageBannerPayload }
     >({
-      query: ({ id, data }) => {
+      query: ({  data }) => {
         const formData = new FormData();
         if (data.background_image !== undefined) {
           formData.append("background_image", data.background_image);
@@ -60,7 +60,7 @@ export const galleryPageApi = api.injectEndpoints({
         }
 
         return {
-          url: `/gallery-page-banner-sections/${id}`,
+          url: `/gallery-page-banner-sections`,
           method: "POST",
           body: formData,
         };

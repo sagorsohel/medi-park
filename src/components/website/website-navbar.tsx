@@ -99,7 +99,7 @@ export function WebsiteNavbar() {
           
           {/* Facilities Dropdown */}
           <DropdownMenu>
-            <DropdownMenuTrigger className="text-sm font-medium transition-colors whitespace-nowrap text-primary-foreground/90 hover:text-primary-foreground focus:outline-none flex items-center gap-1">
+            <DropdownMenuTrigger className="text-sm font-medium transition-colors whitespace-nowrap text-primary hover:text-primary focus:outline-none flex items-center gap-1">
               Facilities
               <ChevronDown className="w-4 h-4" />
             </DropdownMenuTrigger>
