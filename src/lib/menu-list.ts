@@ -119,7 +119,7 @@ export function getMenuList(_pathname: string): Group[] {
         },
         {
           href: "/admin/website/facilities",
-          label: "Facilities",
+          label: "Departments",
           icon: Building,
           submenus: []
         },

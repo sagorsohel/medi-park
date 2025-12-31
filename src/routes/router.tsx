@@ -49,6 +49,8 @@ import FutureVenturesPage from '@/pages/admin/future-ventures/future-ventures-pa
 import AddFutureVenturePage from '@/pages/admin/future-ventures/add-future-venture-page'
 import EditFutureVenturePage from '@/pages/admin/future-ventures/edit-future-venture-page'
 import FutureVentureDetailPage from '@/pages/future-ventures/future-venture-detail-page'
+import NotFoundPage from '@/pages/404/not-found-page'
+import ComingSoonPage from '@/pages/coming-soon/coming-soon-page'
 
 const router = createBrowserRouter([
   // 🌐 Website routes (with website layout - sticky navbar & footer)
@@ -75,6 +77,7 @@ const router = createBrowserRouter([
       { path: "gellery", element: <GelleryPage /> },
       { path: "contacts", element: <ContactPage /> },
       { path: "privacy-policy", element: <PrivacyPage /> },
+      { path: "coming-soon", element: <ComingSoonPage /> },
     ],
   },
 
@@ -157,6 +160,12 @@ const router = createBrowserRouter([
     children: [
       { path: "dashboard", element: <UserDashboardPage /> },
     ],
+  },
+
+  // 🚫 404 Not Found - Catch all unmatched routes
+  {
+    path: "*",
+    element: <NotFoundPage />,
   },
 ]);
 
