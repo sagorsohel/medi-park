@@ -14,6 +14,11 @@ import {
   DropdownMenuTrigger,
  
 } from "@/components/ui/dropdown-menu";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 import { useGetFacilitiesPublicQuery } from "@/services/homepageApi";
 import { useGetFutureVenturesPublicQuery } from "@/services/futureVenturesApi";
 
@@ -33,6 +38,8 @@ export function WebsiteNavbar() {
   const { isAuthenticated, user } = useAppSelector((state) => state.auth);
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
   const [isScrolled, setIsScrolled] = useState<boolean>(false);
+  const [departmentsOpen, setDepartmentsOpen] = useState<boolean>(false);
+  const [futureVenturesOpen, setFutureVenturesOpen] = useState<boolean>(false);
   const { data: facilitiesData } = useGetFacilitiesPublicQuery();
   const { data: futureVenturesData } = useGetFutureVenturesPublicQuery(1);
   
@@ -234,69 +241,71 @@ export function WebsiteNavbar() {
                   
                   {/* Facilities in Mobile Menu */}
                   <div className="pl-4">
-                    <Link
-                      to="/facilities"
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="text-base font-medium transition-colors text-muted-foreground hover:text-primary"
-                    >
-                      Departments
-                    </Link>
-                    {activeFacilities.length > 0 && (
-                      <div className="mt-2 ml-4 space-y-2">
-                        {activeFacilities.slice(0, 10).map((facility) => (
-                          <Link
-                            key={facility.id}
-                            to={`/facilities/${facility.id}`}
-                            onClick={() => setMobileMenuOpen(false)}
-                            className="block text-sm text-muted-foreground hover:text-primary transition-colors"
-                          >
-                            {facility.title}
-                          </Link>
-                        ))}
-                        {activeFacilities.length > 10 && (
-                          <Link
-                            to="/facilities"
-                            onClick={() => setMobileMenuOpen(false)}
-                            className="block text-sm text-primary font-semibold"
-                          >
-                            View All ({activeFacilities.length})
-                          </Link>
+                    <Collapsible open={departmentsOpen} onOpenChange={setDepartmentsOpen}>
+                      <CollapsibleTrigger className="flex items-center justify-between w-full text-base font-medium transition-colors text-muted-foreground hover:text-primary">
+                        <span>Departments</span>
+                        <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${departmentsOpen ? 'transform rotate-180' : ''}`} />
+                      </CollapsibleTrigger>
+                      <CollapsibleContent className="overflow-hidden data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down">
+                        {activeFacilities.length > 0 ? (
+                          <div className="mt-2 ml-4 space-y-2 max-h-[300px] overflow-y-auto">
+                            {activeFacilities.map((facility) => (
+                              <Link
+                                key={facility.id}
+                                to={`/facilities/${facility.id}`}
+                                onClick={() => setMobileMenuOpen(false)}
+                                className="block text-sm text-muted-foreground hover:text-primary transition-colors py-1"
+                              >
+                                {facility.title}
+                              </Link>
+                            ))}
+                            <Link
+                              to="/facilities"
+                              onClick={() => setMobileMenuOpen(false)}
+                              className="block text-sm text-primary font-semibold py-1"
+                            >
+                              View All ({activeFacilities.length})
+                            </Link>
+                          </div>
+                        ) : (
+                          <p className="mt-2 ml-4 text-sm text-gray-500">No departments available</p>
                         )}
-                      </div>
-                    )}
+                      </CollapsibleContent>
+                    </Collapsible>
                   </div>
                   {/* Future Ventures in Mobile Menu */}
                   <div className="pl-4 pt-4 border-t">
-                    <Link
-                      to="/future-ventures"
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="text-base font-medium transition-colors text-muted-foreground hover:text-primary"
-                    >
-                      Future Ventures
-                    </Link>
-                    {activeFutureVentures.length > 0 && (
-                      <div className="mt-2 ml-4 space-y-2">
-                        {activeFutureVentures.slice(0, 10).map((venture) => (
-                          <Link
-                            key={venture.id}
-                            to={`/future-ventures/${venture.id}`}
-                            onClick={() => setMobileMenuOpen(false)}
-                            className="block text-sm text-muted-foreground hover:text-primary transition-colors"
-                          >
-                            {venture.title}
-                          </Link>
-                        ))}
-                        {activeFutureVentures.length > 10 && (
-                          <Link
-                            to="/future-ventures"
-                            onClick={() => setMobileMenuOpen(false)}
-                            className="block text-sm text-primary font-semibold"
-                          >
-                            View All ({activeFutureVentures.length})
-                          </Link>
+                    <Collapsible open={futureVenturesOpen} onOpenChange={setFutureVenturesOpen}>
+                      <CollapsibleTrigger className="flex items-center justify-between w-full text-base font-medium transition-colors text-muted-foreground hover:text-primary">
+                        <span>Future Ventures</span>
+                        <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${futureVenturesOpen ? 'transform rotate-180' : ''}`} />
+                      </CollapsibleTrigger>
+                      <CollapsibleContent className="overflow-hidden data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down">
+                        {activeFutureVentures.length > 0 ? (
+                          <div className="mt-2 ml-4 space-y-2 max-h-[300px] overflow-y-auto">
+                            {activeFutureVentures.map((venture) => (
+                              <Link
+                                key={venture.id}
+                                to={`/future-ventures/${venture.id}`}
+                                onClick={() => setMobileMenuOpen(false)}
+                                className="block text-sm text-muted-foreground hover:text-primary transition-colors py-1"
+                              >
+                                {venture.title}
+                              </Link>
+                            ))}
+                            <Link
+                              to="/future-ventures"
+                              onClick={() => setMobileMenuOpen(false)}
+                              className="block text-sm text-primary font-semibold py-1"
+                            >
+                              View All ({activeFutureVentures.length})
+                            </Link>
+                          </div>
+                        ) : (
+                          <p className="mt-2 ml-4 text-sm text-gray-500">No future ventures available</p>
                         )}
-                      </div>
-                    )}
+                      </CollapsibleContent>
+                    </Collapsible>
                   </div>
                   {isAuthenticated && (
                     <div className="pt-4 border-t">
