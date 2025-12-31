@@ -225,7 +225,7 @@ export function SpecialitiesSection() {
                     window.location.href = "/facilities";
                   }}
                 >
-                  View All Specialities
+                  View All Departments
                 </Button>
               </motion.div>
             </div>
