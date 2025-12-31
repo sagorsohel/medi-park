@@ -81,6 +81,7 @@ export interface Facility {
   footer?: string;
   image: string;
   status: "active" | "inactive";
+  is_specialized?: boolean;
   accordions?: Array<{ title: string; description: string }>;
   doctors?: number[] | Array<{ id: number; doctor_name: string; department: string; specialist: string; image?: string }>;
   blogs?: number[] | Array<{ id: number; title: string; description: string; feature_image?: string }>;
@@ -117,6 +118,7 @@ export interface CreateFacilityPayload {
   footer?: string;
   image: string | File;
   status?: "active" | "inactive";
+  is_specialized?: boolean;
   accordions?: Array<{ title: string; description: string }>;
   doctors?: number[];
   blogs?: number[];
@@ -130,6 +132,7 @@ export interface UpdateFacilityPayload {
   footer?: string;
   image?: string | File;
   status?: "active" | "inactive";
+  is_specialized?: boolean;
   accordions?: Array<{ title: string; description: string }>;
   doctors?: number[];
   blogs?: number[];
@@ -447,6 +450,9 @@ export const homepageApi = api.injectEndpoints({
         if (body.status) {
           formData.append("status", body.status);
         }
+        if (body.is_specialized !== undefined) {
+          formData.append("is_specialized", String(body.is_specialized));
+        }
         if (body.accordions && body.accordions.length > 0) {
           body.accordions.forEach((accordion, index) => {
             formData.append(`accordions[${index}][title]`, accordion.title);
@@ -498,6 +504,9 @@ export const homepageApi = api.injectEndpoints({
         }
         if (body.status) {
           formData.append("status", body.status);
+        }
+        if (body.is_specialized !== undefined) {
+          formData.append("is_specialized", String(body.is_specialized));
         }
         if (body.accordions !== undefined) {
           body.accordions.forEach((accordion, index) => {

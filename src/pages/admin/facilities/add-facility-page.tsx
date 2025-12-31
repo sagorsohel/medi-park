@@ -79,6 +79,7 @@ export default function AddFacilityPage() {
     const [description2, setDescription2] = useState("");
     const [footer, setFooter] = useState("");
     const [status, setStatus] = useState<"active" | "inactive">("inactive");
+    const [isSpecialized, setIsSpecialized] = useState<boolean>(false);
     const [imageFile, setImageFile] = useState<File | null>(null);
     const [imagePreview, setImagePreview] = useState<string | null>(null);
     const [accordions, setAccordions] = useState<AccordionItem[]>([]);
@@ -109,6 +110,7 @@ export default function AddFacilityPage() {
                 setDescription2(facility.description2 || "");
                 setFooter(facility.footer || "");
                 setStatus(facility.status || "inactive");
+                setIsSpecialized(facility.is_specialized || false);
                 setImagePreview(facility.image || null);
                 setAccordions(facility.accordions || []);
                 
@@ -181,6 +183,7 @@ export default function AddFacilityPage() {
                 description2: description2 || undefined,
                 footer: footer || undefined,
                 status,
+                is_specialized: isSpecialized,
                 image: imageFile || imagePreview || "",
                 accordions: accordions.length > 0 ? accordions : undefined,
                 doctors: selectedDoctors.length > 0 ? selectedDoctors : undefined,
@@ -409,6 +412,25 @@ export default function AddFacilityPage() {
                             <option value="inactive">Inactive</option>
                             <option value="active">Active</option>
                         </select>
+                    </FieldContent>
+                </Field>
+
+                <Field>
+                    <FieldLabel>Is Specialized</FieldLabel>
+                    <FieldContent>
+                        <div className="flex items-center space-x-2">
+                            <input
+                                type="checkbox"
+                                id="is_specialized"
+                                checked={isSpecialized}
+                                onChange={(e) => setIsSpecialized(e.target.checked)}
+                                disabled={isViewMode}
+                                className="w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary"
+                            />
+                            <label htmlFor="is_specialized" className="text-sm font-medium text-gray-700">
+                                Mark as Specialized Facility
+                            </label>
+                        </div>
                     </FieldContent>
                 </Field>
 

@@ -137,7 +137,14 @@ export default function FacilitiesPage() {
                                     >
                                         <CardHeader className="pb-4">
                                             <div className="flex items-center justify-between">
-                                                <CardTitle className="text-lg line-clamp-1">{facility.title}</CardTitle>
+                                                <div className="flex items-center gap-2">
+                                                    <CardTitle className="text-lg line-clamp-1">{facility.title}</CardTitle>
+                                                    {facility.is_specialized && (
+                                                        <span className="px-2 py-1 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-xs font-bold rounded-full">
+                                                            SPECIALIZED
+                                                        </span>
+                                                    )}
+                                                </div>
                                                 <div className="flex items-center gap-2">
                                                     <Button
                                                         variant="outline"
