@@ -118,7 +118,7 @@ export interface CreateFacilityPayload {
   footer?: string;
   image: string | File;
   status?: "active" | "inactive";
-  is_specialized?: boolean;
+  is_specialized?: boolean | number;
   accordions?: Array<{ title: string; description: string }>;
   doctors?: number[];
   blogs?: number[];
@@ -132,7 +132,7 @@ export interface UpdateFacilityPayload {
   footer?: string;
   image?: string | File;
   status?: "active" | "inactive";
-  is_specialized?: boolean;
+  is_specialized?: boolean | number;
   accordions?: Array<{ title: string; description: string }>;
   doctors?: number[];
   blogs?: number[];

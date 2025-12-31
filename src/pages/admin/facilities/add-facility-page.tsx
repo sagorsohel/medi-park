@@ -183,7 +183,7 @@ export default function AddFacilityPage() {
                 description2: description2 || undefined,
                 footer: footer || undefined,
                 status,
-                is_specialized: isSpecialized ? 1 : 0,
+                is_specialized: (isSpecialized ? 1 : 0) as boolean | number,
                 image: imageFile || imagePreview || "",
                 accordions: accordions.length > 0 ? accordions : undefined,
                 doctors: selectedDoctors.length > 0 ? selectedDoctors : undefined,
