@@ -10,7 +10,7 @@ export default function InvestorsPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const { data, isLoading, isFetching } = useGetInvestorsQuery(currentPage);
 
-  // Map API data to component format
+  // Map current page data to component format
   const displayedInvestors = useMemo(() => {
     if (!data?.data) return [];
     return data.data.map((investor) => ({
@@ -47,28 +47,57 @@ export default function InvestorsPage() {
             Investor List
           </h1>
 
-          {/* Investor Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
-            {displayedInvestors.map((investor) => (
-              <InvestorListCard
-                key={investor.id}
-                image={investor.image}
-                name={investor.name}
-                role={investor.role}
-              />
-            ))}
-          </div>
-
-          {/* Load More Button */}
-          {displayCount < allInvestors.length && (
-            <div className="text-center mt-8">
-              <Button
-                className="bg-primary hover:bg-blue-800 text-white px-8 py-6 text-lg font-semibold rounded-lg"
-                onClick={handleLoadMore}
-              >
-                Load More Investor
-              </Button>
+          {/* Loading State */}
+          {isLoading && currentPage === 1 ? (
+            <div className="flex items-center justify-center py-16">
+              <Loader2 className="h-8 w-8 animate-spin text-primary" />
             </div>
+          ) : displayedInvestors.length === 0 ? (
+            <div className="text-center py-16">
+              <p className="text-gray-500 text-lg">No investors found.</p>
+            </div>
+          ) : (
+            <>
+              {/* Investor Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+                {displayedInvestors.map((investor) => (
+                  <InvestorListCard
+                    key={investor.id}
+                    image={investor.image}
+                    name={investor.name}
+                    role={investor.role}
+                  />
+                ))}
+              </div>
+
+              {/* Load More Button */}
+              {hasMorePages && (
+                <div className="text-center mt-8">
+                  <Button
+                    className="bg-primary hover:bg-blue-800 text-white px-8 py-6 text-lg font-semibold rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                    onClick={handleLoadMore}
+                    disabled={isLoadingMore}
+                  >
+                    {isLoadingMore ? (
+                      <>
+                        <Loader2 className="w-5 h-5 mr-2 animate-spin inline" />
+                        Loading...
+                      </>
+                    ) : (
+                      "Load More Investor"
+                    )}
+                  </Button>
+                </div>
+              )}
+
+              {/* Show total count if available */}
+              {data?.pagination && (
+                <div className="text-center mt-4 text-sm text-gray-500">
+                  Showing {displayedInvestors.length} of {data.pagination.total_count} investors
+                  {currentPage > 1 && ` (Page ${currentPage})`}
+                </div>
+              )}
+            </>
           )}
         </div>
       </section>
