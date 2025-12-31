@@ -1,24 +1,34 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { PageHeroSection } from '@/components/website/page-hero-section'
 import { BreadcrumbSection } from '@/components/website/breadcrumb-section'
 import { InvestorListCard } from '@/components/website/investor-list-card'
 import { Button } from '@/components/ui/button'
+import { useGetInvestorsQuery } from '@/services/investorApi'
+import { Loader2 } from 'lucide-react'
 
 export default function InvestorsPage() {
-  const [displayCount, setDisplayCount] = useState(36); // Initial display count
+  const [currentPage, setCurrentPage] = useState(1);
+  const { data, isLoading, isFetching } = useGetInvestorsQuery(currentPage);
 
-  // Generate investor data (you can replace this with actual data)
-  const allInvestors = Array.from({ length: 100 }, (_, i) => ({
-    id: i + 1,
-    image: i % 4 === 0 ? "/hero1.png" : i % 4 === 1 ? "/hero2.png" : i % 4 === 2 ? "/hero3.png" : "/hero4.png",
-    name: "Dr. SM Abdullah Al Mamun",
-    role: "Author"
-  }));
+  // Map API data to component format
+  const displayedInvestors = useMemo(() => {
+    if (!data?.data) return [];
+    return data.data.map((investor) => ({
+      id: investor.id,
+      image: investor.image || investor.applicant_image || "/vite.svg",
+      name: investor.investor_name || investor.applicant_full_name || "Investor",
+      role: investor.profession || investor.organization || "Investor"
+    }));
+  }, [data]);
 
-  const displayedInvestors = allInvestors.slice(0, displayCount);
+  // Check if there are more pages to load
+  const hasMorePages = data?.pagination?.next_page !== null;
+  const isLoadingMore = isFetching && currentPage > 1;
 
   const handleLoadMore = () => {
-    setDisplayCount((prev) => Math.min(prev + 12, allInvestors.length));
+    if (hasMorePages && !isLoadingMore) {
+      setCurrentPage((prev) => prev + 1);
+    }
   };
 
   return (
