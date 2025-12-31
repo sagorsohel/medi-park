@@ -71,7 +71,9 @@ const PUBLIC_PATHS = [
   '/homepage-facilities/active',
   '/homepage-hero-sections/active',
   '/homepage-cta-sections/active',
-  
+
+  '/future-ventures',
+  "/departments",
 ]
 
 export const api = createApi({

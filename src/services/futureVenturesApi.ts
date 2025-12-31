@@ -59,6 +59,16 @@ export const futureVenturesApi = api.injectEndpoints({
       providesTags: ["FutureVenture"],
     }),
 
+    // Get active future ventures (public)
+    getFutureVenturesPublic: builder.query<FutureVenturesResponse, number | void>({
+      query: (page = 1) => ({
+        url: `/future-ventures?page=${page}&status=active`,
+        method: "GET",
+      }),
+      providesTags: ["FutureVenture"],
+      keepUnusedDataFor: 3600, // Cache for 60 minutes
+    }),
+
     // Get single future venture by ID
     getFutureVentureById: builder.query<SingleFutureVentureResponse, number>({
       query: (id) => ({
@@ -141,6 +151,7 @@ export const futureVenturesApi = api.injectEndpoints({
 
 export const {
   useGetFutureVenturesQuery,
+  useGetFutureVenturesPublicQuery,
   useGetFutureVentureByIdQuery,
   useCreateFutureVentureMutation,
   useUpdateFutureVentureMutation,

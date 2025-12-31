@@ -15,6 +15,7 @@ import {
  
 } from "@/components/ui/dropdown-menu";
 import { useGetFacilitiesPublicQuery } from "@/services/homepageApi";
+import { useGetFutureVenturesPublicQuery } from "@/services/futureVenturesApi";
 
 const navLinks = [
   { to: "/", label: "Home" },
@@ -33,8 +34,10 @@ export function WebsiteNavbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
   const [isScrolled, setIsScrolled] = useState<boolean>(false);
   const { data: facilitiesData } = useGetFacilitiesPublicQuery();
+  const { data: futureVenturesData } = useGetFutureVenturesPublicQuery(1);
   
   const activeFacilities = facilitiesData?.data?.filter(f => f.status === 'active') || [];
+  const activeFutureVentures = futureVenturesData?.data?.filter(f => f.status === 'active') || [];
 
   useEffect(() => {
     const handleScroll = () => {
@@ -140,14 +143,45 @@ export function WebsiteNavbar() {
 
         {/* Right side actions */}
         <div className="flex items-center gap-2 border border-primary-foreground/50 rounded-full p-1">
-          {/* Pricing Button - Pill Container */}
-          <Button
-            asChild
-            variant="outline"
-            className="hidden md:flex border border-primary-foreground/50 text-primary bg-white backdrop-blur-sm hover:bg-primary-foreground/20 rounded-full px-12 py-2"
-          >
-            <NavLink to="/pricing">Pricing</NavLink>
-          </Button>
+          {/* Future Ventures Dropdown - Desktop */}
+          <DropdownMenu>
+            <DropdownMenuTrigger className="hidden md:flex text-sm font-medium transition-colors whitespace-nowrap text-primary hover:text-primary focus:outline-none items-center gap-1 border border-primary-foreground/50 bg-white backdrop-blur-sm hover:bg-primary-foreground/20 rounded-full px-6 py-2">
+              Future Ventures
+              <ChevronDown className="w-4 h-4" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent 
+              align="end" 
+              className="max-h-[600px] overflow-y-auto w-[600px] max-w-none mt-5 p-4"
+            >
+              <div className="space-y-4">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-lg font-bold text-primary">Future Ventures</h3>
+                  <Link 
+                    to="/future-ventures" 
+                    className="text-sm font-semibold text-primary hover:underline"
+                  >
+                    View All
+                  </Link>
+                </div>
+                {activeFutureVentures.length > 0 ? (
+                  <div className="grid grid-cols-4 gap-3">
+                    {activeFutureVentures.map((venture) => (
+                      <DropdownMenuItem key={venture.id} asChild className="p-0">
+                        <Link
+                          to={`/future-ventures/${venture.id}`}
+                          className="block px-3 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-primary rounded cursor-pointer transition-colors whitespace-normal"
+                        >
+                          {venture.title}
+                        </Link>
+                      </DropdownMenuItem>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="px-3 py-2 text-sm text-gray-500">No future ventures available</p>
+                )}
+              </div>
+            </DropdownMenuContent>
+          </DropdownMenu>
 
           {/* Mobile menu button */}
           <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
@@ -231,16 +265,38 @@ export function WebsiteNavbar() {
                       </div>
                     )}
                   </div>
-                  <div className="pt-4 border-t ">
-                    <Button
-                      asChild
-                      variant="outline"
-                      className="w-full"
+                  {/* Future Ventures in Mobile Menu */}
+                  <div className="pl-4 pt-4 border-t">
+                    <Link
+                      to="/future-ventures"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="text-base font-medium transition-colors text-muted-foreground hover:text-primary"
                     >
-                      <NavLink to="/pricing" onClick={() => setMobileMenuOpen(false)}>
-                        Pricing
-                      </NavLink>
-                    </Button>
+                      Future Ventures
+                    </Link>
+                    {activeFutureVentures.length > 0 && (
+                      <div className="mt-2 ml-4 space-y-2">
+                        {activeFutureVentures.slice(0, 10).map((venture) => (
+                          <Link
+                            key={venture.id}
+                            to={`/future-ventures/${venture.id}`}
+                            onClick={() => setMobileMenuOpen(false)}
+                            className="block text-sm text-muted-foreground hover:text-primary transition-colors"
+                          >
+                            {venture.title}
+                          </Link>
+                        ))}
+                        {activeFutureVentures.length > 10 && (
+                          <Link
+                            to="/future-ventures"
+                            onClick={() => setMobileMenuOpen(false)}
+                            className="block text-sm text-primary font-semibold"
+                          >
+                            View All ({activeFutureVentures.length})
+                          </Link>
+                        )}
+                      </div>
+                    )}
                   </div>
                   {isAuthenticated && (
                     <div className="pt-4 border-t">
