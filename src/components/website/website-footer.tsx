@@ -25,109 +25,109 @@ export function WebsiteFooter() {
   };
 
   return (
-    <footer className="w-full overflow-hidden bg-primary text-primary-foreground ">
-      <div className=" mx-auto w-full max-w-7xl  py-12">
+    <footer className="w-full overflow-hidden bg-primary text-primary-foreground">
+      <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
         {/* Main Footer Content */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12 justify-center items-center mb-8">
           {/* Leftmost Column - Medipark Tele Service */}
-          <div className="space-y-6">
-            <h3 className="text-lg font-semibold">Medipark Tele Service</h3>
+          <div className="space-y-4 sm:space-y-6">
+            <h3 className="text-base sm:text-lg font-semibold">Medipark Tele Service</h3>
 
             {/* Contact Info Buttons */}
             {(firstPhone || email) && (
-              <div className="space-y-3 ">
+              <div className="space-y-3">
                 {firstPhone && (
-                  <div className="flex items-center justify-between gap-3 p-1 font-bold border border-primary-foreground rounded-[22px] ">
-                    <div className=" rounded-lg px-4 py-2 flex items-center gap-2">
-                      <Clock className="h-4 w-4" />
-                      <span className="text-sm">24 hours</span>
+                  <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2 sm:gap-3 p-1 font-bold border border-primary-foreground rounded-[22px]">
+                    <div className="rounded-lg px-3 sm:px-4 py-2 flex items-center gap-2 justify-center sm:justify-start">
+                      <Clock className="h-4 w-4 shrink-0" />
+                      <span className="text-xs sm:text-sm">24 hours</span>
                     </div>
-                    <div className=" rounded-[22px] px-4 py-2 bg-primary-foreground text-primary flex justify-end items-center gap-2">
-                      <Phone className="h-4 w-4" />
-                      <span className="text-sm">{firstPhone}</span>
+                    <div className="rounded-[22px] px-3 sm:px-4 py-2 bg-primary-foreground text-primary flex justify-center sm:justify-end items-center gap-2">
+                      <Phone className="h-4 w-4 shrink-0" />
+                      <span className="text-xs sm:text-sm break-all">{firstPhone}</span>
                     </div>
                   </div>
                 )}
-                {email && <p className="text-sm">{email}</p>}
+                {email && (
+                  <p className="text-xs sm:text-sm break-all">{email}</p>
+                )}
               </div>
             )}
 
-            {/* Navigation Links */}
-            <nav className="flex flex-col gap-2">
-              <Link to="/services" className="text-sm hover:text-blue-300 transition-colors">
+            {/* Logo - Mobile */}
+            <div className="md:hidden">
+              <img
+                src="/footer-logo-1.png"
+                alt="MediPark Specialized Hospital"
+                className="h-10 sm:h-12 w-auto"
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  target.src = "/logo.png";
+                }}
+              />
+            </div>
+          </div>
+
+          <div className="md:col-span-1 lg:col-span-2">
+            <nav className="grid grid-cols-2 gap-x-4 gap-y-2 sm:gap-x-6 sm:gap-y-3">
+              <Link to="/services" className="text-xs sm:text-sm hover:text-blue-300 transition-colors">
                 Services
               </Link>
-              <Link to="/solution" className="text-sm hover:text-blue-300 transition-colors">
-                Solution
-              </Link>
-              <Link to="/contacts" className="text-sm hover:text-blue-300 transition-colors">
-                Contact Us
-              </Link>
-              <Link to="/careers" className="text-sm hover:text-blue-300 transition-colors">
-                Careers
-              </Link>
-            </nav>
-
-            {/* Logo */}
-
-          </div>
-
-          {/* Second Column - Navigation Links */}
-          <div className="space-y-4">
-            <nav className="flex flex-col gap-2">
-              <Link to="/about" className="text-sm hover:text-blue-300 transition-colors">
+              <Link to="/about" className="text-xs sm:text-sm hover:text-blue-300 transition-colors">
                 About Us
               </Link>
-              <Link to="/gallery" className="text-sm hover:text-blue-300 transition-colors">
+              <Link to="/solution" className="text-xs sm:text-sm hover:text-blue-300 transition-colors">
+                Solution
+              </Link>
+              <Link to="/gallery" className="text-xs sm:text-sm hover:text-blue-300 transition-colors">
                 Gallery
               </Link>
-              <Link to="/blogs" className="text-sm hover:text-blue-300 transition-colors">
+              <Link to="/contacts" className="text-xs sm:text-sm hover:text-blue-300 transition-colors">
+                Contact Us
+              </Link>
+              <Link to="/blogs" className="text-xs sm:text-sm hover:text-blue-300 transition-colors">
                 Blogs
               </Link>
-              <Link to="/team" className="text-sm hover:text-blue-300 transition-colors">
+              <Link to="/careers" className="text-xs sm:text-sm hover:text-blue-300 transition-colors">
+                Careers
+              </Link>
+              <Link to="/team" className="text-xs sm:text-sm hover:text-blue-300 transition-colors">
                 Team
               </Link>
-            </nav>
-          </div>
-
-          {/* Third Column - More Links */}
-          <div className="space-y-4">
-            <nav className="flex flex-col gap-2">
-              <Link to="/faqs" className="text-sm hover:text-blue-300 transition-colors">
+              <Link to="/faqs" className="text-xs sm:text-sm hover:text-blue-300 transition-colors">
                 FAQs
               </Link>
-              <Link to="/benefits" className="text-sm hover:text-blue-300 transition-colors">
+              <Link to="/benefits" className="text-xs sm:text-sm hover:text-blue-300 transition-colors">
                 Benefits
               </Link>
-              <Link to="/privacy" className="text-sm hover:text-blue-300 transition-colors">
+              <Link to="/privacy" className="text-xs sm:text-sm hover:text-blue-300 transition-colors">
                 Privacy & Policy
               </Link>
-              <Link to="/terms" className="text-sm hover:text-blue-300 transition-colors">
+              <Link to="/terms" className="text-xs sm:text-sm hover:text-blue-300 transition-colors">
                 Terms & Conditions
               </Link>
             </nav>
           </div>
 
           {/* Rightmost Section */}
-          <div className="space-y-6">
-            {/* Logo and Tagline */}
-            <div>
+          <div className="space-y-4 sm:space-y-6">
+            {/* Logo and Tagline - Desktop */}
+            <div className="hidden md:block">
               <img
                 src="/footer-logo-1.png"
                 alt="MediPark Specialized Hospital"
-                className="h-12 w-auto mb-2"
+                className="h-10 sm:h-12 w-auto mb-2"
                 onError={(e) => {
                   const target = e.target as HTMLImageElement;
                   target.src = "/logo.png";
                 }}
               />
-
             </div>
 
             {/* Location */}
             <div>
-              <h4 className="text-lg font-semibold mb-3">Dhaka</h4>
-              <p className="text-sm text-primary-foreground/80 leading-relaxed">
+              <h4 className="text-base sm:text-lg font-semibold mb-2 sm:mb-3">Dhaka</h4>
+              <p className="text-xs sm:text-sm text-primary-foreground/80 leading-relaxed">
                 Lorem Ipsum is simply dummy text of the printing and typesetting industry.
                 Lorem Ipsum has been the industry's standard dummy text ever since the 1500s
               </p>
@@ -135,7 +135,7 @@ export function WebsiteFooter() {
 
             {/* Social Media Icons */}
             {activeSocialLinks.length > 0 && (
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-3 sm:gap-4 flex-wrap">
                 {activeSocialLinks.map((link) => (
                   <a
                     key={link.id}
@@ -149,14 +149,14 @@ export function WebsiteFooter() {
                       <img
                         src={link.image}
                         alt={link.name}
-                        className="h-5 w-5 object-contain"
+                        className="h-4 w-4 sm:h-5 sm:w-5 object-contain"
                         onError={(e) => {
                           const target = e.target as HTMLImageElement;
                           target.style.display = 'none';
                         }}
                       />
                     ) : (
-                      <span className="text-sm">{link.name}</span>
+                      <span className="text-xs sm:text-sm">{link.name}</span>
                     )}
                   </a>
                 ))}
@@ -168,33 +168,36 @@ export function WebsiteFooter() {
         {/* Bottom Row - Copyright and Back to Top */}
 
 
-        <div className="border-t border-primary-foreground/20 pt-6 flex flex-col sm:flex-row justify-between items-center gap-4">
-          <div className="border border-primary-foreground/10  p-2 rounded-full inline-block">
-            <div className="bg-white p-3 rounded-full w-[175px] mx-auto flex justify-center">
-              <img
-                src="/footer-logo-2.png"
-                alt="MediPark Logo"
-                className="h-8 w-auto "
-                onError={(e) => {
-                  const target = e.target as HTMLImageElement;
-                  target.src = "/logo.png";
-                }}
-              />
+        <div className="border-t border-primary-foreground/20 pt-4 sm:pt-6">
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-6">
+            <div className="border border-primary-foreground/10 p-1.5 sm:p-2 rounded-full inline-block order-2 sm:order-1">
+              <div className="bg-white p-2 sm:p-3 rounded-full w-[140px] sm:w-[175px] mx-auto flex justify-center">
+                <img
+                  src="/footer-logo-2.png"
+                  alt="MediPark Logo"
+                  className="h-6 sm:h-8 w-auto"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.src = "/logo.png";
+                  }}
+                />
+              </div>
             </div>
+            <p className="text-xs sm:text-sm text-primary-foreground/80 text-center order-1 sm:order-2">
+              © {currentYear} softinglobal. All rights reserved.
+            </p>
+            <button
+              onClick={scrollToTop}
+              className="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm hover:text-blue-300 transition-colors order-3"
+            >
+              <span className="hidden sm:inline">Back to top</span>
+              <span className="sm:hidden">Top</span>
+              <div className="w-12 sm:w-16 h-0.5 bg-primary-foreground"></div>
+              <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full border bg-primary-foreground border-primary-foreground text-primary flex items-center justify-center shrink-0">
+                <Mouse className="h-3 w-3 sm:h-4 sm:w-4" />
+              </div>
+            </button>
           </div>
-          <p className="text-sm text-primary-foreground/80">
-            © {currentYear} softinglobal. All rights reserved.
-          </p>
-          <button
-            onClick={scrollToTop}
-            className="flex items-center gap-2 text-sm hover:text-blue-300 transition-colors"
-          >
-            <span>Back to top</span>
-            <div className="w-16 h-0.5  bg-primary-foreground"></div>
-            <div className="w-8 h-8 rounded-full border bg-primary-foreground border-primary-foreground text-primary flex items-center justify-center">
-              <Mouse className="h-4 w-4" />
-            </div>
-          </button>
         </div>
       </div>
     </footer>
