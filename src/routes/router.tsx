@@ -45,6 +45,9 @@ import AddFacilityPage from '@/pages/admin/facilities/add-facility-page'
 import FacilitiesPage from '@/pages/facilities/facilities-page'
 import FacilityDetailPage from '@/pages/facilities/facility-detail-page'
 import MissionVisionPage from '@/pages/mission-vision/mission-vision-page'
+import FutureVenturesPage from '@/pages/admin/future-ventures/future-ventures-page'
+import AddFutureVenturePage from '@/pages/admin/future-ventures/add-future-venture-page'
+import EditFutureVenturePage from '@/pages/admin/future-ventures/edit-future-venture-page'
 
 const router = createBrowserRouter([
   // 🌐 Website routes (with website layout - sticky navbar & footer)
@@ -107,6 +110,10 @@ const router = createBrowserRouter([
       { path: "website/blogs", element: <BlogsPageManage /> },
       { path: "website/contact", element: <ContactAdminPage /> },
       { path: "staff", element: <StaffPage /> },
+      { path: "future-ventures", element: <FutureVenturesPage /> },
+      { path: "future-ventures/add", element: <AddFutureVenturePage /> },
+      { path: "future-ventures/edit/:id", element: <EditFutureVenturePage /> },
+      { path: "future-ventures/view/:id", element: <EditFutureVenturePage /> },
       { path: "staff/new", element: <AddStaffPage /> },
       { path: "doctor", element: <DoctorPage /> },
       { path: "doctor/new", element: <AddDoctorPage /> },

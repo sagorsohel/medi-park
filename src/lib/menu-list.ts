@@ -147,6 +147,12 @@ export function getMenuList(_pathname: string): Group[] {
           icon: Package,
           submenus: []
         },
+        {
+          href: "/admin/future-ventures",
+          label: "Future Ventures",
+          icon: Building,
+          submenus: []
+        },
         // {
         //   href: "/admin/website/inventory-2",
         //   label: "Inventory",
