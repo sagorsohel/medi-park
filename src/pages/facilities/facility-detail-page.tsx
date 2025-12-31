@@ -23,9 +23,9 @@ export default function FacilityDetailPage() {
   const { data: facilityData, isLoading } = useGetFacilityByIdQuery(facilityId);
   const { data: doctorsData } = useGetDoctorsQuery(1);
   const { data: blogsData } = useGetBlogsPublicQuery(1);
-
+console.log(facilityData);
   const facility = facilityData?.data;
-  
+  console.log(facility);
   // Filter doctors by facility or department
   const facilityDoctors = useMemo(() => {
     if (!doctorsData?.data || !facility) return [];

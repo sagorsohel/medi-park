@@ -403,7 +403,7 @@ export const homepageApi = api.injectEndpoints({
     // Facilities Management
     getFacilities: builder.query<FacilitiesResponse, number>({
       query: (page = 1) => ({
-        url: `/facilities?page=${page}`,
+        url: `/departments?page=${page}`,
         method: "GET",
       }),
       providesTags: ["Banner"],
@@ -411,7 +411,7 @@ export const homepageApi = api.injectEndpoints({
 
     getFacilitiesPublic: builder.query<FacilitiesResponse, void>({
       query: () => ({
-        url: "/facilities",
+        url: "/departments",
         method: "GET",
       }),
       providesTags: ["Banner"],
@@ -420,7 +420,7 @@ export const homepageApi = api.injectEndpoints({
 
     getFacilityById: builder.query<SingleFacilityResponse, number>({
       query: (id) => ({
-        url: `/facilities/${id}`,
+        url: `/departments/${id}`,
         method: "GET",
       }),
       providesTags: (result, error, id) => [{ type: "Banner", id }],
@@ -464,7 +464,7 @@ export const homepageApi = api.injectEndpoints({
           });
         }
         return {
-          url: "/facilities",
+          url: "/departments",
           method: "POST",
           body: formData,
         };
@@ -516,7 +516,7 @@ export const homepageApi = api.injectEndpoints({
           });
         }
         return {
-          url: `/facilities/${id}`,
+          url: `/departments/${id}`,
           method: "POST",
           body: formData,
         };
@@ -529,7 +529,7 @@ export const homepageApi = api.injectEndpoints({
       number
     >({
       query: (id) => ({
-        url: `/facilities/${id}`,
+        url: `/departments/${id}`,
         method: "DELETE",
       }),
       invalidatesTags: ["Banner"],
