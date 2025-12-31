@@ -183,7 +183,7 @@ export default function AddFacilityPage() {
                 description2: description2 || undefined,
                 footer: footer || undefined,
                 status,
-                is_specialized: isSpecialized,
+                is_specialized: isSpecialized ? 1 : 0,
                 image: imageFile || imagePreview || "",
                 accordions: accordions.length > 0 ? accordions : undefined,
                 doctors: selectedDoctors.length > 0 ? selectedDoctors : undefined,
@@ -769,7 +769,7 @@ export default function AddFacilityPage() {
                                     {isEditMode ? "Updating..." : "Creating..."}
                                 </>
                             ) : (
-                                isEditMode ? "Update Facility" : "Create Facility"
+                                isEditMode ? "Update Department" : "Create Department"
                             )}
                         </Button>
                     </div>
