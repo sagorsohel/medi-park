@@ -118,7 +118,7 @@ export function WebsiteNavbar() {
               className="max-h-[600px] overflow-y-auto w-[600px] max-w-none mt-5 p-4  -left-[225px]!"
             >
               <div className="space-y-4">
-                <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center justify-between mb-4 sticky top-0 bg-white z-10 pb-2 border-b">
                   <h3 className="text-lg font-bold text-primary">Our Departments</h3>
                   <Link 
                     to="/facilities" 
@@ -157,11 +157,11 @@ export function WebsiteNavbar() {
               <ChevronDown className="w-4 h-4" />
             </DropdownMenuTrigger>
             <DropdownMenuContent 
-              align="end" 
-              className="max-h-[600px] overflow-y-auto w-[600px] max-w-none mt-5 p-4"
+              align="center" 
+              className="max-h-[600px] overflow-y-auto w-[600px] max-w-none mt-5 p-4  -left-[225px]!"
             >
               <div className="space-y-4">
-                <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center justify-between mb-4 sticky top-0 bg-white z-10 pb-2 border-b">
                   <h3 className="text-lg font-bold text-primary">Future Ventures</h3>
                   <Link 
                     to="/future-ventures" 
@@ -200,7 +200,7 @@ export function WebsiteNavbar() {
             </SheetTrigger>
             <SheetContent side="right" className="w-[300px] sm:w-[400px] p-4 bg-background/95 backdrop-blur-md">
               <div className="flex flex-col h-full">
-                <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center justify-between mb-6 shrink-0">
                   <div className="flex items-center gap-2">
                     <img
                       src="/navbar-logo.png"
@@ -221,7 +221,7 @@ export function WebsiteNavbar() {
                     <X className="h-5 w-5" />
                   </Button> */}
                 </div>
-                <nav className="flex flex-col gap-4">
+                <nav className="flex flex-col gap-4 overflow-y-auto flex-1 min-h-0">
                   {navLinks.map((link) => (
                     <NavLink
                       key={link.to}
@@ -238,6 +238,22 @@ export function WebsiteNavbar() {
                       {link.label}
                     </NavLink>
                   ))}
+                  
+                  {/* Future Ventures Direct Link in Mobile Menu */}
+                  {activeFutureVentures.length > 0 && (
+                    <NavLink
+                      to="/future-ventures"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className={({ isActive }) =>
+                        `text-base font-medium transition-colors ${isActive
+                          ? "text-primary border-l-4 border-primary pl-4"
+                          : "text-muted-foreground hover:text-primary pl-4"
+                        }`
+                      }
+                    >
+                      Future Ventures
+                    </NavLink>
+                  )}
                   
                   {/* Facilities in Mobile Menu */}
                   <div className="pl-4">

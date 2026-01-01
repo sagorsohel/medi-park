@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { Link } from "react-router";
 import { useGetFacilitiesPublicQuery } from "@/services/homepageApi";
 import { motion, type Variants } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -104,7 +105,7 @@ export function SpecialitiesSection() {
             viewport={{ once: true, margin: "-100px" }}
             variants={imageVariants}
           >
-            <div className="relative w-full h-[500px] md:h-[600px] rounded-lg overflow-hidden shadow-lg">
+            <div className="relative w-full h-[300px] md:h-[600px] rounded-lg overflow-hidden shadow-lg">
               <img
                 src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=800&h=600&fit=crop"
                 alt="Doctor and patient consultation"
@@ -133,7 +134,7 @@ export function SpecialitiesSection() {
 
             {/* Facilities Grid */}
             <motion.div
-              className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-6"
+              className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-3 lg:gap-4 mb-4 md:mb-6"
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, margin: "-50px" }}
@@ -142,9 +143,9 @@ export function SpecialitiesSection() {
               {Array.from({ length: cardsPerPage }).map((_, index) => {
                 const facility = visibleFacilities[index];
                 if (!facility) {
-                  // Empty placeholder to maintain grid structure
+                  // Empty placeholder to maintain grid structure - hidden on mobile to reduce height
                   return (
-                    <div key={`empty-${index}`} className="bg-transparent rounded-lg p-3 md:p-4 min-h-[120px]" />
+                    <div key={`empty-${index}`} className="hidden md:block bg-transparent rounded-lg p-3 md:p-4 min-h-[120px] h-[120px]" />
                   );
                 }
                 return (
@@ -156,24 +157,26 @@ export function SpecialitiesSection() {
                     whileHover={{ scale: 1.05, y: -5 }}
                     transition={{ duration: 0.2 }}
                   >
-                    <div className="bg-white rounded-lg p-3 md:p-4 h-full flex flex-col items-center justify-center text-center border border-gray-200 hover:border-[#1e3a5f] transition-all duration-300 shadow-sm hover:shadow-lg min-h-[120px]">
-                      {/* Facility Image/Icon */}
-                      <div className="w-12 h-12 md:w-16 md:h-16 mb-2 md:mb-3 flex items-center justify-center">
-                        <img
-                          src={facility.image}
-                          alt={facility.title}
-                          className="w-full h-full object-cover rounded-lg"
-                          onError={(e) => {
-                            const target = e.target as HTMLImageElement;
-                            target.src = "/vite.svg";
-                          }}
-                        />
+                    <Link to={`/facilities/${facility.id}`} className="block h-full">
+                      <div className="bg-white rounded-lg p-2 md:p-3 lg:p-4 h-full flex flex-col items-center justify-center text-center border border-gray-200 hover:border-[#1e3a5f] transition-all duration-300 shadow-sm hover:shadow-lg min-h-[80px] md:min-h-[120px]">
+                        {/* Facility Image/Icon */}
+                        <div className="w-10 h-10 md:w-12 md:h-12 lg:w-16 lg:h-16 mb-1 md:mb-2 lg:mb-3 flex items-center justify-center">
+                          <img
+                            src={facility.image}
+                            alt={facility.title}
+                            className="w-full h-full object-cover rounded-lg"
+                            onError={(e) => {
+                              const target = e.target as HTMLImageElement;
+                              target.src = "/vite.svg";
+                            }}
+                          />
+                        </div>
+                        {/* Facility Title */}
+                        <h3 className="text-[10px] md:text-xs lg:text-sm font-semibold text-[#1e3a5f] line-clamp-2 group-hover:text-[#1e3a5f] transition-colors leading-tight">
+                          {facility.title}
+                        </h3>
                       </div>
-                      {/* Facility Title */}
-                      <h3 className="text-xs md:text-sm font-semibold text-[#1e3a5f] line-clamp-2 group-hover:text-[#1e3a5f] transition-colors">
-                        {facility.title}
-                      </h3>
-                    </div>
+                    </Link>
                   </motion.div>
                 );
               })}
