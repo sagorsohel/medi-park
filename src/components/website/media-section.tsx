@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import { Link } from "react-router";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useNavigate } from "react-router";
@@ -69,70 +70,150 @@ export function MediaSection() {
 
         {/* News Carousel */}
         <div className="relative max-w-6xl mx-auto mb-12">
-          {/* Navigation Arrows */}
-          <button
-            onClick={prevSlide}
-            className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-4 z-10 w-12 h-12 rounded-full bg-blue-100 text-primary flex items-center justify-center hover:bg-blue-200 transition-colors shadow-lg"
-            aria-label="Previous news"
-          >
-            <ChevronLeft className="h-6 w-6" />
-          </button>
-
-          <button
-            onClick={nextSlide}
-            className="absolute right-0 top-1/2 transform -translate-y-1/2 translate-x-4 z-10 w-12 h-12 rounded-full bg-blue-100 text-primary flex items-center justify-center hover:bg-blue-200 transition-colors shadow-lg"
-            aria-label="Next news"
-          >
-            <ChevronRight className="h-6 w-6" />
-          </button>
-
-          {/* News Cards */}
-          <motion.div
-            className="grid grid-cols-1 md:grid-cols-3 gap-6"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-50px" }}
-            variants={containerVariants}
-          >
-            {newsItems.map((item, index) => (
-              <motion.div
-                key={item.id}
-                custom={index}
-                variants={cardVariants}
-                className="transition-opacity duration-300"
+          {/* Navigation Arrows - Show on mobile only */}
+          {newsItems.length > 1 && (
+            <>
+              <button
+                onClick={prevSlide}
+                className="md:hidden absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-4 z-10 w-12 h-12 rounded-full bg-blue-100 text-primary flex items-center justify-center hover:bg-blue-200 transition-colors shadow-lg"
+                aria-label="Previous news"
+                disabled={newsItems.length === 0}
               >
-                <div className="bg-white rounded-lg overflow-hidden shadow-md">
-                  <div className="relative h-48 overflow-hidden">
-                    <img
-                      src={item.feature_image}
-                      alt={item.title}
-                      className="w-full h-full object-cover"
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement;
-                        target.src = "/vite.svg";
-                      }}
-                    />
-                  </div>
-                  <div className="bg-primary text-white p-6">
-                    <p className="text-sm text-blue-200 mb-2">
-                      {new Date(item.created_at).toLocaleDateString("en-US", {
-                        day: "numeric",
-                        month: "long",
-                        year: "numeric",
-                      })}
-                    </p>
-                    <h3 className="text-lg font-semibold mb-3">{item.title}</h3>
-                    <a
-                      href={`/news/${item.id}`}
-                      className="text-blue-300 underline hover:text-blue-200 transition-colors"
-                    >
-                      Read more
-                    </a>
-                  </div>
-                </div>
+                <ChevronLeft className="h-6 w-6" />
+              </button>
+
+              <button
+                onClick={nextSlide}
+                className="md:hidden absolute right-0 top-1/2 transform -translate-y-1/2 translate-x-4 z-10 w-12 h-12 rounded-full bg-blue-100 text-primary flex items-center justify-center hover:bg-blue-200 transition-colors shadow-lg"
+                aria-label="Next news"
+                disabled={newsItems.length === 0}
+              >
+                <ChevronRight className="h-6 w-6" />
+              </button>
+            </>
+          )}
+
+          {/* News Cards - Mobile: Single slide, Desktop: Grid */}
+          <div className="relative overflow-hidden">
+            {/* Mobile: Single slide slider */}
+            <div className="md:hidden">
+              <motion.div
+                className="flex transition-transform duration-300 ease-in-out"
+                animate={{
+                  x: `-${currentIndex * 100}%`,
+                }}
+                style={{
+                  width: `${newsItems.length * 100}%`,
+                }}
+              >
+                {newsItems.map((item, index) => (
+                  <motion.div
+                    key={item.id}
+                    className="w-full shrink-0 px-2"
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true }}
+                    variants={cardVariants}
+                    custom={index}
+                  >
+                    <div className="bg-white rounded-lg overflow-hidden shadow-md">
+                      <div className="relative h-48 overflow-hidden">
+                        <img
+                          src={item.feature_image}
+                          alt={item.title}
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            const target = e.target as HTMLImageElement;
+                            target.src = "/vite.svg";
+                          }}
+                        />
+                      </div>
+                      <div className="bg-primary text-white p-6">
+                        <p className="text-sm text-blue-200 mb-2">
+                          {new Date(item.created_at).toLocaleDateString("en-US", {
+                            day: "numeric",
+                            month: "long",
+                            year: "numeric",
+                          })}
+                        </p>
+                        <h3 className="text-lg font-semibold mb-3">{item.title}</h3>
+                        <Link
+                          to={`/news/${item.id}`}
+                          className="text-blue-300 underline hover:text-blue-200 transition-colors"
+                        >
+                          Read more
+                        </Link>
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
               </motion.div>
-            ))}
-          </motion.div>
+            </div>
+
+            {/* Desktop: Grid layout */}
+            <motion.div
+              className="hidden md:grid md:grid-cols-3 gap-6"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-50px" }}
+              variants={containerVariants}
+            >
+              {newsItems.map((item, index) => (
+                <motion.div
+                  key={item.id}
+                  custom={index}
+                  variants={cardVariants}
+                  className="transition-opacity duration-300"
+                >
+                  <div className="bg-white rounded-lg overflow-hidden shadow-md">
+                    <div className="relative h-48 overflow-hidden">
+                      <img
+                        src={item.feature_image}
+                        alt={item.title}
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.src = "/vite.svg";
+                        }}
+                      />
+                    </div>
+                    <div className="bg-primary text-white p-6">
+                      <p className="text-sm text-blue-200 mb-2">
+                        {new Date(item.created_at).toLocaleDateString("en-US", {
+                          day: "numeric",
+                          month: "long",
+                          year: "numeric",
+                        })}
+                      </p>
+                      <h3 className="text-lg font-semibold mb-3">{item.title}</h3>
+                      <Link
+                        to={`/news/${item.id}`}
+                        className="text-blue-300 underline hover:text-blue-200 transition-colors"
+                      >
+                        Read more
+                      </Link>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </motion.div>
+          </div>
+
+          {/* Mobile: Dots indicator */}
+          {newsItems.length > 1 && (
+            <div className="md:hidden flex justify-center gap-2 mt-6">
+              {newsItems.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentIndex(index)}
+                  className={`w-2 h-2 rounded-full transition-all ${
+                    index === currentIndex ? "bg-primary w-8" : "bg-gray-300"
+                  }`}
+                  aria-label={`Go to slide ${index + 1}`}
+                />
+              ))}
+            </div>
+          )}
         </div>
 
         {/* View All Button */}
