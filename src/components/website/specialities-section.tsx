@@ -222,7 +222,7 @@ export function SpecialitiesSection() {
                 transition={{ duration: 0.6, delay: 0.5 }}
               >
                 <Button
-                  className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-lg font-medium transition-colors"
+                  className="bg-primary hover:bg-primary text-white px-6 py-2 rounded-lg font-medium transition-colors"
                   onClick={() => {
                     // Navigate to facilities page or scroll to more facilities
                     window.location.href = "/facilities";
