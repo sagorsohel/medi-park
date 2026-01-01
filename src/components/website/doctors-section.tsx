@@ -52,6 +52,7 @@ export function DoctorsSection() {
               {doctors.map((doctor) => (
                 <DoctorCard
                   key={doctor.id}
+                  id={doctor.id}
                   image={doctor.image}
                   name={doctor.name}
                   specialization={doctor.specialization}

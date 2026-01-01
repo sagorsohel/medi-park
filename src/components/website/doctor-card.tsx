@@ -1,13 +1,16 @@
 "use client";
 
+import { Link } from "react-router";
+
 interface DoctorCardProps {
+  id: number;
   image: string;
   name: string;
   specialization: string;
   description: string;
 }
 
-export function DoctorCard({ image, name, specialization, description }: DoctorCardProps) {
+export function DoctorCard({ id, image, name, specialization, description }: DoctorCardProps) {
   return (
     <div className="relative flex min-w-[320px] lg:min-w-0 h-full overflow-visible flex-col rounded-xl bg-white bg-clip-border text-gray-700 shadow-md">
       {/* Header Section with Gradient Background */}
@@ -42,9 +45,12 @@ export function DoctorCard({ image, name, specialization, description }: DoctorC
 
       {/* Button Section - fixed at bottom */}
       <div className="p-6 pt-0 mt-auto">
-        <button data-ripple-light="true" type="button" className="select-none rounded-lg bg-primary py-3 px-6 text-center align-middle font-sans text-xs font-bold uppercase text-white shadow-md shadow-primary/20 transition-all hover:shadow-lg hover:shadow-primary/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none w-full">
+        <Link
+          to={`/doctors/${id}`}
+          className="block select-none rounded-lg bg-primary py-3 px-6 text-center align-middle font-sans text-xs font-bold uppercase text-white shadow-md shadow-primary/20 transition-all hover:shadow-lg hover:shadow-primary/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none w-full"
+        >
           Read More
-        </button>
+        </Link>
       </div>
     </div>
   );
