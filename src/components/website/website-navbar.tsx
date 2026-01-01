@@ -19,7 +19,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { useGetFacilitiesPublicQuery } from "@/services/homepageApi";
+import { useGetFacilitiesPublicQuery, useGetSpecializedFacilitiesPublicQuery } from "@/services/homepageApi";
 import { useGetFutureVenturesPublicQuery } from "@/services/futureVenturesApi";
 
 const navLinks = [
@@ -39,11 +39,14 @@ export function WebsiteNavbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
   const [isScrolled, setIsScrolled] = useState<boolean>(false);
   const [departmentsOpen, setDepartmentsOpen] = useState<boolean>(false);
+  const [specializedDepartmentsOpen, setSpecializedDepartmentsOpen] = useState<boolean>(false);
   const [futureVenturesOpen, setFutureVenturesOpen] = useState<boolean>(false);
   const { data: facilitiesData } = useGetFacilitiesPublicQuery();
+  const { data: specializedFacilitiesData } = useGetSpecializedFacilitiesPublicQuery();
   const { data: futureVenturesData } = useGetFutureVenturesPublicQuery(1);
   
   const activeFacilities = facilitiesData?.data?.filter(f => f.status === 'active') || [];
+  const activeSpecializedFacilities = specializedFacilitiesData?.data?.filter(f => f.status === 'active') || [];
   const activeFutureVentures = futureVenturesData?.data?.filter(f => f.status === 'active') || [];
 
   useEffect(() => {
@@ -146,6 +149,48 @@ export function WebsiteNavbar() {
               </div>
             </DropdownMenuContent>
           </DropdownMenu>
+
+          {/* Specialized Departments Dropdown */}
+          {activeSpecializedFacilities.length > 0 && (
+            <DropdownMenu>
+              <DropdownMenuTrigger className="text-sm font-medium transition-colors whitespace-nowrap text-primary hover:text-primary focus:outline-none flex items-center gap-1">
+                Specialized Departments
+                <ChevronDown className="w-4 h-4" />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent 
+                align="center" 
+                className="max-h-[600px] overflow-y-auto w-[600px] max-w-none mt-5 p-4  -left-[225px]!"
+              >
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between mb-4 sticky top-0 bg-white z-10 pb-2 border-b">
+                    <h3 className="text-lg font-bold text-primary">Specialized Departments</h3>
+                    <Link 
+                      to="/facilities?is_specialized=true" 
+                      className="text-sm font-semibold text-primary hover:underline"
+                    >
+                      View All Specialized
+                    </Link>
+                  </div>
+                  {activeSpecializedFacilities.length > 0 ? (
+                    <div className="grid grid-cols-4 gap-3">
+                      {activeSpecializedFacilities.map((facility) => (
+                        <DropdownMenuItem key={facility.id} asChild className="p-0">
+                          <Link
+                            to={`/facilities/${facility.id}`}
+                            className="block px-3 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-primary rounded cursor-pointer transition-colors whitespace-normal"
+                          >
+                            {facility.title}
+                          </Link>
+                        </DropdownMenuItem>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="px-3 py-2 text-sm text-gray-500">No specialized departments available</p>
+                  )}
+                </div>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
         </nav>
 
         {/* Right side actions */}
@@ -289,6 +334,42 @@ export function WebsiteNavbar() {
                       </CollapsibleContent>
                     </Collapsible>
                   </div>
+                  {/* Specialized Departments in Mobile Menu */}
+                  {activeSpecializedFacilities.length > 0 && (
+                    <div className="pl-4 pt-4 border-t">
+                      <Collapsible open={specializedDepartmentsOpen} onOpenChange={setSpecializedDepartmentsOpen}>
+                        <CollapsibleTrigger className="flex items-center justify-between w-full text-base font-medium transition-colors text-muted-foreground hover:text-primary">
+                          <span>Specialized Departments</span>
+                          <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${specializedDepartmentsOpen ? 'transform rotate-180' : ''}`} />
+                        </CollapsibleTrigger>
+                        <CollapsibleContent className="overflow-hidden data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down">
+                          {activeSpecializedFacilities.length > 0 ? (
+                            <div className="mt-2 ml-4 space-y-2 max-h-[300px] overflow-y-auto">
+                              {activeSpecializedFacilities.map((facility) => (
+                                <Link
+                                  key={facility.id}
+                                  to={`/facilities/${facility.id}`}
+                                  onClick={() => setMobileMenuOpen(false)}
+                                  className="block text-sm text-muted-foreground hover:text-primary transition-colors py-1"
+                                >
+                                  {facility.title}
+                                </Link>
+                              ))}
+                              <Link
+                                to="/facilities?is_specialized=true"
+                                onClick={() => setMobileMenuOpen(false)}
+                                className="block text-sm text-primary font-semibold py-1"
+                              >
+                                View All ({activeSpecializedFacilities.length})
+                              </Link>
+                            </div>
+                          ) : (
+                            <p className="mt-2 ml-4 text-sm text-gray-500">No specialized departments available</p>
+                          )}
+                        </CollapsibleContent>
+                      </Collapsible>
+                    </div>
+                  )}
                   {/* Future Ventures in Mobile Menu */}
                   <div className="pl-4 pt-4 border-t">
                     <Collapsible open={futureVenturesOpen} onOpenChange={setFutureVenturesOpen}>

@@ -41,12 +41,12 @@ export default function FacilitiesPage() {
       {/* Hero Section */}
       <PageHeroSection 
         image="/facilities-hero.jpg" 
-        heading="Our Facilities" 
+        heading="Our Departments" 
         alt="Facilities Hero" 
       />
 
       {/* Breadcrumb Section */}
-      <BreadcrumbSection currentPage="Facilities" />
+      <BreadcrumbSection currentPage="Departments" />
 
       {/* Facilities Section */}
       <section className="w-full bg-gray-50 py-16">
@@ -55,7 +55,7 @@ export default function FacilitiesPage() {
           <div className="mb-8">
             <input
               type="text"
-              placeholder="Search facilities..."
+              placeholder="Search departments..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full max-w-md mx-auto block px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
@@ -65,7 +65,7 @@ export default function FacilitiesPage() {
           {/* Facilities Grid */}
           {activeFacilities.length === 0 ? (
             <div className="text-center py-12 text-gray-500">
-              No facilities found.
+              No departments found.
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">

@@ -421,6 +421,15 @@ export const homepageApi = api.injectEndpoints({
       keepUnusedDataFor: 3600, // Cache for 60 minutes (3600 seconds)
     }),
 
+    getSpecializedFacilitiesPublic: builder.query<FacilitiesResponse, void>({
+      query: () => ({
+        url: "/departments?is_specialized=true",
+        method: "GET",
+      }),
+      providesTags: ["Banner"],
+      keepUnusedDataFor: 3600, // Cache for 60 minutes (3600 seconds)
+    }),
+
     getFacilityById: builder.query<SingleFacilityResponse, number>({
       query: (id) => ({
         url: `/departments/${id}`,
@@ -638,6 +647,7 @@ export const {
   useUpdateAboutUsBannerMutation,
   useGetFacilitiesQuery,
   useGetFacilitiesPublicQuery,
+  useGetSpecializedFacilitiesPublicQuery,
   useGetFacilityByIdQuery,
   useCreateFacilityMutation,
   useUpdateFacilityMutation,

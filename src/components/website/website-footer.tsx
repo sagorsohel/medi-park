@@ -37,7 +37,7 @@ export function WebsiteFooter() {
             {(firstPhone || email) && (
               <div className="space-y-3">
                 {firstPhone && (
-                  <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2 sm:gap-3 p-1 font-bold border border-primary-foreground rounded-[22px]">
+                  <div className="flex  sm:flex-row items-stretch sm:items-center justify-between gap-2 sm:gap-3 p-1 font-bold border border-primary-foreground rounded-[22px]">
                     <div className="rounded-lg px-3 sm:px-4 py-2 flex items-center gap-2 justify-center sm:justify-start">
                       <Clock className="h-4 w-4 shrink-0" />
                       <span className="text-xs sm:text-sm">24 hours</span>
