@@ -55,7 +55,7 @@ export function AboutSection() {
   };
 
   return (
-    <div className="relative w-full bg-white py-16 md:py-24 overflow-hidden">
+    <div className="relative w-full bg-white py-8 md:py-24 overflow-hidden">
       {/* Background Circular Lines - Div (Bottom Half Only) */}
       <div className="absolute bottom-0 left-0 w-full h-2/3 pointer-events-none" style={{ zIndex: 0 }}>
         {/* First circular line - bottom half */}
@@ -161,7 +161,7 @@ export function AboutSection() {
           </svg>
 
           {/* Images in arc layout - same positions as image */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 relative z-10 pb-20">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 relative z-10 pb-8">
             {/* Left Image Card - Lower left position */}
             {section.image_1 && (
               <motion.div
