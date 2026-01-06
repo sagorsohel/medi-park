@@ -4,7 +4,7 @@ import { NavLink, Link } from "react-router";
 import { useAppSelector, useAppDispatch } from "@/store/hooks";
 import { logout } from "@/store/slices/authSlice";
 import { Button } from "@/components/ui/button";
-import { Menu,  ChevronDown } from "lucide-react";
+import { Menu, ChevronDown } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import {
@@ -12,7 +12,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
- 
+
 } from "@/components/ui/dropdown-menu";
 import {
   Collapsible,
@@ -24,7 +24,7 @@ import { useGetFutureVenturesPublicQuery } from "@/services/futureVenturesApi";
 
 const navLinks = [
   { to: "/", label: "Home" },
-  { to: "/about", label: "About us" },
+  { to: "/about", label: "About Us" },
   { to: "/mission-vision", label: "Mission & Vision" },
   { to: "/gellery", label: "Gallery" },
   // { to: "/careers", label: "Careers" },
@@ -44,7 +44,7 @@ export function WebsiteNavbar() {
   const { data: facilitiesData } = useGetFacilitiesPublicQuery();
   const { data: specializedFacilitiesData } = useGetSpecializedFacilitiesPublicQuery();
   const { data: futureVenturesData } = useGetFutureVenturesPublicQuery(1);
-  
+
   const activeFacilities = facilitiesData?.data?.filter(f => f.status === 'active') || [];
   const activeSpecializedFacilities = specializedFacilitiesData?.data?.filter(f => f.status === 'active') || [];
   const activeFutureVentures = futureVenturesData?.data?.filter(f => f.status === 'active') || [];
@@ -94,37 +94,61 @@ export function WebsiteNavbar() {
 
         {/* Desktop Navigation - Center */}
         <nav className={`hidden bg-white backdrop-blur-md border px-4 py-4 border-primary-foreground/30 rounded-full lg:flex items-center gap-4 xl:gap-6 ${isScrolled ? 'bg-blue-500' : 'bg-white'}`}>
-          {navLinks.map((link) => (
-            <NavLink
-              key={link.to}
-              to={link.to}
-              end={link.to === "/"}
-              className={({ isActive }) =>
-                `text-sm font-medium transition-colors whitespace-nowrap ${isActive
-                  ? "text-[#D83072] font-semibold"
-                  : "text-primary hover:text-primary"
-                }`
-              }
-            >
-              {link.label}
-            </NavLink>
-          ))}
-          
+          {navLinks.map((link) => {
+            if (link.label === "About Us") {
+              return (
+                <DropdownMenu key={link.to}>
+                  <DropdownMenuTrigger className="text-sm font-medium transition-colors whitespace-nowrap text-primary hover:text-primary focus:outline-none flex items-center gap-1">
+                    {link.label}
+                    <ChevronDown className="w-4 h-4" />
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="start" className="w-[280px] mt-2">
+                    <DropdownMenuItem asChild>
+                      <Link to="/about" className="cursor-pointer w-full font-medium">About BSH</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link to="/about/message-of-chairman" className="cursor-pointer w-full font-medium">Message of Chairman</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link to="/about/message-of-managing-director" className="cursor-pointer w-full font-medium">Message of Managing Director</Link>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              );
+            }
+
+            return (
+              <NavLink
+                key={link.to}
+                to={link.to}
+                end={link.to === "/"}
+                className={({ isActive }) =>
+                  `text-sm font-medium transition-colors whitespace-nowrap ${isActive
+                    ? "text-[#D83072] font-semibold"
+                    : "text-primary hover:text-primary"
+                  }`
+                }
+              >
+                {link.label}
+              </NavLink>
+            );
+          })}
+
           {/* Facilities Dropdown */}
           <DropdownMenu>
             <DropdownMenuTrigger className="text-sm font-medium transition-colors whitespace-nowrap text-primary hover:text-primary focus:outline-none flex items-center gap-1">
               Departments
               <ChevronDown className="w-4 h-4" />
             </DropdownMenuTrigger>
-            <DropdownMenuContent 
-              align="center" 
+            <DropdownMenuContent
+              align="center"
               className="max-h-[600px] overflow-y-auto w-[600px] max-w-none mt-5 p-4  -left-[225px]!"
             >
               <div className="space-y-4">
                 <div className="flex items-center justify-between mb-4 sticky top-0 bg-white z-10 pb-2 border-b">
                   <h3 className="text-lg font-bold text-primary">Our Departments</h3>
-                  <Link 
-                    to="/facilities" 
+                  <Link
+                    to="/facilities"
                     className="text-sm font-semibold text-primary hover:underline"
                   >
                     View All Departments
@@ -157,15 +181,15 @@ export function WebsiteNavbar() {
                 Specialized Departments
                 <ChevronDown className="w-4 h-4" />
               </DropdownMenuTrigger>
-              <DropdownMenuContent 
-                align="center" 
+              <DropdownMenuContent
+                align="center"
                 className="max-h-[600px] overflow-y-auto w-[600px] max-w-none mt-5 p-4  -left-[225px]!"
               >
                 <div className="space-y-4">
                   <div className="flex items-center justify-between mb-4 sticky top-0 bg-white z-10 pb-2 border-b">
                     <h3 className="text-lg font-bold text-primary">Specialized Departments</h3>
-                    <Link 
-                      to="/facilities?is_specialized=true" 
+                    <Link
+                      to="/facilities?is_specialized=true"
                       className="text-sm font-semibold text-primary hover:underline"
                     >
                       View All Specialized
@@ -201,15 +225,15 @@ export function WebsiteNavbar() {
               Future Ventures
               <ChevronDown className="w-4 h-4" />
             </DropdownMenuTrigger>
-            <DropdownMenuContent 
-              align="center" 
+            <DropdownMenuContent
+              align="center"
               className="max-h-[600px] overflow-y-auto w-[600px] max-w-none mt-5 p-4  -left-[225px]!"
             >
               <div className="space-y-4">
                 <div className="flex items-center justify-between mb-4 sticky top-0 bg-white z-10 pb-2 border-b">
                   <h3 className="text-lg font-bold text-primary">Future Ventures</h3>
-                  <Link 
-                    to="/future-ventures" 
+                  <Link
+                    to="/future-ventures"
                     className="text-sm font-semibold text-primary hover:underline"
                   >
                     View All
@@ -256,7 +280,7 @@ export function WebsiteNavbar() {
                         target.src = "/logo.png";
                       }}
                     />
-                   
+
                   </div>
                   {/* <Button
                     variant="ghost"
@@ -267,23 +291,63 @@ export function WebsiteNavbar() {
                   </Button> */}
                 </div>
                 <nav className="flex flex-col gap-4 overflow-y-auto flex-1 min-h-0">
-                  {navLinks.map((link) => (
-                    <NavLink
-                      key={link.to}
-                      to={link.to}
-                      end={link.to === "/"}
-                      onClick={() => setMobileMenuOpen(false)}
-                      className={({ isActive }) =>
-                        `text-base font-medium transition-colors ${isActive
-                          ? "text-primary border-l-4 border-primary pl-4"
-                          : "text-muted-foreground hover:text-primary pl-4"
-                        }`
-                      }
-                    >
-                      {link.label}
-                    </NavLink>
-                  ))}
-                  
+                  {navLinks.map((link) => {
+                    if (link.label === "About Us") {
+                      return (
+                        <div key={link.to} className="pl-4">
+                          <Collapsible>
+                            <CollapsibleTrigger className="flex items-center justify-between w-full text-base font-medium transition-colors text-muted-foreground hover:text-primary py-1">
+                              <span>{link.label}</span>
+                              <ChevronDown className="w-4 h-4 transition-transform duration-200 group-data-[state=open]:rotate-180" />
+                            </CollapsibleTrigger>
+                            <CollapsibleContent className="overflow-hidden data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down">
+                              <div className="mt-2 ml-4 space-y-2 border-l-2 border-gray-100 pl-4">
+                                <Link
+                                  to="/about"
+                                  onClick={() => setMobileMenuOpen(false)}
+                                  className="block text-sm text-muted-foreground hover:text-primary transition-colors py-1"
+                                >
+                                  About BSH
+                                </Link>
+                                <Link
+                                  to="/about/message-of-chairman"
+                                  onClick={() => setMobileMenuOpen(false)}
+                                  className="block text-sm text-muted-foreground hover:text-primary transition-colors py-1"
+                                >
+                                  Message of Chairman
+                                </Link>
+                                <Link
+                                  to="/about/message-of-managing-director"
+                                  onClick={() => setMobileMenuOpen(false)}
+                                  className="block text-sm text-muted-foreground hover:text-primary transition-colors py-1"
+                                >
+                                  Message of Managing Director
+                                </Link>
+                              </div>
+                            </CollapsibleContent>
+                          </Collapsible>
+                        </div>
+                      );
+                    }
+
+                    return (
+                      <NavLink
+                        key={link.to}
+                        to={link.to}
+                        end={link.to === "/"}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className={({ isActive }) =>
+                          `text-base font-medium transition-colors ${isActive
+                            ? "text-primary border-l-4 border-primary pl-4"
+                            : "text-muted-foreground hover:text-primary pl-4"
+                          }`
+                        }
+                      >
+                        {link.label}
+                      </NavLink>
+                    );
+                  })}
+
                   {/* Future Ventures Direct Link in Mobile Menu */}
                   {activeFutureVentures.length > 0 && (
                     <NavLink
@@ -299,7 +363,7 @@ export function WebsiteNavbar() {
                       Future Ventures
                     </NavLink>
                   )}
-                  
+
                   {/* Facilities in Mobile Menu */}
                   <div className="pl-4">
                     <Collapsible open={departmentsOpen} onOpenChange={setDepartmentsOpen}>

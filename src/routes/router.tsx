@@ -52,6 +52,9 @@ import FutureVentureDetailPage from '@/pages/future-ventures/future-venture-deta
 import FutureVenturesPage from '@/pages/future-ventures/future-ventures-page'
 import NotFoundPage from '@/pages/404/not-found-page'
 import ComingSoonPage from '@/pages/coming-soon/coming-soon-page'
+import MessageOfChairmanPage from '@/pages/about/message-of-chairman'
+import MessageOfManagingDirectorPage from '@/pages/about/message-of-managing-director'
+import DirectorDetailPage from '@/pages/about/director-detail-page'
 
 const router = createBrowserRouter([
   // 🌐 Website routes (with website layout - sticky navbar & footer)
@@ -61,6 +64,9 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <HomePage /> },
       { path: "about", element: <AboutPage /> },
+      { path: "about/message-of-chairman", element: <MessageOfChairmanPage /> },
+      { path: "about/message-of-managing-director", element: <MessageOfManagingDirectorPage /> },
+      { path: "about/board-of-directors/:id", element: <DirectorDetailPage /> },
       { path: "mission-vision", element: <MissionVisionPage /> },
       { path: "awards", element: <AwardsPage /> },
       { path: "careers", element: <CareerPage /> },
