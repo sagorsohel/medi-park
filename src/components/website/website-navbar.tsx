@@ -104,7 +104,7 @@ export function WebsiteNavbar() {
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="start" className="w-[280px] mt-2">
                     <DropdownMenuItem asChild>
-                      <Link to="/about" className="cursor-pointer w-full font-medium">About BSH</Link>
+                      <Link to="/about" className="cursor-pointer w-full font-medium">About MSH</Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
                       <Link to="/about/message-of-chairman" className="cursor-pointer w-full font-medium">Message of Chairman</Link>
@@ -307,7 +307,7 @@ export function WebsiteNavbar() {
                                   onClick={() => setMobileMenuOpen(false)}
                                   className="block text-sm text-muted-foreground hover:text-primary transition-colors py-1"
                                 >
-                                  About BSH
+                                  About MSH
                                 </Link>
                                 <Link
                                   to="/about/message-of-chairman"
