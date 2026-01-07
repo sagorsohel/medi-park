@@ -50,6 +50,8 @@ import AddFutureVenturePage from '@/pages/admin/future-ventures/add-future-ventu
 import EditFutureVenturePage from '@/pages/admin/future-ventures/edit-future-venture-page'
 import FutureVentureDetailPage from '@/pages/future-ventures/future-venture-detail-page'
 import FutureVenturesPage from '@/pages/future-ventures/future-ventures-page'
+import DirectorsPage from '@/pages/admin/directors/directors-page'
+import AddDirectorPage from '@/pages/admin/directors/add-director-page'
 import NotFoundPage from '@/pages/404/not-found-page'
 import ComingSoonPage from '@/pages/coming-soon/coming-soon-page'
 import MessageOfChairmanPage from '@/pages/about/message-of-chairman'
@@ -144,6 +146,10 @@ const router = createBrowserRouter([
       { path: "blog/new", element: <AddBlogPage /> },
       { path: "blog/edit/:id", element: <AddBlogPage /> },
       { path: "blog/view/:id", element: <AddBlogPage /> },
+      { path: "directors", element: <DirectorsPage /> },
+      { path: "directors/new", element: <AddDirectorPage /> },
+      { path: "directors/edit/:id", element: <AddDirectorPage /> },
+      { path: "directors/view/:id", element: <AddDirectorPage /> },
     ],
   },
 

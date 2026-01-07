@@ -76,6 +76,12 @@ export function getMenuList(_pathname: string): Group[] {
           icon: Stethoscope,
           submenus: []
         },
+        {
+          href: "/admin/directors",
+          label: "Directors",
+          icon: Building2,
+          submenus: []
+        },
         // {
         //   href: "/admin/equipment",
         //   label: "Equipment",
