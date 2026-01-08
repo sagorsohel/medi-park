@@ -3,7 +3,8 @@ import { tokenManager } from '@/lib/tokenManager'
 import { logout } from '@/store/slices/authSlice'
 import type { RootState } from '@/store/index'
 
-const baseUrl = 'http://api.mediparkhospital.com/api'
+// const baseUrl = 'http://api.mediparkhospital.com/api'
+const baseUrl = 'https://apicopy.mahnoors.shop/api'
 // const baseUrl = 'http://192.168.0.8:8000/api' // For local development
 
 // Common headers for JSON requests
