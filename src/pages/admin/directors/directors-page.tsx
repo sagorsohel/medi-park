@@ -21,7 +21,7 @@ export default function DirectorsPage() {
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
   const [directorToDelete, setDirectorToDelete] = useState<number | null>(null);
 
-  const { data, isLoading, refetch } = useGetDirectorsQuery(currentPage);
+  const { data, isLoading, refetch } = useGetDirectorsQuery({ page: currentPage });
   const [deleteDirector, { isLoading: isDeleting }] = useDeleteDirectorMutation();
 
   useEffect(() => {
@@ -138,7 +138,7 @@ export default function DirectorsPage() {
                     onClick={() => navigate(`/admin/directors/edit/${director.id}`)}
                   >
                     <Edit2 className="w-4 h-4 mr-2" />
-                    
+
                   </Button>
                   <Button
                     variant="destructive"
@@ -148,7 +148,7 @@ export default function DirectorsPage() {
                     disabled={isDeleting}
                   >
                     <Trash2 className="w-4 h-4 mr-2" />
-                   
+
                   </Button>
                 </div>
               </CardContent>
