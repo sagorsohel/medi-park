@@ -1,11 +1,35 @@
 import { motion } from 'framer-motion'
 import { PageHeroSection } from '@/components/website/page-hero-section'
+import { useGetDirectorsQuery, type Director } from '@/services/directorApi'
 
 export default function MessageOfManagingDirectorPage() {
+    const { data: directorsData, isLoading } = useGetDirectorsQuery({ limit: 100 });
+    const managingDirector = directorsData?.data?.find((d: Director) => d.designation === "Managing Director");
+
+    if (isLoading) {
+        return <div className="min-h-screen bg-slate-50 flex items-center justify-center">Loading...</div>;
+    }
+
+    if (!managingDirector) {
+        return (
+            <div className="w-full bg-slate-50 min-h-screen">
+                <PageHeroSection
+                    image="https://placehold.co/1920x600/10b981/ffffff?text=Message+of+Managing+Director"
+                    heading="Message of Managing Director"
+                    alt="Message of Managing Director"
+                    overlayOpacity={0.5}
+                />
+                <div className="container mx-auto px-4 py-16 text-center">
+                    <p>Message not available.</p>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div className="w-full bg-slate-50 min-h-screen">
             <PageHeroSection
-                image="https://placehold.co/1920x600/10b981/ffffff?text=Message+of+Managing+Director"
+                image={managingDirector.photo || "https://placehold.co/1920x600/10b981/ffffff?text=Message+of+Managing+Director"}
                 heading="Message of Managing Director"
                 alt="Message of Managing Director"
                 overlayOpacity={0.5}
@@ -24,8 +48,8 @@ export default function MessageOfManagingDirectorPage() {
                             <div className="relative group">
                                 <div className="absolute inset-0 bg-[#10b981] rounded-lg transform rotate-3 transition-transform group-hover:rotate-6 opacity-20"></div>
                                 <img
-                                    src="https://placehold.co/400x500/e2e8f0/1e293b?text=Managing+Director"
-                                    alt="Dr. Ahmed Zahid Hossain"
+                                    src={managingDirector.photo || "https://placehold.co/400x500/e2e8f0/1e293b?text=Managing+Director"}
+                                    alt={managingDirector.name}
                                     className="relative z-10 rounded-lg shadow-lg w-full max-w-[300px] object-cover"
                                     onError={(e) => {
                                         const target = e.target as HTMLImageElement;
@@ -43,38 +67,12 @@ export default function MessageOfManagingDirectorPage() {
                             </h1>
 
                             <div className="space-y-6 text-gray-600 leading-relaxed mt-8 text-justify">
-                                <p>
-                                    It is a great privilege for me to introduce Bangladesh Specialized Hospital PLC, a state-of-the-art
-                                    healthcare facility in the heart of Dhaka. We have designed this hospital with the belief that users
-                                    deserve the best quality healthcare service in a friendly and comfortable environment.
-                                </p>
-
-                                <p>
-                                    Our goal is to provide world-class healthcare services at an affordable cost. We have equipped our
-                                    hospital with the latest medical technologies and have gathered a team of highly qualified and
-                                    abroad-experienced consultants, nurses, and technicians.
-                                </p>
-
-                                <div className="bg-blue-50 p-6 rounded-xl border-l-4 border-[#1e3a8a] mt-8">
-                                    <p className="italic text-[#1e3a8a] font-medium">
-                                        "Our mission is to bring healthcare of international standards within the reach of every individual.
-                                        We are committed to clinical excellence, patient-centricity, and ethical practices."
-                                    </p>
-                                </div>
-
-                                <p>
-                                    We are constantly striving to improve our services and facilities to meet the growing needs of our
-                                    patients. Your health and well-being are our top priorities.
-                                </p>
-
-                                <p>
-                                    Thank you for keeping your trust in <span className="font-semibold text-[#10b981]">Bangladesh Specialized Hospital PLC.</span>
-                                </p>
+                                <div dangerouslySetInnerHTML={{ __html: managingDirector.message || "" }} />
 
                                 <div className="pt-8 mt-8 border-t border-gray-100">
                                     <p className="text-gray-500 mb-2">Best Regards</p>
-                                    <h3 className="text-xl font-bold text-[#1e3a8a]">DR. AHMED ZAHID HOSSAIN</h3>
-                                    <p className="text-[#10b981] font-medium">Managing Director, BSH PLC.</p>
+                                    <h3 className="text-xl font-bold text-[#1e3a8a] uppercase">{managingDirector.name}</h3>
+                                    <p className="text-[#10b981] font-medium">{managingDirector.designation}, BSH PLC.</p>
                                 </div>
                             </div>
                         </div>

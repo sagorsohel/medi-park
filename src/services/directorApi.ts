@@ -55,17 +55,21 @@ export interface UpdateDirectorPayload {
 
 export const directorApi = api.injectEndpoints({
   endpoints: (builder) => ({
-    getDirectors: builder.query<DirectorsResponse, number | void>({
-      query: (page = 1) => ({
-        url: `/directors?page=${page}`,
-        method: "GET",
-      }),
+    getDirectors: builder.query<DirectorsResponse, { page?: number; limit?: number } | void>({
+      query: (params) => {
+        const page = params && params.page ? params.page : 1;
+        const limit = params && params.limit ? params.limit : 10;
+        return {
+          url: `/directors?page=${page}&limit=${limit}`,
+          method: "GET",
+        };
+      },
       providesTags: (result) =>
         result?.data
           ? [
-              ...result.data.map(({ id }) => ({ type: "Director" as const, id })),
-              { type: "Director", id: "LIST" },
-            ]
+            ...result.data.map(({ id }) => ({ type: "Director" as const, id })),
+            { type: "Director", id: "LIST" },
+          ]
           : [{ type: "Director", id: "LIST" }],
     }),
     getDirectorById: builder.query<SingleDirectorResponse, number>({

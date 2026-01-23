@@ -1,8 +1,29 @@
 import { cn } from "@/lib/utils"
-import { directors } from "@/data/directors-data"
+// import { directors } from "@/data/directors-data"
 import { Link } from "react-router"
+import { useGetDirectorsQuery, type Director } from "@/services/directorApi"
 
 export function BoardOfDirectorsSection() {
+    const { data: directorsData, isLoading } = useGetDirectorsQuery({ limit: 100 });
+    const directors = directorsData?.data || [];
+
+    if (isLoading) {
+        return (
+            <section className="py-16 bg-background">
+                <div className="max-w-7xl mx-auto px-4 sm:px-0">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        {[1, 2, 3, 4].map((i) => (
+                            <div key={i} className="animate-pulse">
+                                <div className="bg-gray-200 aspect-[4/5] w-full"></div>
+                                <div className="h-16 bg-gray-100 mt-2"></div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+        );
+    }
+
     return (
         <section className="py-16 bg-background">
             <div className=" max-w-7xl mx-auto px-4 sm:px-0">
@@ -14,16 +35,19 @@ export function BoardOfDirectorsSection() {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    {directors.map((director) => (
+                    {directors.map((director: Director) => (
                         <Link key={director.id} to={`/about/board-of-directors/${director.id}`} className="block">
                             <div className="flex flex-col group cursor-pointer">
                                 <div className="border-[3px] border-[#10b981] p-1 bg-white transition-transform duration-300 group-hover:scale-[1.02]">
                                     <div className="bg-[#f0fdf4] aspect-[4/5] overflow-hidden relative flex items-end justify-center">
-                                        {/* Using a placeholder div if image fails or for the dummy version */}
                                         <img
-                                            src={director.image}
+                                            src={director.photo || "/placeholder-person.jpg"}
                                             alt={director.name}
                                             className="w-full h-full object-cover object-top"
+                                            onError={(e) => {
+                                                const target = e.target as HTMLImageElement;
+                                                target.src = "/placeholder-person.jpg";
+                                            }}
                                         />
                                     </div>
                                 </div>
@@ -32,7 +56,7 @@ export function BoardOfDirectorsSection() {
                                         {director.name}
                                     </h3>
                                     <p className="text-xs md:text-sm italic mt-0.5 opacity-90">
-                                        {director.title}
+                                        {director.designation}
                                     </p>
                                 </div>
                             </div>

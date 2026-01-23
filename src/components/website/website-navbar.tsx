@@ -33,21 +33,43 @@ const navLinks = [
   { to: "/contacts", label: "Contacts" },
 ];
 
+import { useGetDirectorsQuery, type Director } from "@/services/directorApi";
+
+// ... existing imports ...
+
 export function WebsiteNavbar() {
   const dispatch = useAppDispatch();
   const { isAuthenticated, user } = useAppSelector((state) => state.auth);
+
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
   const [isScrolled, setIsScrolled] = useState<boolean>(false);
   const [departmentsOpen, setDepartmentsOpen] = useState<boolean>(false);
   const [specializedDepartmentsOpen, setSpecializedDepartmentsOpen] = useState<boolean>(false);
   const [futureVenturesOpen, setFutureVenturesOpen] = useState<boolean>(false);
+
   const { data: facilitiesData } = useGetFacilitiesPublicQuery();
   const { data: specializedFacilitiesData } = useGetSpecializedFacilitiesPublicQuery();
   const { data: futureVenturesData } = useGetFutureVenturesPublicQuery(1);
+  const { data: directorsData } = useGetDirectorsQuery({ limit: 100 });
 
   const activeFacilities = facilitiesData?.data?.filter(f => f.status === 'active') || [];
   const activeSpecializedFacilities = specializedFacilitiesData?.data?.filter(f => f.status === 'active') || [];
   const activeFutureVentures = futureVenturesData?.data?.filter(f => f.status === 'active') || [];
+
+  // order: Chairman, Vice Chairman, Managing Director, etc.
+  // We can sort or just map.
+  // Prioritize Chairman and MD if we want specific order, but API order might be fine or we can sort by id.
+  const directors = directorsData?.data || [];
+  const keyDesignations = ["Chairman", "Managing Director", "Vice Chairman"];
+  const importantDirectors = directors.filter(d => keyDesignations.some(k => d.designation.includes(k) || k.includes(d.designation)));
+
+  // sort custom if needed: Chairman first, then Vice, then MD
+  const sortedDirectors = [...importantDirectors].sort((a, b) => {
+    const order = { "Chairman": 1, "Vice Chairman": 2, "Managing Director": 3 };
+    const rankA = order[a.designation as keyof typeof order] || 99;
+    const rankB = order[b.designation as keyof typeof order] || 99;
+    return rankA - rankB;
+  });
 
   useEffect(() => {
     const handleScroll = () => {
@@ -61,6 +83,19 @@ export function WebsiteNavbar() {
   const handleLogout = (): void => {
     dispatch(logout());
   };
+
+  const getDirectorLink = (director: Director) => {
+    const des = director.designation.toLowerCase();
+    if (des.includes('chairman') && !des.includes('vice')) return "/about/message-of-chairman";
+    if (des.includes('managing director')) return "/about/message-of-managing-director";
+    return `/about/board-of-directors/${director.id}`; // OR create message-of-vice-chairman if needed, but we stick to generic for others
+  };
+
+  const getDirectorLabel = (director: Director) => {
+    // Just "Message of [Designation]"
+    return `Message of ${director.designation}`;
+  }
+
 
   return (
     <header className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 w-full sm:max-w-8xl px-4 sm:px-6 lg:px-8">
@@ -106,17 +141,20 @@ export function WebsiteNavbar() {
                     <DropdownMenuItem asChild>
                       <Link to="/about" className="cursor-pointer w-full font-medium">About MSH</Link>
                     </DropdownMenuItem>
+                    {sortedDirectors.map(director => (
+                      <DropdownMenuItem key={director.id} asChild>
+                        <Link to={getDirectorLink(director)} className="cursor-pointer w-full font-medium">
+                          {getDirectorLabel(director)}
+                        </Link>
+                      </DropdownMenuItem>
+                    ))}
                     <DropdownMenuItem asChild>
-                      <Link to="/about/message-of-chairman" className="cursor-pointer w-full font-medium">Message of Chairman</Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                      <Link to="/about/message-of-managing-director" className="cursor-pointer w-full font-medium">Message of Managing Director</Link>
+                      <Link to="/about" className="cursor-pointer w-full font-medium">Board of Directors</Link>
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
               );
             }
-
             return (
               <NavLink
                 key={link.to}
@@ -282,13 +320,6 @@ export function WebsiteNavbar() {
                     />
 
                   </div>
-                  {/* <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    <X className="h-5 w-5" />
-                  </Button> */}
                 </div>
                 <nav className="flex flex-col gap-4 overflow-y-auto flex-1 min-h-0">
                   {navLinks.map((link) => {
@@ -309,19 +340,22 @@ export function WebsiteNavbar() {
                                 >
                                   About MSH
                                 </Link>
+                                {sortedDirectors.map(director => (
+                                  <Link
+                                    key={director.id}
+                                    to={getDirectorLink(director)}
+                                    onClick={() => setMobileMenuOpen(false)}
+                                    className="block text-sm text-muted-foreground hover:text-primary transition-colors py-1"
+                                  >
+                                    {getDirectorLabel(director)}
+                                  </Link>
+                                ))}
                                 <Link
-                                  to="/about/message-of-chairman"
+                                  to="/about"
                                   onClick={() => setMobileMenuOpen(false)}
                                   className="block text-sm text-muted-foreground hover:text-primary transition-colors py-1"
                                 >
-                                  Message of Chairman
-                                </Link>
-                                <Link
-                                  to="/about/message-of-managing-director"
-                                  onClick={() => setMobileMenuOpen(false)}
-                                  className="block text-sm text-muted-foreground hover:text-primary transition-colors py-1"
-                                >
-                                  Message of Managing Director
+                                  Board of Directors
                                 </Link>
                               </div>
                             </CollapsibleContent>
@@ -329,6 +363,8 @@ export function WebsiteNavbar() {
                         </div>
                       );
                     }
+                    // ...
+
 
                     return (
                       <NavLink
@@ -483,12 +519,12 @@ export function WebsiteNavbar() {
                     </div>
                   )}
                 </nav>
-              </div>
-            </SheetContent>
-          </Sheet>
-        </div>
-      </div>
-    </header>
+              </div >
+            </SheetContent >
+          </Sheet >
+        </div >
+      </div >
+    </header >
   );
 }
 
