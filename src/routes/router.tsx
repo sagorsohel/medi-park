@@ -45,6 +45,8 @@ import AddFacilityPage from '@/pages/admin/facilities/add-facility-page'
 import FacilitiesPage from '@/pages/facilities/facilities-page'
 import FacilityDetailPage from '@/pages/facilities/facility-detail-page'
 import MissionVisionPage from '@/pages/mission-vision/mission-vision-page'
+import MissionPage from '@/pages/mission-vision/mission-page'
+import VisionPage from '@/pages/mission-vision/vision-page'
 import AdminFutureVenturesPage from '@/pages/admin/future-ventures/future-ventures-page'
 import AddFutureVenturePage from '@/pages/admin/future-ventures/add-future-venture-page'
 import EditFutureVenturePage from '@/pages/admin/future-ventures/edit-future-venture-page'
@@ -70,6 +72,8 @@ const router = createBrowserRouter([
       { path: "about/message-of-managing-director", element: <MessageOfManagingDirectorPage /> },
       { path: "about/board-of-directors/:id", element: <DirectorDetailPage /> },
       { path: "mission-vision", element: <MissionVisionPage /> },
+      { path: "mission", element: <MissionPage /> },
+      { path: "vision", element: <VisionPage /> },
       { path: "awards", element: <AwardsPage /> },
       { path: "careers", element: <CareerPage /> },
       { path: "careers/job/:id", element: <JobDetailPage /> },

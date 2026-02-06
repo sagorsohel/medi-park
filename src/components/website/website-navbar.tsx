@@ -25,10 +25,9 @@ import { useGetFutureVenturesPublicQuery } from "@/services/futureVenturesApi";
 const navLinks = [
   { to: "/", label: "Home" },
   { to: "/about", label: "About Us" },
-  { to: "/mission-vision", label: "Mission & Vision" },
-  { to: "/gellery", label: "Gallery" },
+  // { to: "/mission-vision", label: "Mission & Vision" },
   // { to: "/careers", label: "Careers" },
-  { to: "/news", label: "News" },
+  { to: "/news-media", label: "News & Media" },
   { to: "/blogs", label: "Blogs" },
   { to: "/contacts", label: "Contacts" },
 ];
@@ -141,6 +140,12 @@ export function WebsiteNavbar() {
                     <DropdownMenuItem asChild>
                       <Link to="/about" className="cursor-pointer w-full font-medium">About MSH</Link>
                     </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link to="/mission" className="cursor-pointer w-full font-medium">Mission</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link to="/vision" className="cursor-pointer w-full font-medium">Vision</Link>
+                    </DropdownMenuItem>
                     {sortedDirectors.map(director => (
                       <DropdownMenuItem key={director.id} asChild>
                         <Link to={getDirectorLink(director)} className="cursor-pointer w-full font-medium">
@@ -150,6 +155,25 @@ export function WebsiteNavbar() {
                     ))}
                     <DropdownMenuItem asChild>
                       <Link to="/about" className="cursor-pointer w-full font-medium">Board of Directors</Link>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              );
+            }
+
+            if (link.label === "News & Media") {
+              return (
+                <DropdownMenu key={link.to}>
+                  <DropdownMenuTrigger className="text-sm font-medium transition-colors whitespace-nowrap text-primary hover:text-primary focus:outline-none flex items-center gap-1">
+                    {link.label}
+                    <ChevronDown className="w-4 h-4" />
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="start" className="w-[200px] mt-2">
+                    <DropdownMenuItem asChild>
+                      <Link to="/news" className="cursor-pointer w-full font-medium">News</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link to="/gellery" className="cursor-pointer w-full font-medium">Gallery</Link>
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
@@ -340,6 +364,20 @@ export function WebsiteNavbar() {
                                 >
                                   About MSH
                                 </Link>
+                                <Link
+                                  to="/mission"
+                                  onClick={() => setMobileMenuOpen(false)}
+                                  className="block text-sm text-muted-foreground hover:text-primary transition-colors py-1"
+                                >
+                                  Mission
+                                </Link>
+                                <Link
+                                  to="/vision"
+                                  onClick={() => setMobileMenuOpen(false)}
+                                  className="block text-sm text-muted-foreground hover:text-primary transition-colors py-1"
+                                >
+                                  Vision
+                                </Link>
                                 {sortedDirectors.map(director => (
                                   <Link
                                     key={director.id}
@@ -356,6 +394,37 @@ export function WebsiteNavbar() {
                                   className="block text-sm text-muted-foreground hover:text-primary transition-colors py-1"
                                 >
                                   Board of Directors
+                                </Link>
+                              </div>
+                            </CollapsibleContent>
+                          </Collapsible>
+                        </div>
+                      );
+                    }
+
+                    if (link.label === "News & Media") {
+                      return (
+                        <div key={link.to} className="pl-4">
+                          <Collapsible>
+                            <CollapsibleTrigger className="flex items-center justify-between w-full text-base font-medium transition-colors text-muted-foreground hover:text-primary py-1">
+                              <span>{link.label}</span>
+                              <ChevronDown className="w-4 h-4 transition-transform duration-200 group-data-[state=open]:rotate-180" />
+                            </CollapsibleTrigger>
+                            <CollapsibleContent className="overflow-hidden data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down">
+                              <div className="mt-2 ml-4 space-y-2 border-l-2 border-gray-100 pl-4">
+                                <Link
+                                  to="/news"
+                                  onClick={() => setMobileMenuOpen(false)}
+                                  className="block text-sm text-muted-foreground hover:text-primary transition-colors py-1"
+                                >
+                                  News
+                                </Link>
+                                <Link
+                                  to="/gellery"
+                                  onClick={() => setMobileMenuOpen(false)}
+                                  className="block text-sm text-muted-foreground hover:text-primary transition-colors py-1"
+                                >
+                                  Gallery
                                 </Link>
                               </div>
                             </CollapsibleContent>
