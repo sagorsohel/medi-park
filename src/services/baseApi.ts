@@ -84,12 +84,12 @@ export const api = createApi({
     const token = tokenManager.getAccessToken()
     // Allow login endpoints and public endpoints without token
     const isLoginEndpoint = apiObj.endpoint === 'adminLogin' || apiObj.endpoint === 'userLogin' || apiObj.endpoint === 'login'
-    const isPublicEndpoint = typeof args === 'object' && args !== null && 
+    const isPublicEndpoint = typeof args === 'object' && args !== null &&
       typeof args.url === 'string' && PUBLIC_PATHS.some((path) => args.url.includes(path))
-    
+
     // Also check if endpoint name contains "Public" (for public queries)
     const isPublicQuery = typeof apiObj.endpoint === 'string' && apiObj.endpoint.toLowerCase().includes('public')
-    
+
     if (!token && !isLoginEndpoint && !isPublicEndpoint && !isPublicQuery) {
       // Only redirect if it's an admin route, not public website routes
       const isAdminRoute = typeof window !== 'undefined' && window.location.pathname.startsWith('/admin')
@@ -115,13 +115,15 @@ export const api = createApi({
 
     // Otherwise, normal JSON request
     const headers = getCommonHeaders(token)
-    if (typeof args === 'object' && args !== null) {
+    if (typeof args === 'string') {
+      args = { url: args, headers }
+    } else if (typeof args === 'object' && args !== null) {
       args = { ...args, headers }
     }
 
     return await rawBaseQuery(args, apiObj, extraOptions)
   },
 
-  tagTypes: ['User', 'Admin', 'Size', 'Color', 'Brand', 'Category', 'Product', 'Banner', 'Order', 'Branch', 'Country', 'Unit', 'Customer', 'Subcategory', 'Supplier', 'Expense', 'Purchase', 'Sale', 'Contact', 'Stock', 'ProfitLoss', 'Dashboard', 'AboutWhoWeAre', 'AboutMission', 'AboutVision', 'AboutTransformingHealthcare', 'AboutMRCPPACES', 'AboutPageBanner', 'News', 'NewsPageBanner', 'GalleryPageBanner', 'Gallery', 'ContactPageBanner', 'ContactBranch', 'ContactMessage', 'BlogPageBanner', 'Blog', 'Doctor', 'Director', 'Investor', 'InstallmentRule', 'FutureVenture'],
+  tagTypes: ['User', 'Admin', 'Size', 'Color', 'Brand', 'Category', 'Product', 'Banner', 'Order', 'Branch', 'Country', 'Unit', 'Customer', 'Subcategory', 'Supplier', 'Expense', 'Purchase', 'Sale', 'Contact', 'Stock', 'ProfitLoss', 'Dashboard', 'AboutWhoWeAre', 'AboutMission', 'AboutVision', 'AboutTransformingHealthcare', 'AboutMRCPPACES', 'AboutPageBanner', 'News', 'NewsPageBanner', 'GalleryPageBanner', 'Gallery', 'ContactPageBanner', 'ContactBranch', 'ContactMessage', 'BlogPageBanner', 'Blog', 'Doctor', 'Director', 'Investor', 'InstallmentRule', 'FutureVenture', 'ShareTransfer', 'CommissionSetting'],
   endpoints: () => ({}),
 })

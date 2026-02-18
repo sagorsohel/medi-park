@@ -59,6 +59,7 @@ import ComingSoonPage from '@/pages/coming-soon/coming-soon-page'
 import MessageOfChairmanPage from '@/pages/about/message-of-chairman'
 import MessageOfManagingDirectorPage from '@/pages/about/message-of-managing-director'
 import DirectorDetailPage from '@/pages/about/director-detail-page'
+import ShareManagePage from '@/pages/admin/share-manage/share-manage-page'
 
 const router = createBrowserRouter([
   // 🌐 Website routes (with website layout - sticky navbar & footer)
@@ -154,6 +155,7 @@ const router = createBrowserRouter([
       { path: "directors/new", element: <AddDirectorPage /> },
       { path: "directors/edit/:id", element: <AddDirectorPage /> },
       { path: "directors/view/:id", element: <AddDirectorPage /> },
+      { path: "share-manage", element: <ShareManagePage /> },
     ],
   },
 

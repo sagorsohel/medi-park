@@ -58,6 +58,12 @@ export function getMenuList(_pathname: string): Group[] {
           icon: CreditCard,
           submenus: []
         },
+        {
+          href: "/admin/share-manage",
+          label: "Share Manage",
+          icon: Building2,
+          submenus: []
+        },
         // {
         //   href: "/admin/hr",
         //   label: "HR",
