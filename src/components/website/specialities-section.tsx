@@ -136,13 +136,13 @@ export function SpecialitiesSection() {
                       className="group"
                     >
                       <Link to={`/facilities/${facility.id}`} className="block h-full">
-                        <div className="bg-[#F8FBFF] rounded-[16px] p-4 h-[140px] flex flex-col items-center justify-center text-center transition-all duration-300 md:hover:bg-[#1e3a5f] hover:shadow-md border border-transparent hover:border-[#1e3a5f]">
+                        <div className="bg-[#F8FBFF] rounded-[16px] p-4 h-[140px] flex flex-col items-center justify-center text-center transition-all duration-300 hover:bg-primary hover:shadow-md border border-transparent hover:border-primary">
                           {/* Facility Icon */}
                           <div className="w-12 h-12 mb-3 flex items-center justify-center">
                             <img
                               src={facility.image}
                               alt={facility.title}
-                              className="w-full h-full object-contain md:group-hover:brightness-0 md:group-hover:invert transition-all duration-300"
+                              className="w-full h-full object-contain rounded-lg  md:group-hover:invert transition-all duration-300"
                               onError={(e) => {
                                 const target = e.target as HTMLImageElement;
                                 target.src = "/vite.svg";
@@ -169,8 +169,8 @@ export function SpecialitiesSection() {
                   onClick={handlePrevious}
                   disabled={currentPage === 0}
                   className={`w-10 h-10 rounded-full flex items-center justify-center border transition-all duration-300 ${currentPage === 0
-                      ? "border-gray-300 text-gray-300 cursor-not-allowed"
-                      : "border-[#84CC16] text-[#84CC16] hover:bg-[#84CC16] hover:text-white"
+                    ? "border-gray-300 text-gray-300 cursor-not-allowed"
+                    : "border-[#84CC16] text-[#84CC16] hover:bg-[#84CC16] hover:text-white"
                     }`}
                   aria-label="Previous specialities"
                 >
@@ -180,8 +180,8 @@ export function SpecialitiesSection() {
                   onClick={handleNext}
                   disabled={currentPage >= totalPages - 1}
                   className={`w-10 h-10 rounded-full flex items-center justify-center border transition-all duration-300 ${currentPage >= totalPages - 1
-                      ? "border-gray-300 text-gray-300 cursor-not-allowed"
-                      : "border-[#84CC16] text-[#84CC16] hover:bg-[#84CC16] hover:text-white"
+                    ? "border-gray-300 text-gray-300 cursor-not-allowed"
+                    : "border-[#84CC16] text-[#84CC16] hover:bg-[#84CC16] hover:text-white"
                     }`}
                   aria-label="Next specialities"
                 >
@@ -192,7 +192,7 @@ export function SpecialitiesSection() {
               {/* View All Button */}
               <Link to="/facilities">
                 <Button
-                  className="bg-[#9063CD] hover:bg-[#8050c0] text-white px-8 py-2.5 rounded text-sm font-semibold transition-colors shadow-none"
+                  className="bg-primary hover:bg-primary text-white px-8 py-2.5 rounded text-sm font-semibold transition-colors shadow-none"
                 >
                   View All Specialities
                 </Button>
