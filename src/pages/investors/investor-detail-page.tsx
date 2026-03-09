@@ -13,13 +13,13 @@ export default function InvestorDetailPage() {
     const investor = data?.data;
 
     return (
-        <div className="w-full min-h-screen bg-gray-50/50 pb-20">
+        <div className="w-full min-h-screen bg-gray-50/50 py-28">
             <BreadcrumbSection currentPage={investor?.investor_name || investor?.applicant_full_name || "Investor Details"} />
 
             <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mt-12">
                 <Button asChild variant="ghost" className="mb-8 text-primary hover:bg-primary/10 -ml-4">
                     <Link to="/investors" className="flex items-center gap-2">
-                        <ArrowLeft className="w-4 h-4" /> Back to Investors
+                        <ArrowLeft className="w-4 h-4" /> Back to Our Lagecy Partners
                     </Link>
                 </Button>
 

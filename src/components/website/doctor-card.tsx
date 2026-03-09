@@ -1,58 +1,108 @@
 "use client";
 
 import { Link } from "react-router";
+import { Star, Stethoscope, Calendar } from "lucide-react";
 
 interface DoctorCardProps {
   id: number;
   image: string;
   name: string;
-  specialization: string;
-  description: string;
+  degrees?: string;
+  specialization?: string;
+  badge?: string;
+  specialties?: string;
+  rating?: number;
+  reviewCount?: number;
+  visitCount?: number;
+  lastWorked?: string;
+  experienceCount?: number;
+  totalExperience?: string;
+  fee?: string;
 }
 
-export function DoctorCard({ id, image, name, specialization, description }: DoctorCardProps) {
+export function DoctorCard({
+  id,
+  image,
+  name,
+  degrees,
+  specialization,
+  badge,
+  specialties,
+  rating = 4.1,
+  reviewCount = 15,
+  visitCount = 35,
+  lastWorked,
+  experienceCount = 0,
+  totalExperience = "1+ Year",
+  fee = "৳2",
+}: DoctorCardProps) {
   return (
-    <div className="relative flex min-w-[320px] lg:min-w-0 h-full overflow-visible flex-col rounded-xl bg-white bg-clip-border text-gray-700 shadow-md">
-      {/* Header Section with Gradient Background */}
-      <div className="relative mx-4 -mt-6 h-32 rounded-xl bg-linear-to-r from-primary/50 to-primary bg-clip-border text-white shadow-lg shadow-blue-500/40">
-      </div>
-      
-      {/* Image Overlay - positioned to overlap header and card body */}
-      <div className="relative -mt-20 mx-auto z-10">
-        <img
-          src={image}
-          alt={name}
-          className="w-36 h-36 object-cover rounded-full border-4 border-white shadow-lg"
-          onError={(e) => {
-            const target = e.target as HTMLImageElement;
-            target.src = "/vite.svg";
-          }}
-        />
+    <div className="relative flex flex-col w-full max-w-[450px] overflow-hidden rounded-2xl bg-white border border-gray-100 shadow-sm transition-all hover:shadow-md h-[275px]">
+      {/* Top Part: Image and Info */}
+      <div className="flex gap-4 p-5">
+        {/* Left Column: Image & Experience */}
+        <div className="flex flex-col items-center gap-3 w-[110px] shrink-0">
+          <div className="relative">
+            <div className="w-[100px] h-[110px] rounded-2xl overflow-hidden border-2 border-gray-50 shadow-sm bg-gray-50">
+              <img
+                src={image}
+                alt={name}
+                className="w-full h-full object-cover"
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  target.src = "/vite.svg";
+                }}
+              />
+            </div>
+            {/* Status Dot */}
+            <div className="absolute top-2 right-2 w-4 h-4 rounded-full bg-primary border-2 border-white shadow-sm" />
+          </div>
+
+          <div className="text-center">
+            <span className="block text-lg font-bold text-gray-900 leading-tight">
+              {totalExperience}
+            </span>
+            <span className="text-[11px] font-medium text-gray-500 uppercase tracking-wide">
+              Experience
+            </span>
+          </div>
+        </div>
+
+        {/* Right Column: Details */}
+        <div className="flex flex-col flex-1 gap-1.5 pt-1 overflow-hidden">
+          <h3 className="text-xl font-bold text-gray-900 truncate leading-snug tracking-tight">
+            {name}
+          </h3>
+
+          <p className="text-sm font-medium text-gray-500 truncate">
+            {degrees || specialization}
+          </p>
+
+          <div className="mt-1">
+            <div className="inline-flex items-center px-4 py-1.5 rounded-r-2xl rounded-l-md bg-primary text-white text-[12px] font-semibold tracking-wide relative">
+              {badge || specialization || "Specialist"}
+              <div className="absolute right-[-8px] top-0 bottom-0 w-4 bg-primary transform skew-x-[-20deg] rounded-r-md -z-10" />
+            </div>
+          </div>
+
+          <p className="text-[14px] font-medium text-primary mt-1 leading-tight truncate">
+            {specialties || "General Physician"}
+          </p>
+
+
+        </div>
       </div>
 
-      {/* Content Section - flex-1 to take available space */}
-      <div className="p-6 flex-1 flex flex-col">
-        <h5 className="mb-2 block font-sans text-xl font-semibold leading-snug tracking-normal text-blue-gray-900 antialiased text-center">
-          {name}
-        </h5>
-        <p className="block font-sans text-sm font-semibold text-primary mb-2 uppercase text-center">
-          {specialization}
-        </p>
-        <p className="block font-sans text-base font-light leading-relaxed text-inherit antialiased text-center flex-1">
-          {description}
-        </p>
-      </div>
-
-      {/* Button Section - fixed at bottom */}
-      <div className="p-6 pt-0 mt-auto">
+      {/* Bottom Part: Action */}
+      <div className="mt-auto border-t border-gray-100 flex items-center justify-center p-3 bg-gray-50/30">
         <Link
           to={`/doctors/${id}`}
-          className="block select-none rounded-lg bg-primary py-3 px-6 text-center align-middle font-sans text-xs font-bold uppercase text-white shadow-md shadow-primary/20 transition-all hover:shadow-lg hover:shadow-primary/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none w-full"
+          className="flex items-center gap-2 w-full justify-center py-2.5 bg-white border border-primary text-primary rounded-xl font-bold text-[14px] shadow-sm hover:bg-primary/5 transition-colors whitespace-nowrap"
         >
-          Read More
+          <Calendar className="w-4 h-4" />
+          Book Appointment
         </Link>
       </div>
     </div>
   );
 }
-

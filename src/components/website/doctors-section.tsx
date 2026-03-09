@@ -15,53 +15,82 @@ export function DoctorsSection() {
   // Get first 5 doctors and map to card format
   const doctors = useMemo(() => {
     if (!data?.data) return [];
-    return data.data.slice(0, 5).map((doctor) => ({
-      id: doctor.id,
-      image: doctor.image || "/vite.svg",
-      name: doctor.doctor_name,
-      specialization: doctor.specialist || "",
-      description: doctor.department || "Experienced medical professional",
-    }));
+    return data.data.slice(0, 6).map((doctor) => {
+      // Extract degrees from education
+      const degrees = doctor.education
+        ?.map((edu) => edu.qualification)
+        .filter(Boolean)
+        .join(", ");
+
+      // Experience Calculation based on user snippet
+      const experienceList = (doctor as any).experience || [];
+      const experienceCount = experienceList.length;
+
+      const totalYears = experienceList.reduce((acc: number, exp: any) => {
+        // Handle "X Years" string or direct number
+        const duration = exp.duration || exp.no_of_years || "0";
+        const years = parseInt(duration) || 0;
+        return acc + years;
+      }, 0);
+
+      const totalExperience = totalYears > 0 ? `${totalYears}+ Year` : "1+ Year";
+
+      return {
+        id: doctor.id,
+        image: doctor.image || "/vite.svg",
+        name: doctor.doctor_name,
+        degrees: degrees || doctor.specialist || "Medical Professional",
+        specialization: doctor.specialist || "",
+        badge: doctor.specialist || "Specialist",
+        specialties: doctor.department || "General Physician",
+        experienceCount: experienceCount,
+        totalExperience: totalExperience,
+        // Mocking these as they're not in the API yet
+        rating: 4.5,
+        reviewCount: 20,
+        visitCount: 40,
+        fee: "৳500",
+      };
+    });
   }, [data]);
 
   return (
-    <div className="w-full bg-blue-50 py-16 md:py-24">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="w-full bg-[#f8fbff] py-20 md:py-28">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
         {/* Title */}
-        <div className="text-center mb-12">
-          <h2 className="text-4xl md:text-5xl font-bold text-primary mb-2">Our Doctors</h2>
-          <div className="w-0.5 h-8 bg-primary mx-auto mt-2" />
+        <div className="text-center mb-16">
+          <h2 className="text-4xl md:text-5xl font-extrabold text-[#1e293b] mb-4">
+            Our <span className="text-primary">Doctors</span>
+          </h2>
+          <div className="w-20 h-1.5 bg-primary mx-auto rounded-full" />
         </div>
 
         {/* Doctor Cards */}
-        <div className="overflow-x-auto mb-18">
+        <div className="mb-20">
           {isLoading ? (
-            <div className="flex items-center justify-center py-12">
-              <Loader2 className="h-8 w-8 animate-spin text-primary" />
+            <div className="flex items-center justify-center py-20">
+              <Loader2 className="h-10 w-10 animate-spin text-primary" />
             </div>
           ) : error ? (
-            <div className="text-center py-12 text-gray-500">
+            <div className="text-center py-20 text-gray-500 bg-white rounded-2xl border border-dashed border-gray-200">
               Failed to load doctors. Please try again later.
             </div>
           ) : doctors.length === 0 ? (
-            <div className="text-center py-12 text-gray-500">
+            <div className="text-center py-20 text-gray-500 bg-white rounded-2xl border border-dashed border-gray-200">
               No doctors available at the moment.
             </div>
           ) : (
-            <div className="flex gap-6 min-w-max lg:min-w-0 lg:grid lg:grid-cols-5 max-w-7xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center">
               {doctors.map((doctor) => (
                 <DoctorCard
                   key={doctor.id}
-                  id={doctor.id}
-                  image={doctor.image}
-                  name={doctor.name}
-                  specialization={doctor.specialization}
-                  description={doctor.description}
+                  {...doctor}
                 />
               ))}
             </div>
           )}
         </div>
+
 
         {/* View All Doctors Button */}
         <div className="text-center">
@@ -69,7 +98,7 @@ export function DoctorsSection() {
             onClick={() => {
               navigate('/doctors')
             }}
-            className="bg-transparant text-primary border-2 border-blue-900 hover:bg-blue-200 px-8 py-7 text-lg font-semibold rounded-full"
+            className="bg-transparent text-primary border-2 border-primary hover:bg-primary hover:text-white px-10 py-7 text-lg font-bold rounded-full transition-all duration-300 shadow-sm hover:shadow-lg"
           >
             View All Doctors
           </Button>
@@ -78,4 +107,5 @@ export function DoctorsSection() {
     </div>
   );
 }
+
 
