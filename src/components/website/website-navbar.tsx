@@ -171,26 +171,7 @@ export function WebsiteNavbar() {
                     <p className="text-sm text-gray-500 italic">No departments available at the moment.</p>
                   )}
 
-                  {activeSpecializedFacilities.length > 0 && (
-                    <div className="mt-8">
-                      <div className="flex justify-between items-center mb-6 pb-2 border-b border-gray-100">
-                        <h3 className="text-xl font-bold text-[#00A884] uppercase tracking-wide">Specialized Departments</h3>
-                        <Link to="/facilities?is_specialized=true" className="text-[13px] font-bold text-gray-500 hover:text-[#00A884] hover:underline uppercase transition-colors">View All Specialized</Link>
-                      </div>
-                      <div className="grid grid-cols-4 gap-x-8 gap-y-4">
-                        {activeSpecializedFacilities.map((facility) => (
-                          <Link
-                            key={facility.id}
-                            to={`/facilities/${facility.id}`}
-                            className="text-[13px] font-semibold text-gray-600 hover:text-[#00A884] transition-colors py-1.5 flex items-center gap-2 group/item"
-                          >
-                            <span className="w-1.5 h-1.5 rounded-full bg-gray-300 group-hover/item:bg-[#00A884] transition-colors shrink-0"></span>
-                            <span className="truncate">{facility.title}</span>
-                          </Link>
-                        ))}
-                      </div>
-                    </div>
-                  )}
+
                 </div>
               </div>
             </div>
@@ -321,6 +302,10 @@ export function WebsiteNavbar() {
                     </div>
                   </CollapsibleContent>
                 </Collapsible>
+
+                <Link to="/health-insight" onClick={() => setMobileMenuOpen(false)} className="block py-3 text-[15px] font-bold text-gray-800 border-b border-gray-100 uppercase">
+                  HEALTH INSIGHT
+                </Link>
 
                 <Link to="/careers" onClick={() => setMobileMenuOpen(false)} className="block py-3 text-[15px] font-bold text-gray-800 border-b border-gray-100 uppercase">
                   CAREER
