@@ -44,7 +44,7 @@ export default function GuidePage() {
     ];
 
     return (
-        <div className="w-full min-h-screen bg-gray-50/50 pb-20">
+        <div className="w-full min-h-screen bg-gray-50/50 py-28">
             <BreadcrumbSection currentPage="Patient & Visitors Guide" />
 
             <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 mt-16">
