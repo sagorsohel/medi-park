@@ -96,7 +96,7 @@ export function AboutSection() {
           >
             {/* Top Right Floating Image */}
             {section.image_2 && (
-              <div className="absolute -top-6 -right-6 md:-top-10 md:-right-10 z-20 rounded-3xl p-2 sm:p-3 border-[8px] border-white shadow-sm w-40 sm:w-48 bg-white overflow-hidden aspect-square">
+              <div className="absolute -top-6 -right-6 md:-top-10 md:-right-10 z-20 rounded-3xl p-2 sm:p-3 border-8 border-white shadow-sm w-40 sm:w-48 bg-white overflow-hidden aspect-square">
                 <img
                   src={section.image_2}
                   alt="About Us Feature 2"
@@ -124,7 +124,7 @@ export function AboutSection() {
 
             {/* Bottom Left Floating Image */}
             {section.image_3 && (
-              <div className="absolute -bottom-6 -left-6 md:-bottom-10 md:-left-10 z-20 rounded-3xl p-2 sm:p-3 border-[8px] border-white shadow-sm w-40 sm:w-48 bg-white overflow-hidden aspect-square">
+              <div className="absolute -bottom-6 -left-6 md:-bottom-10 md:-left-10 z-20 rounded-3xl p-2 sm:p-3 border-8 border-white shadow-sm w-40 sm:w-48 bg-white overflow-hidden aspect-square">
                 <img
                   src={section.image_3}
                   alt="About Us Feature 3"

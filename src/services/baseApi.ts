@@ -69,12 +69,19 @@ const PUBLIC_PATHS = [
   '/homepage-about-us-sections/active',
   '/homepage-facilities/active',
   '/homepage-cta-sections/active',
-  '/homepage-facilities/active',
-  '/homepage-hero-sections/active',
   '/homepage-cta-sections/active',
 
   '/future-ventures',
   "/departments",
+
+  // Public about page endpoints
+  '/about-us-page-banner-sections',
+  '/about-us-page-who-we-are-sections/active',
+  '/about-us-page-our-mission-sections/active',
+  '/about-us-page-our-vision-sections/active',
+  '/about-us-page-after-our-vision-sections/active',
+  '/about-us-page-2nd-after-our-vision-sections/active',
+  '/directors',
 ]
 
 export const api = createApi({
