@@ -60,25 +60,25 @@ export function InvestorSection() {
             <div className="flex gap-6 animate-scroll-left" style={{ width: 'max-content' }}>
               {/* First set of cards */}
               {investors.map((investor) => (
-                <div key={investor.id} className="shrink-0" style={{ width: '280px' }}>
+                <Link key={investor.id} to={`/investors/${investor.id}`} className="shrink-0 block group" style={{ width: '280px' }}>
                   <InvestorCard
                     image={investor.image}
                     name={investor.name}
                     designation={investor.designation}
                     description={investor.description}
                   />
-                </div>
+                </Link>
               ))}
               {/* Duplicate set for seamless infinite loop */}
               {investors.map((investor) => (
-                <div key={`duplicate-${investor.id}`} className="shrink-0" style={{ width: '280px' }}>
+                <Link key={`duplicate-${investor.id}`} to={`/investors/${investor.id}`} className="shrink-0 block group" style={{ width: '280px' }}>
                   <InvestorCard
                     image={investor.image}
                     name={investor.name}
                     designation={investor.designation}
                     description={investor.description}
                   />
-                </div>
+                </Link>
               ))}
             </div>
           </div>

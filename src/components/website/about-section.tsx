@@ -35,7 +35,7 @@ export function AboutSection() {
             transition={{ duration: 0.6 }}
           >
             {/* Title / Subtitle */}
-            <h4 className="text-blue-600 font-bold uppercase tracking-wider mb-3 text-sm">
+            <h4 className="text-primary font-bold uppercase tracking-wider mb-3 text-sm">
               {section.title || "ABOUT US"}
             </h4>
             <h2 className="text-4xl md:text-5xl lg:text-[54px] font-extrabold text-[#0B1B3D] mb-6 leading-tight">
@@ -68,17 +68,12 @@ export function AboutSection() {
               ))}
             </div>
 
-            {/* Footer Text */}
-            <p className="text-gray-500 mb-10 leading-relaxed max-w-xl">
-              Ut wisi enim ad minim veniam, quis laore nostrud exerci tation ulm hedi corper turet
-              suscipit lobortis nisl ut aliquip erat volutpat autem vel eum iriure dolor in hendrerit in
-              vulputate velit.
-            </p>
+
 
             {/* CTA Button */}
             <Link to="/about">
-              <button className="bg-[#9b8afb] hover:bg-[#8673f8] text-white px-7 py-3.5 rounded-full flex gap-3 items-center font-semibold text-lg transition-colors shadow-sm">
-                <span className="bg-white text-[#9b8afb] rounded-full p-1.5 flex items-center justify-center">
+              <button className="bg-primary hover:bg-primary/80 text-white px-7 py-3.5 rounded-full flex gap-3 items-center font-semibold text-lg transition-colors shadow-sm">
+                <span className="bg-white text-primary rounded-full p-1.5 flex items-center justify-center">
                   <ArrowRight className="w-4 h-4" strokeWidth={3} />
                 </span>
                 More About Us

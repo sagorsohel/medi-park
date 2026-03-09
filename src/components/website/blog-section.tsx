@@ -82,7 +82,7 @@ export function BlogSection() {
 
                 {/* Read More Link */}
                 <Link
-                  to={`/blogs/${post.id}`}
+                  to={`/health-insight/${post.id}`}
                   className="text-blue-600 underline hover:text-blue-800 transition-colors"
                 >
                   Read more

@@ -1,4 +1,5 @@
 import { useState, useMemo } from "react";
+import { Link } from "react-router";
 import { PageHeroSection } from '@/components/website/page-hero-section'
 import { BreadcrumbSection } from '@/components/website/breadcrumb-section'
 import { InvestorListCard } from '@/components/website/investor-list-card'
@@ -61,12 +62,13 @@ export default function InvestorsPage() {
               {/* Investor Grid */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
                 {displayedInvestors.map((investor) => (
-                  <InvestorListCard
-                    key={investor.id}
-                    image={investor.image}
-                    name={investor.name}
-                    role={investor.role}
-                  />
+                  <Link key={investor.id} to={`/investors/${investor.id}`} className="block group">
+                    <InvestorListCard
+                      image={investor.image}
+                      name={investor.name}
+                      role={investor.role}
+                    />
+                  </Link>
                 ))}
               </div>
 

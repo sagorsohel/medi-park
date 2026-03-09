@@ -64,6 +64,7 @@ import AppointmentPage from '@/pages/appointment/appointment-page'
 import ReportsPage from '@/pages/reports/reports-page'
 import TelemedicinePage from '@/pages/telemedicine/telemedicine-page'
 import GuidePage from '@/pages/guide/guide-page'
+import InvestorDetailPage from '@/pages/investors/investor-detail-page'
 
 const router = createBrowserRouter([
   // 🌐 Website routes (with website layout - sticky navbar & footer)
@@ -93,6 +94,7 @@ const router = createBrowserRouter([
       { path: "health-insight", element: <BlogsPage /> },
       { path: "health-insight/:id", element: <BlogDetailPage /> },
       { path: "investors", element: <InvestorsPage /> },
+      { path: "investors/:id", element: <InvestorDetailPage /> },
       { path: "gellery", element: <GelleryPage /> },
       { path: "contacts", element: <ContactPage /> },
       { path: "privacy-policy", element: <PrivacyPage /> },
