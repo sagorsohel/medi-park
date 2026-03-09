@@ -125,19 +125,19 @@ function TransferCard({ transfer }: { transfer: ShareTransfer }) {
                 <div className="grid grid-cols-2 gap-2 text-sm">
                     <div>
                         <p className="text-muted-foreground">Seller</p>
-                        <p className="font-medium">{transfer.seller.applicant_full_name}</p>
+                        <p className="font-medium">{transfer?.seller?.applicant_full_name || 'N/A'}</p>
                     </div>
                     <div>
                         <p className="text-muted-foreground">Buyer</p>
-                        <p className="font-medium">{transfer.buyer.applicant_full_name}</p>
+                        <p className="font-medium">{transfer?.buyer?.applicant_full_name || 'N/A'}</p>
                     </div>
                     <div>
                         <p className="text-muted-foreground">Category</p>
-                        <p className="font-medium">{transfer.seller.category_of_share}</p>
+                        <p className="font-medium">{transfer?.seller?.category_of_share || 'N/A'}</p>
                     </div>
                     <div>
                         <p className="text-muted-foreground">Quantity</p>
-                        <p className="font-medium">{transfer.quantity}</p>
+                        <p className="font-medium">{transfer?.quantity}</p>
                     </div>
                 </div>
                 <div className="pt-2 border-t">
@@ -167,21 +167,21 @@ function TransferCard({ transfer }: { transfer: ShareTransfer }) {
                                 <div className="space-y-4 border p-4 rounded-lg">
                                     <h3 className="font-semibold text-lg border-b pb-2">Seller Information</h3>
                                     <div className="grid gap-2 text-sm">
-                                        <InfoRow label="Name" value={transfer.seller.applicant_full_name} />
-                                        <InfoRow label="File No" value={transfer.seller.file_number} />
-                                        <InfoRow label="Father's Name" value={transfer.seller.fathers_name} />
-                                        <InfoRow label="Mobile" value={transfer.seller.mobile_number} />
-                                        <InfoRow label="Address" value={transfer.seller.present_address} />
+                                        <InfoRow label="Name" value={transfer?.seller?.applicant_full_name ?? 'N/A'} />
+                                        <InfoRow label="File No" value={transfer?.seller?.file_number ?? 'N/A'} />
+                                        <InfoRow label="Father's Name" value={transfer?.seller?.fathers_name ?? 'N/A'} />
+                                        <InfoRow label="Mobile" value={transfer?.seller?.mobile_number ?? 'N/A'} />
+                                        <InfoRow label="Address" value={transfer?.seller?.present_address ?? 'N/A'} />
                                     </div>
                                 </div>
                                 <div className="space-y-4 border p-4 rounded-lg">
                                     <h3 className="font-semibold text-lg border-b pb-2">Buyer Information</h3>
                                     <div className="grid gap-2 text-sm">
-                                        <InfoRow label="Name" value={transfer.buyer.applicant_full_name} />
-                                        <InfoRow label="File No" value={transfer.buyer.file_number} />
-                                        <InfoRow label="Father's Name" value={transfer.buyer.fathers_name} />
-                                        <InfoRow label="Mobile" value={transfer.buyer.mobile_number} />
-                                        <InfoRow label="Address" value={transfer.buyer.present_address} />
+                                        <InfoRow label="Name" value={transfer?.buyer?.applicant_full_name ?? 'N/A'} />
+                                        <InfoRow label="File No" value={transfer?.buyer?.file_number ?? 'N/A'} />
+                                        <InfoRow label="Father's Name" value={transfer?.buyer?.fathers_name ?? 'N/A'} />
+                                        <InfoRow label="Mobile" value={transfer?.buyer?.mobile_number ?? 'N/A'} />
+                                        <InfoRow label="Address" value={transfer?.buyer?.present_address ?? 'N/A'} />
                                     </div>
                                 </div>
                             </div>
@@ -189,12 +189,12 @@ function TransferCard({ transfer }: { transfer: ShareTransfer }) {
                             <div className="space-y-4 border p-4 rounded-lg">
                                 <h3 className="font-semibold text-lg border-b pb-2">Transaction Details</h3>
                                 <div className="grid md:grid-cols-3 gap-4 text-sm">
-                                    <InfoRow label="Category" value={transfer.seller.category_of_share} />
-                                    <InfoRow label="Quantity" value={transfer.quantity} />
-                                    <InfoRow label="Price per Share" value={transfer.price_per_share} />
-                                    <InfoRow label="Total Amount" value={transfer.total_amount} />
-                                    <InfoRow label="Status" value={transfer.status === 1 ? "Completed" : "Pending"} />
-                                    <InfoRow label="Payment Mode" value={transfer.seller.mode_of_payment} />
+                                    <InfoRow label="Category" value={transfer?.seller?.category_of_share ?? 'N/A'} />
+                                    <InfoRow label="Quantity" value={transfer?.quantity ?? 'N/A'} />
+                                    <InfoRow label="Price per Share" value={transfer?.price_per_share ?? 'N/A'} />
+                                    <InfoRow label="Total Amount" value={transfer?.total_amount ?? 'N/A'} />
+                                    <InfoRow label="Status" value={transfer?.status === 1 ? "Completed" : "Pending"} />
+                                    <InfoRow label="Payment Mode" value={transfer?.seller?.mode_of_payment ?? 'N/A'} />
                                 </div>
                             </div>
                         </div>
