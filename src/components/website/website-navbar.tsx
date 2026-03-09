@@ -4,16 +4,9 @@ import { NavLink, Link } from "react-router";
 import { useAppSelector, useAppDispatch } from "@/store/hooks";
 import { logout } from "@/store/slices/authSlice";
 import { Button } from "@/components/ui/button";
-import { Menu, ChevronDown } from "lucide-react";
+import { Menu, ChevronDown, Facebook, Linkedin, Youtube, Phone } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-
-} from "@/components/ui/dropdown-menu";
 import {
   Collapsible,
   CollapsibleContent,
@@ -21,30 +14,19 @@ import {
 } from "@/components/ui/collapsible";
 import { useGetFacilitiesPublicQuery, useGetSpecializedFacilitiesPublicQuery } from "@/services/homepageApi";
 import { useGetFutureVenturesPublicQuery } from "@/services/futureVenturesApi";
-
-const navLinks = [
-  { to: "/", label: "Home" },
-  { to: "/about", label: "About Us" },
-  // { to: "/mission-vision", label: "Mission & Vision" },
-  // { to: "/careers", label: "Careers" },
-  { to: "/news-media", label: "News & Media" },
-  { to: "/blogs", label: "Blogs" },
-  { to: "/contacts", label: "Contacts" },
-];
-
 import { useGetDirectorsQuery, type Director } from "@/services/directorApi";
-
-// ... existing imports ...
 
 export function WebsiteNavbar() {
   const dispatch = useAppDispatch();
   const { isAuthenticated, user } = useAppSelector((state) => state.auth);
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
-  const [isScrolled, setIsScrolled] = useState<boolean>(false);
   const [departmentsOpen, setDepartmentsOpen] = useState<boolean>(false);
   const [specializedDepartmentsOpen, setSpecializedDepartmentsOpen] = useState<boolean>(false);
   const [futureVenturesOpen, setFutureVenturesOpen] = useState<boolean>(false);
+  const [aboutOpen, setAboutOpen] = useState<boolean>(false);
+  const [newsOpen, setNewsOpen] = useState<boolean>(false);
+  const [visitorsOpen, setVisitorsOpen] = useState<boolean>(false);
 
   const { data: facilitiesData } = useGetFacilitiesPublicQuery();
   const { data: specializedFacilitiesData } = useGetSpecializedFacilitiesPublicQuery();
@@ -55,29 +37,16 @@ export function WebsiteNavbar() {
   const activeSpecializedFacilities = specializedFacilitiesData?.data?.filter(f => f.status === 'active') || [];
   const activeFutureVentures = futureVenturesData?.data?.filter(f => f.status === 'active') || [];
 
-  // order: Chairman, Vice Chairman, Managing Director, etc.
-  // We can sort or just map.
-  // Prioritize Chairman and MD if we want specific order, but API order might be fine or we can sort by id.
   const directors = directorsData?.data || [];
   const keyDesignations = ["Chairman", "Managing Director", "Vice Chairman"];
   const importantDirectors = directors.filter(d => keyDesignations.some(k => d.designation.includes(k) || k.includes(d.designation)));
 
-  // sort custom if needed: Chairman first, then Vice, then MD
   const sortedDirectors = [...importantDirectors].sort((a, b) => {
     const order = { "Chairman": 1, "Vice Chairman": 2, "Managing Director": 3 };
     const rankA = order[a.designation as keyof typeof order] || 99;
     const rankB = order[b.designation as keyof typeof order] || 99;
     return rankA - rankB;
   });
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   const handleLogout = (): void => {
     dispatch(logout());
@@ -87,513 +56,299 @@ export function WebsiteNavbar() {
     const des = director.designation.toLowerCase();
     if (des.includes('chairman') && !des.includes('vice')) return "/about/message-of-chairman";
     if (des.includes('managing director')) return "/about/message-of-managing-director";
-    return `/about/board-of-directors/${director.id}`; // OR create message-of-vice-chairman if needed, but we stick to generic for others
+    return `/about/board-of-directors/${director.id}`;
   };
 
   const getDirectorLabel = (director: Director) => {
-    // Just "Message of [Designation]"
     return `Message of ${director.designation}`;
-  }
-
+  };
 
   return (
-    <header className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 w-full sm:max-w-8xl px-4 sm:px-6 lg:px-8">
-      {/* Main Navbar Container - Pill Shaped with Glassmorphism */}
-      <div className={`w-full  sm:px-4 py-3 flex items-center justify-between  transition-all duration-300 ${isScrolled ? 'bg-primary/40 px-3 backdrop-blur-sm border border-primary-foreground/30   rounded-full ' : ''
-        }`}>
-        {/* Logo Section - Pill Container */}
-        <NavLink to="/" className="flex items-center">
-          <div className="flex items-center gap-2 border border-primary-foreground/50 rounded-full px-4 py-2 bg-white backdrop-blur-sm">
-            <div className="   flex  justify-center md:w-[133px]">
-              <img
-                src="/navbar-logo.png"
-                alt="MediPark Logo"
-                className="md:h-[30px] sm:h-6 w-auto px-5 sm:px-0 h-6 object-cover sm:w-auto sm:object-cover flex justify-center"
-                onError={(e) => {
-                  const target = e.target as HTMLImageElement;
-                  target.src = "/logo.png";
-                }}
-              />
-            </div>
-            {/* <div className="flex flex-col">
-              <span className="text-sm md:text-base font-bold text-white leading-tight">
-                MediPark
-              </span>
-              <span className="text-xs text-white/90 leading-tight hidden sm:block">
-                Specialized Hospital
-              </span>
-            </div> */}
-          </div>
-        </NavLink>
+    <header className="fixed top-0 left-0 right-0 z-50 w-full shadow-lg font-sans">
+      {/* Top Black Bar */}
+      <div className="bg-[#2D2D2D] text-white py-1.5 px-4 md:px-8 flex flex-col sm:flex-row justify-between items-center text-[13px] w-full border-b border-gray-700">
+        <div className="flex items-center gap-5 mb-2 sm:mb-0">
+          <a href="#" className="hover:text-[#00A884] transition-colors"><Facebook className="w-[14px] h-[14px] fill-current" /></a>
+          <a href="#" className="hover:text-[#00A884] transition-colors"><Linkedin className="w-[14px] h-[14px] fill-current" /></a>
+          <a href="#" className="hover:text-[#00A884] transition-colors"><Youtube className="w-[14px] h-[14px] fill-current" /></a>
+        </div>
+        <div className="font-bold tracking-[0.1em] flex items-center gap-2 uppercase">
+          [ Hotline - 10633 ]
+        </div>
+      </div>
 
-        {/* Desktop Navigation - Center */}
-        <nav className={`hidden bg-white backdrop-blur-md border px-4 py-4 border-primary-foreground/30 rounded-full lg:flex items-center gap-4 xl:gap-6 ${isScrolled ? 'bg-blue-500' : 'bg-white'}`}>
-          {navLinks.map((link) => {
-            if (link.label === "About Us") {
-              return (
-                <DropdownMenu key={link.to}>
-                  <DropdownMenuTrigger className="text-sm font-medium transition-colors whitespace-nowrap text-primary hover:text-primary focus:outline-none flex items-center gap-1">
-                    {link.label}
-                    <ChevronDown className="w-4 h-4" />
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="start" className="w-[280px] mt-2">
-                    <DropdownMenuItem asChild>
-                      <Link to="/about" className="cursor-pointer w-full font-medium">About MSH</Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                      <Link to="/mission" className="cursor-pointer w-full font-medium">Mission</Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                      <Link to="/vision" className="cursor-pointer w-full font-medium">Vision</Link>
-                    </DropdownMenuItem>
-                    {sortedDirectors.map(director => (
-                      <DropdownMenuItem key={director.id} asChild>
-                        <Link to={getDirectorLink(director)} className="cursor-pointer w-full font-medium">
-                          {getDirectorLabel(director)}
-                        </Link>
-                      </DropdownMenuItem>
-                    ))}
-                    <DropdownMenuItem asChild>
-                      <Link to="/about" className="cursor-pointer w-full font-medium">Board of Directors</Link>
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              );
-            }
+      {/* Main Navbar */}
+      <div className="w-full bg-[#00A884] flex items-stretch h-[65px] md:h-[75px] relative">
+        {/* Logo Section Desktop */}
+        <div
+          className="bg-white flex items-center justify-center pl-4 pr-16 relative z-10 hidden sm:flex"
+          style={{ clipPath: 'polygon(0 0, 100% 0, 88% 100%, 0% 100%)', width: '360px' }}
+        >
+          <Link to="/" className="flex items-center -ml-10">
+            <img
+              src="/navbar-logo.png"
+              alt="MediPark Logo"
+              className="h-10 md:h-[42px] w-auto object-contain"
+              onError={(e) => {
+                const target = e.target as HTMLImageElement;
+                target.src = "/logo.png";
+              }}
+            />
+          </Link>
+        </div>
 
-            if (link.label === "News & Media") {
-              return (
-                <DropdownMenu key={link.to}>
-                  <DropdownMenuTrigger className="text-sm font-medium transition-colors whitespace-nowrap text-primary hover:text-primary focus:outline-none flex items-center gap-1">
-                    {link.label}
-                    <ChevronDown className="w-4 h-4" />
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="start" className="w-[200px] mt-2">
-                    <DropdownMenuItem asChild>
-                      <Link to="/news" className="cursor-pointer w-full font-medium">News</Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                      <Link to="/gellery" className="cursor-pointer w-full font-medium">Gallery</Link>
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              );
-            }
-            return (
-              <NavLink
-                key={link.to}
-                to={link.to}
-                end={link.to === "/"}
-                className={({ isActive }) =>
-                  `text-sm font-medium transition-colors whitespace-nowrap ${isActive
-                    ? "text-[#D83072] font-semibold"
-                    : "text-primary hover:text-primary"
-                  }`
-                }
-              >
-                {link.label}
-              </NavLink>
-            );
-          })}
+        {/* Logo Section Mobile */}
+        <div className="bg-white flex items-center px-4 sm:hidden z-10 shadow-[2px_0_5px_rgba(0,0,0,0.1)] py-2">
+          <Link to="/" className="flex items-center">
+            <img
+              src="/navbar-logo.png"
+              alt="MediPark Logo"
+              className="h-9 w-auto object-contain"
+              onError={(e) => {
+                const target = e.target as HTMLImageElement;
+                target.src = "/logo.png";
+              }}
+            />
+          </Link>
+        </div>
 
-          {/* Facilities Dropdown */}
-          <DropdownMenu>
-            <DropdownMenuTrigger className="text-sm font-medium transition-colors whitespace-nowrap text-primary hover:text-primary focus:outline-none flex items-center gap-1">
-              Departments
-              <ChevronDown className="w-4 h-4" />
-            </DropdownMenuTrigger>
-            <DropdownMenuContent
-              align="center"
-              className="max-h-[600px] overflow-y-auto w-[600px] max-w-none mt-5 p-4  -left-[225px]!"
-            >
-              <div className="space-y-4">
-                <div className="flex items-center justify-between mb-4 sticky top-0 bg-white z-10 pb-2 border-b">
-                  <h3 className="text-lg font-bold text-primary">Our Departments</h3>
-                  <Link
-                    to="/facilities"
-                    className="text-sm font-semibold text-primary hover:underline"
-                  >
-                    View All Departments
-                  </Link>
-                </div>
-                {activeFacilities.length > 0 ? (
-                  <div className="grid grid-cols-4 gap-3">
-                    {activeFacilities.map((facility) => (
-                      <DropdownMenuItem key={facility.id} asChild className="p-0">
-                        <Link
-                          to={`/facilities/${facility.id}`}
-                          className="block px-3 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-primary rounded cursor-pointer transition-colors whitespace-normal"
-                        >
-                          {facility.title}
-                        </Link>
-                      </DropdownMenuItem>
-                    ))}
-                  </div>
-                ) : (
-                  <p className="px-3 py-2 text-sm text-gray-500">No facilities available</p>
-                )}
+        {/* Desktop Navigation */}
+        <nav className="flex-1 hidden lg:flex items-center justify-end xl:justify-start xl:pl-6 pr-6 text-white text-[13px] font-bold tracking-wide">
+          <div className="flex items-stretch h-full gap-5 xl:gap-8 static">
+
+            <Link to="/" className="h-full flex items-center hover:text-white/80 transition-colors uppercase">
+              HOME
+            </Link>
+
+            {/* ABOUT US */}
+            <div className="group flex items-stretch cursor-pointer relative">
+              <div className="h-full flex items-center gap-1 hover:text-white/80 transition-colors uppercase">
+                ABOUT US <ChevronDown className="w-4 h-4 transition-transform group-hover:rotate-180" />
               </div>
-            </DropdownMenuContent>
-          </DropdownMenu>
+              <div className="absolute top-full left-0 w-[250px] bg-white text-gray-800 shadow-[0_10px_30px_rgba(0,0,0,0.1)] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top border-t-[3px] border-[#00A884] z-50">
+                <Link to="/about" className="block px-5 py-3.5 hover:bg-[#00A884]/5 hover:text-[#00A884] border-b border-gray-100 uppercase text-xs font-semibold transition-colors">About MSH</Link>
+                <Link to="/mission" className="block px-5 py-3.5 hover:bg-[#00A884]/5 hover:text-[#00A884] border-b border-gray-100 uppercase text-xs font-semibold transition-colors">Mission</Link>
+                <Link to="/vision" className="block px-5 py-3.5 hover:bg-[#00A884]/5 hover:text-[#00A884] border-b border-gray-100 uppercase text-xs font-semibold transition-colors">Vision</Link>
+                {sortedDirectors.map(director => (
+                  <Link key={director.id} to={getDirectorLink(director)} className="block px-5 py-3.5 hover:bg-[#00A884]/5 hover:text-[#00A884] border-b border-gray-100 uppercase text-xs font-semibold transition-colors">
+                    {getDirectorLabel(director)}
+                  </Link>
+                ))}
+                <Link to="/about" className="block px-5 py-3.5 hover:bg-[#00A884]/5 hover:text-[#00A884] uppercase text-xs font-semibold transition-colors">Board of Directors</Link>
+              </div>
+            </div>
 
-          {/* Specialized Departments Dropdown */}
-          {activeSpecializedFacilities.length > 0 && (
-            <DropdownMenu>
-              <DropdownMenuTrigger className="text-sm font-medium transition-colors whitespace-nowrap text-primary hover:text-primary focus:outline-none flex items-center gap-1">
-                Specialized Departments
-                <ChevronDown className="w-4 h-4" />
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
-                align="center"
-                className="max-h-[600px] overflow-y-auto w-[600px] max-w-none mt-5 p-4  -left-[225px]!"
-              >
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between mb-4 sticky top-0 bg-white z-10 pb-2 border-b">
-                    <h3 className="text-lg font-bold text-primary">Specialized Departments</h3>
-                    <Link
-                      to="/facilities?is_specialized=true"
-                      className="text-sm font-semibold text-primary hover:underline"
-                    >
-                      View All Specialized
-                    </Link>
+            {/* FIND DOCTORS */}
+            <Link to="/doctors" className="h-full flex items-center hover:text-white/80 transition-colors uppercase">
+              FIND DOCTORS
+            </Link>
+
+            {/* DEPARTMENTS - FULL WIDTH MEGA MENU */}
+            <div className="group static flex items-stretch cursor-pointer">
+              <div className="h-full flex items-center gap-1 hover:text-white/80 transition-colors uppercase">
+                DEPARTMENTS <ChevronDown className="w-4 h-4 transition-transform group-hover:rotate-180" />
+              </div>
+              <div className="absolute top-full left-0 w-full bg-white text-gray-800 shadow-[0_10px_30px_rgba(0,0,0,0.1)] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 border-t-[3px] border-[#00A884] p-8 z-50">
+                <div className="max-w-7xl mx-auto">
+                  <div className="flex justify-between items-center mb-6 pb-2 border-b border-gray-100">
+                    <h3 className="text-xl font-bold text-[#00A884] uppercase tracking-wide">Our Departments</h3>
+                    <Link to="/facilities" className="text-[13px] font-bold text-gray-500 hover:text-[#00A884] hover:underline uppercase transition-colors">View All Departments</Link>
                   </div>
-                  {activeSpecializedFacilities.length > 0 ? (
-                    <div className="grid grid-cols-4 gap-3">
-                      {activeSpecializedFacilities.map((facility) => (
-                        <DropdownMenuItem key={facility.id} asChild className="p-0">
-                          <Link
-                            to={`/facilities/${facility.id}`}
-                            className="block px-3 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-primary rounded cursor-pointer transition-colors whitespace-normal"
-                          >
-                            {facility.title}
-                          </Link>
-                        </DropdownMenuItem>
+                  {activeFacilities.length > 0 ? (
+                    <div className="grid grid-cols-4 gap-x-8 gap-y-4">
+                      {activeFacilities.map((facility) => (
+                        <Link
+                          key={facility.id}
+                          to={`/facilities/${facility.id}`}
+                          className="text-[13px] font-semibold text-gray-600 hover:text-[#00A884] transition-colors py-1.5 flex items-center gap-2 group/item"
+                        >
+                          <span className="w-1.5 h-1.5 rounded-full bg-gray-300 group-hover/item:bg-[#00A884] transition-colors shrink-0"></span>
+                          <span className="truncate">{facility.title}</span>
+                        </Link>
                       ))}
                     </div>
                   ) : (
-                    <p className="px-3 py-2 text-sm text-gray-500">No specialized departments available</p>
+                    <p className="text-sm text-gray-500 italic">No departments available at the moment.</p>
+                  )}
+
+                  {activeSpecializedFacilities.length > 0 && (
+                    <div className="mt-8">
+                      <div className="flex justify-between items-center mb-6 pb-2 border-b border-gray-100">
+                        <h3 className="text-xl font-bold text-[#00A884] uppercase tracking-wide">Specialized Departments</h3>
+                        <Link to="/facilities?is_specialized=true" className="text-[13px] font-bold text-gray-500 hover:text-[#00A884] hover:underline uppercase transition-colors">View All Specialized</Link>
+                      </div>
+                      <div className="grid grid-cols-4 gap-x-8 gap-y-4">
+                        {activeSpecializedFacilities.map((facility) => (
+                          <Link
+                            key={facility.id}
+                            to={`/facilities/${facility.id}`}
+                            className="text-[13px] font-semibold text-gray-600 hover:text-[#00A884] transition-colors py-1.5 flex items-center gap-2 group/item"
+                          >
+                            <span className="w-1.5 h-1.5 rounded-full bg-gray-300 group-hover/item:bg-[#00A884] transition-colors shrink-0"></span>
+                            <span className="truncate">{facility.title}</span>
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
                   )}
                 </div>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          )}
+              </div>
+            </div>
+
+            {/* VISITORS AND PATIENTS */}
+            <div className="group flex items-stretch cursor-pointer relative">
+              <div className="h-full flex items-center gap-1 hover:text-white/80 transition-colors uppercase">
+                VISITORS AND PATIENTS <ChevronDown className="w-4 h-4 transition-transform group-hover:rotate-180" />
+              </div>
+              <div className="absolute top-full left-0 w-[260px] bg-white text-gray-800 shadow-[0_10px_30px_rgba(0,0,0,0.1)] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top border-t-[3px] border-[#00A884] z-50">
+                <Link to="/visitors/admission" className="block px-5 py-3.5 hover:bg-[#00A884]/5 hover:text-[#00A884] border-b border-gray-100 uppercase text-xs font-semibold transition-colors">Admission Guidelines</Link>
+                <Link to="/visitors/discharge" className="block px-5 py-3.5 hover:bg-[#00A884]/5 hover:text-[#00A884] border-b border-gray-100 uppercase text-xs font-semibold transition-colors">Discharge Guidelines</Link>
+                <Link to="/visitors/rules" className="block px-5 py-3.5 hover:bg-[#00A884]/5 hover:text-[#00A884] border-b border-gray-100 uppercase text-xs font-semibold transition-colors">Visitor Rules</Link>
+                <Link to="/visitors/facilities" className="block px-5 py-3.5 hover:bg-[#00A884]/5 hover:text-[#00A884] border-b border-gray-100 uppercase text-xs font-semibold transition-colors">Facilities for Patients</Link>
+              </div>
+            </div>
+
+            {/* NEWS & MEDIA */}
+            <div className="group flex items-stretch cursor-pointer relative">
+              <div className="h-full flex items-center gap-1 hover:text-white/80 transition-colors uppercase">
+                NEWS & MEDIA <ChevronDown className="w-4 h-4 transition-transform group-hover:rotate-180" />
+              </div>
+              <div className="absolute top-full left-0 w-[200px] bg-white text-gray-800 shadow-[0_10px_30px_rgba(0,0,0,0.1)] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top border-t-[3px] border-[#00A884] z-50">
+                <Link to="/news" className="block px-5 py-3.5 hover:bg-[#00A884]/5 hover:text-[#00A884] border-b border-gray-100 uppercase text-xs font-semibold transition-colors">News</Link>
+                <Link to="/gellery" className="block px-5 py-3.5 hover:bg-[#00A884]/5 hover:text-[#00A884] border-b border-gray-100 uppercase text-xs font-semibold transition-colors">Gallery</Link>
+                <Link to="/blogs" className="block px-5 py-3.5 hover:bg-[#00A884]/5 hover:text-[#00A884] border-b border-gray-100 uppercase text-xs font-semibold transition-colors">Blogs</Link>
+              </div>
+            </div>
+
+            {/* CAREER */}
+            <Link to="/careers" className="h-full flex items-center hover:text-white/80 transition-colors uppercase">
+              CAREER
+            </Link>
+
+            {/* CONTACT */}
+            <Link to="/contacts" className="h-full flex items-center hover:text-white/80 transition-colors uppercase pr-2">
+              CONTACT
+            </Link>
+
+          </div>
         </nav>
 
-        {/* Right side actions */}
-        <div className="flex items-center gap-2 border border-primary-foreground/50 rounded-full p-1">
-          {/* Future Ventures Dropdown - Desktop */}
-          <DropdownMenu>
-            <DropdownMenuTrigger className="hidden md:flex text-sm font-medium transition-colors whitespace-nowrap text-primary hover:text-primary focus:outline-none items-center gap-1 border border-primary-foreground/50 bg-white backdrop-blur-sm hover:bg-primary-foreground/20 rounded-full px-6 py-2">
-              Future Ventures
-              <ChevronDown className="w-4 h-4" />
-            </DropdownMenuTrigger>
-            <DropdownMenuContent
-              align="center"
-              className="max-h-[600px] overflow-y-auto w-[600px] max-w-none mt-5 p-4  -left-[225px]!"
-            >
-              <div className="space-y-4">
-                <div className="flex items-center justify-between mb-4 sticky top-0 bg-white z-10 pb-2 border-b">
-                  <h3 className="text-lg font-bold text-primary">Future Ventures</h3>
-                  <Link
-                    to="/future-ventures"
-                    className="text-sm font-semibold text-primary hover:underline"
-                  >
-                    View All
-                  </Link>
-                </div>
-                {activeFutureVentures.length > 0 ? (
-                  <div className="grid grid-cols-4 gap-3">
-                    {activeFutureVentures.map((venture) => (
-                      <DropdownMenuItem key={venture.id} asChild className="p-0">
-                        <Link
-                          to={`/future-ventures/${venture.id}`}
-                          className="block px-3 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-primary rounded cursor-pointer transition-colors whitespace-normal"
-                        >
-                          {venture.title}
-                        </Link>
-                      </DropdownMenuItem>
-                    ))}
-                  </div>
-                ) : (
-                  <p className="px-3 py-2 text-sm text-gray-500">No future ventures available</p>
-                )}
-              </div>
-            </DropdownMenuContent>
-          </DropdownMenu>
-
-          {/* Mobile menu button */}
+        {/* Mobile menu trigger */}
+        <div className="flex-1 lg:hidden flex justify-end items-center pr-4">
           <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
-            <SheetTrigger asChild className="lg:hidden">
-              <Button variant="ghost" size="icon" className="text-primary-foreground border border-primary-foreground/50 rounded-full bg-primary-foreground/10 backdrop-blur-sm hover:bg-primary-foreground/20">
-                <Menu className="h-5 w-5" />
+            <SheetTrigger asChild>
+              <Button variant="ghost" size="icon" className="text-white hover:bg-white/20 hover:text-white rounded-md">
+                <Menu className="h-6 w-6" />
                 <span className="sr-only">Toggle menu</span>
               </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="w-[300px] sm:w-[400px] p-4 bg-background/95 backdrop-blur-md">
-              <div className="flex flex-col h-full">
-                <div className="flex items-center justify-between mb-6 shrink-0">
-                  <div className="flex items-center gap-2">
-                    <img
-                      src="/navbar-logo.png"
-                      alt="MediPark Logo"
-                      className="h-8 w-auto"
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement;
-                        target.src = "/logo.png";
-                      }}
-                    />
+            <SheetContent side="right" className="w-[300px] sm:w-[400px] p-0 bg-white border-l-0 overflow-hidden flex flex-col">
+              <div className="p-4 bg-[#00A884] text-white flex items-center justify-between shrink-0">
+                <span className="font-bold tracking-wide uppercase">Menu</span>
+              </div>
 
-                  </div>
-                </div>
-                <nav className="flex flex-col gap-4 overflow-y-auto flex-1 min-h-0">
-                  {navLinks.map((link) => {
-                    if (link.label === "About Us") {
-                      return (
-                        <div key={link.to} className="pl-4">
-                          <Collapsible>
-                            <CollapsibleTrigger className="flex items-center justify-between w-full text-base font-medium transition-colors text-muted-foreground hover:text-primary py-1">
-                              <span>{link.label}</span>
-                              <ChevronDown className="w-4 h-4 transition-transform duration-200 group-data-[state=open]:rotate-180" />
-                            </CollapsibleTrigger>
-                            <CollapsibleContent className="overflow-hidden data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down">
-                              <div className="mt-2 ml-4 space-y-2 border-l-2 border-gray-100 pl-4">
-                                <Link
-                                  to="/about"
-                                  onClick={() => setMobileMenuOpen(false)}
-                                  className="block text-sm text-muted-foreground hover:text-primary transition-colors py-1"
-                                >
-                                  About MSH
-                                </Link>
-                                <Link
-                                  to="/mission"
-                                  onClick={() => setMobileMenuOpen(false)}
-                                  className="block text-sm text-muted-foreground hover:text-primary transition-colors py-1"
-                                >
-                                  Mission
-                                </Link>
-                                <Link
-                                  to="/vision"
-                                  onClick={() => setMobileMenuOpen(false)}
-                                  className="block text-sm text-muted-foreground hover:text-primary transition-colors py-1"
-                                >
-                                  Vision
-                                </Link>
-                                {sortedDirectors.map(director => (
-                                  <Link
-                                    key={director.id}
-                                    to={getDirectorLink(director)}
-                                    onClick={() => setMobileMenuOpen(false)}
-                                    className="block text-sm text-muted-foreground hover:text-primary transition-colors py-1"
-                                  >
-                                    {getDirectorLabel(director)}
-                                  </Link>
-                                ))}
-                                <Link
-                                  to="/about"
-                                  onClick={() => setMobileMenuOpen(false)}
-                                  className="block text-sm text-muted-foreground hover:text-primary transition-colors py-1"
-                                >
-                                  Board of Directors
-                                </Link>
-                              </div>
-                            </CollapsibleContent>
-                          </Collapsible>
-                        </div>
-                      );
-                    }
+              <div className="flex-1 overflow-y-auto px-4 py-6 space-y-2">
+                <Link to="/" onClick={() => setMobileMenuOpen(false)} className="block py-3 text-[15px] font-bold text-gray-800 border-b border-gray-100 uppercase">
+                  HOME
+                </Link>
 
-                    if (link.label === "News & Media") {
-                      return (
-                        <div key={link.to} className="pl-4">
-                          <Collapsible>
-                            <CollapsibleTrigger className="flex items-center justify-between w-full text-base font-medium transition-colors text-muted-foreground hover:text-primary py-1">
-                              <span>{link.label}</span>
-                              <ChevronDown className="w-4 h-4 transition-transform duration-200 group-data-[state=open]:rotate-180" />
-                            </CollapsibleTrigger>
-                            <CollapsibleContent className="overflow-hidden data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down">
-                              <div className="mt-2 ml-4 space-y-2 border-l-2 border-gray-100 pl-4">
-                                <Link
-                                  to="/news"
-                                  onClick={() => setMobileMenuOpen(false)}
-                                  className="block text-sm text-muted-foreground hover:text-primary transition-colors py-1"
-                                >
-                                  News
-                                </Link>
-                                <Link
-                                  to="/gellery"
-                                  onClick={() => setMobileMenuOpen(false)}
-                                  className="block text-sm text-muted-foreground hover:text-primary transition-colors py-1"
-                                >
-                                  Gallery
-                                </Link>
-                              </div>
-                            </CollapsibleContent>
-                          </Collapsible>
-                        </div>
-                      );
-                    }
-                    // ...
+                <Collapsible open={aboutOpen} onOpenChange={setAboutOpen}>
+                  <CollapsibleTrigger className="flex items-center justify-between w-full py-3 text-[15px] font-bold text-gray-800 border-b border-gray-100 uppercase">
+                    <span>ABOUT US</span>
+                    <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${aboutOpen ? 'rotate-180' : ''}`} />
+                  </CollapsibleTrigger>
+                  <CollapsibleContent className="bg-gray-50 border-b border-gray-100">
+                    <div className="py-2 pl-4 flex flex-col">
+                      <Link to="/about" onClick={() => setMobileMenuOpen(false)} className="py-2.5 text-sm font-semibold text-gray-600 uppercase">About MSH</Link>
+                      <Link to="/mission" onClick={() => setMobileMenuOpen(false)} className="py-2.5 text-sm font-semibold text-gray-600 uppercase">Mission</Link>
+                      <Link to="/vision" onClick={() => setMobileMenuOpen(false)} className="py-2.5 text-sm font-semibold text-gray-600 uppercase">Vision</Link>
+                      {sortedDirectors.map(director => (
+                        <Link key={director.id} to={getDirectorLink(director)} onClick={() => setMobileMenuOpen(false)} className="py-2.5 text-sm font-semibold text-gray-600 uppercase">
+                          {getDirectorLabel(director)}
+                        </Link>
+                      ))}
+                      <Link to="/about" onClick={() => setMobileMenuOpen(false)} className="py-2.5 text-sm font-semibold text-gray-600 uppercase">Board of Directors</Link>
+                    </div>
+                  </CollapsibleContent>
+                </Collapsible>
 
+                <Link to="/doctors" onClick={() => setMobileMenuOpen(false)} className="block py-3 text-[15px] font-bold text-gray-800 border-b border-gray-100 uppercase">
+                  FIND DOCTORS
+                </Link>
 
-                    return (
-                      <NavLink
-                        key={link.to}
-                        to={link.to}
-                        end={link.to === "/"}
-                        onClick={() => setMobileMenuOpen(false)}
-                        className={({ isActive }) =>
-                          `text-base font-medium transition-colors ${isActive
-                            ? "text-primary border-l-4 border-primary pl-4"
-                            : "text-muted-foreground hover:text-primary pl-4"
-                          }`
-                        }
-                      >
-                        {link.label}
-                      </NavLink>
-                    );
-                  })}
+                <Collapsible open={departmentsOpen} onOpenChange={setDepartmentsOpen}>
+                  <CollapsibleTrigger className="flex items-center justify-between w-full py-3 text-[15px] font-bold text-gray-800 border-b border-gray-100 uppercase">
+                    <span>DEPARTMENTS</span>
+                    <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${departmentsOpen ? 'rotate-180' : ''}`} />
+                  </CollapsibleTrigger>
+                  <CollapsibleContent className="bg-gray-50 border-b border-gray-100">
+                    <div className="py-2 pl-4 flex flex-col max-h-[40vh] overflow-y-auto">
+                      {activeFacilities.map((facility) => (
+                        <Link key={facility.id} to={`/facilities/${facility.id}`} onClick={() => setMobileMenuOpen(false)} className="py-2.5 text-sm font-semibold text-gray-600">
+                          {facility.title}
+                        </Link>
+                      ))}
+                      <Link to="/facilities" onClick={() => setMobileMenuOpen(false)} className="py-2.5 text-sm font-bold text-[#00A884] uppercase">View All Departments</Link>
+                    </div>
+                  </CollapsibleContent>
+                </Collapsible>
 
-                  {/* Future Ventures Direct Link in Mobile Menu */}
-                  {activeFutureVentures.length > 0 && (
-                    <NavLink
-                      to="/future-ventures"
-                      onClick={() => setMobileMenuOpen(false)}
-                      className={({ isActive }) =>
-                        `text-base font-medium transition-colors ${isActive
-                          ? "text-primary border-l-4 border-primary pl-4"
-                          : "text-muted-foreground hover:text-primary pl-4"
-                        }`
-                      }
+                <Collapsible open={visitorsOpen} onOpenChange={setVisitorsOpen}>
+                  <CollapsibleTrigger className="flex items-center justify-between w-full py-3 text-[15px] font-bold text-gray-800 border-b border-gray-100 uppercase">
+                    <span>VISITORS AND PATIENTS</span>
+                    <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${visitorsOpen ? 'rotate-180' : ''}`} />
+                  </CollapsibleTrigger>
+                  <CollapsibleContent className="bg-gray-50 border-b border-gray-100">
+                    <div className="py-2 pl-4 flex flex-col">
+                      <Link to="/visitors/admission" onClick={() => setMobileMenuOpen(false)} className="py-2.5 text-sm font-semibold text-gray-600 uppercase">Admission Guidelines</Link>
+                      <Link to="/visitors/discharge" onClick={() => setMobileMenuOpen(false)} className="py-2.5 text-sm font-semibold text-gray-600 uppercase">Discharge Guidelines</Link>
+                      <Link to="/visitors/rules" onClick={() => setMobileMenuOpen(false)} className="py-2.5 text-sm font-semibold text-gray-600 uppercase">Visitor Rules</Link>
+                      <Link to="/visitors/facilities" onClick={() => setMobileMenuOpen(false)} className="py-2.5 text-sm font-semibold text-gray-600 uppercase">Facilities for Patients</Link>
+                    </div>
+                  </CollapsibleContent>
+                </Collapsible>
+
+                <Collapsible open={newsOpen} onOpenChange={setNewsOpen}>
+                  <CollapsibleTrigger className="flex items-center justify-between w-full py-3 text-[15px] font-bold text-gray-800 border-b border-gray-100 uppercase">
+                    <span>NEWS & MEDIA</span>
+                    <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${newsOpen ? 'rotate-180' : ''}`} />
+                  </CollapsibleTrigger>
+                  <CollapsibleContent className="bg-gray-50 border-b border-gray-100">
+                    <div className="py-2 pl-4 flex flex-col">
+                      <Link to="/news" onClick={() => setMobileMenuOpen(false)} className="py-2.5 text-sm font-semibold text-gray-600 uppercase">News</Link>
+                      <Link to="/gellery" onClick={() => setMobileMenuOpen(false)} className="py-2.5 text-sm font-semibold text-gray-600 uppercase">Gallery</Link>
+                      <Link to="/blogs" onClick={() => setMobileMenuOpen(false)} className="py-2.5 text-sm font-semibold text-gray-600 uppercase">Blogs</Link>
+                    </div>
+                  </CollapsibleContent>
+                </Collapsible>
+
+                <Link to="/careers" onClick={() => setMobileMenuOpen(false)} className="block py-3 text-[15px] font-bold text-gray-800 border-b border-gray-100 uppercase">
+                  CAREER
+                </Link>
+
+                <Link to="/contacts" onClick={() => setMobileMenuOpen(false)} className="block py-3 text-[15px] font-bold text-gray-800 pb-8 uppercase">
+                  CONTACT
+                </Link>
+
+                {isAuthenticated && (
+                  <div className="pt-6 border-t border-gray-200">
+                    <span className="text-sm font-semibold text-gray-500 block mb-3">
+                      Hi, {user?.name ?? "Guest"}
+                    </span>
+                    <Button
+                      onClick={() => { handleLogout(); setMobileMenuOpen(false); }}
+                      className="w-full bg-[#00A884] hover:bg-[#00A884]/90 text-white rounded-md"
                     >
-                      Future Ventures
-                    </NavLink>
-                  )}
+                      LOGOUT
+                    </Button>
+                  </div>
+                )}
+              </div>
+            </SheetContent>
+          </Sheet>
+        </div>
 
-                  {/* Facilities in Mobile Menu */}
-                  <div className="pl-4">
-                    <Collapsible open={departmentsOpen} onOpenChange={setDepartmentsOpen}>
-                      <CollapsibleTrigger className="flex items-center justify-between w-full text-base font-medium transition-colors text-muted-foreground hover:text-primary">
-                        <span>Departments</span>
-                        <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${departmentsOpen ? 'transform rotate-180' : ''}`} />
-                      </CollapsibleTrigger>
-                      <CollapsibleContent className="overflow-hidden data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down">
-                        {activeFacilities.length > 0 ? (
-                          <div className="mt-2 ml-4 space-y-2 max-h-[300px] overflow-y-auto">
-                            {activeFacilities.map((facility) => (
-                              <Link
-                                key={facility.id}
-                                to={`/facilities/${facility.id}`}
-                                onClick={() => setMobileMenuOpen(false)}
-                                className="block text-sm text-muted-foreground hover:text-primary transition-colors py-1"
-                              >
-                                {facility.title}
-                              </Link>
-                            ))}
-                            <Link
-                              to="/facilities"
-                              onClick={() => setMobileMenuOpen(false)}
-                              className="block text-sm text-primary font-semibold py-1"
-                            >
-                              View All ({activeFacilities.length})
-                            </Link>
-                          </div>
-                        ) : (
-                          <p className="mt-2 ml-4 text-sm text-gray-500">No departments available</p>
-                        )}
-                      </CollapsibleContent>
-                    </Collapsible>
-                  </div>
-                  {/* Specialized Departments in Mobile Menu */}
-                  {activeSpecializedFacilities.length > 0 && (
-                    <div className="pl-4 pt-4 border-t">
-                      <Collapsible open={specializedDepartmentsOpen} onOpenChange={setSpecializedDepartmentsOpen}>
-                        <CollapsibleTrigger className="flex items-center justify-between w-full text-base font-medium transition-colors text-muted-foreground hover:text-primary">
-                          <span>Specialized Departments</span>
-                          <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${specializedDepartmentsOpen ? 'transform rotate-180' : ''}`} />
-                        </CollapsibleTrigger>
-                        <CollapsibleContent className="overflow-hidden data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down">
-                          {activeSpecializedFacilities.length > 0 ? (
-                            <div className="mt-2 ml-4 space-y-2 max-h-[300px] overflow-y-auto">
-                              {activeSpecializedFacilities.map((facility) => (
-                                <Link
-                                  key={facility.id}
-                                  to={`/facilities/${facility.id}`}
-                                  onClick={() => setMobileMenuOpen(false)}
-                                  className="block text-sm text-muted-foreground hover:text-primary transition-colors py-1"
-                                >
-                                  {facility.title}
-                                </Link>
-                              ))}
-                              <Link
-                                to="/facilities?is_specialized=true"
-                                onClick={() => setMobileMenuOpen(false)}
-                                className="block text-sm text-primary font-semibold py-1"
-                              >
-                                View All ({activeSpecializedFacilities.length})
-                              </Link>
-                            </div>
-                          ) : (
-                            <p className="mt-2 ml-4 text-sm text-gray-500">No specialized departments available</p>
-                          )}
-                        </CollapsibleContent>
-                      </Collapsible>
-                    </div>
-                  )}
-                  {/* Future Ventures in Mobile Menu */}
-                  <div className="pl-4 pt-4 border-t">
-                    <Collapsible open={futureVenturesOpen} onOpenChange={setFutureVenturesOpen}>
-                      <CollapsibleTrigger className="flex items-center justify-between w-full text-base font-medium transition-colors text-muted-foreground hover:text-primary">
-                        <span>Future Ventures</span>
-                        <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${futureVenturesOpen ? 'transform rotate-180' : ''}`} />
-                      </CollapsibleTrigger>
-                      <CollapsibleContent className="overflow-hidden data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down">
-                        {activeFutureVentures.length > 0 ? (
-                          <div className="mt-2 ml-4 space-y-2 max-h-[300px] overflow-y-auto">
-                            {activeFutureVentures.map((venture) => (
-                              <Link
-                                key={venture.id}
-                                to={`/future-ventures/${venture.id}`}
-                                onClick={() => setMobileMenuOpen(false)}
-                                className="block text-sm text-muted-foreground hover:text-primary transition-colors py-1"
-                              >
-                                {venture.title}
-                              </Link>
-                            ))}
-                            <Link
-                              to="/future-ventures"
-                              onClick={() => setMobileMenuOpen(false)}
-                              className="block text-sm text-primary font-semibold py-1"
-                            >
-                              View All ({activeFutureVentures.length})
-                            </Link>
-                          </div>
-                        ) : (
-                          <p className="mt-2 ml-4 text-sm text-gray-500">No future ventures available</p>
-                        )}
-                      </CollapsibleContent>
-                    </Collapsible>
-                  </div>
-                  {isAuthenticated && (
-                    <div className="pt-4 border-t">
-                      <span className="text-sm text-muted-foreground block mb-2">
-                        Hi, {user?.name ?? "Guest"}
-                      </span>
-                      <Button
-                        variant="outline"
-                        onClick={handleLogout}
-                        className="w-full"
-                      >
-                        Logout
-                      </Button>
-                    </div>
-                  )}
-                </nav>
-              </div >
-            </SheetContent >
-          </Sheet >
-        </div >
-      </div >
-    </header >
+      </div>
+    </header>
   );
 }
-
