@@ -216,7 +216,7 @@ export function WebsiteNavbar() {
               <div className="absolute top-full left-0 w-[200px] bg-white text-gray-800 shadow-[0_10px_30px_rgba(0,0,0,0.1)] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top border-t-[3px] border-[#00A884] z-50">
                 <Link to="/news" className="block px-5 py-3.5 hover:bg-[#00A884]/5 hover:text-[#00A884] border-b border-gray-100 uppercase text-xs font-semibold transition-colors">News</Link>
                 <Link to="/gellery" className="block px-5 py-3.5 hover:bg-[#00A884]/5 hover:text-[#00A884] border-b border-gray-100 uppercase text-xs font-semibold transition-colors">Gallery</Link>
-                <Link to="/blogs" className="block px-5 py-3.5 hover:bg-[#00A884]/5 hover:text-[#00A884] border-b border-gray-100 uppercase text-xs font-semibold transition-colors">Blogs</Link>
+                <Link to="/health-insight" className="block px-5 py-3.5 hover:bg-[#00A884]/5 hover:text-[#00A884] border-b border-gray-100 uppercase text-xs font-semibold transition-colors">Health Insight</Link>
               </div>
             </div>
 
@@ -317,7 +317,7 @@ export function WebsiteNavbar() {
                     <div className="py-2 pl-4 flex flex-col">
                       <Link to="/news" onClick={() => setMobileMenuOpen(false)} className="py-2.5 text-sm font-semibold text-gray-600 uppercase">News</Link>
                       <Link to="/gellery" onClick={() => setMobileMenuOpen(false)} className="py-2.5 text-sm font-semibold text-gray-600 uppercase">Gallery</Link>
-                      <Link to="/blogs" onClick={() => setMobileMenuOpen(false)} className="py-2.5 text-sm font-semibold text-gray-600 uppercase">Blogs</Link>
+                      <Link to="/health-insight" onClick={() => setMobileMenuOpen(false)} className="py-2.5 text-sm font-semibold text-gray-600 uppercase">Health Insight</Link>
                     </div>
                   </CollapsibleContent>
                 </Collapsible>

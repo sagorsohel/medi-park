@@ -20,7 +20,7 @@ export function BlogSection() {
       <div className="w-full bg-white py-16 md:py-24">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl font-bold text-primary mb-2">Blog</h2>
+            <h2 className="text-4xl md:text-5xl font-bold text-primary mb-2">Health Insight</h2>
             <div className="w-0.5 h-8 bg-primary mx-auto mt-2" />
           </div>
           <div className="flex items-center justify-center py-12">
@@ -41,7 +41,7 @@ export function BlogSection() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Title */}
         <div className="text-center mb-12">
-          <h2 className="text-4xl md:text-5xl font-bold text-primary mb-2">Blog</h2>
+          <h2 className="text-4xl md:text-5xl font-bold text-primary mb-2">Health Insight</h2>
           <div className="w-0.5 h-8 bg-primary mx-auto mt-2" />
         </div>
 

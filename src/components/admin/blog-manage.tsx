@@ -75,7 +75,7 @@ export function BlogManage() {
         if (action === "delete") {
             handleDeleteClick(id);
         } else if (action === "edit") {
-            navigate(`/admin/blog/edit/${id}`);
+            navigate(`/admin/health-insight/edit/${id}`);
         }
     };
 
@@ -106,7 +106,7 @@ export function BlogManage() {
                             <RefreshCw className="w-4 h-4 mr-2" />
                             Refresh
                         </Button>
-                        <Button onClick={() => navigate("/admin/blog/new")} className="flex items-center gap-2">
+                        <Button onClick={() => navigate("/admin/health-insight/new")} className="flex items-center gap-2">
                             Add Blog
                         </Button>
                     </div>

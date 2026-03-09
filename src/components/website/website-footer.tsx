@@ -116,7 +116,7 @@ export function WebsiteFooter() {
             <Link to="/speciality" className="hover:text-cyan-400 transition-colors py-1">Speciality</Link>
             <Link to="/health-package" className="hover:text-cyan-400 transition-colors py-1">Health Package</Link>
             <Link to="/news" className="hover:text-cyan-400 transition-colors py-1">News & Media</Link>
-            <Link to="/blogs" className="hover:text-cyan-400 transition-colors py-1">Blogs</Link>
+            <Link to="/health-insight" className="hover:text-cyan-400 transition-colors py-1">Health Insight</Link>
             <Link to="/about" className="hover:text-cyan-400 transition-colors py-1">About Us</Link>
           </nav>
 

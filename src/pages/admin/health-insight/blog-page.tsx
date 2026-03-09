@@ -60,9 +60,9 @@ export default function BlogPage() {
             setBlogToDelete(id);
             setDeleteConfirmOpen(true);
         } else if (action === "edit") {
-            navigate(`/admin/blog/edit/${id}`);
+            navigate(`/admin/health-insight/edit/${id}`);
         } else if (action === "view") {
-            navigate(`/admin/blog/view/${id}`);
+            navigate(`/admin/health-insight/view/${id}`);
         }
     };
 
@@ -96,10 +96,10 @@ export default function BlogPage() {
             {/* Header */}
             <div className="mb-8 flex justify-between items-center">
                 <div>
-                    <h1 className="text-3xl font-bold text-gray-900 mb-2">Blogs</h1>
+                    <h1 className="text-3xl font-bold text-gray-900 mb-2">Health Insight</h1>
                     <p className="text-gray-600">Manage blog posts and articles</p>
                 </div>
-                <Button onClick={() => navigate("/admin/blog/new")}>Add New</Button>
+                <Button onClick={() => navigate("/admin/health-insight/new")}>Add New</Button>
             </div>
 
             {/* Filters */}

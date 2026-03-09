@@ -195,7 +195,7 @@ export default function FacilitiesPage() {
                                                         <span className="font-semibold text-blue-600">{doctorCount}</span>
                                                     </div>
                                                     <div className="flex items-center gap-1">
-                                                        <span className="text-gray-600">Blogs:</span>
+                                                        <span className="text-gray-600">Health Insight:</span>
                                                         <span className="font-semibold text-green-600">{blogCount}</span>
                                                     </div>
                                                 </div>

@@ -710,7 +710,7 @@ export function FacilitiesManage() {
                   </Field>
 
                   <Field>
-                    <FieldLabel>Blogs</FieldLabel>
+                    <FieldLabel>Health Insight</FieldLabel>
                     <FieldContent>
                       <select
                         multiple
@@ -1109,7 +1109,7 @@ export function FacilitiesManage() {
                         </Field>
 
                         <Field>
-                          <FieldLabel>Blogs</FieldLabel>
+                          <FieldLabel>Health Insight</FieldLabel>
                           <FieldContent>
                             {isEditing ? (
                               <select

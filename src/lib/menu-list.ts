@@ -154,8 +154,8 @@ export function getMenuList(_pathname: string): Group[] {
           submenus: []
         },
         {
-          href: "/admin/website/blogs",
-          label: "Blogs",
+          href: "/admin/website/health-insight",
+          label: "Health Insight",
           icon: Package,
           submenus: []
         },

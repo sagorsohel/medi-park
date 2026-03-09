@@ -196,7 +196,7 @@ export default function AddBlogPage() {
                 }).unwrap();
                 toast.success("Blog created successfully!");
             }
-            navigate("/admin/blog");
+            navigate("/admin/health-insight");
         } catch (error: unknown) {
             console.error("Failed to save blog:", error);
             const errorMessage =
@@ -228,7 +228,7 @@ export default function AddBlogPage() {
             <div className="mb-6">
                 <Button
                     variant="ghost"
-                    onClick={() => navigate("/admin/blog")}
+                    onClick={() => navigate("/admin/health-insight")}
                     className="mb-4"
                 >
                     <ChevronLeft className="w-4 h-4 mr-2" />
@@ -367,7 +367,7 @@ export default function AddBlogPage() {
                         <Button
                             type="button"
                             variant="outline"
-                            onClick={() => navigate("/admin/blog")}
+                            onClick={() => navigate("/admin/health-insight")}
                         >
                             Cancel
                         </Button>

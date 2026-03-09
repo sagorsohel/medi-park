@@ -59,7 +59,7 @@ const PUBLIC_PATHS = [
   '/homepage-cta-sections/active',
   // Public website endpoints
   '/doctors',
-  '/blogs',
+  '/health-insight',
   '/news',
   '/investors',
   '/gallery',

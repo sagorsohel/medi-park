@@ -26,8 +26,8 @@ import InvestorPage from '../pages/admin/investor/investor-page'
 import AddInvestorPage from '../pages/admin/investor/add-investor-page'
 import InstallmentRulesPage from '../pages/admin/installment-rules/installment-rules-page'
 import AddInstallmentRulePage from '../pages/admin/installment-rules/add-installment-rule-page'
-import BlogPage from '../pages/admin/blog/blog-page'
-import AddBlogPage from '../pages/admin/blog/add-blog-page'
+import BlogPage from '../pages/admin/health-insight/blog-page'
+import AddBlogPage from '../pages/admin/health-insight/add-blog-page'
 import UserDashboardPage from '../pages/user/user-dashboard-page'
 import AdminPanelLayout from '@/components/admin-panel/admin-panel-layout'
 import UserPanelLayout from '@/components/user-panel/user-panel-layout'
@@ -37,7 +37,7 @@ import AboutPageManage from '@/pages/admin/about-page-manage/about-page-manage'
 import NewsPageManage from '@/pages/admin/news/news-page'
 import AddNewsPage from '@/pages/admin/news/add-news-page'
 import GelleryPageManage from '@/pages/admin/gellery/gellery'
-import BlogsPageManage from '@/pages/admin/blogs/blogs'
+import BlogsPageManage from '@/pages/admin/health-insights/blogs'
 import NewsPage from '@/pages/news/news-page'
 import ContactAdminPage from '@/pages/admin/contact/contact'
 import FacilitiesPageAdmin from '@/pages/admin/facilities/facilities-page'
@@ -86,8 +86,8 @@ const router = createBrowserRouter([
       { path: "future-ventures/:id", element: <FutureVentureDetailPage /> },
       { path: "doctors", element: <DoctorsPage /> },
       { path: "doctors/:id", element: <DoctorDetailPage /> },
-      { path: "blogs", element: <BlogsPage /> },
-      { path: "blogs/:id", element: <BlogDetailPage /> },
+      { path: "health-insight", element: <BlogsPage /> },
+      { path: "health-insight/:id", element: <BlogDetailPage /> },
       { path: "investors", element: <InvestorsPage /> },
       { path: "gellery", element: <GelleryPage /> },
       { path: "contacts", element: <ContactPage /> },
@@ -127,7 +127,7 @@ const router = createBrowserRouter([
       { path: "news/new", element: <AddNewsPage /> },
       { path: "news/edit/:id", element: <AddNewsPage /> },
       { path: "news/view/:id", element: <AddNewsPage /> },
-      { path: "website/blogs", element: <BlogsPageManage /> },
+      { path: "website/health-insight", element: <BlogsPageManage /> },
       { path: "website/contact", element: <ContactAdminPage /> },
       { path: "staff", element: <StaffPage /> },
       { path: "future-ventures", element: <AdminFutureVenturesPage /> },
@@ -147,10 +147,10 @@ const router = createBrowserRouter([
       { path: "installment-rules/new", element: <AddInstallmentRulePage /> },
       { path: "installment-rules/edit/:id", element: <AddInstallmentRulePage /> },
       { path: "installment-rules/view/:id", element: <AddInstallmentRulePage /> },
-      { path: "blog", element: <BlogPage /> },
-      { path: "blog/new", element: <AddBlogPage /> },
-      { path: "blog/edit/:id", element: <AddBlogPage /> },
-      { path: "blog/view/:id", element: <AddBlogPage /> },
+      { path: "health-insight", element: <BlogPage /> },
+      { path: "health-insight/new", element: <AddBlogPage /> },
+      { path: "health-insight/edit/:id", element: <AddBlogPage /> },
+      { path: "health-insight/view/:id", element: <AddBlogPage /> },
       { path: "directors", element: <DirectorsPage /> },
       { path: "directors/new", element: <AddDirectorPage /> },
       { path: "directors/edit/:id", element: <AddDirectorPage /> },

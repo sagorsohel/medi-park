@@ -4,7 +4,7 @@ import { useParams } from "react-router";
 import { PageHeroSection } from '@/components/website/page-hero-section'
 import { BreadcrumbSection } from '@/components/website/breadcrumb-section'
 import { Card, CardContent } from '@/components/ui/card'
-import { useGetBlogByIdQuery } from "@/services/blogApi";
+import { useGetBlogByIdPublicQuery } from "@/services/blogApi";
 import { Loader2 } from "lucide-react";
 import { motion, type Variants } from "framer-motion";
 
@@ -12,8 +12,9 @@ export default function BlogDetailPage() {
   const { id } = useParams<{ id: string }>();
   const blogId = id ? parseInt(id) : 0;
 
-  const { data: blogData, isLoading } = useGetBlogByIdQuery(blogId);
+  const { data: blogData, isLoading, error } = useGetBlogByIdPublicQuery(blogId);
   const blogPost = blogData?.data;
+  console.log("Blog ID params:", id, "Parsed blogId:", blogId, "Data:", blogData, "Error:", error);
 
   // Animation variants
   const contentVariants: Variants = {
@@ -47,10 +48,10 @@ export default function BlogDetailPage() {
   return (
     <div className="w-full">
       {/* Hero Section */}
-      <PageHeroSection 
-        image={blogPost.feature_image} 
-        heading={'Blog'} 
-        alt={`${blogPost.title} Hero`} 
+      <PageHeroSection
+        image={blogPost.feature_image}
+        heading={'Health Insight'}
+        alt={`${blogPost.title} Hero`}
       />
 
       {/* Breadcrumb Section */}

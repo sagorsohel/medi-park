@@ -12,7 +12,7 @@ interface BlogCardProps {
 }
 
 export function BlogCard({ id, image, date, title, link }: BlogCardProps) {
-  const blogLink = link || `/blogs/${id}`;
+  const blogLink = link || `/health-insight/${id}`;
 
   return (
     <Card className="overflow-hidden p-0! border hover:shadow-lg transition-shadow">

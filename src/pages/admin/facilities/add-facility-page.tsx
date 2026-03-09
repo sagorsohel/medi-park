@@ -647,7 +647,7 @@ export default function AddFacilityPage() {
                 </Field>
 
                 <Field>
-                    <FieldLabel>Blogs</FieldLabel>
+                    <FieldLabel>Health Insight</FieldLabel>
                     <FieldContent>
                         {isViewMode ? (
                             <div className="space-y-4">

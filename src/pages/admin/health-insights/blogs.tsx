@@ -1,7 +1,7 @@
 "use client";
 
 import { BlogPageBannerManage } from "@/components/admin/blog-page-banner-manage";
-import BlogPage from "@/pages/admin/blog/blog-page";
+import BlogPage from "@/pages/admin/health-insight/blog-page";
 
 export default function BlogsPageManage() {
   return (

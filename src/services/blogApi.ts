@@ -73,6 +73,15 @@ export const blogApi = api.injectEndpoints({
       keepUnusedDataFor: 3600,
     }),
 
+    getBlogByIdPublic: builder.query<SingleBlogResponse, number>({
+      query: (id) => ({
+        url: `/blogs/${id}`,
+        method: "GET",
+      }),
+      providesTags: ["Blog"],
+      keepUnusedDataFor: 3600,
+    }),
+
     getBlogsPublic: builder.query<BlogResponse, number>({
       query: (page = 1) => ({
         url: `/blogs?page=${page}&status=active`,
@@ -160,6 +169,7 @@ export const blogApi = api.injectEndpoints({
 export const {
   useGetBlogsQuery,
   useGetBlogByIdQuery,
+  useGetBlogByIdPublicQuery,
   useGetBlogsPublicQuery,
   useCreateBlogMutation,
   useUpdateBlogMutation,

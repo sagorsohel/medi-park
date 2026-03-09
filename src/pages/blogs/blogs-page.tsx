@@ -14,7 +14,7 @@ export default function BlogsPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const { data: bannerData } = useGetBlogPageBannerQuery();
   const { data, isLoading } = useGetBlogsPublicQuery(currentPage);
-  
+
   const blogItems = data?.data || [];
   const pagination = data?.pagination;
   const banner = bannerData?.data;
@@ -73,30 +73,30 @@ export default function BlogsPage() {
   return (
     <div className="w-full">
       {/* Hero Section */}
-      <PageHeroSection 
-        image={heroImage} 
-        heading="Blogs" 
-        alt="Blogs Hero"
+      <PageHeroSection
+        image={heroImage}
+        heading="Health Insight"
+        alt="Health Insight Hero"
         overlayOpacity={heroOpacity}
       />
-      
+
       {/* Breadcrumb Section */}
-      <BreadcrumbSection currentPage="Blogs" />
-      
+      <BreadcrumbSection currentPage="Health Insight" />
+
       {/* Blogs Section */}
       <section className="w-full bg-white py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Title */}
           <div className="text-center mb-8">
             <h2 className="text-4xl md:text-5xl font-bold text-primary mb-4">
-              Blogs
+              Health Insight
             </h2>
             <div className="w-44 h-1 bg-primary mx-auto"></div>
           </div>
 
           {/* Description */}
           <p className="text-gray-700 text-center mb-12 max-w-4xl mx-auto">
-            Stay updated with our latest health insights, medical breakthroughs, and expert advice 
+            Stay updated with our latest health insights, medical breakthroughs, and expert advice
             from our team of healthcare professionals.
           </p>
 
@@ -117,9 +117,9 @@ export default function BlogsPage() {
               </div>
             ) : (
               blogItems.map((blog, index) => (
-                <motion.div 
-                  key={blog.id} 
-                  custom={index} 
+                <motion.div
+                  key={blog.id}
+                  custom={index}
                   variants={cardVariants}
                   initial="hidden"
                   animate="visible"
@@ -162,7 +162,7 @@ export default function BlogsPage() {
             </motion.div>
           )}
 
-         
+
         </div>
       </section>
     </div>
