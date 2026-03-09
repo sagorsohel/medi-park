@@ -16,14 +16,7 @@ export function WebsiteLayout() {
     window.scrollTo(0, 0);
   }, [location.pathname]);
 
-  // Prefetch data when on specific pages for instant display
-  useEffect(() => {
-    if (location.pathname === "/") {
-      store.dispatch(homepageApi.endpoints.getHeroSectionsPublic.initiate());
-    } else if (location.pathname === "/about") {
-      store.dispatch(aboutPageApi.endpoints.getAboutPageBanner.initiate());
-    }
-  }, [location.pathname]);
+  // Let React Query hooks handle data fetching natively
 
   return (
     <div className="flex min-h-screen flex-col">

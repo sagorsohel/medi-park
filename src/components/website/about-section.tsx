@@ -1,6 +1,8 @@
 "use client";
 import { useGetAboutUsSectionPublicQuery } from "@/services/homepageApi";
-import { motion, type Variants } from "framer-motion";
+import { motion } from "framer-motion";
+import { Link } from "react-router";
+import { ArrowRight } from "lucide-react";
 
 export function AboutSection() {
   const { data } = useGetAboutUsSectionPublicQuery();
@@ -9,231 +11,133 @@ export function AboutSection() {
   // Only render if we have cached data
   if (!section) return null;
 
-  // Animation variants
-  const buttonVariants: Variants = {
-    hidden: { y: -30, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: {
-        duration: 0.6,
-        ease: "easeOut",
-      },
-    },
-  };
-
-  const textVariants: Variants = {
-    hidden: { x: -50, opacity: 0 },
-    visible: {
-      x: 0,
-      opacity: 1,
-      transition: {
-        duration: 0.6,
-        delay: 0.2,
-        ease: "easeOut",
-      },
-    },
-  };
-
-  const imageVariants: Variants = {
-    hidden: (index: number) => {
-      if (index === 0) return { x: -100, y: 50, opacity: 0 }; // Left image from left-bottom
-      if (index === 1) return { y: -50, opacity: 0 }; // Middle image from top
-      if (index === 2) return { x: 100, y: 50, opacity: 0 }; // Right image from right-bottom
-      return { opacity: 0 };
-    },
-    visible: (index: number) => ({
-      x: 0,
-      y: 0,
-      opacity: 1,
-      transition: {
-        duration: 0.6,
-        delay: 0.4 + index * 0.15,
-        ease: "easeOut",
-      },
-    }),
-  };
+  const features = [
+    "Seamless Care",
+    "Patient-Centered Care",
+    "Warm and Welcoming Environment",
+    "Personalized Approach",
+    "Comprehensive Care",
+    "Cutting-Edge Technology",
+    "Expert Doctors",
+    "Positive Reviews",
+  ];
 
   return (
-    <div className="relative w-full bg-white py-8 md:py-24 overflow-hidden">
-      {/* Background Circular Lines - Div (Bottom Half Only) */}
-      <div className="absolute bottom-0 left-0 w-full h-2/3 pointer-events-none" style={{ zIndex: 0 }}>
-        {/* First circular line - bottom half */}
-        <div
-          className="absolute border border-[#848484] opacity-20 rounded-full"
-          style={{
-            width: '1200px',
-            height: '1900px',
-            left: '50%',
-            bottom: '30%',
-            transform: 'translateX(-50%)',
-            borderWidth: '2px',
-            clipPath: 'inset(50% 0 0 0) '
-          }}
-        />
-        {/* Second circular line - bottom half */}
-        <div
-          className="absolute border border-[#848484] opacity-20 rounded-full"
-          style={{
-            width: '1000px',
-            height: '1300px',
-            left: '50%',
-            bottom: '50%',
-            transform: 'translateX(-50%)',
-            borderWidth: '2px',
-            clipPath: 'inset(45% 0 0 0)'
-          }}
-        />
-      </div>
+    <div className="relative w-full bg-white py-16 md:py-24 overflow-hidden">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
 
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        {/* About Us Navigation Button */}
-        <motion.div
-          className="flex flex-col items-center mb-12 md:mb-0"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-50px" }}
-          variants={buttonVariants}
-        >
-          <button className="bg-gray-100 border border-gray-400 rounded-lg px-6 py-2 text-gray-800 font-medium text-sm md:text-base hover:bg-gray-200 transition-colors">
-            {section.title || "About Us"}
-          </button>
-          <div className="w-0.5 h-8 bg-gray-600 mt-2" />
-        </motion.div>
-
-        {/* Mission Statement - Left Aligned */}
-        <motion.div
-          className="max-w-xl mx-auto mb-16 md:mb-20 px-4"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-50px" }}
-          variants={textVariants}
-        >
-          <p className="text-base md:text-lg text-gray-700 leading-relaxed text-center">
-            {section.sub_title && (
-              <span className="font-bold text-gray-900">{section.sub_title} </span>
-            )}
-            {section.content}
-          </p>
-        </motion.div>
-
-        {/* Image Cards in Arc with SVG S-Curve Connecting Lines */}
-        <div className="relative max-w-6xl mx-auto px-4">
-          {/* SVG for S-curve pattern connecting images */}
-          <svg
-            className="absolute -top-44 left-0 w-full h-full pointer-events-none hidden md:block"
-            viewBox="0 0 1000 1000"
-            preserveAspectRatio="xMidYMid meet"
-            style={{ zIndex: 1, height: '100%' }}
+          {/* Left Column - Content */}
+          <motion.div
+            initial={{ opacity: 0, x: -50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.6 }}
           >
-            {/* S-curve from top left of left image, up towards text, then down to top left of center image */}
-            <path
-              d="M 200 450 Q 250 200 500 250 Q 750 300 800 450"
-              fill="none"
-              stroke="#d1d5db"
-              strokeWidth="2"
-              className="opacity-60"
-            />
-            {/* Curve from top left of center image down to top left of right image */}
-            <path
-              d="M 500 250 Q 650 300 800 450"
-              fill="none"
-              stroke="#d1d5db"
-              strokeWidth="2"
-              className="opacity-60"
-            />
-            {/* Line connecting bottom of left image to bottom of center image */}
-            <path
-              d="M 250 550 Q 400 550 500 550"
-              fill="none"
-              stroke="#d1d5db"
-              strokeWidth="1.5"
-              className="opacity-50"
-            />
-            {/* Line connecting bottom of center image to bottom of right image */}
-            <path
-              d="M 500 550 Q 650 550 750 550"
-              fill="none"
-              stroke="#d1d5db"
-              strokeWidth="1.5"
-              className="opacity-50"
-            />
-          </svg>
+            {/* Title / Subtitle */}
+            <h4 className="text-blue-600 font-bold uppercase tracking-wider mb-3 text-sm">
+              {section.title || "ABOUT US"}
+            </h4>
+            <h2 className="text-4xl md:text-5xl lg:text-[54px] font-extrabold text-[#0B1B3D] mb-6 leading-tight">
+              {section.sub_title || "We Provide Finnest Patient's Care & Amenities"}
+            </h2>
 
-          {/* Images in arc layout - same positions as image */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 relative z-10 pb-8">
-            {/* Left Image Card - Lower left position */}
-            {section.image_1 && (
-              <motion.div
-                className="relative group transform md:translate-y-8 translate-x-6"
-                custom={0}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, margin: "-100px" }}
-                variants={imageVariants}
-              >
-                <div className="bg-white border inline-flex justify-center p-2  border-gray-300 rounded-lg  shadow-sm">
-                  <img
-                    src={section.image_1}
-                    alt="About visualization 1"
-                    className="w-[262px] h-[144px]  object-cover"
-                    onError={(e) => {
-                      const target = e.target as HTMLImageElement;
-                      target.src = "/vite.svg";
-                    }}
-                  />
+            {/* Main Content */}
+            <div className="text-gray-600 text-lg mb-8 leading-relaxed">
+              {section.content ? (
+                <div dangerouslySetInnerHTML={{ __html: section.content }} />
+              ) : (
+                <p>
+                  Embrace a world of comprehensive healthcare where your well-being takes center
+                  stage. At Meca, we're dedicated to providing you with personalized and
+                  compassionate medical services.
+                </p>
+              )}
+            </div>
+
+            {/* Checklist */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-5 gap-x-4 mb-8">
+              {features.map((feature, index) => (
+                <div key={index} className="flex items-center text-[#0B1B3D] font-medium text-[16px]">
+                  <svg className="w-5 h-5 mr-3 flex-shrink-0 text-emerald-500" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M2.5 13.5L6 17L14 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M10.5 13.5L14 17L22 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                  {feature}
                 </div>
-              </motion.div>
-            )}
+              ))}
+            </div>
 
-            {/* Middle Image Card - Center position (higher) */}
+            {/* Footer Text */}
+            <p className="text-gray-500 mb-10 leading-relaxed max-w-xl">
+              Ut wisi enim ad minim veniam, quis laore nostrud exerci tation ulm hedi corper turet
+              suscipit lobortis nisl ut aliquip erat volutpat autem vel eum iriure dolor in hendrerit in
+              vulputate velit.
+            </p>
+
+            {/* CTA Button */}
+            <Link to="/about">
+              <button className="bg-[#9b8afb] hover:bg-[#8673f8] text-white px-7 py-3.5 rounded-full flex gap-3 items-center font-semibold text-lg transition-colors shadow-sm">
+                <span className="bg-white text-[#9b8afb] rounded-full p-1.5 flex items-center justify-center">
+                  <ArrowRight className="w-4 h-4" strokeWidth={3} />
+                </span>
+                More About Us
+              </button>
+            </Link>
+          </motion.div>
+
+          {/* Right Column - Image & Floating Cards */}
+          <motion.div
+            className="relative lg:ml-10 mt-10 lg:mt-0"
+            initial={{ opacity: 0, x: 50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
+            {/* Top Right Floating Image */}
             {section.image_2 && (
-              <motion.div
-                className="relative group transform md:-translate-y-2 translate-x-12"
-                custom={1}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, margin: "-100px" }}
-                variants={imageVariants}
-              >
-                <div className="bg-white border inline-flex justify-center p-2  border-gray-300 rounded-lg  overflow-hidden shadow-sm">
-                  <img
-                    src={section.image_2}
-                    alt="About visualization 2"
-                    className="w-[262px] h-[144px]  object-cover"
-                    onError={(e) => {
-                      const target = e.target as HTMLImageElement;
-                      target.src = "/vite.svg";
-                    }}
-                  />
-                </div>
-              </motion.div>
+              <div className="absolute -top-6 -right-6 md:-top-10 md:-right-10 z-20 rounded-3xl p-2 sm:p-3 border-[8px] border-white shadow-sm w-40 sm:w-48 bg-white overflow-hidden aspect-square">
+                <img
+                  src={section.image_2}
+                  alt="About Us Feature 2"
+                  className="w-full h-full object-cover rounded-2xl"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.src = "/vite.svg";
+                  }}
+                />
+              </div>
             )}
 
-            {/* Right Image Card - Lower right position */}
+            {/* Main Image */}
+            <div className="relative z-10 rounded-[40px] overflow-hidden shadow-lg h-[450px] sm:h-[600px] w-full bg-gray-100">
+              <img
+                src={section.image_1}
+                alt="Finest Patient Care"
+                className="w-full h-full object-cover"
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  target.src = "/vite.svg";
+                }}
+              />
+            </div>
+
+            {/* Bottom Left Floating Image */}
             {section.image_3 && (
-              <motion.div
-                className="relative group transform md:translate-y-8 translate-x-12"
-                custom={2}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, margin: "-100px" }}
-                variants={imageVariants}
-              >
-                <div className="bg-white border inline-flex justify-center p-2  border-gray-300 rounded-lg  overflow-hidden shadow-sm">
-                  <img
-                    src={section.image_3}
-                    alt="About visualization 3"
-                    className="w-[262px] h-[144px]  object-cover"
-                    onError={(e) => {
-                      const target = e.target as HTMLImageElement;
-                      target.src = "/vite.svg";
-                    }}
-                  />
-                </div>
-              </motion.div>
+              <div className="absolute -bottom-6 -left-6 md:-bottom-10 md:-left-10 z-20 rounded-3xl p-2 sm:p-3 border-[8px] border-white shadow-sm w-40 sm:w-48 bg-white overflow-hidden aspect-square">
+                <img
+                  src={section.image_3}
+                  alt="About Us Feature 3"
+                  className="w-full h-full object-cover rounded-2xl"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.src = "/vite.svg";
+                  }}
+                />
+              </div>
             )}
-          </div>
+          </motion.div>
+
         </div>
       </div>
     </div>

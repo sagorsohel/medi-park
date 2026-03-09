@@ -10,10 +10,7 @@ import { store } from '@/store'
 import { aboutPageApi } from '@/services/aboutPageApi'
 
 export default function AboutPage() {
-  // Prefetch about page banner data on mount to show immediately
-  useEffect(() => {
-    store.dispatch(aboutPageApi.endpoints.getAboutPageBanner.initiate());
-  }, []);
+
 
   return (
     <div className="w-full">
