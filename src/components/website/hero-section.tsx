@@ -55,11 +55,46 @@ export function HeroSection() {
   }
 
   const quickLinks = [
-    { icon: Stethoscope, label: "FIND A DOCTOR", href: "/doctors" },
-    { icon: CalendarDays, label: "REQUEST AN APPOINTMENT", href: "/appointment" },
-    { icon: FileText, label: "ONLINE REPORT", href: "/reports" },
-    { icon: Headset, label: "TELE-ONLINE", href: "/telemedicine" },
-    { icon: Users, label: "PATIENT & VISITORS GUIDE", href: "/guide" },
+    {
+      icon: Stethoscope,
+      label: "FIND A DOCTOR",
+      href: "/doctors",
+      bgClass: "bg-blue-50/60 hover:bg-blue-100/80",
+      textClass: "text-[#1e3a5f] group-hover:text-blue-700",
+      iconClass: "bg-blue-100 text-blue-600 group-hover:bg-blue-600 group-hover:text-white"
+    },
+    {
+      icon: CalendarDays,
+      label: "REQUEST AN APPOINTMENT",
+      href: "/appointment",
+      bgClass: "bg-emerald-50/60 hover:bg-emerald-100/80",
+      textClass: "text-[#1e3a5f] group-hover:text-emerald-700",
+      iconClass: "bg-emerald-100 text-emerald-600 group-hover:bg-emerald-600 group-hover:text-white"
+    },
+    {
+      icon: FileText,
+      label: "ONLINE REPORT",
+      href: "/reports",
+      bgClass: "bg-purple-50/60 hover:bg-purple-100/80",
+      textClass: "text-[#1e3a5f] group-hover:text-purple-700",
+      iconClass: "bg-purple-100 text-purple-600 group-hover:bg-purple-600 group-hover:text-white"
+    },
+    {
+      icon: Headset,
+      label: "TELE-ONLINE",
+      href: "/telemedicine",
+      bgClass: "bg-amber-50/60 hover:bg-amber-100/80",
+      textClass: "text-[#1e3a5f] group-hover:text-amber-700",
+      iconClass: "bg-amber-100 text-amber-600 group-hover:bg-amber-600 group-hover:text-white"
+    },
+    {
+      icon: Users,
+      label: "PATIENT & VISITORS GUIDE",
+      href: "/guide",
+      bgClass: "bg-rose-50/60 hover:bg-rose-100/80",
+      textClass: "text-[#1e3a5f] group-hover:text-rose-700",
+      iconClass: "bg-rose-100 text-rose-600 group-hover:bg-rose-600 group-hover:text-white"
+    },
   ];
 
   return (
@@ -113,24 +148,24 @@ export function HeroSection() {
 
       {/* Quick Access Bar - Overlapping bottom */}
       <div className="absolute bottom-0 left-0 w-full z-20">
-        <div className="max-w-7xl mx-auto px-0 md:px-6 lg:px-8">
-          <div className="bg-white/95 backdrop-blur-sm shadow-xl md:rounded-t-lg overflow-hidden border-t md:border-t-0">
-            <div className="grid grid-cols-2 md:grid-cols-5 divide-x divide-gray-100 border-b border-gray-100 md:border-none">
+        <div className="max-w-7xl mx-auto px-0 md:px-6 lg:px-3">
+          <div className="bg-white/60 backdrop-blur-xl bg-linear-to-r from-blue-100/40 via-purple-100/40 to-pink-100/40 shadow-[0_-10px_40px_rgb(0,0,0,0.08)] md:rounded-t-2xl overflow-hidden border-t md:border-t md:border-x border-white/60">
+            <div className="grid grid-cols-2 md:grid-cols-5 divide-x divide-white/40 border-b border-white/40 md:border-none">
               {quickLinks.map((link, index) => (
                 <Link
                   key={index}
                   to={link.href}
                   className={`
                      group flex items-center justify-between p-4 md:p-6 
-                     hover:bg-blue-50 transition-all duration-300
-                     ${index === quickLinks.length - 1 ? 'col-span-2 md:col-span-1 border-t md:border-t-0' : ''}
+                     ${link.bgClass} transition-all duration-300
+                     ${index === quickLinks.length - 1 ? 'col-span-2 md:col-span-1 border-t border-white/40 md:border-t-0' : ''}
                    `}
                 >
-                  <span className="text-xs md:text-sm font-bold text-[#1e3a5f] uppercase tracking-wide group-hover:text-primary">
+                  <span className={`text-xs md:text-sm font-bold uppercase tracking-wide transition-colors ${link.textClass}`}>
                     {link.label}
                   </span>
-                  <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-[#1e3a5f] text-white flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                    <link.icon className="w-4 h-4 md:w-5 md:h-5" />
+                  <div className={`w-10 h-10 md:w-12 md:h-12 rounded-full flex shrink-0 items-center justify-center group-hover:scale-110 transition-all duration-300 shadow-sm border border-white/50 ${link.iconClass}`}>
+                    <link.icon className="w-5 h-5 md:w-6 md:h-6" />
                   </div>
                 </Link>
               ))}
