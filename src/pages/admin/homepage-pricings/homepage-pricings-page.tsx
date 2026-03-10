@@ -2,17 +2,9 @@
 
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
-import { Plus, Search, Edit2, Trash2, Loader2, DollarSign } from "lucide-react";
+import { Plus, Search, Edit2, Trash2, Loader2, DollarSign, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import {
     Pagination,
@@ -123,78 +115,99 @@ export default function HomepagePricingsPage() {
                         </p>
                     </div>
                 ) : (
-                    <div className="overflow-x-auto rounded-xl border border-gray-100">
-                        <Table>
-                            <TableHeader className="bg-gray-50/80">
-                                <TableRow>
-                                    <TableHead className="font-bold py-5">Title</TableHead>
-                                    <TableHead className="font-bold py-5">Value</TableHead>
-                                    <TableHead className="font-bold py-5">Highlight</TableHead>
-                                    <TableHead className="font-bold py-5">Status</TableHead>
-                                    <TableHead className="text-right font-bold py-5">Actions</TableHead>
-                                </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                                {filteredData?.map((pricing) => (
-                                    <TableRow key={pricing.id} className="hover:bg-gray-50/50 transition-colors group">
-                                        <TableCell>
-                                            <span className="font-bold text-gray-900 text-lg">
-                                                {pricing.title}
-                                            </span>
-                                        </TableCell>
-                                        <TableCell>
-                                            <span className="text-gray-900 font-semibold block">
-                                                ${pricing.price} <span className="text-gray-500 font-normal">/{pricing.duration}</span>
-                                            </span>
-                                        </TableCell>
-                                        <TableCell>
-                                            <Badge variant={pricing.highlight ? "default" : "secondary"}>
-                                                {pricing.highlight ? "Yes" : "No"}
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        {filteredData?.map((pricing) => {
+                            let parsedFeatures: string[] = [];
+                            try {
+                                parsedFeatures = typeof pricing.features === "string"
+                                    ? JSON.parse(pricing.features)
+                                    : Array.isArray(pricing.features) ? pricing.features : [];
+                            } catch (e) {
+                                parsedFeatures = [];
+                            }
+
+                            return (
+                                <div
+                                    key={pricing.id}
+                                    className={`relative flex flex-col bg-white rounded-3xl p-8 border hover:-translate-y-2 transition-all duration-300 ${pricing.highlight
+                                        ? "border-primary shadow-xl shadow-primary/10 ring-1 ring-primary"
+                                        : "border-gray-100 shadow-lg hover:shadow-xl"
+                                        }`}
+                                >
+                                    {pricing.highlight && (
+                                        <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-primary text-white px-4 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
+                                            Most Popular
+                                        </div>
+                                    )}
+
+                                    <div className="flex justify-between items-start mb-6">
+                                        <div>
+                                            <h3 className="text-2xl font-black text-gray-900 mb-2">{pricing.title}</h3>
+                                            <p className="text-gray-500 text-sm line-clamp-2 min-h-[40px]">{pricing.description}</p>
+                                        </div>
+                                        <button onClick={() => handleStatusToggle(pricing)} className="focus:outline-none shrink-0 ml-4">
+                                            <Badge
+                                                variant="outline"
+                                                className={
+                                                    pricing.status === "active"
+                                                        ? "bg-green-50 text-green-700 border-green-200 font-bold px-3 py-1 hover:bg-green-100 transition-colors cursor-pointer"
+                                                        : "bg-red-50 text-red-700 border-red-200 font-bold px-3 py-1 hover:bg-red-100 transition-colors cursor-pointer"
+                                                }
+                                            >
+                                                <div
+                                                    className={`w-1.5 h-1.5 rounded-full mr-1.5 ${pricing.status === "active" ? "bg-green-500" : "bg-red-500"
+                                                        }`}
+                                                />
+                                                {pricing.status.toUpperCase()}
                                             </Badge>
-                                        </TableCell>
-                                        <TableCell>
-                                            <button onClick={() => handleStatusToggle(pricing)} className="focus:outline-none">
-                                                <Badge
-                                                    variant="outline"
-                                                    className={
-                                                        pricing.status === "active"
-                                                            ? "bg-green-50 text-green-700 border-green-200 font-bold px-3 py-1 hover:bg-green-100 transition-colors cursor-pointer"
-                                                            : "bg-red-50 text-red-700 border-red-200 font-bold px-3 py-1 hover:bg-red-100 transition-colors cursor-pointer"
-                                                    }
-                                                >
-                                                    <div
-                                                        className={`w-1.5 h-1.5 rounded-full mr-2 ${pricing.status === "active" ? "bg-green-500" : "bg-red-500"
-                                                            }`}
-                                                    />
-                                                    {pricing.status.toUpperCase()}
-                                                </Badge>
-                                            </button>
-                                        </TableCell>
-                                        <TableCell className="text-right">
-                                            <div className="flex justify-end gap-2 text-right">
-                                                <Link to={`/admin/homepage-pricings/edit/${pricing.id}`}>
-                                                    <Button
-                                                        variant="ghost"
-                                                        size="icon"
-                                                        className="h-10 w-10 text-gray-400 hover:text-blue-600 hover:bg-blue-50 bg-gray-50 rounded-xl"
-                                                    >
-                                                        <Edit2 className="w-4 h-4" />
-                                                    </Button>
-                                                </Link>
-                                                <Button
-                                                    variant="ghost"
-                                                    size="icon"
-                                                    onClick={() => handleDeleteClick(pricing.id)}
-                                                    className="h-10 w-10 text-gray-400 hover:text-red-600 hover:bg-red-50 bg-gray-50 rounded-xl"
-                                                >
-                                                    <Trash2 className="w-4 h-4" />
-                                                </Button>
-                                            </div>
-                                        </TableCell>
-                                    </TableRow>
-                                ))}
-                            </TableBody>
-                        </Table>
+                                        </button>
+                                    </div>
+
+                                    <div className="mb-6 flex items-end gap-1">
+                                        <span className="text-4xl font-black text-gray-900">${pricing.price}</span>
+                                        <span className="text-gray-500 font-medium pb-1.5">/{pricing.duration}</span>
+                                    </div>
+
+                                    {/* Features List Layout */}
+                                    <div className="grow space-y-4 mb-8 bg-gray-50/50 p-6 rounded-2xl border border-gray-100 min-h-[220px]">
+                                        <h4 className="text-sm font-bold text-gray-900 uppercase tracking-wide">Included Features</h4>
+                                        {parsedFeatures.length > 0 ? (
+                                            <ul className="space-y-3">
+                                                {parsedFeatures.map((feature, idx) => (
+                                                    <li key={idx} className="flex items-start text-sm font-medium text-gray-700 gap-3 relative">
+                                                        <div className="mt-0.5 shrink-0 bg-primary/10 p-0.5 rounded-full">
+                                                            <Check className="w-4 h-4 text-primary font-bold" />
+                                                        </div>
+                                                        <span className="leading-snug">{feature}</span>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        ) : (
+                                            <p className="text-sm text-gray-400 italic font-medium py-4">No specific features listed.</p>
+                                        )}
+                                    </div>
+
+                                    <div className="flex justify-end gap-3 pt-6 border-t border-gray-100 mt-auto">
+                                        <Link to={`/admin/homepage-pricings/edit/${pricing.id}`} className="flex-1">
+                                            <Button
+                                                variant="outline"
+                                                className="w-full h-12 text-blue-600 border-blue-200 hover:bg-blue-50 focus:ring-4 focus:ring-blue-100 rounded-xl font-bold transition-all gap-2"
+                                            >
+                                                <Edit2 className="w-4 h-4" /> Edit Details
+                                            </Button>
+                                        </Link>
+                                        <Button
+                                            variant="outline"
+                                            onClick={() => handleDeleteClick(pricing.id)}
+                                            className="h-12 px-5 text-red-600 border-red-200 hover:bg-red-50 focus:ring-4 focus:ring-red-100 rounded-xl font-bold transition-all shrink-0"
+                                            title="Delete Pricing"
+                                        >
+                                            <Trash2 className="w-4 h-4" />
+                                        </Button>
+                                    </div>
+                                </div>
+                            );
+                        })}
                     </div>
                 )}
 

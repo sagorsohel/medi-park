@@ -55,7 +55,7 @@ export const homepagePricingApi = api.injectEndpoints({
         updateHomepagePricing: builder.mutation<any, { id: number; data: Partial<HomepagePricing> }>({
             query: ({ id, data }) => ({
                 url: `/homepage-pricings/${id}`,
-                method: "PUT",
+                method: "POST",
                 body: data,
             }),
             invalidatesTags: ["HomepagePricing"],

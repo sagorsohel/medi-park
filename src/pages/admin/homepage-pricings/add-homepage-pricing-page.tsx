@@ -29,7 +29,7 @@ export default function AddHomepagePricingPage() {
     const [formData, setFormData] = useState({
         title: "",
         price: "" as string | number,
-        duration: "Sample duration",
+        duration: "month",
         description: "",
         highlight: false,
         status: "active" as "active" | "inactive",
@@ -47,7 +47,7 @@ export default function AddHomepagePricingPage() {
             setFormData({
                 title: item.title || "",
                 price: item.price !== null ? item.price : "",
-                duration: item.duration || "Sample duration",
+                duration: item.duration || "month",
                 description: item.description || "",
                 highlight: Boolean(item.highlight),
                 status: item.status || "active",
@@ -184,14 +184,22 @@ export default function AddHomepagePricingPage() {
                                 </div>
                                 <div className="space-y-3">
                                     <Label htmlFor="duration" className="text-sm font-bold text-gray-700 ml-1">Duration Cycle *</Label>
-                                    <Input
-                                        id="duration"
+                                    <Select
                                         value={formData.duration}
-                                        onChange={(e) => handleChange("duration", e.target.value)}
-                                        required
-                                        placeholder="e.g. monthly"
-                                        className="h-14 rounded-2xl border-gray-200 bg-gray-50/50 focus:bg-white focus:ring-4 focus:ring-primary/10 transition-all text-lg font-medium"
-                                    />
+                                        onValueChange={(value) => handleChange("duration", value)}
+                                    >
+                                        <SelectTrigger className="h-14 rounded-2xl border-gray-200 bg-gray-50/50 focus:bg-white focus:ring-4 focus:ring-primary/10 transition-all text-lg font-medium">
+                                            <SelectValue placeholder="Select duration" />
+                                        </SelectTrigger>
+                                        <SelectContent className="rounded-2xl border-gray-100 shadow-xl">
+                                            <SelectItem value="month" className="py-3 rounded-xl focus:bg-primary/5 cursor-pointer">
+                                                <span className="font-semibold text-gray-700">Month / month</span>
+                                            </SelectItem>
+                                            <SelectItem value="year" className="py-3 rounded-xl focus:bg-primary/5 cursor-pointer">
+                                                <span className="font-semibold text-gray-700">Year / year</span>
+                                            </SelectItem>
+                                        </SelectContent>
+                                    </Select>
                                 </div>
                             </div>
                         </div>
