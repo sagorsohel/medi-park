@@ -72,6 +72,7 @@ import HealthCheckupPackagesPage from '@/pages/admin/health-checkup-packages/hea
 import AddHealthCheckupPackagePage from '@/pages/admin/health-checkup-packages/add-health-checkup-package-page'
 import PackagePagesPage from '@/pages/admin/package-pages/package-pages-page'
 import AddPackagePagePage from '@/pages/admin/package-pages/add-package-page'
+import RoomRentsManagePage from '@/pages/admin/room-rents/room-rents-page'
 
 const router = createBrowserRouter([
   // 🌐 Website routes (with website layout - sticky navbar & footer)
@@ -184,6 +185,7 @@ const router = createBrowserRouter([
       { path: "package-pages/new", element: <AddPackagePagePage /> },
       { path: "package-pages/edit/:id", element: <AddPackagePagePage /> },
       { path: "equipment", element: <EquipmentManagePage /> },
+      { path: "room-rents", element: <RoomRentsManagePage /> },
     ],
   },
 

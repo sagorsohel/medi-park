@@ -165,7 +165,7 @@ export default function PackagePagesPage() {
                                             </button>
                                         </TableCell>
                                         <TableCell className="text-right">
-                                            <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                            <div className="flex justify-end gap-2">
                                                 <Link to={`/admin/package-pages/edit/${pkg.id}`}>
                                                     <Button
                                                         variant="ghost"
@@ -208,8 +208,8 @@ export default function PackagePagesPage() {
                                     <PaginationItem key={page}>
                                         <PaginationLink
                                             className={`cursor-pointer w-10 h-10 rounded-xl font-bold ${currentPage === page
-                                                    ? "bg-primary text-white hover:bg-primary/90"
-                                                    : "text-gray-600 hover:bg-gray-100"
+                                                ? "bg-primary text-white hover:bg-primary/90"
+                                                : "text-gray-600 hover:bg-gray-100"
                                                 }`}
                                             isActive={currentPage === page}
                                             onClick={() => setCurrentPage(page)}

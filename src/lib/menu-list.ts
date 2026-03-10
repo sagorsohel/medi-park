@@ -94,6 +94,12 @@ export function getMenuList(_pathname: string): Group[] {
           icon: Package,
           submenus: []
         },
+        {
+          href: "/admin/room-rents",
+          label: "Room Rents",
+          icon: Building,
+          submenus: []
+        },
       ]
     },
     {
