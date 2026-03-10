@@ -131,6 +131,6 @@ export const api = createApi({
     return await rawBaseQuery(args, apiObj, extraOptions)
   },
 
-  tagTypes: ['User', 'Admin', 'Size', 'Color', 'Brand', 'Category', 'Product', 'Banner', 'Order', 'Branch', 'Country', 'Unit', 'Customer', 'Subcategory', 'Supplier', 'Expense', 'Purchase', 'Sale', 'Contact', 'Stock', 'ProfitLoss', 'Dashboard', 'AboutWhoWeAre', 'AboutMission', 'AboutVision', 'AboutTransformingHealthcare', 'AboutMRCPPACES', 'AboutPageBanner', 'News', 'NewsPageBanner', 'GalleryPageBanner', 'Gallery', 'ContactPageBanner', 'ContactBranch', 'ContactMessage', 'BlogPageBanner', 'Blog', 'Doctor', 'Director', 'Investor', 'InstallmentRule', 'FutureVenture', 'ShareTransfer', 'CommissionSetting'],
+  tagTypes: ['User', 'Admin', 'Size', 'Color', 'Brand', 'Category', 'Product', 'Banner', 'Order', 'Branch', 'Country', 'Unit', 'Customer', 'Subcategory', 'Supplier', 'Expense', 'Purchase', 'Sale', 'Contact', 'Stock', 'ProfitLoss', 'Dashboard', 'AboutWhoWeAre', 'AboutMission', 'AboutVision', 'AboutTransformingHealthcare', 'AboutMRCPPACES', 'AboutPageBanner', 'News', 'NewsPageBanner', 'GalleryPageBanner', 'Gallery', 'ContactPageBanner', 'ContactBranch', 'ContactMessage', 'BlogPageBanner', 'Blog', 'Doctor', 'Director', 'Investor', 'InstallmentRule', 'FutureVenture', 'ShareTransfer', 'CommissionSetting', 'HealthCheckup'],
   endpoints: () => ({}),
 })
