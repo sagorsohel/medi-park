@@ -67,6 +67,8 @@ import GuidePage from '@/pages/guide/guide-page'
 import PublicHealthCheckupPage from '@/pages/health-checkup/public-health-checkup-page'
 import PublicRoomRentPage from '@/pages/room-rent/public-room-rent-page'
 import PublicEquipmentsPage from '@/pages/equipments/public-equipments-page'
+import PublicHealthTipsPage from '@/pages/health-tips/public-health-tips-page'
+import PublicVisitorsPolicyPage from '@/pages/visitors-policy/public-visitors-policy-page'
 import InvestorDetailPage from '@/pages/investors/investor-detail-page'
 import HealthCheckupManagePage from '@/pages/admin/health-checkup/health-checkup-page'
 import AddHealthCheckupPage from '@/pages/admin/health-checkup/add-health-checkup-page'
@@ -119,6 +121,8 @@ const router = createBrowserRouter([
       { path: "health-checkup", element: <PublicHealthCheckupPage /> },
       { path: "room-rent", element: <PublicRoomRentPage /> },
       { path: "equipments", element: <PublicEquipmentsPage /> },
+      { path: "health-tips", element: <PublicHealthTipsPage /> },
+      { path: "visitors-policy", element: <PublicVisitorsPolicyPage /> },
     ],
   },
 
