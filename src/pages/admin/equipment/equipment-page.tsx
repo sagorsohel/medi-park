@@ -41,6 +41,15 @@ import {
 import { Loader2, Plus, Edit2, Trash2, PlusCircle, X } from "lucide-react";
 import toast from "react-hot-toast";
 import { Badge } from "@/components/ui/badge";
+import {
+    Pagination,
+    PaginationContent,
+    PaginationItem,
+    PaginationLink,
+    PaginationNext,
+    PaginationPrevious,
+} from "@/components/ui/pagination";
+import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 
 export default function EquipmentManagePage() {
     const [activeTab, setActiveTab] = useState("categories");
@@ -91,6 +100,9 @@ function CategoriesTab() {
     const [selectedCategory, setSelectedCategory] = useState<any>(null);
     const [formData, setFormData] = useState({ name: "", status: "active" });
 
+    const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
+    const [categoryToDelete, setCategoryToDelete] = useState<number | null>(null);
+
     const handleAdd = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
@@ -114,14 +126,21 @@ function CategoriesTab() {
         }
     };
 
-    const handleDelete = async (id: number) => {
-        if (window.confirm("Are you sure you want to delete this category?")) {
-            try {
-                await deleteCategory(id).unwrap();
-                toast.success("Category deleted successfully");
-            } catch (error) {
-                toast.error("Failed to delete category");
-            }
+    const handleDeleteClick = (id: number) => {
+        setCategoryToDelete(id);
+        setDeleteConfirmOpen(true);
+    };
+
+    const confirmDelete = async () => {
+        if (!categoryToDelete) return;
+        try {
+            await deleteCategory(categoryToDelete).unwrap();
+            toast.success("Category deleted successfully");
+        } catch (error) {
+            toast.error("Failed to delete category");
+        } finally {
+            setDeleteConfirmOpen(false);
+            setCategoryToDelete(null);
         }
     };
 
@@ -217,7 +236,7 @@ function CategoriesTab() {
                                                 variant="ghost"
                                                 size="icon"
                                                 className="h-9 w-9 rounded-lg hover:bg-red-50 hover:text-red-600"
-                                                onClick={() => handleDelete(cat.id)}
+                                                onClick={() => handleDeleteClick(cat.id)}
                                             >
                                                 <Trash2 className="w-4 h-4" />
                                             </Button>
@@ -267,13 +286,25 @@ function CategoriesTab() {
                     </form>
                 </DialogContent>
             </Dialog>
+
+            <ConfirmDialog
+                open={deleteConfirmOpen}
+                onOpenChange={setDeleteConfirmOpen}
+                onConfirm={confirmDelete}
+                title="Delete Category"
+                description="Are you sure you want to delete this category? This action cannot be undone."
+                confirmText="Delete"
+                cancelText="Cancel"
+                variant="destructive"
+            />
         </div>
     );
 }
 
 function ItemsTab() {
+    const [currentPage, setCurrentPage] = useState(1);
     const { data: categories } = useGetEquipmentCategoriesQuery();
-    const { data: equipments, isLoading } = useGetEquipmentsQuery();
+    const { data: equipments, isLoading } = useGetEquipmentsQuery(currentPage);
     const [createEquipment] = useCreateEquipmentMutation();
     const [updateEquipment] = useUpdateEquipmentMutation();
     const [deleteEquipment] = useDeleteEquipmentMutation();
@@ -281,6 +312,11 @@ function ItemsTab() {
     const [isAddOpen, setIsAddOpen] = useState(false);
     const [isEditOpen, setIsEditOpen] = useState(false);
     const [selectedItem, setSelectedItem] = useState<any>(null);
+
+    const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
+    const [itemToDelete, setItemToDelete] = useState<number | null>(null);
+
+    const metadata = equipments?.pagination;
 
     // For Add (one category, Multiple names)
     const [addForm, setAddForm] = useState({
@@ -346,14 +382,22 @@ function ItemsTab() {
         }
     };
 
-    const handleDelete = async (id: number) => {
-        if (window.confirm("Are you sure?")) {
-            try {
-                await deleteEquipment(id).unwrap();
-                toast.success("Deleted successfully");
-            } catch (error) {
-                toast.error("Failed to delete");
-            }
+    const handleDeleteClick = (id: number) => {
+        setItemToDelete(id);
+        setDeleteConfirmOpen(true);
+    };
+
+    const confirmDelete = async () => {
+        if (!itemToDelete) return;
+
+        try {
+            await deleteEquipment(itemToDelete).unwrap();
+            toast.success("Deleted successfully");
+        } catch (error) {
+            toast.error("Failed to delete");
+        } finally {
+            setDeleteConfirmOpen(false);
+            setItemToDelete(null);
         }
     };
 
@@ -496,11 +540,11 @@ function ItemsTab() {
                         </TableHeader>
                         <TableBody>
                             {equipments?.data.map((item) => {
-                                const category = categories?.data.find(c => c.id === item.equipment_category_id);
+                                const categoryName = item.equipment_category?.name || categories?.data.find(c => c.id === item.equipment_category_id)?.name;
                                 return (
                                     <TableRow key={item.id} className="hover:bg-gray-50/30">
                                         <TableCell className="font-semibold py-4 text-gray-900">{item.name}</TableCell>
-                                        <TableCell className="py-4 font-medium text-gray-500">{category?.name || "N/A"}</TableCell>
+                                        <TableCell className="py-4 font-medium text-gray-500">{categoryName || "N/A"}</TableCell>
                                         <TableCell className="py-4">
                                             <Badge variant="outline" className={item.status === "active" ? "bg-green-50 text-green-700 border-green-100 font-bold px-3 py-1" : "bg-gray-50 text-gray-500 border-gray-100 font-bold px-3 py-1"}>
                                                 <div className={`w-1.5 h-1.5 rounded-full mr-2 ${item.status === "active" ? "bg-green-500" : "bg-gray-400"}`} />
@@ -529,7 +573,7 @@ function ItemsTab() {
                                                     variant="ghost"
                                                     size="icon"
                                                     className="h-9 w-9 rounded-lg hover:bg-red-50 hover:text-red-600"
-                                                    onClick={() => handleDelete(item.id)}
+                                                    onClick={() => handleDeleteClick(item.id)}
                                                 >
                                                     <Trash2 className="w-4 h-4" />
                                                 </Button>
@@ -540,6 +584,44 @@ function ItemsTab() {
                             })}
                         </TableBody>
                     </Table>
+                </div>
+            )}
+
+            {/* Pagination */}
+            {metadata && metadata.total_page > 0 && (
+                <div className="mt-6 border-t border-gray-100 pt-6">
+                    <Pagination>
+                        <PaginationContent>
+                            <PaginationItem>
+                                <PaginationPrevious
+                                    className="cursor-pointer font-bold text-gray-600 hover:bg-gray-100 hover:text-gray-900 rounded-xl px-4"
+                                    onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                                />
+                            </PaginationItem>
+
+                            {Array.from({ length: metadata.total_page }, (_, i) => i + 1).map((page) => (
+                                <PaginationItem key={page}>
+                                    <PaginationLink
+                                        className={`cursor-pointer w-10 h-10 rounded-xl font-bold ${currentPage === page
+                                            ? "bg-primary text-white hover:bg-primary/90"
+                                            : "text-gray-600 hover:bg-gray-100"
+                                            }`}
+                                        isActive={currentPage === page}
+                                        onClick={() => setCurrentPage(page)}
+                                    >
+                                        {page}
+                                    </PaginationLink>
+                                </PaginationItem>
+                            ))}
+
+                            <PaginationItem>
+                                <PaginationNext
+                                    className="cursor-pointer font-bold text-gray-600 hover:bg-gray-100 hover:text-gray-900 rounded-xl px-4"
+                                    onClick={() => setCurrentPage((p) => Math.min(metadata.total_page, p + 1))}
+                                />
+                            </PaginationItem>
+                        </PaginationContent>
+                    </Pagination>
                 </div>
             )}
 
@@ -596,6 +678,17 @@ function ItemsTab() {
                     </form>
                 </DialogContent>
             </Dialog>
+
+            <ConfirmDialog
+                open={deleteConfirmOpen}
+                onOpenChange={setDeleteConfirmOpen}
+                onConfirm={confirmDelete}
+                title="Delete Equipment"
+                description="Are you sure you want to delete this equipment item? This action cannot be undone."
+                confirmText="Delete"
+                cancelText="Cancel"
+                variant="destructive"
+            />
         </div>
     );
 }

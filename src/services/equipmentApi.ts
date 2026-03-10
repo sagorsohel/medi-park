@@ -16,6 +16,7 @@ export interface Equipment {
     status: "active" | "inactive";
     created_at: string;
     updated_at: string;
+    equipment_category?: EquipmentCategory;
 }
 
 export interface EquipmentCategoryResponse {
@@ -27,6 +28,15 @@ export interface EquipmentCategoryResponse {
 export interface EquipmentResponse {
     success: boolean;
     message: string;
+    pagination: {
+        per_page: number;
+        total_count: number;
+        total_page: number;
+        current_page: number;
+        current_page_count: number;
+        next_page: number | null;
+        previous_page: number | null;
+    };
     data: Equipment[];
 }
 
@@ -65,9 +75,9 @@ export const equipmentApi = api.injectEndpoints({
         }),
 
         // Equipment
-        getEquipments: builder.query<EquipmentResponse, void>({
-            query: () => ({
-                url: "/equipment",
+        getEquipments: builder.query<EquipmentResponse, number | void>({
+            query: (page = 1) => ({
+                url: `/equipment?page=${page}&per_page=10`,
                 method: "GET",
             }),
             providesTags: ["Equipment"],

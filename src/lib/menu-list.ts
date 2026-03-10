@@ -159,6 +159,12 @@ export function getMenuList(_pathname: string): Group[] {
           icon: Package,
           submenus: []
         },
+        {
+          href: "/admin/package-pages",
+          label: "Package Pages",
+          icon: FileText,
+          submenus: []
+        },
         // {
         //   href: "/admin/website/inventory-2",
         //   label: "Inventory",
