@@ -88,30 +88,12 @@ export function getMenuList(_pathname: string): Group[] {
           icon: Building2,
           submenus: []
         },
-        // {
-        //   href: "/admin/equipment",
-        //   label: "Equipment",
-        //   icon: Wrench,
-        //   submenus: []
-        // },
-        // {
-        //   href: "/admin/settings",
-        //   label: "Settings",
-        //   icon: Settings,
-        //   submenus: []
-        // },
-        // {
-        //   href: "/terms-conditions",
-        //   label: "Terms & Conditions",
-        //   icon: FileText,
-        //   submenus: []
-        // },
-        // {
-        //   href: "/privacy-policy",
-        //   label: "Privacy Policy",
-        //   icon: FileText,
-        //   submenus: []
-        // }
+        {
+          href: "/admin/equipment",
+          label: "Equipment",
+          icon: Package,
+          submenus: []
+        },
       ]
     },
     {

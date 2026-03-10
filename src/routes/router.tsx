@@ -67,6 +67,7 @@ import GuidePage from '@/pages/guide/guide-page'
 import InvestorDetailPage from '@/pages/investors/investor-detail-page'
 import HealthCheckupManagePage from '@/pages/admin/health-checkup/health-checkup-page'
 import AddHealthCheckupPage from '@/pages/admin/health-checkup/add-health-checkup-page'
+import EquipmentManagePage from '@/pages/admin/equipment/equipment-page'
 
 const router = createBrowserRouter([
   // 🌐 Website routes (with website layout - sticky navbar & footer)
@@ -172,6 +173,7 @@ const router = createBrowserRouter([
       { path: "health-checkup/new", element: <AddHealthCheckupPage /> },
       { path: "health-checkup/edit/:id", element: <AddHealthCheckupPage /> },
       { path: "health-checkup/view/:id", element: <AddHealthCheckupPage /> },
+      { path: "equipment", element: <EquipmentManagePage /> },
     ],
   },
 

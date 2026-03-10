@@ -39,7 +39,7 @@ export const healthCheckupApi = api.injectEndpoints({
     endpoints: (builder) => ({
         getHealthCheckups: builder.query<HealthCheckupResponse, number>({
             query: (page = 1) => ({
-                url: `/health-checkup-pages?page=${page}`,
+                url: `/health-checkup-page?page=${page}`,
                 method: "GET",
             }),
             providesTags: ["HealthCheckup"],
@@ -47,7 +47,7 @@ export const healthCheckupApi = api.injectEndpoints({
 
         getHealthCheckupById: builder.query<SingleHealthCheckupResponse, number>({
             query: (id) => ({
-                url: `/health-checkup-pages/${id}`,
+                url: `/health-checkup-page/${id}`,
                 method: "GET",
             }),
             providesTags: ["HealthCheckup"],
@@ -70,9 +70,9 @@ export const healthCheckupApi = api.injectEndpoints({
             { id: number; data: Partial<HealthCheckupPayload> }
         >({
             query: ({ id, data }) => ({
-                url: `/health-checkup-pages/${id}`,
-                method: "POST",
-                body: { ...data, _method: "PUT" }, // Common pattern in this project for updates if they use POST + _method
+                url: `/health-checkup-page/${id}`,
+                method: "PUT",
+                body: data,
             }),
             invalidatesTags: ["HealthCheckup"],
         }),
@@ -82,7 +82,7 @@ export const healthCheckupApi = api.injectEndpoints({
             number
         >({
             query: (id) => ({
-                url: `/health-checkup-pages/${id}`,
+                url: `/health-checkup-page/${id}`,
                 method: "DELETE",
             }),
             invalidatesTags: ["HealthCheckup"],
