@@ -9,79 +9,32 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 
-const pricingPlans = [
-  {
-    name: "Foundation Share",
-    price: "$19",
-    tagline: "Unleash the power of automation.",
-    features: [
-      "Multi-step Zaps",
-      "3 Premium Apps",
-      "2 Users team"
-    ],
-    popular: false
-  },
-  {
-    name: "Standard Ownership",
-    price: "$19",
-    tagline: "Unleash the power of automation.",
-    features: [
-      "Multi-step Zaps",
-      "3 Premium Apps",
-      "2 Users team"
-    ],
-    popular: false
-  },
-  {
-    name: "Premium Stake",
-    price: "$89",
-    tagline: "Automation plus enterprise-grade features.",
-    features: [
-      "Multi-step Zap",
-      "Unlimited Premium",
-      "Unlimited Users Team",
-      "Advanced Admin",
-      "Custom Data Retention"
-    ],
-    popular: true
-  },
-  {
-    name: "Elite Circle",
-    price: "$19",
-    tagline: "Unleash the power of automation.",
-    features: [
-      "Multi-step Zaps",
-      "3 Premium Apps",
-      "2 Users team"
-    ],
-    popular: false
-  },
-  {
-    name: "Legacy Partner",
-    price: "$19",
-    tagline: "Unleash the power of automation.",
-    features: [
-      "Multi-step Zaps",
-      "3 Premium Apps",
-      "2 Users team"
-    ],
-    popular: false
-  }
-];
+import { useGetHomepagePricingsQuery, type HomepagePricing } from "@/services/homepagePricingApi";
+import { Loader2 } from "lucide-react";
 
 interface PricingCardProps {
-  plan: typeof pricingPlans[0];
+  plan: HomepagePricing;
 }
 
 function PricingCard({ plan }: PricingCardProps) {
+  const isPopular = !!plan.highlight;
+  let parsedFeatures: string[] = [];
+  try {
+    if (typeof plan.features === "string") {
+      parsedFeatures = JSON.parse(plan.features);
+    } else if (Array.isArray(plan.features)) {
+      parsedFeatures = plan.features;
+    }
+  } catch (e) { /* ignore */ }
+
   return (
     <div
-      className={`relative rounded-[24px] p-6 w-full flex flex-col ${plan.popular
-          ? "bg-primary text-primary-foreground scale-105 z-10 min-h-[500px] shadow-2xl"
-          : "bg-card text-primary border-[3px] border-primary h-fit shadow-md"
+      className={`relative rounded-[24px] p-6 w-full flex flex-col ${isPopular
+        ? "bg-primary text-primary-foreground scale-105 z-10 min-h-[500px] shadow-2xl"
+        : "bg-card text-primary border-[3px] border-primary h-fit shadow-md"
         } `}
     >
-      {plan.popular && (
+      {isPopular && (
         <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 z-20">
           <span className="bg-background border border-primary text-primary text-xs font-semibold px-3 py-1 rounded-full whitespace-nowrap">
             MOST POPULAR
@@ -89,34 +42,34 @@ function PricingCard({ plan }: PricingCardProps) {
         </div>
       )}
 
-      <div className={`mb-6 ${plan.popular ? "" : "flex-1"}`}>
+      <div className={`mb-6 ${isPopular ? "" : "flex-1"}`}>
         <div className="flex gap-1 items-center">
-          <div className="text-[32px] font-bold">{plan.price}</div>
-          <div className={`text-sm font-medium mt-2 ${plan.popular ? "text-primary-foreground/80" : "text-muted-foreground"}`}>
-            /month
+          <div className="text-[32px] font-bold">${plan.price}</div>
+          <div className={`text-sm font-medium mt-2 ${isPopular ? "text-primary-foreground/80" : "text-muted-foreground"}`}>
+            /{plan.duration}
           </div>
         </div>
-        <h3 className="text-xl font-semibold mb-2">{plan.name}</h3>
-        <p className={`text-md font-semibold ${plan.popular ? "text-primary-foreground" : "text-primary"}`}>
-          {plan.tagline}
+        <h3 className="text-xl font-semibold mb-2">{plan.title}</h3>
+        <p className={`text-md font-semibold ${isPopular ? "text-primary-foreground" : "text-primary"}`}>
+          {plan.description}
         </p>
       </div>
 
-      <ul className={`space-y-3 mb-6 ${plan.popular ? "" : "flex-1"}`}>
-        {plan.features.map((feature, featureIndex) => (
+      <ul className={`space-y-3 mb-6 ${isPopular ? "" : "flex-1"}`}>
+        {parsedFeatures.map((feature, featureIndex) => (
           <li key={featureIndex} className="flex items-start gap-2">
             <div>
-              <Check className={`h-5 w-5 rounded-full shrink-0 ${plan.popular ? "text-primary-foreground bg-primary-foreground/20" : "bg-primary text-primary-foreground"}`} />
+              <Check className={`h-5 w-5 rounded-full shrink-0 ${isPopular ? "text-primary-foreground bg-primary-foreground/20" : "bg-primary text-primary-foreground"}`} />
             </div>
-            <span className={`text-sm ${plan.popular ? "text-primary-foreground" : "text-primary"}`}>{feature}</span>
+            <span className={`text-sm ${isPopular ? "text-primary-foreground" : "text-primary"}`}>{feature}</span>
           </li>
         ))}
       </ul>
 
       <button
-        className={`w-full rounded-[22px] py-2 px-4 font-medium transition-colors mt-auto ${plan.popular
-            ? "bg-background text-primary border-2 border-background hover:border-background hover:bg-primary hover:text-primary-foreground"
-            : "bg-primary text-primary-foreground border-2 border-primary hover:bg-secondary hover:text-primary"
+        className={`w-full rounded-[22px] py-2 px-4 font-medium transition-colors mt-auto ${isPopular
+          ? "bg-background text-primary border-2 border-background hover:border-background hover:bg-primary hover:text-primary-foreground"
+          : "bg-primary text-primary-foreground border-2 border-primary hover:bg-secondary hover:text-primary"
           }`}
       >
         Choose plan
@@ -126,6 +79,30 @@ function PricingCard({ plan }: PricingCardProps) {
 }
 
 export function PricingSection() {
+  const { data, isLoading } = useGetHomepagePricingsQuery(1);
+  const activePlansRaw = data?.data?.filter(p => p.status === "active") || [];
+
+  const regularPlans = activePlansRaw.filter(p => !p.highlight);
+  const highlightedPlans = activePlansRaw.filter(p => p.highlight);
+
+  const activePlans = [...regularPlans];
+  highlightedPlans.forEach(hp => {
+    const mid = Math.floor(activePlans.length / 2);
+    activePlans.splice(mid, 0, hp);
+  });
+
+  if (isLoading) {
+    return (
+      <div className="w-full bg-white py-16 md:py-24 flex justify-center items-center">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
+
+  if (activePlans.length === 0) {
+    return null;
+  }
+
   return (
     <div className="w-full bg-white py-16 md:py-24">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -146,8 +123,8 @@ export function PricingSection() {
               }}
             >
               <CarouselContent className="-ml-2 md:-ml-4">
-                {pricingPlans.map((plan, index) => (
-                  <CarouselItem key={index} className="pl-2 md:pl-4 basis-full sm:basis-1/2">
+                {activePlans.map((plan, index) => (
+                  <CarouselItem key={plan.id} className="pl-2 md:pl-4 basis-full sm:basis-1/2">
                     <PricingCard plan={plan} />
                   </CarouselItem>
                 ))}
@@ -161,9 +138,9 @@ export function PricingSection() {
           </div>
 
           {/* Desktop Grid */}
-          <div className="hidden lg:grid lg:grid-cols-5 gap-4 items-center justify-center">
-            {pricingPlans.map((plan, index) => (
-              <PricingCard key={index} plan={plan} />
+          <div className={`hidden lg:grid ${activePlans.length < 5 ? `lg:grid-cols-${activePlans.length}` : 'lg:grid-cols-5'} gap-4 items-center justify-center`}>
+            {activePlans.map((plan, index) => (
+              <PricingCard key={plan.id} plan={plan} />
             ))}
           </div>
         </div>

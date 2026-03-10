@@ -64,6 +64,7 @@ const PUBLIC_PATHS = [
   '/investors',
   '/gallery',
   '/pricing',
+  '/homepage-pricings',
   '/contact',
   '/homepage-hero-sections/active',
   '/homepage-about-us-sections/active',
