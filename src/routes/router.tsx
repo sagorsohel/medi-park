@@ -68,6 +68,8 @@ import InvestorDetailPage from '@/pages/investors/investor-detail-page'
 import HealthCheckupManagePage from '@/pages/admin/health-checkup/health-checkup-page'
 import AddHealthCheckupPage from '@/pages/admin/health-checkup/add-health-checkup-page'
 import EquipmentManagePage from '@/pages/admin/equipment/equipment-page'
+import HealthCheckupPackagesPage from '@/pages/admin/health-checkup-packages/health-checkup-packages-page'
+import AddHealthCheckupPackagePage from '@/pages/admin/health-checkup-packages/add-health-checkup-package-page'
 
 const router = createBrowserRouter([
   // 🌐 Website routes (with website layout - sticky navbar & footer)
@@ -173,6 +175,9 @@ const router = createBrowserRouter([
       { path: "health-checkup/new", element: <AddHealthCheckupPage /> },
       { path: "health-checkup/edit/:id", element: <AddHealthCheckupPage /> },
       { path: "health-checkup/view/:id", element: <AddHealthCheckupPage /> },
+      { path: "health-checkup-packages", element: <HealthCheckupPackagesPage /> },
+      { path: "health-checkup-packages/new", element: <AddHealthCheckupPackagePage /> },
+      { path: "health-checkup-packages/edit/:id", element: <AddHealthCheckupPackagePage /> },
       { path: "equipment", element: <EquipmentManagePage /> },
     ],
   },

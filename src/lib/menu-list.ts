@@ -153,6 +153,12 @@ export function getMenuList(_pathname: string): Group[] {
           icon: FileText,
           submenus: []
         },
+        {
+          href: "/admin/health-checkup-packages",
+          label: "Health Packages",
+          icon: Package,
+          submenus: []
+        },
         // {
         //   href: "/admin/website/inventory-2",
         //   label: "Inventory",
