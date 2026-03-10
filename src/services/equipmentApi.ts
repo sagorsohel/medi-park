@@ -82,6 +82,14 @@ export const equipmentApi = api.injectEndpoints({
             }),
             providesTags: ["Equipment"],
         }),
+        getEquipmentsPublic: builder.query<EquipmentResponse, void>({
+            query: () => ({
+                url: `/equipment?status=active&per_page=1000`,
+                method: "GET",
+            }),
+            providesTags: ["Equipment"],
+            keepUnusedDataFor: 3600,
+        }),
         createEquipment: builder.mutation<any, { equipment_category_id: number; equipment: { name: string; status: string }[] }>({
             query: (body) => {
                 const formData = new FormData();
@@ -122,6 +130,7 @@ export const {
     useUpdateEquipmentCategoryMutation,
     useDeleteEquipmentCategoryMutation,
     useGetEquipmentsQuery,
+    useGetEquipmentsPublicQuery,
     useCreateEquipmentMutation,
     useUpdateEquipmentMutation,
     useDeleteEquipmentMutation,
