@@ -73,6 +73,8 @@ import AddHealthCheckupPackagePage from '@/pages/admin/health-checkup-packages/a
 import PackagePagesPage from '@/pages/admin/package-pages/package-pages-page'
 import AddPackagePagePage from '@/pages/admin/package-pages/add-package-page'
 import RoomRentsManagePage from '@/pages/admin/room-rents/room-rents-page'
+import HomepagePricingsPage from '@/pages/admin/homepage-pricings/homepage-pricings-page'
+import AddHomepagePricingPage from '@/pages/admin/homepage-pricings/add-homepage-pricing-page'
 
 const router = createBrowserRouter([
   // 🌐 Website routes (with website layout - sticky navbar & footer)
@@ -186,6 +188,9 @@ const router = createBrowserRouter([
       { path: "package-pages/edit/:id", element: <AddPackagePagePage /> },
       { path: "equipment", element: <EquipmentManagePage /> },
       { path: "room-rents", element: <RoomRentsManagePage /> },
+      { path: "homepage-pricings", element: <HomepagePricingsPage /> },
+      { path: "homepage-pricings/new", element: <AddHomepagePricingPage /> },
+      { path: "homepage-pricings/edit/:id", element: <AddHomepagePricingPage /> },
     ],
   },
 

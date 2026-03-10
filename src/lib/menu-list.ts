@@ -13,7 +13,8 @@ import {
   type LucideIcon,
   Image,
   CreditCard,
-  Building
+  Building,
+  DollarSign
 } from "lucide-react";
 
 type Submenu = {
@@ -169,6 +170,12 @@ export function getMenuList(_pathname: string): Group[] {
           href: "/admin/package-pages",
           label: "Package Pages",
           icon: FileText,
+          submenus: []
+        },
+        {
+          href: "/admin/homepage-pricings",
+          label: "Homepage Pricings",
+          icon: DollarSign,
           submenus: []
         },
         // {
