@@ -33,6 +33,14 @@ export const roomRentApi = api.injectEndpoints({
             }),
             providesTags: ["RoomRent"],
         }),
+        getRoomRentsPublic: builder.query<RoomRentResponse, void>({
+            query: () => ({
+                url: `/room-rents?status=active&limit=100`,
+                method: "GET",
+            }),
+            providesTags: ["RoomRent"],
+            keepUnusedDataFor: 3600,
+        }),
         createRoomRents: builder.mutation<any, { room_rents: { bed_name: string; charges: string | number; status: string }[] }>({
             query: (body) => ({
                 url: "/room-rents",
@@ -61,6 +69,7 @@ export const roomRentApi = api.injectEndpoints({
 
 export const {
     useGetRoomRentsQuery,
+    useGetRoomRentsPublicQuery,
     useCreateRoomRentsMutation,
     useUpdateRoomRentMutation,
     useDeleteRoomRentMutation,

@@ -66,6 +66,7 @@ const PUBLIC_PATHS = [
   '/pricing',
   '/homepage-pricings',
   '/health-checkup-packages',
+  '/room-rents',
   '/contact',
   '/homepage-hero-sections/active',
   '/homepage-about-us-sections/active',

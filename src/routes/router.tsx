@@ -65,6 +65,7 @@ import ReportsPage from '@/pages/reports/reports-page'
 import TelemedicinePage from '@/pages/telemedicine/telemedicine-page'
 import GuidePage from '@/pages/guide/guide-page'
 import PublicHealthCheckupPage from '@/pages/health-checkup/public-health-checkup-page'
+import PublicRoomRentPage from '@/pages/room-rent/public-room-rent-page'
 import InvestorDetailPage from '@/pages/investors/investor-detail-page'
 import HealthCheckupManagePage from '@/pages/admin/health-checkup/health-checkup-page'
 import AddHealthCheckupPage from '@/pages/admin/health-checkup/add-health-checkup-page'
@@ -115,6 +116,7 @@ const router = createBrowserRouter([
       { path: "telemedicine", element: <TelemedicinePage /> },
       { path: "guide", element: <GuidePage /> },
       { path: "health-checkup", element: <PublicHealthCheckupPage /> },
+      { path: "room-rent", element: <PublicRoomRentPage /> },
     ],
   },
 
