@@ -182,10 +182,15 @@ export function WebsiteNavbar() {
                 VISITORS AND PATIENTS <ChevronDown className="w-4 h-4 transition-transform group-hover:rotate-180" />
               </div>
               <div className="absolute top-full left-0 w-[260px] bg-white text-gray-800 shadow-[0_10px_30px_rgba(0,0,0,0.1)] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top border-t-[3px] border-[#00A884] z-50">
-                <Link to="/visitors/admission" className="block px-5 py-3.5 hover:bg-[#00A884]/5 hover:text-[#00A884] border-b border-gray-100 uppercase text-xs font-semibold transition-colors">Admission Guidelines</Link>
-                <Link to="/visitors/discharge" className="block px-5 py-3.5 hover:bg-[#00A884]/5 hover:text-[#00A884] border-b border-gray-100 uppercase text-xs font-semibold transition-colors">Discharge Guidelines</Link>
-                <Link to="/visitors/rules" className="block px-5 py-3.5 hover:bg-[#00A884]/5 hover:text-[#00A884] border-b border-gray-100 uppercase text-xs font-semibold transition-colors">Visitor Rules</Link>
-                <Link to="/visitors/facilities" className="block px-5 py-3.5 hover:bg-[#00A884]/5 hover:text-[#00A884] border-b border-gray-100 uppercase text-xs font-semibold transition-colors">Facilities for Patients</Link>
+                <Link to="/services" className="block px-5 py-3.5 hover:bg-[#00A884]/5 hover:text-[#00A884] border-b border-gray-100 uppercase text-xs font-semibold transition-colors">Services</Link>
+                <Link to="/facilities" className="block px-5 py-3.5 hover:bg-[#00A884]/5 hover:text-[#00A884] border-b border-gray-100 uppercase text-xs font-semibold transition-colors">Facilities</Link>
+                <Link to="/health-checkup" className="block px-5 py-3.5 hover:bg-[#00A884]/5 hover:text-[#00A884] border-b border-gray-100 uppercase text-xs font-semibold transition-colors">Health Check Up</Link>
+                <Link to="/packages" className="block px-5 py-3.5 hover:bg-[#00A884]/5 hover:text-[#00A884] border-b border-gray-100 uppercase text-xs font-semibold transition-colors">Packages</Link>
+                <Link to="/room-rent" className="block px-5 py-3.5 hover:bg-[#00A884]/5 hover:text-[#00A884] border-b border-gray-100 uppercase text-xs font-semibold transition-colors">Room Rent</Link>
+                <Link to="/equipments" className="block px-5 py-3.5 hover:bg-[#00A884]/5 hover:text-[#00A884] border-b border-gray-100 uppercase text-xs font-semibold transition-colors">Equipments</Link>
+                <Link to="/health-tips" className="block px-5 py-3.5 hover:bg-[#00A884]/5 hover:text-[#00A884] border-b border-gray-100 uppercase text-xs font-semibold transition-colors">Health Tips</Link>
+                <Link to="/visitors-policy" className="block px-5 py-3.5 hover:bg-[#00A884]/5 hover:text-[#00A884] border-b border-gray-100 uppercase text-xs font-semibold transition-colors">Visitors Policy</Link>
+                <Link to="/feedback" className="block px-5 py-3.5 hover:bg-[#00A884]/5 hover:text-[#00A884] uppercase text-xs font-semibold transition-colors">Feedback</Link>
               </div>
             </div>
 
@@ -284,10 +289,15 @@ export function WebsiteNavbar() {
                   </CollapsibleTrigger>
                   <CollapsibleContent className="bg-gray-50 border-b border-gray-100">
                     <div className="py-2 pl-4 flex flex-col">
-                      <Link to="/visitors/admission" onClick={() => setMobileMenuOpen(false)} className="py-2.5 text-sm font-semibold text-gray-600 uppercase">Admission Guidelines</Link>
-                      <Link to="/visitors/discharge" onClick={() => setMobileMenuOpen(false)} className="py-2.5 text-sm font-semibold text-gray-600 uppercase">Discharge Guidelines</Link>
-                      <Link to="/visitors/rules" onClick={() => setMobileMenuOpen(false)} className="py-2.5 text-sm font-semibold text-gray-600 uppercase">Visitor Rules</Link>
-                      <Link to="/visitors/facilities" onClick={() => setMobileMenuOpen(false)} className="py-2.5 text-sm font-semibold text-gray-600 uppercase">Facilities for Patients</Link>
+                      <Link to="/services" onClick={() => setMobileMenuOpen(false)} className="py-2.5 text-sm font-semibold text-gray-600 uppercase">Services</Link>
+                      <Link to="/facilities" onClick={() => setMobileMenuOpen(false)} className="py-2.5 text-sm font-semibold text-gray-600 uppercase">Facilities</Link>
+                      <Link to="/health-checkup" onClick={() => setMobileMenuOpen(false)} className="py-2.5 text-sm font-semibold text-gray-600 uppercase">Health Check Up</Link>
+                      <Link to="/packages" onClick={() => setMobileMenuOpen(false)} className="py-2.5 text-sm font-semibold text-gray-600 uppercase">Packages</Link>
+                      <Link to="/room-rent" onClick={() => setMobileMenuOpen(false)} className="py-2.5 text-sm font-semibold text-gray-600 uppercase">Room Rent</Link>
+                      <Link to="/equipments" onClick={() => setMobileMenuOpen(false)} className="py-2.5 text-sm font-semibold text-gray-600 uppercase">Equipments</Link>
+                      <Link to="/health-tips" onClick={() => setMobileMenuOpen(false)} className="py-2.5 text-sm font-semibold text-gray-600 uppercase">Health Tips</Link>
+                      <Link to="/visitors-policy" onClick={() => setMobileMenuOpen(false)} className="py-2.5 text-sm font-semibold text-gray-600 uppercase">Visitors Policy</Link>
+                      <Link to="/feedback" onClick={() => setMobileMenuOpen(false)} className="py-2.5 text-sm font-semibold text-gray-600 uppercase">Feedback</Link>
                     </div>
                   </CollapsibleContent>
                 </Collapsible>
