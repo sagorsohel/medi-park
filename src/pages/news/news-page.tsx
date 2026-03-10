@@ -11,7 +11,7 @@ import { motion, type Variants } from "framer-motion";
 export default function NewsPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const { data } = useGetNewsPublicQuery(currentPage);
-  
+
   const newsItems = data?.data || [];
   const pagination = data?.pagination;
 
@@ -50,35 +50,26 @@ export default function NewsPage() {
       <BreadcrumbSection currentPage="News & Media" />
 
       {/* News & Media Section */}
-      <section className="w-full bg-white py-16">
+      <section className="w-full bg-[#fcfdff] py-16 md:py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Title */}
-          <div className="text-center mb-8">
-            <h2 className="text-4xl md:text-5xl font-bold text-primary mb-4">
-              News & Media
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-extrabold text-[#1e293b] mb-4">
+              News & <span className="text-primary">Media</span>
             </h2>
-            <div className="w-44 h-1 bg-primary mx-auto"></div>
+            <div className="w-20 h-1.5 bg-primary mx-auto rounded-full" />
           </div>
-
-          {/* Description */}
-          <p className="text-gray-700 text-center mb-12 max-w-4xl mx-auto">
-            Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-            Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
-            when an unknown printer took a galley of type and scrambled it to make a type
-            specimen book. It has survived not only five centuries, but also the leap into
-            electronic typesetting, remaining essentially unchanged.
-          </p>
 
           {/* News Grid */}
           <motion.div
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10"
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-50px" }}
             variants={containerVariants}
           >
             {newsItems.length === 0 ? (
-              <div className="col-span-full text-center py-12 text-gray-500">
+              <div className="col-span-full text-center py-20 text-gray-500 bg-white rounded-3xl shadow-sm">
                 No news available at the moment.
               </div>
             ) : (
@@ -89,11 +80,13 @@ export default function NewsPage() {
                     image={news.feature_image}
                     date={news.created_at}
                     title={news.title}
+                    description={news.description}
                   />
                 </motion.div>
               ))
             )}
           </motion.div>
+
 
           {/* Pagination */}
           {pagination && pagination.total_page > 1 && (

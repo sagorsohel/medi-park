@@ -4,27 +4,30 @@ import { Link } from "react-router";
 import { useMemo } from "react";
 import { useGetBlogsPublicQuery } from "@/services/blogApi";
 import { Loader2 } from "lucide-react";
+import { BlogCard } from "./blog-card";
 
 export function BlogSection() {
   const { data, isLoading } = useGetBlogsPublicQuery(1);
 
-  // Get first 6 active blog posts
+  // Get first 3 active blog posts for the home page section
   const blogPosts = useMemo(() => {
     if (!data?.data) return [];
-    return data.data.slice(0, 6);
+    return data.data.slice(0, 3);
   }, [data]);
 
   // Show loading state
   if (isLoading) {
     return (
-      <div className="w-full bg-white py-16 md:py-24">
+      <div className="w-full bg-[#fcfdff] py-20 md:py-28">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl font-bold text-primary mb-2">Health Insight</h2>
-            <div className="w-0.5 h-8 bg-primary mx-auto mt-2" />
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-extrabold text-[#1e293b] mb-4">
+              Health <span className="text-primary">Insight</span>
+            </h2>
+            <div className="w-20 h-1.5 bg-primary mx-auto rounded-full" />
           </div>
-          <div className="flex items-center justify-center py-12">
-            <Loader2 className="h-8 w-8 animate-spin text-primary" />
+          <div className="flex items-center justify-center py-20">
+            <Loader2 className="h-10 w-10 animate-spin text-primary" />
           </div>
         </div>
       </div>
@@ -37,62 +40,44 @@ export function BlogSection() {
   }
 
   return (
-    <div className="w-full bg-white py-16 md:py-24">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="w-full bg-[#fcfdff] py-20 md:py-28">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
         {/* Title */}
-        <div className="text-center mb-12">
-          <h2 className="text-4xl md:text-5xl font-bold text-primary mb-2">Health Insight</h2>
-          <div className="w-0.5 h-8 bg-primary mx-auto mt-2" />
+        <div className="text-center mb-16">
+          <h2 className="text-4xl md:text-5xl font-extrabold text-[#1e293b] mb-4">
+            Health <span className="text-primary">Insight</span>
+          </h2>
+          <div className="w-20 h-1.5 bg-primary mx-auto rounded-full" />
         </div>
 
         {/* Blog Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center">
           {blogPosts.map((post) => (
-            <div key={post.id} className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow">
-              {/* Image */}
-              <div className="relative h-48 overflow-hidden">
-                <img
-                  src={post.feature_image}
-                  alt={post.title}
-                  className="w-full h-full object-cover"
-                  onError={(e) => {
-                    const target = e.target as HTMLImageElement;
-                    target.src = "/vite.svg";
-                  }}
-                />
-              </div>
-
-              {/* Content */}
-              <div className="p-6">
-                {/* Date Badge */}
-                <div className="inline-block border-2 border-blue-200 rounded-full px-4 py-1 mb-3">
-                  <span className="text-sm text-primary font-medium">
-                    {new Date(post.created_at).toLocaleDateString("en-US", {
-                      day: "numeric",
-                      month: "long",
-                      year: "numeric",
-                    })}
-                  </span>
-                </div>
-
-                {/* Title */}
-                <h3 className="text-lg font-semibold text-gray-900 mb-3 line-clamp-2">
-                  {post.title}
-                </h3>
-
-                {/* Read More Link */}
-                <Link
-                  to={`/health-insight/${post.id}`}
-                  className="text-blue-600 underline hover:text-blue-800 transition-colors"
-                >
-                  Read more
-                </Link>
-              </div>
-            </div>
+            <BlogCard
+              key={post.id}
+              id={post.id}
+              image={post.feature_image}
+              title={post.title}
+              description={post.description}
+              authorName={post.author_name}
+              authorImage={post.author_image}
+              readTime="10 Min Read"
+            />
           ))}
+        </div>
+
+        {/* View All Button */}
+        <div className="text-center mt-16">
+          <Link
+            to="/health-insight"
+            className="inline-flex items-center justify-center px-10 py-4 border-2 border-primary text-primary font-bold rounded-full hover:bg-primary hover:text-white transition-all duration-300 shadow-sm hover:shadow-lg"
+          >
+            Explore All Insights
+          </Link>
         </div>
       </div>
     </div>
   );
 }
+
 

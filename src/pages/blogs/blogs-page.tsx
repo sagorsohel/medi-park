@@ -127,8 +127,11 @@ export default function BlogsPage() {
                   <BlogCard
                     id={blog.id}
                     image={blog.feature_image || "/vite.svg"}
-                    date={formatDate(blog.created_at)}
                     title={blog.title}
+                    description={blog.description}
+                    authorName={blog.author_name}
+                    authorImage={blog.author_image}
+                    readTime="10 Min Read"
                   />
                 </motion.div>
               ))

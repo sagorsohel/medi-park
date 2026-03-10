@@ -7,11 +7,12 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useNavigate } from "react-router";
 import { useGetNewsPublicQuery } from "@/services/newsApi";
 import { motion, type Variants } from "framer-motion";
+import { NewsPublicCard } from "./news-public-card";
 
 export function MediaSection() {
   const { data } = useGetNewsPublicQuery(1);
   const navigate = useNavigate();
-  
+
   // Get first 3 active news items
   const newsItems = useMemo(() => {
     if (!data?.data) return [];
@@ -46,59 +47,59 @@ export function MediaSection() {
   };
 
   const cardVariants: Variants = {
-    hidden: { y: 50, opacity: 0, scale: 0.9 },
+    hidden: { y: 50, opacity: 0, scale: 0.95 },
     visible: (index: number) => ({
       y: 0,
       opacity: 1,
       scale: 1,
       transition: {
-        duration: 0.5,
+        duration: 0.6,
         delay: 0.1 * index,
-        ease: "easeOut",
+        ease: [0.22, 1, 0.36, 1],
       },
     }),
   };
 
   return (
-    <div className="w-full bg-white py-16 md:py-24">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="w-full bg-[#fcfdff] py-20 md:py-28">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
         {/* Title */}
-        <div className="text-center mb-12">
-          <h2 className="text-4xl md:text-5xl font-bold text-primary mb-2">News & Media</h2>
-          <div className="w-0.5 h-8 bg-primary mx-auto mt-2" />
+        <div className="text-center mb-16">
+          <h2 className="text-4xl md:text-5xl font-extrabold text-[#1e293b] mb-4">
+            News & <span className="text-primary">Media</span>
+          </h2>
+          <div className="w-20 h-1.5 bg-primary mx-auto rounded-full" />
         </div>
 
         {/* News Carousel */}
-        <div className="relative max-w-6xl mx-auto mb-12">
+        <div className="relative mb-20">
           {/* Navigation Arrows - Show on mobile only */}
           {newsItems.length > 1 && (
             <>
               <button
                 onClick={prevSlide}
-                className="md:hidden absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-4 z-10 w-12 h-12 rounded-full bg-blue-100 text-primary flex items-center justify-center hover:bg-blue-200 transition-colors shadow-lg"
+                className="md:hidden absolute left-[-10px] top-1/2 transform -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-white text-primary flex items-center justify-center hover:bg-gray-50 transition-colors shadow-xl"
                 aria-label="Previous news"
-                disabled={newsItems.length === 0}
               >
                 <ChevronLeft className="h-6 w-6" />
               </button>
 
               <button
                 onClick={nextSlide}
-                className="md:hidden absolute right-0 top-1/2 transform -translate-y-1/2 translate-x-4 z-10 w-12 h-12 rounded-full bg-blue-100 text-primary flex items-center justify-center hover:bg-blue-200 transition-colors shadow-lg"
+                className="md:hidden absolute right-[-10px] top-1/2 transform -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-white text-primary flex items-center justify-center hover:bg-gray-50 transition-colors shadow-xl"
                 aria-label="Next news"
-                disabled={newsItems.length === 0}
               >
                 <ChevronRight className="h-6 w-6" />
               </button>
             </>
           )}
 
-          {/* News Cards - Mobile: Single slide, Desktop: Grid */}
-          <div className="relative overflow-hidden">
+          {/* News Cards */}
+          <div className="relative">
             {/* Mobile: Single slide slider */}
-            <div className="md:hidden">
+            <div className="md:hidden overflow-hidden rounded-[40px]">
               <motion.div
-                className="flex transition-transform duration-300 ease-in-out"
+                className="flex transition-transform duration-500 ease-out"
                 animate={{
                   x: `-${currentIndex * 100}%`,
                 }}
@@ -116,35 +117,13 @@ export function MediaSection() {
                     variants={cardVariants}
                     custom={index}
                   >
-                    <div className="bg-white rounded-lg overflow-hidden shadow-md">
-                      <div className="relative h-48 overflow-hidden">
-                        <img
-                          src={item.feature_image}
-                          alt={item.title}
-                          className="w-full h-full object-cover"
-                          onError={(e) => {
-                            const target = e.target as HTMLImageElement;
-                            target.src = "/vite.svg";
-                          }}
-                        />
-                      </div>
-                      <div className="bg-primary text-white p-6">
-                        <p className="text-sm text-blue-200 mb-2">
-                          {new Date(item.created_at).toLocaleDateString("en-US", {
-                            day: "numeric",
-                            month: "long",
-                            year: "numeric",
-                          })}
-                        </p>
-                        <h3 className="text-lg font-semibold mb-3">{item.title}</h3>
-                        <Link
-                          to={`/news/${item.id}`}
-                          className="text-blue-300 underline hover:text-blue-200 transition-colors"
-                        >
-                          Read more
-                        </Link>
-                      </div>
-                    </div>
+                    <NewsPublicCard
+                      id={item.id}
+                      image={item.feature_image}
+                      date={item.created_at}
+                      title={item.title}
+                      description={item.description}
+                    />
                   </motion.div>
                 ))}
               </motion.div>
@@ -152,7 +131,7 @@ export function MediaSection() {
 
             {/* Desktop: Grid layout */}
             <motion.div
-              className="hidden md:grid md:grid-cols-3 gap-6"
+              className="hidden md:grid md:grid-cols-3 gap-8"
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, margin: "-50px" }}
@@ -163,37 +142,14 @@ export function MediaSection() {
                   key={item.id}
                   custom={index}
                   variants={cardVariants}
-                  className="transition-opacity duration-300"
                 >
-                  <div className="bg-white rounded-lg overflow-hidden shadow-md">
-                    <div className="relative h-48 overflow-hidden">
-                      <img
-                        src={item.feature_image}
-                        alt={item.title}
-                        className="w-full h-full object-cover"
-                        onError={(e) => {
-                          const target = e.target as HTMLImageElement;
-                          target.src = "/vite.svg";
-                        }}
-                      />
-                    </div>
-                    <div className="bg-primary text-white p-6">
-                      <p className="text-sm text-blue-200 mb-2">
-                        {new Date(item.created_at).toLocaleDateString("en-US", {
-                          day: "numeric",
-                          month: "long",
-                          year: "numeric",
-                        })}
-                      </p>
-                      <h3 className="text-lg font-semibold mb-3">{item.title}</h3>
-                      <Link
-                        to={`/news/${item.id}`}
-                        className="text-blue-300 underline hover:text-blue-200 transition-colors"
-                      >
-                        Read more
-                      </Link>
-                    </div>
-                  </div>
+                  <NewsPublicCard
+                    id={item.id}
+                    image={item.feature_image}
+                    date={item.created_at}
+                    title={item.title}
+                    description={item.description}
+                  />
                 </motion.div>
               ))}
             </motion.div>
@@ -201,20 +157,20 @@ export function MediaSection() {
 
           {/* Mobile: Dots indicator */}
           {newsItems.length > 1 && (
-            <div className="md:hidden flex justify-center gap-2 mt-6">
+            <div className="md:hidden flex justify-center gap-2 mt-8">
               {newsItems.map((_, index) => (
                 <button
                   key={index}
                   onClick={() => setCurrentIndex(index)}
-                  className={`w-2 h-2 rounded-full transition-all ${
-                    index === currentIndex ? "bg-primary w-8" : "bg-gray-300"
-                  }`}
+                  className={`h-2 rounded-full transition-all duration-300 ${index === currentIndex ? "bg-primary w-10" : "bg-gray-200 w-2"
+                    }`}
                   aria-label={`Go to slide ${index + 1}`}
                 />
               ))}
             </div>
           )}
         </div>
+
 
         {/* View All Button */}
         <motion.div
