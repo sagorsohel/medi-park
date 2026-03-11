@@ -125,6 +125,12 @@ export function getMenuList(_pathname: string): Group[] {
           submenus: []
         },
         {
+          href: "/admin/job-posts",
+          label: "Job Posts",
+          icon: FileText,
+          submenus: []
+        },
+        {
           href: "/admin/website/facilities",
           label: "Departments",
           icon: Building,

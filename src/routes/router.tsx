@@ -34,6 +34,8 @@ import UserPanelLayout from '@/components/user-panel/user-panel-layout'
 import { WebsiteLayout } from '@/components/website/website-layout'
 import AboutPageManage from '@/pages/admin/about-page-manage/about-page-manage'
 import CareerPageManagePage from '@/pages/admin/career-page-manage/career-page-manage'
+import JobPostPage from '@/pages/admin/job-post/job-post-page'
+import AddJobPage from '@/pages/admin/job-post/add-job-page'
 
 import NewsPageManage from '@/pages/admin/news/news-page'
 import AddNewsPage from '@/pages/admin/news/add-news-page'
@@ -150,6 +152,10 @@ const router = createBrowserRouter([
       { path: "website/home", element: <WebHomeManagePage /> },
       { path: "website/about", element: <AboutPageManage /> },
       { path: "website/careers", element: <CareerPageManagePage /> },
+      { path: "job-posts", element: <JobPostPage /> },
+      { path: "job-posts/new", element: <AddJobPage /> },
+      { path: "job-posts/edit/:id", element: <AddJobPage /> },
+      { path: "job-posts/view/:id", element: <AddJobPage /> },
       { path: "website/facilities", element: <FacilitiesPageAdmin /> },
       { path: "website/facilities/new", element: <AddFacilityPage /> },
       { path: "website/facilities/edit/:id", element: <AddFacilityPage /> },
