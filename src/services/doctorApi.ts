@@ -17,10 +17,10 @@ export interface Doctor {
   present_address: string | null;
   permanent_address: string | null;
   education?: Array<{ institute_name?: string; qualification?: string; year?: string }>;
-  experience?: Array<{ hospital_name?: string; no_of_years?: string; year?: string }>;
-  social_media?: Array<{ title?: string; link?: string }>;
-  membership?: Array<{ title?: string; description?: string; year?: string }>;
-  awards?: Array<{ title?: string; description?: string; year?: string }>;
+  experience?: Array<{ hospital?: string; duration?: string; designation?: string }>;
+  social_media?: { facebook?: string; twitter?: string; linkedin?: string;[key: string]: string | undefined };
+  membership?: string[];
+  awards?: string[];
   created_at: string;
   updated_at: string;
 }
@@ -108,9 +108,9 @@ export const doctorApi = api.injectEndpoints({
       providesTags: (result) =>
         result?.data
           ? [
-              ...result.data.map(({ id }) => ({ type: "Doctor" as const, id })),
-              { type: "Doctor", id: "LIST" },
-            ]
+            ...result.data.map(({ id }) => ({ type: "Doctor" as const, id })),
+            { type: "Doctor", id: "LIST" },
+          ]
           : [{ type: "Doctor", id: "LIST" }],
     }),
     getDoctorById: builder.query<SingleDoctorResponse, number>({
@@ -155,7 +155,7 @@ export const doctorApi = api.injectEndpoints({
         if (data.username) formData.append("username", data.username);
         if (data.password) formData.append("password", data.password);
         if (data.password_confirmation) formData.append("password_confirmation", data.password_confirmation);
-        
+
         // Handle arrays
         if (data.education && data.education.length > 0) {
           data.education.forEach((edu, index) => {
@@ -164,7 +164,7 @@ export const doctorApi = api.injectEndpoints({
             formData.append(`education[${index}][year]`, edu.year);
           });
         }
-        
+
         if (data.experience && data.experience.length > 0) {
           data.experience.forEach((exp, index) => {
             formData.append(`experience[${index}][hospital_name]`, exp.hospital_name);
@@ -172,14 +172,14 @@ export const doctorApi = api.injectEndpoints({
             formData.append(`experience[${index}][year]`, exp.year);
           });
         }
-        
+
         if (data.social_media && data.social_media.length > 0) {
           data.social_media.forEach((sm, index) => {
             formData.append(`social_media[${index}][title]`, sm.title);
             formData.append(`social_media[${index}][link]`, sm.link);
           });
         }
-        
+
         if (data.membership && data.membership.length > 0) {
           data.membership.forEach((mem, index) => {
             formData.append(`membership[${index}][title]`, mem.title);
@@ -187,7 +187,7 @@ export const doctorApi = api.injectEndpoints({
             formData.append(`membership[${index}][year]`, mem.year);
           });
         }
-        
+
         if (data.awards && data.awards.length > 0) {
           data.awards.forEach((award, index) => {
             formData.append(`awards[${index}][title]`, award.title);
@@ -242,7 +242,7 @@ export const doctorApi = api.injectEndpoints({
         if (data.username) formData.append("username", data.username);
         if (data.password) formData.append("password", data.password);
         if (data.password_confirmation) formData.append("password_confirmation", data.password_confirmation);
-        
+
         // Handle arrays
         if (data.education && data.education.length > 0) {
           data.education.forEach((edu, index) => {
@@ -251,7 +251,7 @@ export const doctorApi = api.injectEndpoints({
             formData.append(`education[${index}][year]`, edu.year);
           });
         }
-        
+
         if (data.experience && data.experience.length > 0) {
           data.experience.forEach((exp, index) => {
             formData.append(`experience[${index}][hospital_name]`, exp.hospital_name);
@@ -259,14 +259,14 @@ export const doctorApi = api.injectEndpoints({
             formData.append(`experience[${index}][year]`, exp.year);
           });
         }
-        
+
         if (data.social_media && data.social_media.length > 0) {
           data.social_media.forEach((sm, index) => {
             formData.append(`social_media[${index}][title]`, sm.title);
             formData.append(`social_media[${index}][link]`, sm.link);
           });
         }
-        
+
         if (data.membership && data.membership.length > 0) {
           data.membership.forEach((mem, index) => {
             formData.append(`membership[${index}][title]`, mem.title);
@@ -274,7 +274,7 @@ export const doctorApi = api.injectEndpoints({
             formData.append(`membership[${index}][year]`, mem.year);
           });
         }
-        
+
         if (data.awards && data.awards.length > 0) {
           data.awards.forEach((award, index) => {
             formData.append(`awards[${index}][title]`, award.title);

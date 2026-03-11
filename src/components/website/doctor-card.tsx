@@ -100,7 +100,7 @@ export function DoctorCard({
           className="flex items-center gap-2 w-full justify-center py-2.5 bg-white border border-primary text-primary rounded-xl font-bold text-[14px] shadow-sm hover:bg-primary/5 transition-colors whitespace-nowrap"
         >
           <Calendar className="w-4 h-4" />
-          Book Appointment
+          View Details
         </Link>
       </div>
     </div>
