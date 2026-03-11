@@ -8,6 +8,7 @@ import { BreadcrumbSection } from "@/components/website/breadcrumb-section";
 import { Card, CardContent } from "@/components/ui/card";
 import { Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
+import { DynamicIcon } from "@/components/dynamic-icon";
 
 export default function FacilitiesPage() {
   const navigate = useNavigate();
@@ -17,14 +18,14 @@ export default function FacilitiesPage() {
   const activeFacilities = useMemo(() => {
     if (!data?.data) return [];
     let facilities = data.data.filter((facility) => facility.status === 'active');
-    
+
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
       facilities = facilities.filter((facility) =>
         facility.title.toLowerCase().includes(query)
       );
     }
-    
+
     return facilities;
   }, [data, searchQuery]);
 
@@ -39,10 +40,10 @@ export default function FacilitiesPage() {
   return (
     <div className="w-full">
       {/* Hero Section */}
-      <PageHeroSection 
-        image="/facilities-hero.jpg" 
-        heading="Our Departments" 
-        alt="Facilities Hero" 
+      <PageHeroSection
+        image="https://blog.brindhavvanareionhospitals.com/wp-content/uploads/2025/01/hospital-facilities.jpg"
+        heading="Our Departments"
+        alt="Facilities Hero"
       />
 
       {/* Breadcrumb Section */}
@@ -80,22 +81,28 @@ export default function FacilitiesPage() {
                     className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer h-full"
                     onClick={() => navigate(`/facilities/${facility.id}`)}
                   >
-                    <div className="relative h-48 overflow-hidden">
-                      <img
-                        src={facility.image}
-                        alt={facility.title}
-                        className="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
-                        onError={(e) => {
-                          const target = e.target as HTMLImageElement;
-                          target.src = "/vite.svg";
-                        }}
-                      />
+                    <div className="relative h-48 overflow-hidden bg-gray-100 flex items-center justify-center group">
+                      {facility.icon ? (
+                        <div className="w-20 h-20 rounded-full bg-white shadow-sm flex items-center justify-center text-primary group-hover:scale-110 transition-transform duration-300">
+                          <DynamicIcon name={facility.icon} className="w-10 h-10" />
+                        </div>
+                      ) : (
+                        <img
+                          src={facility.image}
+                          alt={facility.title}
+                          className="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
+                          onError={(e) => {
+                            const target = e.target as HTMLImageElement;
+                            target.src = "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?q=80&w=1000";
+                          }}
+                        />
+                      )}
                     </div>
                     <CardContent className="p-4">
                       <h3 className="font-semibold text-lg mb-2 line-clamp-2">
                         {facility.title}
                       </h3>
-                      <div 
+                      <div
                         className="text-sm text-gray-600 line-clamp-3 prose max-w-none"
                         dangerouslySetInnerHTML={{ __html: facility.short_description }}
                       />

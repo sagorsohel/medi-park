@@ -13,6 +13,7 @@ import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@/component
 import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router";
+import { DynamicIcon } from "@/components/dynamic-icon";
 
 export default function FacilityDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -23,13 +24,13 @@ export default function FacilityDetailPage() {
   const { data: facilityData, isLoading } = useGetFacilityByIdQuery(facilityId);
   const { data: doctorsData } = useGetDoctorsQuery(1);
   const { data: blogsData } = useGetBlogsPublicQuery(1);
-console.log(facilityData);
+  console.log(facilityData);
   const facility = facilityData?.data;
   console.log(facility);
   // Filter doctors by facility or department
   const facilityDoctors = useMemo(() => {
     if (!doctorsData?.data || !facility) return [];
-    
+
     interface DoctorItem {
       id: number;
       image: string;
@@ -37,7 +38,7 @@ console.log(facilityData);
       role: string;
       department: string;
     }
-    
+
     // If facility has assigned doctors, use those
     if (facility.doctors && Array.isArray(facility.doctors) && facility.doctors.length > 0) {
       return facility.doctors
@@ -54,10 +55,10 @@ console.log(facilityData);
         })
         .filter((doctor): doctor is DoctorItem => doctor !== null);
     }
-    
+
     // Otherwise, try to match by department
     return doctorsData.data
-      .filter((doctor) => 
+      .filter((doctor) =>
         doctor.department?.toLowerCase().includes(facility.title.toLowerCase()) ||
         facility.title.toLowerCase().includes(doctor.department?.toLowerCase() || "")
       )
@@ -74,7 +75,7 @@ console.log(facilityData);
   // Get related blogs
   const relatedBlogs = useMemo(() => {
     if (!blogsData?.data || !facility) return [];
-    
+
     interface BlogItem {
       id: number;
       title: string;
@@ -83,7 +84,7 @@ console.log(facilityData);
       author_name: string;
       created_at: string;
     }
-    
+
     // If facility has assigned blogs, use those
     if (facility.blogs && Array.isArray(facility.blogs) && facility.blogs.length > 0) {
       return facility.blogs
@@ -102,7 +103,7 @@ console.log(facilityData);
         .filter((blog): blog is BlogItem => blog !== null)
         .slice(0, 6);
     }
-    
+
     // Otherwise, return recent blogs
     return blogsData.data.slice(0, 6).map((blog) => ({
       id: blog.id,
@@ -148,10 +149,10 @@ console.log(facilityData);
   return (
     <div className="w-full">
       {/* Hero Section */}
-      <PageHeroSection 
-        image={facility.image} 
-        heading={facility.title} 
-        alt={`${facility.title} Hero`} 
+      <PageHeroSection
+        image={facility.image}
+        heading={facility.title}
+        alt={`${facility.title} Hero`}
       />
 
       {/* Breadcrumb Section */}
@@ -161,7 +162,12 @@ console.log(facilityData);
       <section className="w-full bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           {/* Title Section */}
-          <div className="mb-0 text-center">
+          <div className="mb-8 text-center flex flex-col items-center">
+            {facility.icon && (
+              <div className="mb-4 text-primary p-4 rounded-full bg-primary/5">
+                <DynamicIcon name={facility.icon} className="w-16 h-16" />
+              </div>
+            )}
             <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
               {facility.title}
             </h1>
@@ -193,7 +199,7 @@ console.log(facilityData);
               </motion.div>
             )}
 
-         
+
           </div>
 
           {/* Conditions Treated / Accordions Section */}
@@ -221,15 +227,14 @@ console.log(facilityData);
                             {accordion.title}
                           </h3>
                           <ChevronDown
-                            className={`w-5 h-5 text-gray-500 transition-transform duration-200 shrink-0 ${
-                              openAccordions.has(index) ? 'transform rotate-180' : ''
-                            }`}
+                            className={`w-5 h-5 text-gray-500 transition-transform duration-200 shrink-0 ${openAccordions.has(index) ? 'transform rotate-180' : ''
+                              }`}
                           />
                         </div>
                       </CollapsibleTrigger>
                       <CollapsibleContent className="overflow-hidden data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down">
                         <div className="px-4 pb-4 border-t border-gray-100">
-                          <div 
+                          <div
                             className="text-gray-700 prose max-w-none pt-4"
                             dangerouslySetInnerHTML={{ __html: accordion.description }}
                           />
@@ -304,7 +309,7 @@ console.log(facilityData);
           )}
 
           <div>
-          {facility.description2 && (
+            {facility.description2 && (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -367,12 +372,12 @@ console.log(facilityData);
                         {blog.title}
                       </h3>
                       {blog.description && (
-                        <div 
+                        <div
                           className="text-sm text-gray-600 line-clamp-3 prose max-w-none mb-4 flex-1"
-                          dangerouslySetInnerHTML={{ 
-                            __html: blog.description.length > 150 
-                              ? blog.description.substring(0, 150) + '...' 
-                              : blog.description 
+                          dangerouslySetInnerHTML={{
+                            __html: blog.description.length > 150
+                              ? blog.description.substring(0, 150) + '...'
+                              : blog.description
                           }}
                         />
                       )}

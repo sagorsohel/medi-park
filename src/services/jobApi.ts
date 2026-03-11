@@ -24,9 +24,15 @@ export interface JobDetail {
 
 export interface JobDetailsResponse {
     data: JobDetail[];
-    current_page?: number;
-    last_page?: number;
-    total?: number;
+    pagination?: {
+        per_page: number;
+        total_count: number;
+        total_page: number;
+        current_page: number;
+        current_page_count: number;
+        next_page: number | null;
+        previous_page: number | null;
+    };
 }
 
 export interface CreateJobDetailPayload {
@@ -53,22 +59,31 @@ export interface UpdateJobDetailPayload extends Partial<CreateJobDetailPayload> 
 export interface JobApplication {
     id: number;
     job_detail_id: number;
-    name: string;
+    full_name: string;
     email: string;
     phone: string;
-    resume_url?: string;
-    cover_letter?: string;
+    present_address?: { address: string; district: string };
+    permanent_address?: { address: string; district: string };
+    cv_url?: string;
+    image_url?: string;
+    status: string;
     applied_at: string;
     created_at: string;
     updated_at: string;
-    job?: JobDetail;
+    job_detail?: JobDetail;
 }
 
 export interface JobApplicationsResponse {
     data: JobApplication[];
-    current_page?: number;
-    last_page?: number;
-    total?: number;
+    pagination?: {
+        per_page: number;
+        total_count: number;
+        total_page: number;
+        current_page: number;
+        current_page_count: number;
+        next_page: number | null;
+        previous_page: number | null;
+    };
 }
 
 export const jobApi = api.injectEndpoints({
@@ -128,6 +143,13 @@ export const jobApi = api.injectEndpoints({
             }),
             invalidatesTags: ["JobApplication" as any],
         }),
+        getJobApplicationById: builder.query<{ data: JobApplication }, number>({
+            query: (id) => ({
+                url: `/job-applications/${id}`,
+                method: "GET",
+            }),
+            providesTags: ["JobApplication" as any],
+        }),
         createJobApplication: builder.mutation<{ message: string }, FormData>({
             query: (data) => ({
                 url: "/job-applications",
@@ -146,6 +168,7 @@ export const {
     useUpdateJobDetailMutation,
     useDeleteJobDetailMutation,
     useGetJobApplicationsQuery,
+    useGetJobApplicationByIdQuery,
     useDeleteJobApplicationMutation,
     useCreateJobApplicationMutation,
 } = jobApi;

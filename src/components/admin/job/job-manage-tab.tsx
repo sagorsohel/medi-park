@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 import { useGetJobDetailsQuery, useDeleteJobDetailMutation, useUpdateJobDetailMutation } from "@/services/jobApi";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
+import { JobPostDetailModal } from "./job-post-detail-modal";
 import toast from "react-hot-toast";
 
 export function JobManageTab() {
@@ -19,6 +20,8 @@ export function JobManageTab() {
     const [filter, setFilter] = useState<string>("all");
     const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
     const [jobToDelete, setJobToDelete] = useState<string | null>(null);
+    const [viewModalOpen, setViewModalOpen] = useState(false);
+    const [selectedJob, setSelectedJob] = useState<any>(null);
 
     const { data, isLoading, refetch } = useGetJobDetailsQuery({ page: currentPage });
     const [deleteJobDetail] = useDeleteJobDetailMutation();
@@ -63,10 +66,10 @@ export function JobManageTab() {
     }, [searchQuery, filter, mappedJobs]);
 
     const pagination = {
-        current_page: data?.current_page || 1,
-        last_page: data?.last_page || 1,
-        total: data?.total || 0,
-        per_page: 15, // Default assumption since not returned in specific fields
+        current_page: data?.pagination?.current_page || 1,
+        last_page: data?.pagination?.total_page || 1,
+        total: data?.pagination?.total_count || 0,
+        per_page: data?.pagination?.per_page || 10,
     };
 
     const showingFrom = (pagination.current_page - 1) * pagination.per_page + 1;
@@ -108,8 +111,14 @@ export function JobManageTab() {
         if (action === "delete") {
             setJobToDelete(id);
             setDeleteConfirmOpen(true);
-        } else if (action === "edit" || action === "view") {
-            navigate(`/admin/job-posts/${action}/${id}`);
+        } else if (action === "view") {
+            const job = data?.data.find(j => j.id === Number(id));
+            if (job) {
+                setSelectedJob(job);
+                setViewModalOpen(true);
+            }
+        } else if (action === "edit") {
+            navigate(`/admin/job-posts/edit/${id}`);
         }
     };
 
@@ -184,6 +193,12 @@ export function JobManageTab() {
                 confirmText="Delete"
                 cancelText="Cancel"
                 variant="destructive"
+            />
+
+            <JobPostDetailModal
+                open={viewModalOpen}
+                onOpenChange={setViewModalOpen}
+                job={selectedJob}
             />
         </div>
     );

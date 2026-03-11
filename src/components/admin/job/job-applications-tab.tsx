@@ -4,6 +4,7 @@ import { useState, useMemo, useEffect } from "react";
 import { DataTableFilters } from "@/components/ui/data-table-filters";
 import { DataTablePagination } from "@/components/ui/data-table-pagination";
 import { JobApplicationTable, type JobApplicationData } from "@/components/admin/job/job-application-table";
+import { JobApplicationDetailModal } from "@/components/admin/job/job-application-detail-modal";
 import { Loader2 } from "lucide-react";
 import { useGetJobApplicationsQuery, useDeleteJobApplicationMutation } from "@/services/jobApi";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
@@ -16,6 +17,8 @@ export function JobApplicationsTab() {
     const [filter, setFilter] = useState<string>("all");
     const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
     const [appToDelete, setAppToDelete] = useState<string | null>(null);
+    const [viewModalOpen, setViewModalOpen] = useState(false);
+    const [selectedApplication, setSelectedApplication] = useState<any>(null);
 
     const { data, isLoading, refetch } = useGetJobApplicationsQuery({ page: currentPage });
     const [deleteJobApplication] = useDeleteJobApplicationMutation();
@@ -29,12 +32,12 @@ export function JobApplicationsTab() {
         if (!data?.data) return [];
         return data.data.map((app) => ({
             id: `APP-${app.id.toString().padStart(4, "0")}`,
-            name: app.name || "N/A",
+            name: app.full_name || "N/A",
             email: app.email || "N/A",
             phone: app.phone || "N/A",
-            jobAppliedFor: app.job?.job_title || "Unknown",
+            jobAppliedFor: app.job_detail?.job_title || "Unknown",
             appliedAt: app.applied_at || app.created_at || new Date().toISOString(),
-            resumeUrl: app.resume_url,
+            resumeUrl: app.cv_url,
             originalId: app.id,
         }));
     }, [data]);
@@ -54,10 +57,10 @@ export function JobApplicationsTab() {
     }, [searchQuery, filter, mappedApps]);
 
     const pagination = {
-        current_page: data?.current_page || 1,
-        last_page: data?.last_page || 1,
-        total: data?.total || 0,
-        per_page: 15,
+        current_page: data?.pagination?.current_page || 1,
+        last_page: data?.pagination?.total_page || 1,
+        total: data?.pagination?.total_count || 0,
+        per_page: data?.pagination?.per_page || 10,
     };
 
     const showingFrom = (pagination.current_page - 1) * pagination.per_page + 1;
@@ -84,7 +87,11 @@ export function JobApplicationsTab() {
             setAppToDelete(id);
             setDeleteConfirmOpen(true);
         } else if (action === "view") {
-            console.log(`View app: ${id}`);
+            const app = data?.data.find(a => a.id === Number(id));
+            if (app) {
+                setSelectedApplication(app);
+                setViewModalOpen(true);
+            }
         }
     };
 
@@ -157,6 +164,12 @@ export function JobApplicationsTab() {
                 confirmText="Delete"
                 cancelText="Cancel"
                 variant="destructive"
+            />
+
+            <JobApplicationDetailModal
+                open={viewModalOpen}
+                onOpenChange={setViewModalOpen}
+                application={selectedApplication}
             />
         </div>
     );
