@@ -15,6 +15,7 @@ import {
 import { useGetFacilitiesPublicQuery, useGetSpecializedFacilitiesPublicQuery } from "@/services/homepageApi";
 import { useGetFutureVenturesPublicQuery } from "@/services/futureVenturesApi";
 import { useGetDirectorsQuery, type Director } from "@/services/directorApi";
+import { DynamicIcon } from "@/components/dynamic-icon";
 
 export function WebsiteNavbar() {
   const dispatch = useAppDispatch();
@@ -160,9 +161,16 @@ export function WebsiteNavbar() {
                         <Link
                           key={facility.id}
                           to={`/facilities/${facility.id}`}
-                          className="text-[13px] font-semibold text-gray-600 hover:text-[#00A884] transition-colors py-1.5 flex items-center gap-2 group/item"
+                          className="text-[13px] font-semibold text-gray-600 hover:text-[#00A884] transition-colors py-1.5 flex items-center gap-3 group/item"
                         >
-                          <span className="w-1.5 h-1.5 rounded-full bg-gray-300 group-hover/item:bg-[#00A884] transition-colors shrink-0"></span>
+                          {facility.icon ? (
+                            <DynamicIcon
+                              name={facility.icon}
+                              className="w-6 h-6 text-gray-400 group-hover/item:text-[#00A884] transition-colors shrink-0"
+                            />
+                          ) : (
+                            <span className="w-1.5 h-1.5 rounded-full bg-gray-300 group-hover/item:bg-[#00A884] transition-colors shrink-0"></span>
+                          )}
                           <span className="truncate">{facility.title}</span>
                         </Link>
                       ))}
@@ -273,7 +281,15 @@ export function WebsiteNavbar() {
                   <CollapsibleContent className="bg-gray-50 border-b border-gray-100">
                     <div className="py-2 pl-4 flex flex-col max-h-[40vh] overflow-y-auto">
                       {activeFacilities.map((facility) => (
-                        <Link key={facility.id} to={`/facilities/${facility.id}`} onClick={() => setMobileMenuOpen(false)} className="py-2.5 text-sm font-semibold text-gray-600">
+                        <Link
+                          key={facility.id}
+                          to={`/facilities/${facility.id}`}
+                          onClick={() => setMobileMenuOpen(false)}
+                          className="py-2.5 text-sm font-semibold text-gray-600 flex items-center gap-3"
+                        >
+                          {facility.icon && (
+                            <DynamicIcon name={facility.icon} className="w-6 h-6 text-gray-400" />
+                          )}
                           {facility.title}
                         </Link>
                       ))}

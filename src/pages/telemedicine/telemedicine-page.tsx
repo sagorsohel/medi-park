@@ -5,7 +5,7 @@ import { Link } from "react-router";
 
 export default function TelemedicinePage() {
     return (
-        <div className="w-full min-h-screen bg-gray-50/50 py-28">
+        <div className="w-full min-h-screen bg-gray-50/50">
             <BreadcrumbSection currentPage="Telemedicine" />
 
             <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 mt-16 space-y-20">

@@ -16,7 +16,7 @@ export default function PublicRoomRentPage() {
     const roomRents = roomRentsData?.data || [];
 
     return (
-        <div className="w-full bg-[#f2f7f7] min-h-screen py-28">
+        <div className="w-full bg-[#f2f7f7] min-h-screen">
             {/* Top Banner & Breadcrumb */}
             <PageHeroSection
                 image="https://cms-img.coverfox.com/room-rent-limit-silent.jpg"

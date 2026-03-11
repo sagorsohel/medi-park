@@ -7,7 +7,7 @@ import { Link } from "react-router";
 
 export default function AppointmentPage() {
     return (
-        <div className="w-full py-28 min-h-screen bg-gray-50/50 pb-20">
+        <div className="w-full min-h-screen bg-gray-50/50 pb-20">
             -            <BreadcrumbSection currentPage="Request Appointment" />
 
             <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 mt-12">

@@ -73,7 +73,7 @@ export function WebsiteFooter() {
               <img
                 src="/navbar-logo.png"
                 alt="MediPark Hospital"
-                className="h-[70px] md:h-[90px] w-auto object-contain drop-shadow-[0_0_15px_rgba(255,255,255,0.4)]"
+                className="h-[70px] md:h-[90px] w-auto object-contain "
                 onError={(e) => {
                   const target = e.target as HTMLImageElement;
                   target.src = "/logo.png";

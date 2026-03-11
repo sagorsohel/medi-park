@@ -13,7 +13,7 @@ export default function InvestorDetailPage() {
     const investor = data?.data;
 
     return (
-        <div className="w-full min-h-screen bg-gray-50/50 py-28">
+        <div className="w-full min-h-screen bg-gray-50/50">
             <BreadcrumbSection currentPage={investor?.investor_name || investor?.applicant_full_name || "Investor Details"} />
 
             <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mt-12">

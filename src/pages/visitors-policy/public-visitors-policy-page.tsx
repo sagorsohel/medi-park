@@ -3,7 +3,7 @@ import { BreadcrumbSection } from "@/components/website/breadcrumb-section";
 
 export default function PublicVisitorsPolicyPage() {
     return (
-        <div className="w-full bg-[#f2f7f7] min-h-screen py-28">
+        <div className="w-full bg-[#f2f7f7] min-h-screen">
             {/* Banner Section */}
             <PageHeroSection
                 image="https://cdn.prod.website-files.com/6509fe179d7033a278a05268/6672082117b13ec219b44660_6541ce2386fd954dce04339c_Visitor-ebook-hero-1200x630.png"

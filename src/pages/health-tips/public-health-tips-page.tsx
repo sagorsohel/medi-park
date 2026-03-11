@@ -3,7 +3,7 @@ import { BreadcrumbSection } from "@/components/website/breadcrumb-section";
 
 export default function PublicHealthTipsPage() {
     return (
-        <div className="w-full bg-[#f2f7f7] min-h-screen py-28">
+        <div className="w-full bg-[#f2f7f7] min-h-screen">
             {/* Banner Section */}
             <PageHeroSection
                 image="https://lifelinehospitalkerala.com/wp-content/uploads/2025/04/happy-fit-young-lady-writing-diet-plan-notebook-indoor-1024x683.jpg"

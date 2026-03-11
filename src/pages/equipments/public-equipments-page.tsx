@@ -18,7 +18,7 @@ export default function PublicEquipmentsPage() {
     const categoryNames = Object.keys(categorizedEquipments);
 
     return (
-        <div className="w-full bg-[#f2f7f7] min-h-screen py-28">
+        <div className="w-full bg-[#f2f7f7] min-h-screen">
             {/* Banner Section */}
             <PageHeroSection
                 image="https://5.imimg.com/data5/SELLER/Default/2020/9/FG/YB/UX/24033124/bed-head-panel-1498096-500x500.jpg"
