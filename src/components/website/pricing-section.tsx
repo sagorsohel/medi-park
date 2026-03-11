@@ -29,47 +29,48 @@ function PricingCard({ plan }: PricingCardProps) {
 
   return (
     <div
-      className={`relative rounded-[24px] p-6 w-full flex flex-col ${isPopular
-        ? "bg-primary text-primary-foreground scale-105 z-10 min-h-[500px] shadow-2xl"
-        : "bg-card text-primary border-[3px] border-primary h-fit shadow-md"
+      className={`relative rounded-[24px] p-6 w-full flex flex-col mx-auto ${isPopular
+        ? "bg-primary text-primary-foreground lg:scale-105 z-10 min-h-[400px] lg:min-h-[500px] shadow-2xl"
+        : "bg-white text-primary border-[3px] border-primary min-h-[400px] lg:h-fit shadow-md"
         } `}
     >
       {isPopular && (
-        <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 z-20">
-          <span className="bg-background border border-primary text-primary text-xs font-semibold px-3 py-1 rounded-full whitespace-nowrap">
+        <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-20">
+          <span className="bg-white border-2 border-primary text-primary text-xs font-bold px-4 py-1.5 rounded-full whitespace-nowrap shadow-sm">
             MOST POPULAR
           </span>
         </div>
       )}
 
-      <div className={`mb-6 ${isPopular ? "" : "flex-1"}`}>
-        <div className="flex gap-1 items-center">
-          <div className="text-[32px] font-bold">${plan.price}</div>
-          <div className={`text-sm font-medium mt-2 ${isPopular ? "text-primary-foreground/80" : "text-muted-foreground"}`}>
+      <div className="mb-6">
+        <div className="flex gap-1 items-baseline">
+          <span className={`text-2xl md:text-3xl font-bold ${isPopular ? "text-primary-foreground/90" : "text-primary/60"}`}>$</span>
+          <span className="text-[40px] md:text-[48px] font-extrabold tracking-tight">{plan.price}</span>
+          <span className={`text-sm md:text-base font-semibold ml-1 ${isPopular ? "text-primary-foreground/80" : "text-muted-foreground"}`}>
             /{plan.duration}
-          </div>
+          </span>
         </div>
-        <h3 className="text-xl font-semibold mb-2">{plan.title}</h3>
-        <p className={`text-md font-semibold ${isPopular ? "text-primary-foreground" : "text-primary"}`}>
+        <h3 className="text-xl md:text-2xl font-bold mb-2 mt-2">{plan.title}</h3>
+        <p className={`text-sm md:text-md font-medium leading-relaxed ${isPopular ? "text-primary-foreground/90" : "text-primary/70"}`}>
           {plan.description}
         </p>
       </div>
 
-      <ul className={`space-y-3 mb-6 ${isPopular ? "" : "flex-1"}`}>
+      <ul className="space-y-4 mb-8 flex-1">
         {parsedFeatures.map((feature, featureIndex) => (
-          <li key={featureIndex} className="flex items-start gap-2">
-            <div>
-              <Check className={`h-5 w-5 rounded-full shrink-0 ${isPopular ? "text-primary-foreground bg-primary-foreground/20" : "bg-primary text-primary-foreground"}`} />
+          <li key={featureIndex} className="flex items-start gap-3">
+            <div className={`mt-1 h-5 w-5 rounded-full shrink-0 flex items-center justify-center ${isPopular ? "bg-primary-foreground/20 text-primary-foreground" : "bg-primary/10 text-primary"}`}>
+              <Check className="h-3.5 w-3.5 stroke-[3px]" />
             </div>
-            <span className={`text-sm ${isPopular ? "text-primary-foreground" : "text-primary"}`}>{feature}</span>
+            <span className={`text-[15px] leading-snug ${isPopular ? "text-primary-foreground" : "text-gray-700"}`}>{feature}</span>
           </li>
         ))}
       </ul>
 
       <button
-        className={`w-full rounded-[22px] py-2 px-4 font-medium transition-colors mt-auto ${isPopular
-          ? "bg-background text-primary border-2 border-background hover:border-background hover:bg-primary hover:text-primary-foreground"
-          : "bg-primary text-primary-foreground border-2 border-primary hover:bg-secondary hover:text-primary"
+        className={`w-full rounded-full py-3 px-6 font-bold transition-all duration-300 transform active:scale-95 ${isPopular
+          ? "bg-white text-primary hover:bg-white/90 shadow-lg"
+          : "bg-primary text-white hover:bg-primary/90 shadow-md"
           }`}
       >
         Choose plan
@@ -104,11 +105,12 @@ export function PricingSection() {
   }
 
   return (
-    <div className="w-full bg-white py-16 md:py-24">
+    <div className="w-full bg-[#f8fafc] py-20 md:py-32 overflow-hidden">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Title */}
-        <div className="text-center mb-24">
-          <h2 className="text-4xl md:text-5xl font-bold text-primary mb-12">Pricing</h2>
+        <div className="text-center mb-16 md:mb-24">
+          <h2 className="text-4xl md:text-5xl font-extrabold text-primary mb-4 tracking-tight">Our Pricing Plans</h2>
+          <div className="w-20 h-1.5 bg-primary mx-auto rounded-full" />
         </div>
 
         {/* Pricing Cards - Carousel on mobile, grid on desktop */}
@@ -118,28 +120,35 @@ export function PricingSection() {
             <Carousel
               className="w-full"
               opts={{
-                align: "start",
+                align: "center",
                 loop: true,
               }}
             >
-              <CarouselContent className="-ml-2 md:-ml-4">
-                {activePlans.map((plan, index) => (
-                  <CarouselItem key={plan.id} className="pl-2 md:pl-4 basis-full sm:basis-1/2">
-                    <PricingCard plan={plan} />
+              <CarouselContent className="-ml-4 py-12"> {/* Added py-12 for badge/scale clearance */}
+                {activePlans.map((plan) => (
+                  <CarouselItem key={plan.id} className="pl-4 basis-[90%] sm:basis-1/2">
+                    <div className="px-1">
+                      <PricingCard plan={plan} />
+                    </div>
                   </CarouselItem>
                 ))}
               </CarouselContent>
               {/* Navigation buttons below cards */}
-              <div className="flex justify-center items-center gap-4 mt-6">
-                <CarouselPrevious className="relative left-0 top-0 transform-none" />
-                <CarouselNext className="relative right-0 top-0 transform-none" />
+              <div className="flex justify-center items-center gap-6 mt-4">
+                <CarouselPrevious className="static transform-none h-12 w-12 border-2 border-primary/20 hover:border-primary text-primary transition-all" />
+                <CarouselNext className="static transform-none h-12 w-12 border-2 border-primary/20 hover:border-primary text-primary transition-all" />
               </div>
             </Carousel>
           </div>
 
           {/* Desktop Grid */}
-          <div className={`hidden lg:grid ${activePlans.length < 5 ? `lg:grid-cols-${activePlans.length}` : 'lg:grid-cols-5'} gap-4 items-center justify-center`}>
-            {activePlans.map((plan, index) => (
+          <div className={`hidden lg:grid gap-6 items-stretch justify-center pt-8 ${activePlans.length === 1 ? 'lg:grid-cols-1 max-w-md mx-auto' :
+            activePlans.length === 2 ? 'lg:grid-cols-2 max-w-4xl mx-auto' :
+              activePlans.length === 3 ? 'lg:grid-cols-3 max-w-6xl mx-auto' :
+                activePlans.length === 4 ? 'lg:grid-cols-4' :
+                  'lg:grid-cols-5'
+            }`}>
+            {activePlans.map((plan) => (
               <PricingCard key={plan.id} plan={plan} />
             ))}
           </div>
