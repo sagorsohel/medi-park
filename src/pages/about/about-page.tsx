@@ -5,6 +5,7 @@ import { BoardOfDirectorsSection } from '@/components/website/board-of-directors
 import { MissionVisionSection } from '@/components/website/mission-vision-section'
 import { TransformingHealthcareSection } from '@/components/website/transforming-healthcare-section'
 import { MRCPPACESSection } from '@/components/website/mrcp-paces-section'
+import { VideoSection } from '@/components/website/video-section'
 import { useEffect } from 'react'
 import { store } from '@/store'
 import { aboutPageApi } from '@/services/aboutPageApi'
@@ -23,12 +24,15 @@ export default function AboutPage() {
       {/* Who We Are Section */}
       <WhoWeAreSection />
 
+      {/* Video Section */}
+
+
       {/* Board of Directors Section */}
       <BoardOfDirectorsSection />
 
       {/* Mission & Vision Section */}
       <MissionVisionSection />
-
+      <VideoSection />
       {/* Transforming Healthcare Section */}
       <TransformingHealthcareSection />
 
