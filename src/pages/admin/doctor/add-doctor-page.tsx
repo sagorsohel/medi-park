@@ -79,11 +79,11 @@ export default function AddDoctorPage() {
 
     const [imageFile, setImageFile] = useState<File | null>(null);
     const [imagePreview, setImagePreview] = useState<string | null>(null);
-    
+
     // Known Languages as array
     const [knownLanguages, setKnownLanguages] = useState<string[]>([]);
     const [languageSelectKey, setLanguageSelectKey] = useState(0);
-    
+
     // Tab state
     const [activeTab, setActiveTab] = useState("basic");
 
@@ -135,7 +135,7 @@ export default function AddDoctorPage() {
                 password: "",
                 password_confirmation: "",
             });
-            
+
             // Handle known_languages as array
             if (doctor.known_languages) {
                 if (Array.isArray(doctor.known_languages)) {
@@ -145,7 +145,7 @@ export default function AddDoctorPage() {
                     setKnownLanguages(doctor.known_languages.split(',').map(l => l.trim()).filter(l => l));
                 }
             }
-            
+
             // Handle arrays for education, experience, etc.
             type DoctorWithArrays = Doctor & {
                 education?: Array<{ institute_name?: string; qualification?: string; year?: string }>;
@@ -154,9 +154,9 @@ export default function AddDoctorPage() {
                 membership?: Array<{ title?: string; description?: string; year?: string }>;
                 awards?: Array<{ title?: string; description?: string; year?: string }>;
             };
-            
+
             const doctorWithArrays = doctor as DoctorWithArrays;
-            
+
             if (doctorWithArrays.education && Array.isArray(doctorWithArrays.education)) {
                 setEducationEntries(doctorWithArrays.education.map((edu: { institute_name?: string; qualification?: string; year?: string }, idx: number) => ({
                     id: (idx + 1).toString(),
@@ -165,7 +165,7 @@ export default function AddDoctorPage() {
                     year: edu.year || "",
                 })));
             }
-            
+
             if (doctorWithArrays.experience && Array.isArray(doctorWithArrays.experience)) {
                 setExperienceEntries(doctorWithArrays.experience.map((exp: { hospital_name?: string; no_of_years?: string; year?: string }, idx: number) => ({
                     id: (idx + 1).toString(),
@@ -174,7 +174,7 @@ export default function AddDoctorPage() {
                     year: exp.year || "",
                 })));
             }
-            
+
             if (doctorWithArrays.social_media && Array.isArray(doctorWithArrays.social_media)) {
                 setSocialMediaEntries(doctorWithArrays.social_media.map((sm: { title?: string; link?: string }, idx: number) => ({
                     id: (idx + 1).toString(),
@@ -182,7 +182,7 @@ export default function AddDoctorPage() {
                     link: sm.link || "",
                 })));
             }
-            
+
             if (doctorWithArrays.membership && Array.isArray(doctorWithArrays.membership)) {
                 setMembershipEntries(doctorWithArrays.membership.map((mem: { title?: string; description?: string; year?: string }, idx: number) => ({
                     id: (idx + 1).toString(),
@@ -191,7 +191,7 @@ export default function AddDoctorPage() {
                     year: mem.year || "",
                 })));
             }
-            
+
             if (doctorWithArrays.awards && Array.isArray(doctorWithArrays.awards)) {
                 setAwardEntries(doctorWithArrays.awards.map((award: { title?: string; description?: string; year?: string }, idx: number) => ({
                     id: (idx + 1).toString(),
@@ -272,8 +272,8 @@ export default function AddDoctorPage() {
     const handleSubmit = async () => {
         if (isViewMode) return;
 
-        if (!formData.doctor_name || !formData.department || !formData.specialist || !formData.email_address || !formData.mobile_number) {
-            toast.error("Please fill in all required fields.");
+        if (!formData.doctor_name) {
+            toast.error("Doctor name is required.");
             return;
         }
 
@@ -324,7 +324,7 @@ export default function AddDoctorPage() {
             if (formData.username) payload.username = formData.username;
             if (formData.password) payload.password = formData.password;
             if (formData.password_confirmation) payload.password_confirmation = formData.password_confirmation;
-            
+
             // Add arrays for education, experience, social_media, membership, awards
             const validEducation = educationEntries.filter(edu => edu.instituteName || edu.qualification || edu.year);
             if (validEducation.length > 0) {
@@ -334,7 +334,7 @@ export default function AddDoctorPage() {
                     year: edu.year,
                 }));
             }
-            
+
             const validExperience = experienceEntries.filter(exp => exp.hospitalName || exp.noOfYears || exp.year);
             if (validExperience.length > 0) {
                 payload.experience = validExperience.map(exp => ({
@@ -343,7 +343,7 @@ export default function AddDoctorPage() {
                     year: exp.year,
                 }));
             }
-            
+
             const validSocialMedia = socialMediaEntries.filter(sm => sm.title || sm.link);
             if (validSocialMedia.length > 0) {
                 payload.social_media = validSocialMedia.map(sm => ({
@@ -351,7 +351,7 @@ export default function AddDoctorPage() {
                     link: sm.link,
                 }));
             }
-            
+
             const validMembership = membershipEntries.filter(mem => mem.title || mem.description || mem.year);
             if (validMembership.length > 0) {
                 payload.membership = validMembership.map(mem => ({
@@ -360,7 +360,7 @@ export default function AddDoctorPage() {
                     year: mem.year,
                 }));
             }
-            
+
             const validAwards = awardEntries.filter(award => award.title || award.description || award.year);
             if (validAwards.length > 0) {
                 payload.awards = validAwards.map(award => ({
@@ -378,10 +378,13 @@ export default function AddDoctorPage() {
                 toast.success("Doctor created successfully!");
             }
             navigate("/admin/doctor");
-        } catch (error: unknown) {
+        } catch (error: any) {
             console.error("Failed to save doctor:", error);
-            const errorMessage = (error as { data?: { message?: string } })?.data?.message || "Failed to save doctor. Please try again.";
-            toast.error(errorMessage);
+            const errorMessage =
+                error?.data?.errors ? Object.values(error.data.errors as Record<string, string[]>)[0]?.[0] :
+                    error?.data?.message ? error.data.message :
+                        "Failed to save doctor. Please try again.";
+            toast.error(errorMessage as string);
         }
     };
 
@@ -472,7 +475,7 @@ export default function AddDoctorPage() {
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <Label htmlFor="department">Department *</Label>
+                                    <Label htmlFor="department">Department</Label>
                                     <Select
                                         value={formData.department}
                                         onValueChange={(value) => handleInputChange("department", value)}
@@ -499,7 +502,7 @@ export default function AddDoctorPage() {
                             {/* Specialist and Mobile Number */}
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div className="space-y-2">
-                                    <Label htmlFor="specialist">Specialist *</Label>
+                                    <Label htmlFor="specialist">Specialist</Label>
                                     <Select
                                         value={formData.specialist}
                                         onValueChange={(value) => handleInputChange("specialist", value)}
@@ -516,7 +519,7 @@ export default function AddDoctorPage() {
                                     </Select>
                                 </div>
                                 <div className="space-y-2">
-                                    <Label htmlFor="mobile">Mobile Number *</Label>
+                                    <Label htmlFor="mobile">Mobile Number</Label>
                                     <Input
                                         id="mobile"
                                         value={formData.mobile_number}
@@ -530,7 +533,7 @@ export default function AddDoctorPage() {
                             {/* Email Address and Date of Birth */}
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div className="space-y-2">
-                                    <Label htmlFor="email">Email Address *</Label>
+                                    <Label htmlFor="email">Email Address</Label>
                                     <Input
                                         id="email"
                                         type="email"
@@ -773,7 +776,7 @@ export default function AddDoctorPage() {
                                     </div>
                                 </div>
                             )}
-                            
+
                             {/* Next Button */}
                             {!isViewMode && (
                                 <div className="flex justify-end mt-8">

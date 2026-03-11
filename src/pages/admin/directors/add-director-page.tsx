@@ -123,8 +123,8 @@ export default function AddDirectorPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!formData.name.trim() || !formData.designation.trim()) {
-      toast.error("Name and designation are required");
+    if (!formData.name.trim()) {
+      toast.error("Name is required");
       return;
     }
 
@@ -154,17 +154,21 @@ export default function AddDirectorPage() {
         toast.success("Director created successfully");
       }
       navigate("/admin/directors");
-    } catch (error) {
+    } catch (error: any) {
       console.error("Failed to submit director:", error);
-      toast.error("Failed to save director. Please check the form and try again.");
+      const errorMessage =
+        error?.data?.errors ? Object.values(error.data.errors as Record<string, string[]>)[0]?.[0] :
+          error?.data?.message ? error.data.message :
+            "Failed to save director. Please check the form and try again.";
+      toast.error(errorMessage as string);
     }
   };
 
   const readOnlyProps = isViewMode
     ? {
-        readOnly: true,
-        disabled: true,
-      }
+      readOnly: true,
+      disabled: true,
+    }
     : {};
 
   return (
@@ -207,7 +211,7 @@ export default function AddDirectorPage() {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="designation">Designation *</Label>
+                <Label htmlFor="designation">Designation</Label>
                 <Input
                   id="designation"
                   value={formData.designation}

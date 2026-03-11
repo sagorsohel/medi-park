@@ -113,7 +113,7 @@ export default function AddFacilityPage() {
                 setIsSpecialized(facility.is_specialized || false);
                 setImagePreview(facility.image || null);
                 setAccordions(facility.accordions || []);
-                
+
                 // Handle doctors - extract IDs if they're objects
                 if (facility.doctors) {
                     const doctorIds = facility.doctors.map((doc: number | { id: number }) => typeof doc === 'number' ? doc : doc.id);
@@ -121,7 +121,7 @@ export default function AddFacilityPage() {
                 } else {
                     setSelectedDoctors([]);
                 }
-                
+
                 // Handle blogs - extract IDs if they're objects
                 if (facility.blogs) {
                     const blogIds = facility.blogs.map((blog: number | { id: number }) => typeof blog === 'number' ? blog : blog.id);
@@ -165,13 +165,8 @@ export default function AddFacilityPage() {
     const handleSubmit = async () => {
         if (isViewMode) return;
 
-        if (!title.trim() || !shortDescription.trim()) {
-            toast.error("Title and short description are required.");
-            return;
-        }
-
-        if (isCreateMode && !imageFile) {
-            toast.error("Please select an image.");
+        if (!title.trim()) {
+            toast.error("Title is required.");
             return;
         }
 
@@ -198,12 +193,13 @@ export default function AddFacilityPage() {
                 toast.success("Facility created successfully!");
             }
             navigate("/admin/website/facilities");
-        } catch (error: unknown) {
+        } catch (error: any) {
             console.error("Failed to save facility:", error);
-            const errorMessage = (error && typeof error === 'object' && 'data' in error && error.data && typeof error.data === 'object' && 'message' in error.data && typeof error.data.message === 'string')
-                ? error.data.message
-                : "Failed to save facility. Please try again.";
-            toast.error(errorMessage);
+            const errorMessage =
+                error?.data?.errors ? Object.values(error.data.errors as Record<string, string[]>)[0]?.[0] :
+                    error?.data?.message ? error.data.message :
+                        "Failed to save facility. Please try again.";
+            toast.error(errorMessage as string);
         }
     };
 
@@ -247,10 +243,10 @@ export default function AddFacilityPage() {
                 </Field>
 
                 <Field>
-                    <FieldLabel>Short Description *</FieldLabel>
+                    <FieldLabel>Short Description</FieldLabel>
                     <FieldContent>
                         {isViewMode ? (
-                            <div 
+                            <div
                                 className="text-gray-700 prose max-w-none border p-4 rounded"
                                 dangerouslySetInnerHTML={{ __html: shortDescription }}
                             />
@@ -281,7 +277,7 @@ export default function AddFacilityPage() {
                     <FieldLabel>Description 1</FieldLabel>
                     <FieldContent>
                         {isViewMode ? (
-                            <div 
+                            <div
                                 className="text-gray-700 prose max-w-none border p-4 rounded"
                                 dangerouslySetInnerHTML={{ __html: description1 || '' }}
                             />
@@ -312,7 +308,7 @@ export default function AddFacilityPage() {
                     <FieldLabel>Description 2</FieldLabel>
                     <FieldContent>
                         {isViewMode ? (
-                            <div 
+                            <div
                                 className="text-gray-700 prose max-w-none border p-4 rounded"
                                 dangerouslySetInnerHTML={{ __html: description2 || '' }}
                             />
@@ -343,7 +339,7 @@ export default function AddFacilityPage() {
                     <FieldLabel>Footer</FieldLabel>
                     <FieldContent>
                         {isViewMode ? (
-                            <div 
+                            <div
                                 className="text-gray-700 prose max-w-none border p-4 rounded"
                                 dangerouslySetInnerHTML={{ __html: footer || '' }}
                             />
@@ -371,7 +367,7 @@ export default function AddFacilityPage() {
                 </Field>
 
                 <Field>
-                    <FieldLabel>Image {isCreateMode && '*'}</FieldLabel>
+                    <FieldLabel>Image</FieldLabel>
                     <FieldContent>
                         {isViewMode ? (
                             imagePreview && (
@@ -450,15 +446,14 @@ export default function AddFacilityPage() {
                                                 <div className="flex items-center justify-between p-4 hover:bg-gray-50 transition-colors">
                                                     <h4 className="font-semibold text-left">{accordion.title || `Accordion ${index + 1}`}</h4>
                                                     <ChevronDown
-                                                        className={`w-5 h-5 text-gray-500 transition-transform duration-200 ${
-                                                            openAccordions.has(index) ? 'transform rotate-180' : ''
-                                                        }`}
+                                                        className={`w-5 h-5 text-gray-500 transition-transform duration-200 ${openAccordions.has(index) ? 'transform rotate-180' : ''
+                                                            }`}
                                                     />
                                                 </div>
                                             </CollapsibleTrigger>
                                             <CollapsibleContent className="overflow-hidden data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down">
                                                 <div className="px-4 pb-4">
-                                                    <div 
+                                                    <div
                                                         className="text-gray-700 prose max-w-none text-sm"
                                                         dangerouslySetInnerHTML={{ __html: accordion.description }}
                                                     />
@@ -488,9 +483,8 @@ export default function AddFacilityPage() {
                                                 />
                                                 <CollapsibleTrigger className="p-1 hover:bg-gray-100 rounded transition-colors">
                                                     <ChevronDown
-                                                        className={`w-5 h-5 text-gray-500 transition-transform duration-200 ${
-                                                            openAccordions.has(index) ? 'transform rotate-180' : ''
-                                                        }`}
+                                                        className={`w-5 h-5 text-gray-500 transition-transform duration-200 ${openAccordions.has(index) ? 'transform rotate-180' : ''
+                                                            }`}
                                                     />
                                                 </CollapsibleTrigger>
                                                 <Button
@@ -590,13 +584,13 @@ export default function AddFacilityPage() {
                                     <div className="p-2 space-y-2">
                                         {doctorsData.data.map((doctor) => {
                                             const isSelected = selectedDoctors.includes(doctor.id);
-                                            const isAlreadyAdded = isEditMode && facilityData?.data?.doctors && 
+                                            const isAlreadyAdded = isEditMode && facilityData?.data?.doctors &&
                                                 Array.isArray(facilityData.data.doctors) &&
                                                 facilityData.data.doctors.some((d: number | { id: number }) => {
                                                     const doctorId = typeof d === 'number' ? d : d.id;
                                                     return doctorId === doctor.id;
                                                 });
-                                            
+
                                             return (
                                                 <div
                                                     key={doctor.id}
@@ -607,9 +601,8 @@ export default function AddFacilityPage() {
                                                             setSelectedDoctors([...selectedDoctors, doctor.id]);
                                                         }
                                                     }}
-                                                    className={`flex items-center justify-between p-3 border rounded-md cursor-pointer hover:bg-gray-50 transition-colors ${
-                                                        isSelected ? 'bg-blue-50 border-blue-300' : 'border-gray-200'
-                                                    }`}
+                                                    className={`flex items-center justify-between p-3 border rounded-md cursor-pointer hover:bg-gray-50 transition-colors ${isSelected ? 'bg-blue-50 border-blue-300' : 'border-gray-200'
+                                                        }`}
                                                 >
                                                     <div className="flex items-center gap-3 flex-1">
                                                         {doctor.image && (
@@ -672,7 +665,7 @@ export default function AddFacilityPage() {
                                                         )}
                                                         <div className="p-4">
                                                             <h4 className="font-semibold text-lg mb-2 line-clamp-2">{blogObj.title}</h4>
-                                                            <div 
+                                                            <div
                                                                 className="text-sm text-gray-600 line-clamp-3 prose max-w-none"
                                                                 dangerouslySetInnerHTML={{ __html: blogObj.description?.substring(0, 150) + '...' || '' }}
                                                             />
@@ -692,13 +685,13 @@ export default function AddFacilityPage() {
                                     <div className="p-2 space-y-2">
                                         {blogsData.data.map((blog) => {
                                             const isSelected = selectedBlogs.includes(blog.id);
-                                            const isAlreadyAdded = isEditMode && facilityData?.data?.blogs && 
+                                            const isAlreadyAdded = isEditMode && facilityData?.data?.blogs &&
                                                 Array.isArray(facilityData.data.blogs) &&
                                                 facilityData.data.blogs.some((b: number | { id: number }) => {
                                                     const blogId = typeof b === 'number' ? b : b.id;
                                                     return blogId === blog.id;
                                                 });
-                                            
+
                                             return (
                                                 <div
                                                     key={blog.id}
@@ -709,9 +702,8 @@ export default function AddFacilityPage() {
                                                             setSelectedBlogs([...selectedBlogs, blog.id]);
                                                         }
                                                     }}
-                                                    className={`flex items-center justify-between p-3 border rounded-md cursor-pointer hover:bg-gray-50 transition-colors ${
-                                                        isSelected ? 'bg-green-50 border-green-300' : 'border-gray-200'
-                                                    }`}
+                                                    className={`flex items-center justify-between p-3 border rounded-md cursor-pointer hover:bg-gray-50 transition-colors ${isSelected ? 'bg-green-50 border-green-300' : 'border-gray-200'
+                                                        }`}
                                                 >
                                                     <div className="flex items-center gap-3 flex-1">
                                                         {blog.feature_image && (
@@ -727,7 +719,7 @@ export default function AddFacilityPage() {
                                                         )}
                                                         <div className="flex-1">
                                                             <p className="font-medium text-sm line-clamp-1">{blog.title}</p>
-                                                            <div 
+                                                            <div
                                                                 className="text-xs text-gray-500 line-clamp-2 prose max-w-none"
                                                                 dangerouslySetInnerHTML={{ __html: blog.description?.substring(0, 100) + '...' || '' }}
                                                             />

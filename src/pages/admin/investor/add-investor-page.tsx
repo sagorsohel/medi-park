@@ -219,8 +219,8 @@ export default function AddInvestorPage() {
     const handleSubmit = async () => {
         if (isViewMode) return;
 
-        if (!formData.investor_name || !formData.email_address || !formData.mobile_number) {
-            toast.error("Please fill in all required fields.");
+        if (!formData.investor_name) {
+            toast.error("Investor name is required.");
             return;
         }
 
@@ -242,7 +242,11 @@ export default function AddInvestorPage() {
             navigate("/admin/investor");
         } catch (error: any) {
             console.error("Error saving investor:", error);
-            toast.error(error?.data?.message || "Failed to save investor. Please try again.");
+            const errorMessage =
+                error?.data?.errors ? Object.values(error.data.errors as Record<string, string[]>)[0]?.[0] :
+                    error?.data?.message ? error.data.message :
+                        "Failed to save investor. Please try again.";
+            toast.error(errorMessage as string);
         }
     };
 
@@ -416,14 +420,13 @@ export default function AddInvestorPage() {
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <Label htmlFor="email_address">Email Address *</Label>
+                                    <Label htmlFor="email_address">Email Address</Label>
                                     <Input
                                         id="email_address"
                                         type="email"
                                         value={formData.email_address}
                                         onChange={(e) => handleInputChange("email_address", e.target.value)}
                                         placeholder="Enter here"
-                                        required
                                         {...readOnlyProps}
                                     />
                                 </div>
@@ -432,13 +435,12 @@ export default function AddInvestorPage() {
                             {/* Mobile Number and Gender */}
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div className="space-y-2">
-                                    <Label htmlFor="mobile_number">Mobile Number *</Label>
+                                    <Label htmlFor="mobile_number">Mobile Number</Label>
                                     <Input
                                         id="mobile_number"
                                         value={formData.mobile_number}
                                         onChange={(e) => handleInputChange("mobile_number", e.target.value)}
                                         placeholder="Enter here"
-                                        required
                                         {...readOnlyProps}
                                     />
                                 </div>
