@@ -88,6 +88,7 @@ const PUBLIC_PATHS = [
   '/directors',
   '/career-pages',
   '/job-details',
+  '/job-applications',
 ]
 
 export const api = createApi({

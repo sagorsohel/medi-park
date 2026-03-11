@@ -208,6 +208,7 @@ export default function JobDetailPage() {
           open={isModalOpen}
           onOpenChange={setIsModalOpen}
           jobTitle={job.job_title}
+          jobId={job.id}
         />
       )}
     </div>

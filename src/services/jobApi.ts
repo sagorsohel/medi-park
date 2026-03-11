@@ -128,6 +128,14 @@ export const jobApi = api.injectEndpoints({
             }),
             invalidatesTags: ["JobApplication" as any],
         }),
+        createJobApplication: builder.mutation<{ message: string }, FormData>({
+            query: (data) => ({
+                url: "/job-applications",
+                method: "POST",
+                body: data,
+            }),
+            invalidatesTags: ["JobApplication" as any],
+        }),
     }),
 });
 
@@ -139,4 +147,5 @@ export const {
     useDeleteJobDetailMutation,
     useGetJobApplicationsQuery,
     useDeleteJobApplicationMutation,
+    useCreateJobApplicationMutation,
 } = jobApi;
