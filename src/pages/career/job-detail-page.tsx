@@ -193,7 +193,7 @@ export default function JobDetailPage() {
               <Button
                 variant="outline"
                 className="border-blue-900 text-primary hover:bg-blue-50 px-8 py-6 text-lg rounded-lg flex-1 sm:flex-none"
-                onClick={() => navigate("/career")}
+                onClick={() => navigate("/careers")}
               >
                 ← See All Positions
               </Button>
