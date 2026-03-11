@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Field, FieldLabel, FieldContent } from "@/components/ui/field";
-import { Loader2, RefreshCw } from "lucide-react";
+import { Loader2, RefreshCw, Plus, Trash2 } from "lucide-react";
 import {
   useGetAboutUsSectionQuery,
   useUpdateAboutUsSectionMutation,
@@ -19,6 +19,7 @@ interface EditableAboutSection {
   image_2?: string | File;
   image_3?: string | File;
   status?: 'active' | 'inactive';
+  features?: string[];
 }
 
 export function AboutSectionManage() {
@@ -41,6 +42,31 @@ export function AboutSectionManage() {
     }
   }, [data]);
 
+  const [newFeature, setNewFeature] = useState("");
+
+  const handleAddFeature = () => {
+    if (!newFeature.trim()) return;
+    const currentFeatures = editableData.features || data?.data?.features || [];
+    setEditableData(prev => ({
+      ...prev,
+      features: [...currentFeatures, newFeature.trim()],
+    }));
+    setNewFeature("");
+  };
+
+  const handleRemoveFeature = (index: number) => {
+    const currentFeatures = editableData.features || data?.data?.features || [];
+    setEditableData(prev => ({
+      ...prev,
+      features: currentFeatures.filter((_, i) => i !== index),
+    }));
+  };
+
+  const getFeatures = (): string[] => {
+    if (editableData.features !== undefined) return editableData.features;
+    return data?.data?.features || ['thi', 'ghj']; // Use provided features as fallback/initial
+  };
+
   const hasChanges = (): boolean => {
     if (!data?.data) return false;
     const section = data.data;
@@ -52,6 +78,14 @@ export function AboutSectionManage() {
     if (editableData.image_2 instanceof File) return true;
     if (editableData.image_3 instanceof File) return true;
     if (editableData.status !== undefined && editableData.status !== section.status) return true;
+
+    if (editableData.features !== undefined) {
+      const currentFeatures = section.features || [];
+      if (editableData.features.length !== currentFeatures.length) return true;
+      for (let i = 0; i < editableData.features.length; i++) {
+        if (editableData.features[i] !== currentFeatures[i]) return true;
+      }
+    }
 
     return false;
   };
@@ -342,6 +376,49 @@ export function AboutSectionManage() {
                   <option value="active">Active</option>
                   <option value="inactive">Inactive</option>
                 </select>
+              </FieldContent>
+            </Field>
+
+            <Field>
+              <FieldLabel>Features</FieldLabel>
+              <FieldContent>
+                <div className="space-y-3">
+                  <div className="flex gap-2">
+                    <Input
+                      value={newFeature}
+                      onChange={(e) => setNewFeature(e.target.value)}
+                      placeholder="Add a new feature"
+                      onKeyPress={(e) => e.key === "Enter" && handleAddFeature()}
+                      disabled={updating}
+                    />
+                    <Button
+                      type="button"
+                      onClick={handleAddFeature}
+                      disabled={updating || !newFeature.trim()}
+                      variant="outline"
+                      size="icon"
+                    >
+                      <Plus className="h-4 w-4" />
+                    </Button>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-2">
+                    {getFeatures().map((feature, index) => (
+                      <div
+                        key={index}
+                        className="flex items-center justify-between p-2 bg-gray-50 border border-gray-200 rounded-lg group"
+                      >
+                        <span className="text-sm text-gray-700">{feature}</span>
+                        <button
+                          onClick={() => handleRemoveFeature(index)}
+                          className="text-red-500 hover:text-red-700 p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                          disabled={updating}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </FieldContent>
             </Field>
           </div>

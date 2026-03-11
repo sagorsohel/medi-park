@@ -43,6 +43,7 @@ export interface AboutUsSection {
   image_2: string;
   image_3: string;
   status: "active" | "inactive";
+  features?: string[];
   created_at: string;
   updated_at: string;
 }
@@ -61,6 +62,7 @@ export interface UpdateAboutUsSectionPayload {
   image_2?: string | File;
   image_3?: string | File;
   status?: "active" | "inactive";
+  features?: string[];
 }
 
 export interface AboutUsBannerSection {
@@ -350,6 +352,11 @@ export const homepageApi = api.injectEndpoints({
           }
         }
         if (data.status !== undefined) formData.append("status", data.status);
+        if (data.features !== undefined) {
+          data.features.forEach((feature, index) => {
+            formData.append(`features[${index}]`, feature);
+          });
+        }
         return {
           url: `/homepage-about-us-sections/${id}`,
           method: "POST",
