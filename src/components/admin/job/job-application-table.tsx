@@ -53,13 +53,8 @@ export function JobApplicationTable({
                     <TableRow>
                         <TableHead className="w-[50px] p-4">
                             <Checkbox
-                                checked={allSelected}
+                                checked={someSelected ? "indeterminate" : allSelected}
                                 onCheckedChange={(checked) => onSelectAll(checked as boolean)}
-                                ref={(input) => {
-                                    if (input) {
-                                        input.indeterminate = someSelected;
-                                    }
-                                }}
                             />
                         </TableHead>
                         <TableHead className="font-semibold text-gray-700">Applicant Name</TableHead>
