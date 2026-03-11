@@ -70,7 +70,7 @@ export function JobApplicationModal({ open, onOpenChange, jobTitle, jobId }: Job
 
     if (formData.upload_cv) data.append("upload_cv", formData.upload_cv);
     if (formData.upload_image) data.append("upload_image", formData.upload_image);
-    data.append("status", "active");
+    data.append("status", "pending");
 
     try {
       await createJobApplication(data).unwrap();

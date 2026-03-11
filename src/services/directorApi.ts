@@ -151,6 +151,14 @@ export const directorApi = api.injectEndpoints({
         { type: "Director", id: "LIST" },
       ],
     }),
+    updateDirectorsOrder: builder.mutation<{ success: boolean; message: string }, { orders: { id: number; order: number }[] }>({
+      query: (data) => ({
+        url: "/directors/update-order",
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: [{ type: "Director", id: "LIST" }],
+    }),
   }),
 });
 
@@ -160,5 +168,6 @@ export const {
   useCreateDirectorMutation,
   useUpdateDirectorMutation,
   useDeleteDirectorMutation,
+  useUpdateDirectorsOrderMutation,
 } = directorApi;
 

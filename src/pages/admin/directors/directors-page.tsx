@@ -11,9 +11,11 @@ import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import {
   useGetDirectorsQuery,
   useDeleteDirectorMutation,
+  useUpdateDirectorsOrderMutation,
   type Director,
 } from "@/services/directorApi";
 import toast from "react-hot-toast";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 
 export default function DirectorsPage() {
   const navigate = useNavigate();
@@ -21,15 +23,47 @@ export default function DirectorsPage() {
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
   const [directorToDelete, setDirectorToDelete] = useState<number | null>(null);
 
-  const { data, isLoading, refetch } = useGetDirectorsQuery({ page: currentPage });
+  const { data, isLoading, refetch } = useGetDirectorsQuery({
+    page: currentPage,
+    limit: 100 // Set a high limit for ordering to be effective across all directors or just current page
+  });
   const [deleteDirector, { isLoading: isDeleting }] = useDeleteDirectorMutation();
+  const [updateOrder, { isLoading: isUpdatingOrder }] = useUpdateDirectorsOrderMutation();
+
+  const [localDirectors, setLocalDirectors] = useState<Director[]>([]);
 
   useEffect(() => {
-    refetch();
-  }, [currentPage, refetch]);
+    if (data?.data) {
+      setLocalDirectors(data.data);
+    }
+  }, [data]);
 
-  const directors: Director[] = useMemo(() => data?.data ?? [], [data]);
+  const directors = localDirectors;
   const pagination = data?.pagination;
+
+  const handleMove = async (index: number, direction: 'left' | 'right') => {
+    const newDirectors = [...localDirectors];
+    const targetIndex = direction === 'left' ? index - 1 : index + 1;
+
+    if (targetIndex < 0 || targetIndex >= newDirectors.length) return;
+
+    const [moveditem] = newDirectors.splice(index, 1);
+    newDirectors.splice(targetIndex, 0, moveditem);
+
+    setLocalDirectors(newDirectors);
+
+    const payload = {
+      orders: newDirectors.map((d, i) => ({ id: d.id, order: i + 1 }))
+    };
+
+    try {
+      await updateOrder(payload).unwrap();
+      toast.success("Order updated");
+    } catch (err) {
+      toast.error("Failed to update order");
+      refetch();
+    }
+  };
 
   const handleDeleteClick = (id: number) => {
     setDirectorToDelete(id);
@@ -82,7 +116,7 @@ export default function DirectorsPage() {
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-          {directors.map((director) => (
+          {directors.map((director, index) => (
             <Card key={director.id} className="flex flex-col">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-lg font-semibold">
@@ -98,6 +132,26 @@ export default function DirectorsPage() {
                 >
                   {director.status === "active" ? "Active" : "Inactive"}
                 </Badge>
+                <div className="flex gap-1 ml-2">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-8 w-8 text-gray-500 hover:text-primary"
+                    onClick={() => handleMove(index, 'left')}
+                    disabled={index === 0 || isUpdatingOrder}
+                  >
+                    <ArrowLeft className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-8 w-8 text-gray-500 hover:text-primary"
+                    onClick={() => handleMove(index, 'right')}
+                    disabled={index === directors.length - 1 || isUpdatingOrder}
+                  >
+                    <ArrowRight className="h-4 w-4" />
+                  </Button>
+                </div>
               </CardHeader>
               <CardContent className="flex-1 flex flex-col p-4 gap-3">
                 <div className="flex items-start gap-4">
