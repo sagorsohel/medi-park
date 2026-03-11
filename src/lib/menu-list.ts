@@ -3,7 +3,7 @@ import {
   // Settings,
   FileText,
   Building2,
-  // Briefcase,
+  Briefcase,
   // UserCog,
   // Wrench,
   Home,
@@ -116,6 +116,12 @@ export function getMenuList(_pathname: string): Group[] {
           href: "/admin/website/about",
           label: "About Us",
           icon: Phone,
+          submenus: []
+        },
+        {
+          href: "/admin/website/careers",
+          label: "Careers",
+          icon: Briefcase,
           submenus: []
         },
         {

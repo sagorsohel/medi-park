@@ -33,6 +33,7 @@ import AdminPanelLayout from '@/components/admin-panel/admin-panel-layout'
 import UserPanelLayout from '@/components/user-panel/user-panel-layout'
 import { WebsiteLayout } from '@/components/website/website-layout'
 import AboutPageManage from '@/pages/admin/about-page-manage/about-page-manage'
+import CareerPageManagePage from '@/pages/admin/career-page-manage/career-page-manage'
 
 import NewsPageManage from '@/pages/admin/news/news-page'
 import AddNewsPage from '@/pages/admin/news/add-news-page'
@@ -148,6 +149,7 @@ const router = createBrowserRouter([
       { path: "dashboard", element: <DashboardPage /> },
       { path: "website/home", element: <WebHomeManagePage /> },
       { path: "website/about", element: <AboutPageManage /> },
+      { path: "website/careers", element: <CareerPageManagePage /> },
       { path: "website/facilities", element: <FacilitiesPageAdmin /> },
       { path: "website/facilities/new", element: <AddFacilityPage /> },
       { path: "website/facilities/edit/:id", element: <AddFacilityPage /> },
