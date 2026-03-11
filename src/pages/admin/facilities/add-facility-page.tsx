@@ -19,6 +19,7 @@ import { useGetBlogsQuery } from "@/services/blogApi";
 import toast from "react-hot-toast";
 import ReactQuill from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css';
+import { IconSelector } from "@/components/admin/icon-selector";
 
 const quillModules = {
     toolbar: [
@@ -79,6 +80,7 @@ export default function AddFacilityPage() {
     const [description2, setDescription2] = useState("");
     const [footer, setFooter] = useState("");
     const [status, setStatus] = useState<"active" | "inactive">("inactive");
+    const [icon, setIcon] = useState("");
     const [isSpecialized, setIsSpecialized] = useState<boolean>(false);
     const [imageFile, setImageFile] = useState<File | null>(null);
     const [imagePreview, setImagePreview] = useState<string | null>(null);
@@ -110,6 +112,7 @@ export default function AddFacilityPage() {
                 setDescription2(facility.description2 || "");
                 setFooter(facility.footer || "");
                 setStatus(facility.status || "inactive");
+                setIcon(facility.icon || "");
                 setIsSpecialized(facility.is_specialized || false);
                 setImagePreview(facility.image || null);
                 setAccordions(facility.accordions || []);
@@ -178,6 +181,7 @@ export default function AddFacilityPage() {
                 description2: description2 || undefined,
                 footer: footer || undefined,
                 status,
+                icon,
                 is_specialized: (isSpecialized ? 1 : 0) as boolean | number,
                 image: imageFile || imagePreview || "",
                 accordions: accordions.length > 0 ? accordions : undefined,
@@ -393,6 +397,17 @@ export default function AddFacilityPage() {
                                 )}
                             </div>
                         )}
+                    </FieldContent>
+                </Field>
+
+                <Field>
+                    <FieldLabel>Icon</FieldLabel>
+                    <FieldContent>
+                        <IconSelector
+                            value={icon}
+                            onChange={setIcon}
+                            disabled={isViewMode}
+                        />
                     </FieldContent>
                 </Field>
 
@@ -767,7 +782,7 @@ export default function AddFacilityPage() {
                     </div>
                 )}
             </div>
-        </div>
+        </div >
     );
 }
 

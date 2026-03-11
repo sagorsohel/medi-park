@@ -10,6 +10,7 @@ import { Loader2, Edit2, Trash2, Eye } from "lucide-react";
 import { useGetFacilitiesQuery, useDeleteFacilityMutation } from "@/services/homepageApi";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import toast from "react-hot-toast";
+import { DynamicIcon } from "@/components/dynamic-icon";
 
 export default function FacilitiesPage() {
     const navigate = useNavigate();
@@ -171,16 +172,25 @@ export default function FacilitiesPage() {
                                             </div>
                                         </CardHeader>
                                         <CardContent className="space-y-4 p-3">
-                                            <div>
-                                                <img
-                                                    src={facility.image}
-                                                    alt={facility.title}
-                                                    className="w-full h-48 object-cover rounded border"
-                                                    onError={(e) => {
-                                                        const target = e.target as HTMLImageElement;
-                                                        target.src = "/vite.svg";
-                                                    }}
-                                                />
+                                            <div className="relative w-full h-48 bg-gray-50 rounded border overflow-hidden flex items-center justify-center group">
+                                                {facility.icon ? (
+                                                    <div className="flex items-center justify-center w-full h-full bg-primary/5">
+                                                        <DynamicIcon
+                                                            name={facility.icon}
+                                                            className="w-20 h-20 text-primary transition-transform group-hover:scale-110"
+                                                        />
+                                                    </div>
+                                                ) : (
+                                                    <img
+                                                        src={facility.image}
+                                                        alt={facility.title}
+                                                        className="w-full h-full object-cover transition-transform group-hover:scale-105"
+                                                        onError={(e) => {
+                                                            const target = e.target as HTMLImageElement;
+                                                            target.src = "/vite.svg";
+                                                        }}
+                                                    />
+                                                )}
                                             </div>
                                             <div>
                                                 <p className="text-gray-700 line-clamp-2">{facility.title}</p>

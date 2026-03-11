@@ -80,6 +80,7 @@ export interface Facility {
   description2?: string;
   footer?: string;
   image: string;
+  icon?: string;
   status: "active" | "inactive";
   is_specialized?: boolean;
   accordions?: Array<{ title: string; description: string }>;
@@ -117,6 +118,7 @@ export interface CreateFacilityPayload {
   description2?: string;
   footer?: string;
   image: string | File;
+  icon?: string;
   status?: "active" | "inactive";
   is_specialized?: boolean | number;
   accordions?: Array<{ title: string; description: string }>;
@@ -131,6 +133,7 @@ export interface UpdateFacilityPayload {
   description2?: string;
   footer?: string;
   image?: string | File;
+  icon?: string;
   status?: "active" | "inactive";
   is_specialized?: boolean | number;
   accordions?: Array<{ title: string; description: string }>;
@@ -447,6 +450,9 @@ export const homepageApi = api.injectEndpoints({
         formData.append("title", body.title);
         formData.append("short_description", body.short_description);
         formData.append("image", body.image);
+        if (body.icon) {
+          formData.append("icon", body.icon);
+        }
         if (body.description1) {
           formData.append("description1", body.description1);
         }
@@ -510,6 +516,9 @@ export const homepageApi = api.injectEndpoints({
         }
         if (body.image) {
           formData.append("image", body.image);
+        }
+        if (body.icon) {
+          formData.append("icon", body.icon);
         }
         if (body.status) {
           formData.append("status", body.status);

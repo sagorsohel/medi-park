@@ -6,6 +6,7 @@ import { useGetFacilitiesPublicQuery } from "@/services/homepageApi";
 import { motion, type Variants } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { DynamicIcon } from "@/components/dynamic-icon";
 
 export function SpecialitiesSection() {
   const { data } = useGetFacilitiesPublicQuery();
@@ -139,15 +140,22 @@ export function SpecialitiesSection() {
                         <div className="bg-[#F8FBFF] rounded-[16px] p-4 h-[140px] flex flex-col items-center justify-center text-center transition-all duration-300 hover:bg-primary hover:shadow-md border border-transparent hover:border-primary">
                           {/* Facility Icon */}
                           <div className="w-12 h-12 mb-3 flex items-center justify-center">
-                            <img
-                              src={facility.image}
-                              alt={facility.title}
-                              className="w-full h-full object-contain rounded-lg  md:group-hover:invert transition-all duration-300"
-                              onError={(e) => {
-                                const target = e.target as HTMLImageElement;
-                                target.src = "/vite.svg";
-                              }}
-                            />
+                            {facility.icon ? (
+                              <DynamicIcon
+                                name={facility.icon}
+                                className="w-8 h-8 md:w-10 md:h-10 text-primary group-hover:text-white transition-all duration-300 transform group-hover:scale-110"
+                              />
+                            ) : (
+                              <img
+                                src={facility.image}
+                                alt={facility.title}
+                                className="w-full h-full object-contain rounded-lg md:group-hover:invert transition-all duration-300"
+                                onError={(e) => {
+                                  const target = e.target as HTMLImageElement;
+                                  target.src = "/vite.svg";
+                                }}
+                              />
+                            )}
                           </div>
                           {/* Facility Title */}
                           <h3 className="text-xs sm:text-sm font-semibold text-[#1e3a5f] line-clamp-3 md:group-hover:text-white transition-colors duration-300 leading-tight px-1">
