@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, startTransition } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import {
   useCreateDirectorMutation,
@@ -87,22 +87,20 @@ export default function AddDirectorPage() {
   useEffect(() => {
     if (directorData?.data && directorId && !hasLoadedData) {
       const director = directorData.data;
-      startTransition(() => {
-        const normalizedStatus =
-          director.status === "active" ? "active" : "inactive";
+      const normalizedStatus =
+        director.status === "active" ? "active" : "inactive";
 
-        setFormData({
-          name: director.name || "",
-          designation: director.designation || "",
-          special_message: director.special_message || "",
-          message: director.message || "",
-          status: normalizedStatus,
-        });
-        if (director.photo) {
-          setPhotoPreview(director.photo);
-        }
-        setHasLoadedData(true);
+      setFormData({
+        name: director.name || "",
+        designation: director.designation || "",
+        special_message: director.special_message || "",
+        message: director.message || "",
+        status: normalizedStatus,
       });
+      if (director.photo) {
+        setPhotoPreview(director.photo);
+      }
+      setHasLoadedData(true);
     }
   }, [directorData, directorId, hasLoadedData]);
 
@@ -193,7 +191,7 @@ export default function AddDirectorPage() {
         onSubmit={handleSubmit}
         className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 w-full"
       >
-        {isLoading && !isCreateMode ? (
+        {isLoading || (!isCreateMode && !hasLoadedData) ? (
           <div className="flex items-center justify-center py-12">
             <Loader2 className="h-8 w-8 animate-spin text-gray-400" />
           </div>

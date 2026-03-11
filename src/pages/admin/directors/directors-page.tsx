@@ -127,7 +127,7 @@ export default function DirectorsPage() {
                 </div>
                 {director.message && (
                   <p className="text-sm text-gray-600 line-clamp-3">
-                    {director.message}
+                    {director.message.replace(/<[^>]*>?/gm, '')}
                   </p>
                 )}
                 <div className="mt-4 flex justify-between gap-2">
