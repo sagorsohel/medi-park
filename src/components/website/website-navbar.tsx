@@ -38,11 +38,11 @@ export function WebsiteNavbar() {
   const activeFutureVentures = futureVenturesData?.data?.filter(f => f.status === 'active') || [];
 
   const directors = directorsData?.data || [];
-  const keyDesignations = ["Chairman", "Managing Director", "Vice Chairman"];
+  const keyDesignations = ["Chairman", "Managing Director", "Vice Chairman", "Deputy Managing Director"];
   const importantDirectors = directors.filter(d => keyDesignations.some(k => d.designation.includes(k) || k.includes(d.designation)));
 
   const sortedDirectors = [...importantDirectors].sort((a, b) => {
-    const order = { "Chairman": 1, "Vice Chairman": 2, "Managing Director": 3 };
+    const order = { "Chairman": 1, "Vice Chairman": 2, "Managing Director": 3, "Deputy Managing Director": 4 };
     const rankA = order[a.designation as keyof typeof order] || 99;
     const rankB = order[b.designation as keyof typeof order] || 99;
     return rankA - rankB;
@@ -55,7 +55,7 @@ export function WebsiteNavbar() {
   const getDirectorLink = (director: Director) => {
     const des = director.designation.toLowerCase();
     if (des.includes('chairman') && !des.includes('vice')) return "/about/message-of-chairman";
-    if (des.includes('managing director')) return "/about/message-of-managing-director";
+    if (des.includes('managing director') && !des.includes('deputy')) return "/about/message-of-managing-director";
     return `/about/board-of-directors/${director.id}`;
   };
 

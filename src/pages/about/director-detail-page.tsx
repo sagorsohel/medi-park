@@ -24,7 +24,7 @@ export default function DirectorDetailPage() {
         <div className="w-full bg-slate-50 min-h-screen">
             <PageHeroSection
                 image={director.photo || "https://placehold.co/1920x600/e2e8f0/1e293b?text=Director+Detail"}
-                heading={director.name}
+                heading={`Message of ${director.designation}`}
                 alt={director.name}
                 overlayOpacity={0.5}
             />
@@ -56,7 +56,7 @@ export default function DirectorDetailPage() {
                         {/* Content Section */}
                         <div className="md:w-2/3 p-8 md:p-12">
                             <h1 className="text-3xl md:text-4xl font-bold text-[#1e3a8a] mb-2 uppercase relative inline-block">
-                                {director.designation}
+                                MESSAGE OF {director.designation}
                                 <div className="h-1 w-20 bg-[#10b981] mt-2 rounded-full"></div>
                             </h1>
 
