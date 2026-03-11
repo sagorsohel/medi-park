@@ -56,7 +56,15 @@ export function VideoLinkManage() {
         setUpdating(true);
 
         try {
-            await updateVideoLink(editableData).unwrap();
+            const currentObj: any = data?.data || {};
+            const payload = {
+                title: editableData.title !== undefined ? editableData.title : currentObj.title,
+                description: editableData.description !== undefined ? editableData.description : currentObj.description,
+                video: editableData.video !== undefined ? editableData.video : currentObj.video,
+                status: editableData.status !== undefined ? editableData.status : currentObj.status,
+            };
+
+            await updateVideoLink(payload).unwrap();
 
             setEditableData({});
             refetch();
@@ -162,15 +170,35 @@ export function VideoLinkManage() {
                     <Field>
                         <FieldLabel>Preview</FieldLabel>
                         <FieldContent>
-                            <div className="relative w-full max-w-xl rounded-lg overflow-hidden border border-gray-300 bg-black">
-                                <video
-                                    key={getValue("video")}
-                                    controls
-                                    className="w-full"
-                                    src={getValue("video")}
-                                >
-                                    Your browser does not support the video tag.
-                                </video>
+                            <div className="relative w-full max-w-xl rounded-lg overflow-hidden border border-gray-300 bg-black aspect-video flex items-center justify-center">
+                                {(() => {
+                                    const videoUrl = getValue("video");
+                                    const youtubeMatch = videoUrl.match(/^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/);
+                                    const youtubeId = youtubeMatch && youtubeMatch[2].length === 11 ? youtubeMatch[2] : null;
+
+                                    if (youtubeId) {
+                                        return (
+                                            <iframe
+                                                className="w-full h-full"
+                                                src={`https://www.youtube.com/embed/${youtubeId}`}
+                                                title="Video Preview"
+                                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                                allowFullScreen
+                                            ></iframe>
+                                        );
+                                    }
+
+                                    return (
+                                        <video
+                                            key={videoUrl}
+                                            controls
+                                            className="w-full h-full object-contain"
+                                            src={videoUrl}
+                                        >
+                                            Your browser does not support the video tag.
+                                        </video>
+                                    );
+                                })()}
                             </div>
                         </FieldContent>
                     </Field>
