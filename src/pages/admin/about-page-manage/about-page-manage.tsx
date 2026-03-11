@@ -5,6 +5,7 @@ import { WhoWeAreManage } from "@/components/admin/who-we-are-manage";
 import { MissionVisionManage } from "@/components/admin/mission-vision-manage";
 import { TransformingHealthcareManage } from "@/components/admin/transforming-healthcare-manage";
 import { MRCPPACESManage } from "@/components/admin/mrcp-paces-manage";
+import { VideoLinkManage } from "@/components/admin/video-link-manage";
 
 export default function AboutPageManage() {
     return (
@@ -15,7 +16,7 @@ export default function AboutPageManage() {
 
             {/* About Page Banner Management */}
             <AboutPageBannerManage />
-            
+
             {/* Who We Are Section */}
             <WhoWeAreManage />
 
@@ -27,6 +28,9 @@ export default function AboutPageManage() {
 
             {/* MRCP PACES */}
             <MRCPPACESManage />
+
+            {/* Video Link */}
+            <VideoLinkManage />
         </div>
     );
 }
