@@ -86,6 +86,8 @@ const PUBLIC_PATHS = [
   '/about-us-page-after-our-vision-sections/active',
   '/about-us-page-2nd-after-our-vision-sections/active',
   '/directors',
+  '/career-pages',
+  '/job-details',
 ]
 
 export const api = createApi({

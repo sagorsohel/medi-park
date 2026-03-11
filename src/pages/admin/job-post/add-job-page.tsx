@@ -8,7 +8,8 @@ import { Input } from "@/components/ui/input";
 import { Field, FieldLabel, FieldContent } from "@/components/ui/field";
 import { Loader2, ArrowLeft, Save } from "lucide-react";
 import toast from "react-hot-toast";
-import { Textarea } from "@/components/ui/textarea";
+import "react-quill-new/dist/quill.snow.css";
+import ReactQuill from "react-quill-new";
 import {
     useGetJobDetailByIdQuery,
     useCreateJobDetailMutation,
@@ -249,11 +250,11 @@ export default function AddJobPage() {
                             <Field>
                                 <FieldLabel>Job Purpose</FieldLabel>
                                 <FieldContent>
-                                    <Textarea
+                                    <ReactQuill
+                                        theme="snow"
                                         value={formData.purpose}
-                                        onChange={(e) => handleChange("purpose", e.target.value)}
-                                        placeholder="Brief description of the job purpose..."
-                                        rows={3}
+                                        onChange={(value) => handleChange("purpose", value)}
+                                        className="bg-white min-h-[150px]"
                                     />
                                 </FieldContent>
                             </Field>
@@ -261,11 +262,11 @@ export default function AddJobPage() {
                             <Field>
                                 <FieldLabel>General Job Description</FieldLabel>
                                 <FieldContent>
-                                    <Textarea
+                                    <ReactQuill
+                                        theme="snow"
                                         value={formData.general_job_description}
-                                        onChange={(e) => handleChange("general_job_description", e.target.value)}
-                                        placeholder="General description..."
-                                        rows={4}
+                                        onChange={(value) => handleChange("general_job_description", value)}
+                                        className="bg-white min-h-[200px]"
                                     />
                                 </FieldContent>
                             </Field>
@@ -273,11 +274,11 @@ export default function AddJobPage() {
                             <Field>
                                 <FieldLabel>Department Specific Job Description</FieldLabel>
                                 <FieldContent>
-                                    <Textarea
+                                    <ReactQuill
+                                        theme="snow"
                                         value={formData.department_specific_job_description}
-                                        onChange={(e) => handleChange("department_specific_job_description", e.target.value)}
-                                        placeholder="Department specific description..."
-                                        rows={4}
+                                        onChange={(value) => handleChange("department_specific_job_description", value)}
+                                        className="bg-white min-h-[200px]"
                                     />
                                 </FieldContent>
                             </Field>
@@ -292,11 +293,11 @@ export default function AddJobPage() {
                             <Field>
                                 <FieldLabel>Training and Development</FieldLabel>
                                 <FieldContent>
-                                    <Textarea
+                                    <ReactQuill
+                                        theme="snow"
                                         value={formData.training_and_development}
-                                        onChange={(e) => handleChange("training_and_development", e.target.value)}
-                                        placeholder="Training requirements..."
-                                        rows={3}
+                                        onChange={(value) => handleChange("training_and_development", value)}
+                                        className="bg-white min-h-[150px]"
                                     />
                                 </FieldContent>
                             </Field>
@@ -304,11 +305,11 @@ export default function AddJobPage() {
                             <Field>
                                 <FieldLabel>Prevention and Control of Infections</FieldLabel>
                                 <FieldContent>
-                                    <Textarea
+                                    <ReactQuill
+                                        theme="snow"
                                         value={formData.prevention_and_control_of_infections}
-                                        onChange={(e) => handleChange("prevention_and_control_of_infections", e.target.value)}
-                                        placeholder="Guidelines or requirements..."
-                                        rows={3}
+                                        onChange={(value) => handleChange("prevention_and_control_of_infections", value)}
+                                        className="bg-white min-h-[150px]"
                                     />
                                 </FieldContent>
                             </Field>
@@ -316,11 +317,11 @@ export default function AddJobPage() {
                             <Field>
                                 <FieldLabel>Basic Competencies</FieldLabel>
                                 <FieldContent>
-                                    <Textarea
+                                    <ReactQuill
+                                        theme="snow"
                                         value={formData.basic_competencies}
-                                        onChange={(e) => handleChange("basic_competencies", e.target.value)}
-                                        placeholder="Required basic competencies..."
-                                        rows={3}
+                                        onChange={(value) => handleChange("basic_competencies", value)}
+                                        className="bg-white min-h-[150px]"
                                     />
                                 </FieldContent>
                             </Field>
@@ -328,11 +329,11 @@ export default function AddJobPage() {
                             <Field>
                                 <FieldLabel>Behavioral Competencies</FieldLabel>
                                 <FieldContent>
-                                    <Textarea
+                                    <ReactQuill
+                                        theme="snow"
                                         value={formData.behavioral_competencies}
-                                        onChange={(e) => handleChange("behavioral_competencies", e.target.value)}
-                                        placeholder="Required behavioral traits..."
-                                        rows={3}
+                                        onChange={(value) => handleChange("behavioral_competencies", value)}
+                                        className="bg-white min-h-[150px]"
                                     />
                                 </FieldContent>
                             </Field>
