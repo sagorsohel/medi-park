@@ -21,7 +21,7 @@ export function WebsiteLayout() {
   return (
     <div className="flex min-h-screen flex-col">
       <WebsiteNavbar />
-      <main className="flex-1 overflow-hidden py-28">
+      <main className="flex-1 overflow-hidden py-[100px]">
         <Outlet />
       </main>
       <WebsiteFooter />

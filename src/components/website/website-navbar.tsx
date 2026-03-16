@@ -4,8 +4,9 @@ import { NavLink, Link } from "react-router";
 import { useAppSelector, useAppDispatch } from "@/store/hooks";
 import { logout } from "@/store/slices/authSlice";
 import { Button } from "@/components/ui/button";
-import { Menu, ChevronDown, Facebook, Linkedin, Youtube, Phone } from "lucide-react";
-import { useState, useEffect } from "react";
+import { Menu, ChevronDown, Facebook, Linkedin, Youtube, Phone, MessageCircle, Instagram } from "lucide-react";
+import { FaWhatsapp } from "react-icons/fa6";
+import { useState, useEffect, useMemo } from "react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import {
   Collapsible,
@@ -15,11 +16,24 @@ import {
 import { useGetFacilitiesPublicQuery, useGetSpecializedFacilitiesPublicQuery } from "@/services/homepageApi";
 import { useGetFutureVenturesPublicQuery } from "@/services/futureVenturesApi";
 import { useGetDirectorsQuery, type Director } from "@/services/directorApi";
+import { useGetFooterContactQuery, useGetSocialLinksQuery } from "@/services/contactPageApi";
 import { DynamicIcon } from "@/components/dynamic-icon";
 
 export function WebsiteNavbar() {
   const dispatch = useAppDispatch();
   const { isAuthenticated, user } = useAppSelector((state) => state.auth);
+
+  const { data: footerContactData } = useGetFooterContactQuery();
+  const { data: socialLinksData } = useGetSocialLinksQuery(1);
+
+  // Get active social links
+  const activeSocialLinks = useMemo(() => {
+    if (!socialLinksData?.data) return [];
+    return socialLinksData.data.filter((link) => link.status === "active");
+  }, [socialLinksData]);
+
+  const footerContact = footerContactData?.data;
+  const firstPhone = footerContact?.phone && footerContact.phone.length > 0 ? footerContact.phone[0] : "10633";
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
   const [departmentsOpen, setDepartmentsOpen] = useState<boolean>(false);
@@ -67,23 +81,29 @@ export function WebsiteNavbar() {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 w-full shadow-lg font-sans">
       {/* Top Black Bar */}
-      <div className="bg-[#2D2D2D] text-white py-1.5 px-4 md:px-8 flex flex-col sm:flex-row justify-between items-center text-[13px] w-full border-b border-gray-700">
+      <div className="bg-[#234687] text-white py-1.5 px-4 md:px-8 flex flex-col sm:flex-row justify-between items-center text-[13px] w-full border-b border-gray-700">
         <div className="flex items-center gap-5 mb-2 sm:mb-0">
-          <a href="#" className="hover:text-[#00A884] transition-colors"><Facebook className="w-[14px] h-[14px] fill-current" /></a>
-          <a href="#" className="hover:text-[#00A884] transition-colors"><Linkedin className="w-[14px] h-[14px] fill-current" /></a>
-          <a href="#" className="hover:text-[#00A884] transition-colors"><Youtube className="w-[14px] h-[14px] fill-current" /></a>
+          <a href={activeSocialLinks.find(l => l.name.toLowerCase().includes('facebook'))?.link || '#'} className="hover:text-primary transition-colors"><Facebook className="w-[14px] h-[14px] fill-current" /></a>
+          <a href={activeSocialLinks.find(l => l.name.toLowerCase().includes('twitter') || l.name.toLowerCase().includes('x'))?.link || '#'} className="hover:text-primary transition-colors">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M13.3174 10.7749L21.1143 1.76465H19.2687L12.5025 9.58434L7.10098 1.76465H0.880859L9.05711 13.627L0.880859 23.1316H2.72661L9.89437 14.8466L15.5861 23.1316H21.8062L13.317 10.7749H13.3174ZM10.8252 13.7712L9.99849 12.585L3.39169 3.0983H6.22359L11.5546 10.7423L12.3813 11.9285L19.3364 21.9161H16.5045L10.8252 13.7716V13.7712Z" fill="currentColor" />
+            </svg>
+          </a>
+          <a href={activeSocialLinks.find(l => l.name.toLowerCase().includes('instagram'))?.link || '#'} className="hover:text-primary transition-colors"><Instagram className="w-[14px] h-[14px]" /></a>
+          <a href={activeSocialLinks.find(l => l.name.toLowerCase().includes('linkedin'))?.link || '#'} className="hover:text-primary transition-colors"><Linkedin className="w-[14px] h-[14px] fill-current" /></a>
+          <a href={activeSocialLinks.find(l => l.name.toLowerCase().includes('youtube'))?.link || '#'} className="hover:text-primary transition-colors"><Youtube className="w-[14px] h-[14px] fill-current" /></a>
         </div>
         <div className="font-bold tracking-[0.1em] flex items-center gap-2 uppercase">
-          [ Hotline - 10633 ]
+          [ Hotline - {firstPhone} ]
         </div>
       </div>
 
       {/* Main Navbar */}
-      <div className="w-full bg-[#00A884] flex items-stretch h-[65px] md:h-[75px] relative">
+      <div className="w-full bg-primary border-b-6 border-primary flex items-stretch h-[65px] md:h-[75px] relative">
         {/* Logo Section Desktop */}
         <div
-          className="bg-white flex items-center justify-center pl-4 pr-16 relative z-10 hidden sm:flex"
-          style={{ clipPath: 'polygon(0 0, 100% 0, 88% 100%, 0% 100%)', width: '360px' }}
+          className="bg-white items-center justify-center  relative z-10 hidden sm:flex"
+          style={{ clipPath: 'polygon(0 0, 100% 0, 88% 100%, 0% 100%)', width: '260px' }}
         >
           <Link to="/" className="flex items-center -ml-10">
             <img
@@ -114,20 +134,33 @@ export function WebsiteNavbar() {
         </div>
 
         {/* Desktop Navigation */}
-        <nav className="flex-1 hidden lg:flex items-center justify-end xl:justify-start xl:pl-6 pr-6 text-white text-[13px] font-bold tracking-wide">
-          <div className="flex items-stretch h-full gap-5 xl:gap-8 static">
+        <nav className="flex-1 hidden lg:flex items-center justify-start xl:pl-3 pr-3 text-white text-[13px] font-bold tracking-wide h-full">
+          <div className="flex items-stretch h-full gap-1 xl:gap-2 static">
 
-            <Link to="/" className="h-full flex items-center hover:text-white/80 transition-colors uppercase">
-              HOME
-            </Link>
+            <NavLink
+              to="/"
+              className="h-full flex items-center px-1  whitespace-nowrap uppercase group/link"
+            >
+              {({ isActive }) => (
+                <span className={`px-3 py-2 rounded-md transition-all ${isActive ? 'bg-black/20' : 'group-hover/link:bg-black/10'}`}>
+                  HOME
+                </span>
+              )}
+            </NavLink>
 
-            {/* ABOUT US */}
             <div className="group flex items-stretch cursor-pointer relative">
-              <div className="h-full flex items-center gap-1 hover:text-white/80 transition-colors uppercase">
-                ABOUT US <ChevronDown className="w-4 h-4 transition-transform group-hover:rotate-180" />
-              </div>
-              <div className="absolute top-full left-0 w-[250px] bg-white text-gray-800 shadow-[0_10px_30px_rgba(0,0,0,0.1)] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top border-t-[3px] border-[#00A884] z-50">
-                <Link to="/about" className="block px-5 py-3.5 hover:bg-[#00A884]/5 hover:text-[#00A884] border-b border-gray-100 uppercase text-xs font-semibold transition-colors">About MSH</Link>
+              <NavLink
+                to="/about"
+                className="h-full flex items-center px-1 whitespace-nowrap uppercase"
+              >
+                {({ isActive }) => (
+                  <span className={`flex items-center gap-1 px-3 py-2 rounded-md transition-all ${isActive ? 'bg-black/20' : 'group-hover:bg-black/10'}`}>
+                    ABOUT US <ChevronDown className="w-4 h-4 transition-transform group-hover:rotate-180" />
+                  </span>
+                )}
+              </NavLink>
+              <div className="absolute top-full left-0 w-[250px] bg-white text-gray-800 shadow-[0_10px_30px_rgba(0,0,0,0.1)] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top border-t-[3px] border-primary z-50">
+                <Link to="/about" className="block px-5 py-3.5 hover:bg-primary/5 hover:text-primary border-b border-gray-100 uppercase text-xs font-semibold transition-colors">About MSH</Link>
                 <Link to="/mission" className="block px-5 py-3.5 hover:bg-[#00A884]/5 hover:text-[#00A884] border-b border-gray-100 uppercase text-xs font-semibold transition-colors">Mission</Link>
                 <Link to="/vision" className="block px-5 py-3.5 hover:bg-[#00A884]/5 hover:text-[#00A884] border-b border-gray-100 uppercase text-xs font-semibold transition-colors">Vision</Link>
                 {sortedDirectors.map(director => (
@@ -135,7 +168,7 @@ export function WebsiteNavbar() {
                     {getDirectorLabel(director)}
                   </Link>
                 ))}
-                <Link to="/about" className="block px-5 py-3.5 hover:bg-[#00A884]/5 hover:text-[#00A884] uppercase text-xs font-semibold transition-colors">Board of Directors</Link>
+                <Link to="/about" className="block px-5 py-3.5 hover:bg-primary/5 hover:text-primary uppercase text-xs font-semibold transition-colors">Board of Directors</Link>
               </div>
             </div>
 
@@ -146,14 +179,16 @@ export function WebsiteNavbar() {
 
             {/* DEPARTMENTS - FULL WIDTH MEGA MENU */}
             <div className="group static flex items-stretch cursor-pointer">
-              <div className="h-full flex items-center gap-1 hover:text-white/80 transition-colors uppercase">
-                DEPARTMENTS <ChevronDown className="w-4 h-4 transition-transform group-hover:rotate-180" />
+              <div className="h-full flex items-center px-1  whitespace-nowrap uppercase">
+                <span className="flex items-center gap-1 px-3 py-2 rounded-md transition-all group-hover:bg-black/10">
+                  DEPARTMENTS <ChevronDown className="w-4 h-4 transition-transform group-hover:rotate-180" />
+                </span>
               </div>
-              <div className="absolute top-full left-0 w-full bg-white text-gray-800 shadow-[0_10px_30px_rgba(0,0,0,0.1)] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 border-t-[3px] border-[#00A884] p-8 z-50">
+              <div className="absolute top-full left-0 w-full bg-white text-gray-800 shadow-[0_10px_30px_rgba(0,0,0,0.1)] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 border-t-[3px] border-primary p-8 z-50">
                 <div className="max-w-7xl mx-auto">
                   <div className="flex justify-between items-center mb-6 pb-2 border-b border-gray-100">
-                    <h3 className="text-xl font-bold text-[#00A884] uppercase tracking-wide">Our Departments</h3>
-                    <Link to="/facilities" className="text-[13px] font-bold text-gray-500 hover:text-[#00A884] hover:underline uppercase transition-colors">View All Departments</Link>
+                    <h3 className="text-xl font-bold text-primary uppercase tracking-wide">Our Departments</h3>
+                    <Link to="/facilities" className="text-[13px] font-bold text-gray-500 hover:text-primary hover:underline uppercase transition-colors">View All Departments</Link>
                   </div>
                   {activeFacilities.length > 0 ? (
                     <div className="grid grid-cols-4 gap-x-8 gap-y-4">
@@ -166,10 +201,10 @@ export function WebsiteNavbar() {
                           {facility.icon ? (
                             <DynamicIcon
                               name={facility.icon}
-                              className="w-6 h-6 text-gray-400 group-hover/item:text-[#00A884] transition-colors shrink-0"
+                              className="w-6 h-6 text-gray-400 group-hover/item:text-primary transition-colors shrink-0"
                             />
                           ) : (
-                            <span className="w-1.5 h-1.5 rounded-full bg-gray-300 group-hover/item:bg-[#00A884] transition-colors shrink-0"></span>
+                            <span className="w-1.5 h-1.5 rounded-full bg-gray-300 group-hover/item:bg-primary transition-colors shrink-0"></span>
                           )}
                           <span className="truncate">{facility.title}</span>
                         </Link>
@@ -186,49 +221,103 @@ export function WebsiteNavbar() {
 
             {/* VISITORS AND PATIENTS */}
             <div className="group flex items-stretch cursor-pointer relative">
-              <div className="h-full flex items-center gap-1 hover:text-white/80 transition-colors uppercase">
-                VISITORS AND PATIENTS <ChevronDown className="w-4 h-4 transition-transform group-hover:rotate-180" />
-              </div>
-              <div className="absolute top-full left-0 w-[260px] bg-white text-gray-800 shadow-[0_10px_30px_rgba(0,0,0,0.1)] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top border-t-[3px] border-[#00A884] z-50">
-                <Link to="/services" className="block px-5 py-3.5 hover:bg-[#00A884]/5 hover:text-[#00A884] border-b border-gray-100 uppercase text-xs font-semibold transition-colors">Services</Link>
-                <Link to="/facilities" className="block px-5 py-3.5 hover:bg-[#00A884]/5 hover:text-[#00A884] border-b border-gray-100 uppercase text-xs font-semibold transition-colors">Facilities</Link>
-                <Link to="/health-checkup" className="block px-5 py-3.5 hover:bg-[#00A884]/5 hover:text-[#00A884] border-b border-gray-100 uppercase text-xs font-semibold transition-colors">Health Check Up</Link>
-                <Link to="/packages" className="block px-5 py-3.5 hover:bg-[#00A884]/5 hover:text-[#00A884] border-b border-gray-100 uppercase text-xs font-semibold transition-colors">Packages</Link>
-                <Link to="/room-rent" className="block px-5 py-3.5 hover:bg-[#00A884]/5 hover:text-[#00A884] border-b border-gray-100 uppercase text-xs font-semibold transition-colors">Room Rent</Link>
-                <Link to="/equipments" className="block px-5 py-3.5 hover:bg-[#00A884]/5 hover:text-[#00A884] border-b border-gray-100 uppercase text-xs font-semibold transition-colors">Equipments</Link>
-                <Link to="/health-tips" className="block px-5 py-3.5 hover:bg-[#00A884]/5 hover:text-[#00A884] border-b border-gray-100 uppercase text-xs font-semibold transition-colors">Health Tips</Link>
-                <Link to="/visitors-policy" className="block px-5 py-3.5 hover:bg-[#00A884]/5 hover:text-[#00A884] border-b border-gray-100 uppercase text-xs font-semibold transition-colors">Visitors Policy</Link>
-                <Link to="/feedback" className="block px-5 py-3.5 hover:bg-[#00A884]/5 hover:text-[#00A884] uppercase text-xs font-semibold transition-colors">Feedback</Link>
+              <NavLink
+                to="/services"
+                className="h-full flex items-center px-1  whitespace-nowrap uppercase"
+              >
+                {({ isActive }) => (
+                  <span className={`flex items-center gap-1 px-3 py-2 rounded-md transition-all ${isActive ? 'bg-black/20' : 'group-hover:bg-black/10'}`}>
+                    VISITORS AND PATIENTS <ChevronDown className="w-4 h-4 transition-transform group-hover:rotate-180" />
+                  </span>
+                )}
+              </NavLink>
+              <div className="absolute top-full left-0 w-[260px] bg-white text-gray-800 shadow-[0_10px_30px_rgba(0,0,0,0.1)] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top border-t-[3px] border-primary z-50">
+                <Link to="/services" className="block px-5 py-3.5 hover:bg-primary/5 hover:text-primary border-b border-gray-100 uppercase text-xs font-semibold transition-colors">Services</Link>
+                <Link to="/facilities" className="block px-5 py-3.5 hover:bg-primary/5 hover:text-primary border-b border-gray-100 uppercase text-xs font-semibold transition-colors">Facilities</Link>
+                <Link to="/health-checkup" className="block px-5 py-3.5 hover:bg-primary/5 hover:text-primary border-b border-gray-100 uppercase text-xs font-semibold transition-colors">Health Check Up</Link>
+                <Link to="/packages" className="block px-5 py-3.5 hover:bg-primary/5 hover:text-primary border-b border-gray-100 uppercase text-xs font-semibold transition-colors">Packages</Link>
+                <Link to="/room-rent" className="block px-5 py-3.5 hover:bg-primary/5 hover:text-primary border-b border-gray-100 uppercase text-xs font-semibold transition-colors">Room Rent</Link>
+                <Link to="/equipments" className="block px-5 py-3.5 hover:bg-primary/5 hover:text-primary border-b border-gray-100 uppercase text-xs font-semibold transition-colors">Equipments</Link>
+                <Link to="/health-tips" className="block px-5 py-3.5 hover:bg-primary/5 hover:text-primary border-b border-gray-100 uppercase text-xs font-semibold transition-colors">Health Tips</Link>
+                <Link to="/visitors-policy" className="block px-5 py-3.5 hover:bg-primary/5 hover:text-primary border-b border-gray-100 uppercase text-xs font-semibold transition-colors">Visitors Policy</Link>
+                <Link to="/feedback" className="block px-5 py-3.5 hover:bg-primary/5 hover:text-primary uppercase text-xs font-semibold transition-colors">Feedback</Link>
               </div>
             </div>
 
             {/* NEWS & MEDIA */}
             <div className="group flex items-stretch cursor-pointer relative">
-              <div className="h-full flex items-center gap-1 hover:text-white/80 transition-colors uppercase">
-                NEWS & MEDIA <ChevronDown className="w-4 h-4 transition-transform group-hover:rotate-180" />
-              </div>
-              <div className="absolute top-full left-0 w-[200px] bg-white text-gray-800 shadow-[0_10px_30px_rgba(0,0,0,0.1)] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top border-t-[3px] border-[#00A884] z-50">
-                <Link to="/news" className="block px-5 py-3.5 hover:bg-[#00A884]/5 hover:text-[#00A884] border-b border-gray-100 uppercase text-xs font-semibold transition-colors">News</Link>
-                <Link to="/gellery" className="block px-5 py-3.5 hover:bg-[#00A884]/5 hover:text-[#00A884] border-b border-gray-100 uppercase text-xs font-semibold transition-colors">Gallery</Link>
+              <NavLink
+                to="/news"
+                className="h-full flex items-center px-1  whitespace-nowrap uppercase"
+              >
+                {({ isActive }) => (
+                  <span className={`flex items-center gap-1 px-3 py-2 rounded-md transition-all ${isActive ? 'bg-black/20' : 'group-hover:bg-black/10'}`}>
+                    NEWS & MEDIA <ChevronDown className="w-4 h-4 transition-transform group-hover:rotate-180" />
+                  </span>
+                )}
+              </NavLink>
+              <div className="absolute top-full left-0 w-[200px] bg-white text-gray-800 shadow-[0_10px_30px_rgba(0,0,0,0.1)] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top border-t-[3px] border-primary z-50">
+                <Link to="/news" className="block px-5 py-3.5 hover:bg-primary/5 hover:text-primary border-b border-gray-100 uppercase text-xs font-semibold transition-colors">News</Link>
+                <Link to="/gellery" className="block px-5 py-3.5 hover:bg-primary/5 hover:text-primary border-b border-gray-100 uppercase text-xs font-semibold transition-colors">Gallery</Link>
                 {/* <Link to="/health-insight" className="block px-5 py-3.5 hover:bg-[#00A884]/5 hover:text-[#00A884] border-b border-gray-100 uppercase text-xs font-semibold transition-colors">Health Insight</Link> */}
               </div>
             </div>
 
             {/* CAREER */}
-            <Link to="/health-insight" className="h-full flex items-center hover:text-white/80 transition-colors uppercase">
-              Health Insight
-            </Link>
-            <Link to="/careers" className="h-full flex items-center hover:text-white/80 transition-colors uppercase">
-              CAREER
-            </Link>
+            <NavLink
+              to="/health-insight"
+              className="h-full flex items-center px-1  whitespace-nowrap uppercase group/link"
+            >
+              {({ isActive }) => (
+                <span className={`px-3 py-2 rounded-md transition-all ${isActive ? 'bg-black/20' : 'group-hover/link:bg-black/10'}`}>
+                  Health Insight
+                </span>
+              )}
+            </NavLink>
+            <NavLink
+              to="/careers"
+              className="h-full flex items-center px-1  whitespace-nowrap uppercase group/link"
+            >
+              {({ isActive }) => (
+                <span className={`px-3 py-2 rounded-md transition-all ${isActive ? 'bg-black/20' : 'group-hover/link:bg-black/10'}`}>
+                  CAREER
+                </span>
+              )}
+            </NavLink>
 
             {/* CONTACT */}
-            <Link to="/contacts" className="h-full flex items-center hover:text-white/80 transition-colors uppercase pr-2">
-              CONTACT
-            </Link>
+            <NavLink
+              to="/contacts"
+              className="h-full flex items-center px-1  whitespace-nowrap uppercase group/link"
+            >
+              {({ isActive }) => (
+                <span className={`px-3 py-2 rounded-md transition-all ${isActive ? 'bg-black/20' : 'group-hover/link:bg-black/10'}`}>
+                  CONTACT
+                </span>
+              )}
+            </NavLink>
 
           </div>
         </nav>
+
+        {/* Live Chat Section Desktop */}
+        <div
+          className="bg-white items-center justify-center pl-16 pr-8 relative z-10 hidden lg:flex"
+          style={{ clipPath: 'polygon(12% 0, 100% 0, 100% 100%, 0% 100%)', width: '160px' }}
+        >
+          <a
+            href="https://wa.me/8801865625788"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 group transition-all"
+          >
+
+            <div className="flex flex-col">
+              <Button className="text-[10px] font-bold  uppercase leading-none">Live Chat</Button>
+
+            </div>
+          </a>
+        </div>
 
         {/* Mobile menu trigger */}
         <div className="flex-1 lg:hidden flex justify-end items-center pr-4">
@@ -240,7 +329,7 @@ export function WebsiteNavbar() {
               </Button>
             </SheetTrigger>
             <SheetContent side="right" className="w-[300px] sm:w-[400px] p-0 bg-white border-l-0 overflow-hidden flex flex-col">
-              <div className="p-4 bg-[#00A884] text-white flex items-center justify-between shrink-0">
+              <div className="p-4 bg-primary text-white flex items-center justify-between shrink-0">
                 <span className="font-bold tracking-wide uppercase">Menu</span>
               </div>
 
@@ -293,7 +382,7 @@ export function WebsiteNavbar() {
                           {facility.title}
                         </Link>
                       ))}
-                      <Link to="/facilities" onClick={() => setMobileMenuOpen(false)} className="py-2.5 text-sm font-bold text-[#00A884] uppercase">View All Departments</Link>
+                      <Link to="/facilities" onClick={() => setMobileMenuOpen(false)} className="py-2.5 text-sm font-bold text-primary uppercase">View All Departments</Link>
                     </div>
                   </CollapsibleContent>
                 </Collapsible>
@@ -351,12 +440,29 @@ export function WebsiteNavbar() {
                     </span>
                     <Button
                       onClick={() => { handleLogout(); setMobileMenuOpen(false); }}
-                      className="w-full bg-[#00A884] hover:bg-[#00A884]/90 text-white rounded-md"
+                      className="w-full bg-primary hover:bg-primary/90 text-white rounded-md"
                     >
                       LOGOUT
                     </Button>
                   </div>
                 )}
+
+                <div className="pt-6 border-t border-gray-200">
+                  <a
+                    href="https://wa.me/8801865625788"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center gap-3 p-4 bg-[#25D366]/10 rounded-lg hover:bg-[#25D366]/20 transition-all border border-[#25D366]/20"
+                  >
+                    <div className="bg-[#25D366] text-white p-2 rounded-full shadow-md">
+                      <FaWhatsapp className="w-6 h-6" />
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="text-xs font-bold text-gray-500 uppercase">Live Chat</span>
+                      <span className="text-lg font-extrabold text-[#2D2D2D]">01865625788</span>
+                    </div>
+                  </a>
+                </div>
               </div>
             </SheetContent>
           </Sheet>
