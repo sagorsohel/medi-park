@@ -11,6 +11,7 @@ import { useEffect } from 'react'
 import { store } from '@/store'
 import { homepageApi } from '@/services/homepageApi'
 import { VideoSection } from '@/components/website/video-section'
+import { ContactMapSection } from '@/components/website/contact-map-section'
 
 export default function HomePage() {
   // Prefetch hero sections data on mount to show immediately
@@ -48,6 +49,7 @@ export default function HomePage() {
       <VideoSection />
       {/* Investor Section */}
       <InvestorSection />
+      <ContactMapSection />
     </div>
   )
 }
