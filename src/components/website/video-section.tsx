@@ -22,8 +22,8 @@ export function VideoSection() {
     }
 
     return (
-        <section className="py-16 md:py-24 bg-white w-full">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <section className="py-6 bg-white w-full">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 ">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -54,7 +54,7 @@ export function VideoSection() {
                         whileInView={{ opacity: 1, scale: 1 }}
                         viewport={{ once: true, margin: "-50px" }}
                         transition={{ duration: 0.6, delay: 0.2 }}
-                        className="w-full max-w-5xl mx-auto rounded-xl md:rounded-2xl overflow-hidden shadow-2xl bg-black aspect-video flex items-center justify-center relative"
+                        className="w-full max-w-7xl mx-auto rounded-xl md:rounded-2xl overflow-hidden shadow-2xl bg-black aspect-video flex items-center justify-center relative"
                     >
                         {youtubeId ? (
                             <iframe

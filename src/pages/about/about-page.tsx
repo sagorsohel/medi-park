@@ -32,7 +32,7 @@ export default function AboutPage() {
 
       {/* Mission & Vision Section */}
       <MissionVisionSection />
-      <VideoSection />
+
       {/* Transforming Healthcare Section */}
       <TransformingHealthcareSection />
 

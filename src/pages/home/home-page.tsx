@@ -10,6 +10,7 @@ import { BlogSection } from '@/components/website/blog-section'
 import { useEffect } from 'react'
 import { store } from '@/store'
 import { homepageApi } from '@/services/homepageApi'
+import { VideoSection } from '@/components/website/video-section'
 
 export default function HomePage() {
   // Prefetch hero sections data on mount to show immediately
@@ -44,6 +45,7 @@ export default function HomePage() {
 
       {/* Blog Section */}
       <BlogSection />
+      <VideoSection />
       {/* Investor Section */}
       <InvestorSection />
     </div>

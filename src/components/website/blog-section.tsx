@@ -21,10 +21,9 @@ export function BlogSection() {
       <div className="w-full bg-[#fcfdff] py-20 md:py-28">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-extrabold text-[#1e293b] mb-4">
+            <h2 className="text-4xl md:text-5xl font-extrabold text-primary mb-4">
               Health <span className="text-primary">Insight</span>
             </h2>
-            <div className="w-20 h-1.5 bg-primary mx-auto rounded-full" />
           </div>
           <div className="flex items-center justify-center py-20">
             <Loader2 className="h-10 w-10 animate-spin text-primary" />
@@ -44,10 +43,9 @@ export function BlogSection() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
         {/* Title */}
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-extrabold text-[#1e293b] mb-4">
+          <h2 className="text-4xl md:text-5xl font-extrabold text-primary mb-4">
             Health <span className="text-primary">Insight</span>
           </h2>
-          <div className="w-20 h-1.5 bg-primary mx-auto rounded-full" />
         </div>
 
         {/* Blog Grid */}
