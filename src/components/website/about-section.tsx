@@ -35,11 +35,11 @@ export function AboutSection() {
             transition={{ duration: 0.6 }}
           >
             {/* Title / Subtitle */}
-            <h4 className="text-primary font-bold uppercase tracking-wider mb-3 text-sm">
-              {section.title || "ABOUT US"}
+            <h4 className="text-primary font-normal  tracking-wider mb-3 text-sm">
+              {section.sub_title || "ABOUT US"}
             </h4>
-            <h2 className="text-4xl md:text-5xl lg:text-[54px] font-extrabold text-[#0B1B3D] mb-6 leading-tight">
-              {section.sub_title || "We Provide Finnest Patient's Care & Amenities"}
+            <h2 className="text-4xl  font-semibold text-[#0B1B3D] mb-6 leading-tight">
+              {section.title || "We Provide Finnest Patient's Care & Amenities"}
             </h2>
 
             {/* Main Content */}

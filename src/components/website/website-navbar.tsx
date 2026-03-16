@@ -99,7 +99,7 @@ export function WebsiteNavbar() {
       </div>
 
       {/* Main Navbar */}
-      <div className="w-full bg-primary border-b-6 border-primary flex items-stretch h-[65px] md:h-[75px] relative">
+      <div className="w-full bg-primary border-b-none sm:border-b-6 sm:border-primary flex items-stretch h-[65px] md:h-[75px] relative">
         {/* Logo Section Desktop */}
         <div
           className="bg-white items-center justify-center  relative z-10 hidden sm:flex"
@@ -306,7 +306,7 @@ export function WebsiteNavbar() {
           style={{ clipPath: 'polygon(12% 0, 100% 0, 100% 100%, 0% 100%)', width: '160px' }}
         >
           <a
-            href="https://wa.me/8801865625788"
+            href="https://wa.me/8801805032998"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-2 group transition-all"
@@ -449,17 +449,15 @@ export function WebsiteNavbar() {
 
                 <div className="pt-6 border-t border-gray-200">
                   <a
-                    href="https://wa.me/8801865625788"
+                    href="https://wa.me/8801805032998"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center justify-center gap-3 p-4 bg-[#25D366]/10 rounded-lg hover:bg-[#25D366]/20 transition-all border border-[#25D366]/20"
                   >
-                    <div className="bg-[#25D366] text-white p-2 rounded-full shadow-md">
-                      <FaWhatsapp className="w-6 h-6" />
-                    </div>
+
                     <div className="flex flex-col">
-                      <span className="text-xs font-bold text-gray-500 uppercase">Live Chat</span>
-                      <span className="text-lg font-extrabold text-[#2D2D2D]">01865625788</span>
+                      <Button className="text-xs font-bold  uppercase">Live Chat</Button>
+
                     </div>
                   </a>
                 </div>

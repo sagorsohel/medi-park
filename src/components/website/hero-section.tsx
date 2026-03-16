@@ -59,7 +59,7 @@ export function HeroSection() {
       icon: Stethoscope,
       label: "FIND A DOCTOR",
       href: "/doctors",
-      bgClass: "bg-blue-50/60 hover:bg-blue-100/80",
+      bgClass: "bg-blue-50 hover:bg-blue-100/80",
       textClass: "text-[#1e3a5f] group-hover:text-blue-700",
       iconClass: "bg-blue-100 text-blue-600 group-hover:bg-blue-600 group-hover:text-white"
     },
@@ -67,7 +67,7 @@ export function HeroSection() {
       icon: CalendarDays,
       label: "REQUEST AN APPOINTMENT",
       href: "/appointment",
-      bgClass: "bg-emerald-50/60 hover:bg-emerald-100/80",
+      bgClass: "bg-emerald-50 hover:bg-emerald-100/80",
       textClass: "text-[#1e3a5f] group-hover:text-emerald-700",
       iconClass: "bg-emerald-100 text-emerald-600 group-hover:bg-emerald-600 group-hover:text-white"
     },
@@ -75,7 +75,7 @@ export function HeroSection() {
       icon: FileText,
       label: "ONLINE REPORT",
       href: "/reports",
-      bgClass: "bg-purple-50/60 hover:bg-purple-100/80",
+      bgClass: "bg-purple-50 hover:bg-purple-100/80",
       textClass: "text-[#1e3a5f] group-hover:text-purple-700",
       iconClass: "bg-purple-100 text-purple-600 group-hover:bg-purple-600 group-hover:text-white"
     },
@@ -83,7 +83,7 @@ export function HeroSection() {
       icon: Headset,
       label: "TELE-ONLINE",
       href: "/telemedicine",
-      bgClass: "bg-amber-50/60 hover:bg-amber-100/80",
+      bgClass: "bg-amber-50 hover:bg-amber-100/80",
       textClass: "text-[#1e3a5f] group-hover:text-amber-700",
       iconClass: "bg-amber-100 text-amber-600 group-hover:bg-amber-600 group-hover:text-white"
     },
@@ -91,7 +91,7 @@ export function HeroSection() {
       icon: Users,
       label: "PATIENT & VISITORS GUIDE",
       href: "/guide",
-      bgClass: "bg-rose-50/60 hover:bg-rose-100/80",
+      bgClass: "bg-rose-50 hover:bg-rose-100/80",
       textClass: "text-[#1e3a5f] group-hover:text-rose-700",
       iconClass: "bg-rose-100 text-rose-600 group-hover:bg-rose-600 group-hover:text-white"
     },
@@ -149,16 +149,16 @@ export function HeroSection() {
       {/* Quick Access Bar - Overlapping bottom */}
       <div className="absolute bottom-0 left-0 w-full z-20">
         <div className="max-w-7xl mx-auto px-0 md:px-6 lg:px-3">
-          <div className="bg-white/60 backdrop-blur-xl bg-linear-to-r from-blue-100/40 via-purple-100/40 to-pink-100/40 shadow-[0_-10px_40px_rgb(0,0,0,0.08)] md:rounded-t-2xl overflow-hidden border-t md:border-t md:border-x border-white/60">
-            <div className="grid grid-cols-2 md:grid-cols-5 divide-x divide-white/40 border-b border-white/40 md:border-none">
+          <div className="    overflow-hidden  mb-3">
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-5 divide-x divide-white/40 border-b  md:border-none">
               {quickLinks.map((link, index) => (
                 <Link
                   key={index}
                   to={link.href}
                   className={`
-                     group flex items-center justify-between p-4 md:p-6 
+                     group flex items-center rounded-lg justify-between p-4 md:p-6 
                      ${link.bgClass} transition-all duration-300
-                     ${index === quickLinks.length - 1 ? 'col-span-2 md:col-span-1 border-t border-white/40 md:border-t-0' : ''}
+                   }
                    `}
                 >
                   <span className={`text-xs md:text-sm font-bold uppercase tracking-wide transition-colors ${link.textClass}`}>
