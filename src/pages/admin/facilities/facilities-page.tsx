@@ -1,13 +1,15 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { DataTableFilters } from "@/components/ui/data-table-filters";
 import { DataTablePagination } from "@/components/ui/data-table-pagination";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Loader2, Edit2, Trash2, Eye } from "lucide-react";
-import { useGetFacilitiesQuery, useDeleteFacilityMutation } from "@/services/homepageApi";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Loader2, Edit2, Trash2, Eye, Upload, Save } from "lucide-react";
+import { useGetFacilitiesQuery, useDeleteFacilityMutation, useGetHomepageSpecialitiesSectionQuery, useUpdateHomepageSpecialitiesSectionMutation } from "@/services/homepageApi";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import toast from "react-hot-toast";
 import { DynamicIcon } from "@/components/dynamic-icon";
@@ -22,6 +24,48 @@ export default function FacilitiesPage() {
 
     const { data, isLoading, refetch } = useGetFacilitiesQuery(currentPage);
     const [deleteFacility] = useDeleteFacilityMutation();
+
+    // Specialities Banner State
+    const { data: specialitiesData, isLoading: isLoadingSpecialities } = useGetHomepageSpecialitiesSectionQuery();
+    const [updateSpecialities, { isLoading: isUpdatingSpecialities }] = useUpdateHomepageSpecialitiesSectionMutation();
+
+    const [specialitiesTitle, setSpecialitiesTitle] = useState("");
+    const [specialitiesImage, setSpecialitiesImage] = useState<File | string | null>(null);
+    const [previewImage, setPreviewImage] = useState<string | null>(null);
+    const fileInputRef = useRef<HTMLInputElement>(null);
+
+    useEffect(() => {
+        if (specialitiesData?.data) {
+            setSpecialitiesTitle(specialitiesData.data.title || "");
+            setSpecialitiesImage(specialitiesData.data.image || null);
+            setPreviewImage(specialitiesData.data.image || null);
+        }
+    }, [specialitiesData]);
+
+    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            setSpecialitiesImage(file);
+            setPreviewImage(URL.createObjectURL(file));
+        }
+    };
+
+    const handleUpdateSpecialities = async () => {
+        try {
+            const sectionId = specialitiesData?.data?.id || 1; 
+            await updateSpecialities({
+                id: sectionId,
+                data: {
+                    title: specialitiesTitle,
+                    ...(specialitiesImage instanceof File ? { image: specialitiesImage } : {})
+                }
+            }).unwrap();
+            toast.success("Specialities section updated successfully!");
+        } catch (error) {
+            console.error("Failed to update specialities section:", error);
+            toast.error("Failed to update specialities section.");
+        }
+    };
 
     // Filter and search facilities
     const filteredFacilities = useMemo(() => {
@@ -96,12 +140,121 @@ export default function FacilitiesPage() {
             <div className="mb-8 flex justify-between items-center">
                 <div>
                     <h1 className="text-3xl font-bold text-gray-900 mb-2">Facilities</h1>
-                    <p className="text-gray-600">Manage facility information</p>
+                    <p className="text-gray-600">Manage facility information and homepage specialities banner.</p>
                 </div>
                 <Button onClick={() => navigate("/admin/website/facilities/new")}>Add New Facility</Button>
             </div>
 
-            <div className="py-8">
+            {/* Specialities Banner Section */}
+            <Card className="mb-10 border-primary/20 shadow-sm">
+                <CardHeader className="bg-primary/5 pb-4">
+                    <CardTitle className="text-xl text-primary flex items-center gap-2">
+                        Homepage Specialities Section
+                    </CardTitle>
+                    <CardDescription>
+                        Update the title and background image for the specialities section on the homepage.
+                    </CardDescription>
+                </CardHeader>
+                <CardContent className="pt-6">
+                    {isLoadingSpecialities ? (
+                        <div className="flex items-center justify-center p-8">
+                            <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                        </div>
+                    ) : (
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            {/* Left Side: Form */}
+                            <div className="space-y-6">
+                                <div className="space-y-2">
+                                    <Label htmlFor="specialities-title" className="text-base font-semibold">
+                                        Section Title
+                                    </Label>
+                                    <Input
+                                        id="specialities-title"
+                                        placeholder="e.g. Center of Excellence"
+                                        value={specialitiesTitle}
+                                        onChange={(e) => setSpecialitiesTitle(e.target.value)}
+                                    />
+                                </div>
+                                
+                                <div className="space-y-2">
+                                    <Label className="text-base font-semibold">Background Image</Label>
+                                    <div className="flex items-center gap-4">
+                                        <Input
+                                            type="file"
+                                            accept="image/*"
+                                            className="hidden"
+                                            ref={fileInputRef}
+                                            onChange={handleImageChange}
+                                        />
+                                        <Button
+                                            type="button"
+                                            variant="outline"
+                                            onClick={() => fileInputRef.current?.click()}
+                                            className="w-full flex items-center justify-center gap-2"
+                                        >
+                                            <Upload className="w-4 h-4" />
+                                            {previewImage ? "Change Image" : "Upload Image"}
+                                        </Button>
+                                    </div>
+                                </div>
+
+                                <Button 
+                                    onClick={handleUpdateSpecialities} 
+                                    disabled={isUpdatingSpecialities}
+                                    className="w-full sm:w-auto flex items-center gap-2"
+                                >
+                                    {isUpdatingSpecialities ? (
+                                        <Loader2 className="w-4 h-4 animate-spin" />
+                                    ) : (
+                                        <Save className="w-4 h-4" />
+                                    )}
+                                    Save Section Setup
+                                </Button>
+                            </div>
+
+                            {/* Right Side: Preview */}
+                            <div className="flex flex-col space-y-2">
+                                <Label className="text-base font-semibold text-gray-700">Image Preview</Label>
+                                <div className="w-full aspect-video rounded-xl border-2 border-dashed border-gray-300 overflow-hidden flex items-center justify-center bg-gray-50 relative group">
+                                    {previewImage ? (
+                                        <>
+                                            <img
+                                                src={previewImage}
+                                                alt="Banner preview"
+                                                className="w-full h-full object-cover"
+                                            />
+                                            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                                <Button
+                                                    type="button"
+                                                    variant="secondary"
+                                                    size="sm"
+                                                    onClick={() => fileInputRef.current?.click()}
+                                                >
+                                                    Change Image
+                                                </Button>
+                                            </div>
+                                        </>
+                                    ) : (
+                                        <div className="text-center p-6 flex flex-col items-center">
+                                            <div className="w-16 h-16 rounded-full bg-indigo-50 flex items-center justify-center mb-4">
+                                                <Upload className="h-8 w-8 text-indigo-500" />
+                                            </div>
+                                            <p className="text-sm text-gray-500 text-center">
+                                                No image selected. Upload an image to see preview.
+                                            </p>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </CardContent>
+            </Card>
+
+            <div>
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4">
+                    <h2 className="text-2xl font-bold text-gray-900">All Facilities</h2>
+                </div>
                 {/* Filters */}
                 <DataTableFilters
                     onBulkAction={handleBulkAction}

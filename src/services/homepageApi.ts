@@ -170,6 +170,25 @@ export interface UpdateCTASectionPayload {
   status?: "active" | "inactive";
 }
 
+export interface SpecialitiesSection {
+  id: number;
+  title: string;
+  image: string;
+  status: "active" | "inactive";
+}
+
+export interface SpecialitiesSectionResponse {
+  success: boolean;
+  message: string;
+  data: SpecialitiesSection;
+}
+
+export interface UpdateSpecialitiesSectionPayload {
+  title?: string;
+  image?: string | File;
+  status?: "active" | "inactive";
+}
+
 export const homepageApi = api.injectEndpoints({
   endpoints: (builder) => ({
     // Get all hero sections
@@ -645,6 +664,41 @@ export const homepageApi = api.injectEndpoints({
       },
       invalidatesTags: ["Banner"],
     }),
+
+    getHomepageSpecialitiesSection: builder.query<SpecialitiesSectionResponse, void>({
+      query: () => ({
+        url: "/homepage-specialities-sections",
+        method: "GET",
+      }),
+      providesTags: ["Banner"],
+      transformResponse: (
+        response: SpecialitiesSectionResponse | { data: SpecialitiesSection[] }
+      ) => {
+        if (Array.isArray(response.data)) {
+          return { ...response, data: response.data[0] } as SpecialitiesSectionResponse;
+        }
+        return response as SpecialitiesSectionResponse;
+      },
+    }),
+
+    updateHomepageSpecialitiesSection: builder.mutation<
+      SpecialitiesSectionResponse,
+      { id: number; data: UpdateSpecialitiesSectionPayload }
+    >({
+      query: ({ id, data: body }) => {
+        const formData = new FormData();
+        if (body.title) formData.append("title", body.title);
+        if (body.image) formData.append("image", body.image);
+        if (body.status) formData.append("status", body.status);
+
+        return {
+          url: `/homepage-specialities-sections`,
+          method: "POST",
+          body: formData,
+        };
+      },
+      invalidatesTags: ["Banner"],
+    }),
   }),
 });
 
@@ -671,4 +725,6 @@ export const {
   useGetCTASectionQuery,
   useGetCTASectionPublicQuery,
   useUpdateCTASectionMutation,
+  useGetHomepageSpecialitiesSectionQuery,
+  useUpdateHomepageSpecialitiesSectionMutation,
 } = homepageApi;
