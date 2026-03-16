@@ -5,6 +5,7 @@ import { useGetFacilityByIdQuery } from "@/services/homepageApi";
 import { useGetDoctorsQuery } from "@/services/doctorApi";
 import { useGetBlogsPublicQuery } from "@/services/blogApi";
 import { PageHeroSection } from "@/components/website/page-hero-section";
+import { FacilityHeroSection } from "@/components/website/facility-hero-section";
 import { BreadcrumbSection } from "@/components/website/breadcrumb-section";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -149,7 +150,12 @@ export default function FacilityDetailPage() {
   return (
     <div className="w-full">
       {/* Hero Section */}
-      <PageHeroSection
+      {/* <PageHeroSection
+        image={facility.image}
+        heading={facility.title}
+        alt={`${facility.title} Hero`}
+      /> */}
+      <FacilityHeroSection
         image={facility.image}
         heading={facility.title}
         alt={`${facility.title} Hero`}
