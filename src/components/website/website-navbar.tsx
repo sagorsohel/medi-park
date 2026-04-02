@@ -103,7 +103,7 @@ export function WebsiteNavbar() {
         {/* Logo Section Desktop */}
         <div
           className="bg-white items-center justify-center  relative z-10 hidden sm:flex"
-          style={{ clipPath: 'polygon(0 0, 100% 0, 88% 100%, 0% 100%)', width: '260px' }}
+          style={{ clipPath: 'polygon(0 0, 100% 0, 88% 100%, 0% 100%)', width: '240px' }}
         >
           <Link to="/" className="flex items-center -ml-10">
             <img
@@ -134,7 +134,7 @@ export function WebsiteNavbar() {
         </div>
 
         {/* Desktop Navigation */}
-        <nav className="flex-1 hidden lg:flex items-center justify-start xl:pl-3 pr-3 text-white text-[13px] font-bold tracking-wide h-full">
+        <nav className="flex-1 hidden lg:flex items-center justify-center xl:pl-3 pr-3 text-white text-[13px] font-bold tracking-wide h-full">
           <div className="flex items-stretch h-full gap-1 xl:gap-2 static">
 
             <NavLink
@@ -302,8 +302,8 @@ export function WebsiteNavbar() {
 
         {/* Live Chat Section Desktop */}
         <div
-          className="bg-white items-center justify-center pl-16 pr-8 relative z-10 hidden lg:flex"
-          style={{ clipPath: 'polygon(12% 0, 100% 0, 100% 100%, 0% 100%)', width: '160px' }}
+          className="bg-white items-center justify-center pl-10 pr-4 relative z-10 hidden lg:flex"
+          style={{ clipPath: 'polygon(12% 0, 100% 0, 100% 100%, 0% 100%)', width: '240px' }}
         >
           <a
             href="https://wa.me/8801805032998"
