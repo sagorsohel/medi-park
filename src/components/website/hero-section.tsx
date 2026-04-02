@@ -98,73 +98,74 @@ export function HeroSection() {
   ];
 
   return (
-    <div className="relative w-full h-[500px] md:h-[calc(100vh-80px)] overflow-hidden bg-white">
-      <Swiper
-        modules={[Autoplay, Pagination, Navigation]}
-        autoplay={{
-          delay: 5000,
-          disableOnInteraction: false,
-        }}
-        navigation={{
-          nextEl: ".hero-slide-next",
-          prevEl: ".hero-slide-prev",
-        }}
-        loop={activeSlides.length > 1}
-        speed={1000}
-        className="h-full w-full group"
-        onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
-      >
-        {activeSlides.map((slide) => (
-          <SwiperSlide key={slide.id}>
-            <div className="relative w-full h-full">
-              <img
-                src={slide.background_image}
-                alt={slide.title || "Hero Banner"}
-                className="w-full h-full object-cover"
-                onError={(e) => {
-                  const target = e.target as HTMLImageElement;
-                  target.src = "/vite.svg";
-                }}
-              />
-              {/* Dynamic overlay with opacity from API */}
-              <div
-                className="absolute inset-0 bg-black"
-                style={{ opacity: slide.opacity ? parseFloat(slide.opacity) : 0 }}
-              />
-            </div>
-          </SwiperSlide>
-        ))}
-      </Swiper>
+    <div className="relative w-full h-auto md:h-[calc(100vh-80px)] overflow-hidden bg-white">
+      <div className="h-[400px] md:h-full relative">
+        <Swiper
+          modules={[Autoplay, Pagination, Navigation]}
+          autoplay={{
+            delay: 5000,
+            disableOnInteraction: false,
+          }}
+          navigation={{
+            nextEl: ".hero-slide-next",
+            prevEl: ".hero-slide-prev",
+          }}
+          loop={activeSlides.length > 1}
+          speed={1000}
+          className="h-full w-full group"
+          onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
+        >
+          {activeSlides.map((slide) => (
+            <SwiperSlide key={slide.id}>
+              <div className="relative w-full h-full">
+                <img
+                  src={slide.background_image}
+                  alt={slide.title || "Hero Banner"}
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.src = "/vite.svg";
+                  }}
+                />
+                {/* Dynamic overlay with opacity from API */}
+                <div
+                  className="absolute inset-0 bg-black"
+                  style={{ opacity: slide.opacity ? parseFloat(slide.opacity) : 0 }}
+                />
+              </div>
+            </SwiperSlide>
+          ))}
+        </Swiper>
 
-      {/* Custom Navigation Buttons */}
-      <button className="hero-slide-prev absolute left-4 md:left-8 top-1/2 z-20 -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 border-white/40 bg-white/40 hover:bg-white rounded-full flex items-center justify-center cursor-pointer shadow-lg transition-all text-gray-800 hover:text-primary disabled:opacity-50 disabled:cursor-not-allowed border border-gray-100">
-        <ChevronLeft className="w-6 h-6" />
-        <span className="sr-only">Previous slide</span>
-      </button>
-      <button className="hero-slide-next absolute right-4 md:right-8 top-1/2 z-20 -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 border-white/40 bg-white/40 hover:bg-white rounded-full flex items-center justify-center cursor-pointer shadow-lg transition-all text-gray-800 hover:text-primary disabled:opacity-50 disabled:cursor-not-allowed border border-gray-100">
-        <ChevronRight className="w-6 h-6" />
-        <span className="sr-only">Next slide</span>
-      </button>
+        {/* Custom Navigation Buttons */}
+        <button className="hero-slide-prev absolute left-4 md:left-8 top-1/2 z-20 -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 border-white/40 bg-white/40 hover:bg-white rounded-full flex items-center justify-center cursor-pointer shadow-lg transition-all text-gray-800 hover:text-primary disabled:opacity-50 disabled:cursor-not-allowed border border-gray-100">
+          <ChevronLeft className="w-6 h-6" />
+          <span className="sr-only">Previous slide</span>
+        </button>
+        <button className="hero-slide-next absolute right-4 md:right-8 top-1/2 z-20 -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 border-white/40 bg-white/40 hover:bg-white rounded-full flex items-center justify-center cursor-pointer shadow-lg transition-all text-gray-800 hover:text-primary disabled:opacity-50 disabled:cursor-not-allowed border border-gray-100">
+          <ChevronRight className="w-6 h-6" />
+          <span className="sr-only">Next slide</span>
+        </button>
+      </div>
 
-      {/* Quick Access Bar - Overlapping bottom */}
-      <div className="absolute bottom-0 left-0 w-full z-20">
-        <div className="max-w-7xl mx-auto px-0 md:px-6 lg:px-3">
-          <div className="    overflow-hidden  mb-3">
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-5 divide-x divide-white/40 border-b  md:border-none">
+      {/* Quick Access Bar - Under hero on mobile, Overlapping on desktop */}
+      <div className="md:absolute md:bottom-0 md:left-0 w-full z-20 bg-white md:bg-transparent py-6 md:py-0">
+        <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-3">
+          <div className="overflow-hidden md:mb-3">
+            <div className="grid grid-cols-1 md:grid-cols-5 gap-3 md:gap-5">
               {quickLinks.map((link, index) => (
                 <Link
                   key={index}
                   to={link.href}
                   className={`
-                     group flex items-center rounded-lg justify-between p-4 md:p-6 
-                     ${link.bgClass} transition-all duration-300
-                   }
+                     group flex items-center rounded-xl justify-between p-5 md:p-6 
+                     ${link.bgClass} shadow-sm md:shadow-md border border-white/50 transition-all duration-300 transform md:hover:-translate-y-1
                    `}
                 >
-                  <span className={`text-xs md:text-sm font-bold uppercase tracking-wide transition-colors ${link.textClass}`}>
+                  <span className={`text-[13px] md:text-sm font-bold uppercase tracking-wider transition-colors ${link.textClass}`}>
                     {link.label}
                   </span>
-                  <div className={`w-10 h-10 md:w-12 md:h-12 rounded-full flex shrink-0 items-center justify-center group-hover:scale-110 transition-all duration-300 shadow-sm border border-white/50 ${link.iconClass}`}>
+                  <div className={`w-11 h-11 md:w-12 md:h-12 rounded-full flex shrink-0 items-center justify-center group-hover:scale-110 transition-all duration-300 shadow-sm border border-white/50 ${link.iconClass}`}>
                     <link.icon className="w-5 h-5 md:w-6 md:h-6" />
                   </div>
                 </Link>
