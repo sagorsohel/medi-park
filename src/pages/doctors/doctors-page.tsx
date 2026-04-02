@@ -1,15 +1,17 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useState } from 'react'
 import { PageHeroSection } from '@/components/website/page-hero-section'
 import { BreadcrumbSection } from '@/components/website/breadcrumb-section'
 import { DoctorProfileCard } from '@/components/website/doctor-profile-card'
-import { User, Loader2 } from 'lucide-react'
+import { User, Loader2, Search } from 'lucide-react'
 import { useGetDoctorsQuery } from '@/services/doctorApi'
+import { Input } from "@/components/ui/input";
 
 export default function DoctorsPage() {
+  const [searchTerm, setSearchTerm] = useState("");
   const { data, isLoading } = useGetDoctorsQuery(1);
 
-  // Group doctors by department
-  const departments = useMemo(() => {
+  // Group doctors by department after filtering
+  const filteredDepartments = useMemo(() => {
     if (!data?.data) return [];
 
     const departmentMap = new Map<string, {
@@ -26,7 +28,15 @@ export default function DoctorsPage() {
       }>;
     }>();
 
-    data.data.forEach((doctor) => {
+    // First filter doctors then group
+    const filteredDoctors = data.data.filter(doctor => {
+        const name = (doctor.doctor_name || "").toLowerCase();
+        const dept = (doctor.department || "").toLowerCase();
+        const search = searchTerm.toLowerCase();
+        return name.includes(search) || dept.includes(search);
+    });
+
+    filteredDoctors.forEach((doctor) => {
       const deptName = doctor.department || "Other";
       
       // Format qualifications from education array
@@ -69,7 +79,7 @@ export default function DoctorsPage() {
     });
 
     return Array.from(departmentMap.values());
-  }, [data]);
+  }, [data, searchTerm]);
 
   return (
     <div className="w-full">
@@ -79,39 +89,68 @@ export default function DoctorsPage() {
       {/* Breadcrumb Section */}
       <BreadcrumbSection currentPage="Our Doctors" />
 
-      {/* Doctors by Department */}
+      {/* Doctors List Section */}
       <section className="w-full bg-white py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {isLoading ? (
-            <div className="flex items-center justify-center py-12">
-              <Loader2 className="h-8 w-8 animate-spin text-primary" />
+          
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
+            <h1 className="text-3xl md:text-4xl font-bold text-primary">
+              Our Expert Doctors
+            </h1>
+
+            {/* Search Bar */}
+            <div className="relative w-full md:w-96 group">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-primary transition-colors" />
+              <Input
+                type="text"
+                placeholder="Search by name or department..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-10 h-12 border-gray-200 shadow-sm focus:border-primary focus:ring-primary rounded-xl"
+              />
             </div>
-          ) : departments.length === 0 ? (
-            <div className="text-center py-12 text-gray-500">
-              No doctors available at the moment.
+          </div>
+
+          {isLoading ? (
+            <div className="flex items-center justify-center py-16">
+              <Loader2 className="h-10 w-10 animate-spin text-primary" />
+            </div>
+          ) : filteredDepartments.length === 0 ? (
+            <div className="text-center py-20 bg-gray-50 rounded-3xl border-2 border-dashed border-gray-200">
+               <p className="text-gray-500 text-lg font-medium">
+                 {searchTerm ? `No doctors matching "${searchTerm}" found.` : "No doctors available."}
+               </p>
+               {searchTerm && (
+                 <button 
+                    className="mt-2 text-primary font-bold hover:underline"
+                    onClick={() => setSearchTerm("")}
+                 >
+                   Clear search filters
+                 </button>
+               )}
             </div>
           ) : (
-            departments.map((department) => (
+            filteredDepartments.map((department) => (
             <div key={department.id} className="mb-16 last:mb-0">
               {/* Department Header */}
-              <div className="flex items-center justify-between mb-6 pb-6 border-b-2 border-gray-200">
-                <div className="flex items-center gap-3">
-                  <div className="text-primary">
+              <div className="flex items-center justify-between mb-8 pb-4 border-b-2 border-gray-100/80">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary">
                     {department.icon}
                   </div>
-                  <h2 className="text-3xl md:text-4xl font-bold text-primary">
+                  <h2 className="text-2xl md:text-3xl font-black text-[#0B1B3D]">
                     {department.name}
                   </h2>
                 </div>
-                <div className="px-4 py-2 rounded-full border-2 border-blue-900 bg-blue-50">
-                  <span className="text-primary font-semibold">
-                    {department.doctors.length} {department.doctors.length === 1 ? 'Doctor' : 'Doctors'}
+                <div className="px-5 py-1.5 rounded-full border border-primary/20 bg-primary/5">
+                  <span className="text-primary font-black text-sm">
+                    {department.doctors.length} {department.doctors.length === 1 ? 'DOCTOR' : 'DOCTORS'}
                   </span>
                 </div>
               </div>
 
               {/* Doctors Grid */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {department.doctors.map((doctor) => (
                   <DoctorProfileCard
                     key={doctor.id}
