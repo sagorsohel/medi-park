@@ -81,7 +81,7 @@ export function WebsiteNavbar() {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 w-full shadow-lg font-sans">
       {/* Top Black Bar */}
-      <div className="bg-[#234687] text-white py-1.5 px-4 md:px-8 flex flex-col sm:flex-row justify-between items-center text-[13px] w-full border-b border-gray-700">
+      <div className="bg-[#0B1B3D] text-white py-1.5 px-4 md:px-8 flex flex-col sm:flex-row justify-between items-center text-[13px] w-full border-b border-gray-700">
         <div className="flex items-center gap-5 mb-2 sm:mb-0">
           <a href={activeSocialLinks.find(l => l.name.toLowerCase().includes('facebook'))?.link || '#'} className="hover:text-primary transition-colors"><Facebook className="w-[14px] h-[14px] fill-current" /></a>
           <a href={activeSocialLinks.find(l => l.name.toLowerCase().includes('twitter') || l.name.toLowerCase().includes('x'))?.link || '#'} className="hover:text-primary transition-colors">
@@ -159,16 +159,34 @@ export function WebsiteNavbar() {
                   </span>
                 )}
               </NavLink>
-              <div className="absolute top-full left-0 w-[250px] bg-[#234687] text-white shadow-[0_10px_30px_rgba(0,0,0,0.1)] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top border-t-[3px] border-primary z-50">
-                <Link to="/about" className="block px-5 py-3.5 hover:bg-primary/5 hover:text-primary border-b border-gray-100 uppercase text-xs font-semibold transition-colors">About MSH</Link>
-                <Link to="/mission" className="block px-5 py-3.5 hover:bg-[#00A884]/5 hover:text-[#00A884] border-b border-gray-100 uppercase text-xs font-semibold transition-colors">Mission</Link>
-                <Link to="/vision" className="block px-5 py-3.5 hover:bg-[#00A884]/5 hover:text-[#00A884] border-b border-gray-100 uppercase text-xs font-semibold transition-colors">Vision</Link>
-                {sortedDirectors.map(director => (
-                  <Link key={director.id} to={getDirectorLink(director)} className="block px-5 py-3.5 hover:bg-[#00A884]/5 hover:text-[#00A884] border-b border-gray-100 uppercase text-xs font-semibold transition-colors">
-                    {getDirectorLabel(director)}
+              <div className="absolute top-full left-0 w-[250px] bg-[#0B1B3D] text-white shadow-[0_10px_30px_rgba(0,0,0,0.1)] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top border-t-[3px] border-primary z-50">
+                {/* About MSH with Submenu */}
+                <div className="group/sub relative">
+                  <Link 
+                    to="/about" 
+                    className="flex items-center justify-between px-5 py-3.5 hover:bg-primary/10 hover:text-primary border-b border-gray-700/50 uppercase text-xs font-semibold transition-all"
+                  >
+                    About MSH
+                    <ChevronDown className="w-3.5 h-3.5 -rotate-90 group-hover/sub:text-primary" />
                   </Link>
-                ))}
-                <Link to="/about" className="block px-5 py-3.5 hover:bg-primary/5 hover:text-primary uppercase text-xs font-semibold transition-colors">Board of Directors</Link>
+                  
+                  {/* Nested Flyout for Messages */}
+                  <div className="absolute left-[100%] top-0 w-[250px] bg-[#0B1B3D] border-l border-primary shadow-xl opacity-0 invisible group-hover/sub:opacity-100 group-hover/sub:visible transition-all duration-300">
+                    {sortedDirectors.map(director => (
+                      <Link 
+                        key={director.id} 
+                        to={getDirectorLink(director)} 
+                        className="block px-5 py-3.5 hover:bg-primary/10 hover:text-primary border-b border-gray-700/50 uppercase text-xs font-semibold transition-all last:border-b-0"
+                      >
+                        {getDirectorLabel(director)}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+
+                <Link to="/mission" className="block px-5 py-3.5 hover:bg-primary/10 hover:text-primary border-b border-gray-700/50 uppercase text-xs font-semibold transition-all">Mission</Link>
+                <Link to="/vision" className="block px-5 py-3.5 hover:bg-primary/10 hover:text-primary border-b border-gray-700/50 uppercase text-xs font-semibold transition-all">Vision</Link>
+                <Link to="/about" className="block px-5 py-3.5 hover:bg-primary/10 hover:text-primary uppercase text-xs font-semibold transition-all">Board of Directors</Link>
               </div>
             </div>
 
