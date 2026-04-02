@@ -36,7 +36,7 @@ export function WebsiteFooter() {
               <img
                 src="/navbar-logo.png"
                 alt="MediPark Hospital"
-                className="h-[60px] md:h-[80px] w-auto object-contain brightness-0 invert"
+                className="h-[60px] md:h-[80px] w-full p-2 rounded-lg object-contain bg-white "
                 onError={(e) => {
                   const target = e.target as HTMLImageElement;
                   target.src = "/logo.png";
@@ -63,8 +63,8 @@ export function WebsiteFooter() {
                 { name: 'Contact', to: '/contacts' },
                 { name: 'Health Package', to: '/health-package' },
               ].map((link, i) => (
-                <li key={i} className="border-b border-white/10 transition-colors hover:border-white/30">
-                  <Link to={link.to} className="flex items-center block py-3 group hover:text-white transition-colors text-[14px]">
+                <li key={i} className="border-b-2 border-white/10 transition-colors hover:border-white/30">
+                  <Link to={link.to} className="flex items-center  py-3 group hover:text-white transition-colors text-[16px]">
                     <ChevronRight className="w-4 h-4 mr-2.5 text-primary shrink-0 transition-transform group-hover:translate-x-1" />
                     {link.name}
                   </Link>
@@ -84,8 +84,8 @@ export function WebsiteFooter() {
                 { name: 'Patient Stories', to: '/patient-stories' },
                 { name: 'About Us', to: '/about' },
               ].map((link, i) => (
-                <li key={i} className="border-b border-white/10 transition-colors hover:border-white/30">
-                  <Link to={link.to} className="flex items-center block py-3 group hover:text-white transition-colors text-[14px]">
+                <li key={i} className="border-b-2 border-white/10 transition-colors hover:border-white/30">
+                  <Link to={link.to} className="flex items-center  py-3 group hover:text-white transition-colors text-[16px]">
                     <ChevronRight className="w-4 h-4 mr-2.5 text-primary shrink-0 transition-transform group-hover:translate-x-1" />
                     {link.name}
                   </Link>
@@ -167,7 +167,7 @@ export function WebsiteFooter() {
           <div className="flex flex-wrap items-center justify-center gap-2 text-[13px] text-white md:mr-16">
             <span className="text-blue-100/50">Developed By</span>
             <a href="https://softinglobal.com" className="font-semibold tracking-wide text-blue-100/80">Softin-global</a>
-            <span className="text-blue-100/50">| ICT Division.</span>
+
           </div>
 
           {/* Scroll To Top Button (positioned globally relative to the bottom bar) */}
