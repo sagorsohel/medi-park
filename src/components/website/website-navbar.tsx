@@ -249,7 +249,7 @@ export function WebsiteNavbar() {
                   </span>
                 )}
               </NavLink>
-              <div className="absolute top-full left-0 w-[260px] bg-[#234687] text-white shadow-[0_10px_30px_rgba(0,0,0,0.1)] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top border-t-[3px] border-primary z-50">
+              <div className="absolute top-full left-0 w-[260px] bg-[#0B1B3D] text-white shadow-[0_10px_30px_rgba(0,0,0,0.1)] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top border-t-[3px] border-primary z-50">
                 <Link to="/services" className="block px-5 py-3.5 hover:bg-primary/5 hover:text-primary border-b border-gray-100 uppercase text-xs font-semibold transition-colors">Services</Link>
                 <Link to="/facilities" className="block px-5 py-3.5 hover:bg-primary/5 hover:text-primary border-b border-gray-100 uppercase text-xs font-semibold transition-colors">Facilities</Link>
                 <Link to="/health-checkup" className="block px-5 py-3.5 hover:bg-primary/5 hover:text-primary border-b border-gray-100 uppercase text-xs font-semibold transition-colors">Health Check Up</Link>
@@ -274,7 +274,7 @@ export function WebsiteNavbar() {
                   </span>
                 )}
               </NavLink>
-              <div className="absolute top-full left-0 w-[200px] bg-[#234687] text-white shadow-[0_10px_30px_rgba(0,0,0,0.1)] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top border-t-[3px] border-primary z-50">
+              <div className="absolute top-full left-0 w-[200px] bg-[#0B1B3D] text-white shadow-[0_10px_30px_rgba(0,0,0,0.1)] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top border-t-[3px] border-primary z-50">
                 <Link to="/news" className="block px-5 py-3.5 hover:bg-primary/5 hover:text-primary border-b border-gray-100 uppercase text-xs font-semibold transition-colors">News</Link>
                 <Link to="/gellery" className="block px-5 py-3.5 hover:bg-primary/5 hover:text-primary border-b border-gray-100 uppercase text-xs font-semibold transition-colors">Gallery</Link>
                 {/* <Link to="/health-insight" className="block px-5 py-3.5 hover:bg-[#00A884]/5 hover:text-[#00A884] border-b border-gray-100 uppercase text-xs font-semibold transition-colors">Health Insight</Link> */}

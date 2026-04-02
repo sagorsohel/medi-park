@@ -1,6 +1,5 @@
-"use client";
-
-import { Check } from "lucide-react";
+import { Check, Loader2 } from "lucide-react";
+import { Link } from "react-router";
 import {
   Carousel,
   CarouselContent,
@@ -10,7 +9,7 @@ import {
 } from "@/components/ui/carousel";
 
 import { useGetHomepagePricingsQuery, type HomepagePricing } from "@/services/homepagePricingApi";
-import { Loader2 } from "lucide-react";
+
 
 interface PricingCardProps {
   plan: HomepagePricing;
@@ -67,14 +66,16 @@ function PricingCard({ plan }: PricingCardProps) {
         ))}
       </ul>
 
-      <button
-        className={`w-full rounded-full py-3 px-6 font-bold transition-all duration-300 transform active:scale-95 ${isPopular
+      <Link
+        to={`/packages/${plan.id}`}
+        state={{ plan }}
+        className={`w-full rounded-full py-3 px-6 font-bold text-center block transition-all duration-300 transform active:scale-95 ${isPopular
           ? "bg-white text-primary hover:bg-white/90 shadow-lg"
           : "bg-primary text-white hover:bg-primary/90 shadow-md"
           }`}
       >
         Choose plan
-      </button>
+      </Link>
     </div>
   );
 }
@@ -152,6 +153,17 @@ export function PricingSection() {
               <PricingCard key={plan.id} plan={plan} />
             ))}
           </div>
+        </div>
+
+        {/* View All Packages Link */}
+        <div className="mt-16 text-center">
+          <Link
+            to="/packages"
+            className="inline-flex items-center gap-2 bg-primary text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-primary/90 transition-all shadow-lg hover:shadow-xl active:scale-95 group"
+          >
+            Explore All Packages
+            <span className="group-hover:translate-x-1 transition-transform">→</span>
+          </Link>
         </div>
       </div>
     </div>

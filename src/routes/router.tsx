@@ -84,6 +84,9 @@ import RoomRentsManagePage from '@/pages/admin/room-rents/room-rents-page'
 import HomepagePricingsPage from '@/pages/admin/homepage-pricings/homepage-pricings-page'
 import AddHomepagePricingPage from '@/pages/admin/homepage-pricings/add-homepage-pricing-page'
 
+import PackageDetailPage from '@/pages/packages/package-detail-page'
+import PublicPackagesPage from '@/pages/packages/public-packages-page'
+
 const router = createBrowserRouter([
   // 🌐 Website routes (with website layout - sticky navbar & footer)
   {
@@ -126,6 +129,8 @@ const router = createBrowserRouter([
       { path: "equipments", element: <PublicEquipmentsPage /> },
       { path: "health-tips", element: <PublicHealthTipsPage /> },
       { path: "visitors-policy", element: <PublicVisitorsPolicyPage /> },
+      { path: "packages", element: <PublicPackagesPage /> },
+      { path: "packages/:id", element: <PackageDetailPage /> },
     ],
   },
 
