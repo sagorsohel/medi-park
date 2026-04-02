@@ -35,10 +35,8 @@ export function AboutSection() {
             transition={{ duration: 0.6 }}
           >
             {/* Title / Subtitle */}
-            <h4 className="text-primary font-normal  tracking-wider mb-3 text-sm">
-              {section.sub_title || "ABOUT US"}
-            </h4>
-            <h2 className="text-4xl  font-semibold text-[#0B1B3D] mb-6 leading-tight">
+
+            <h2 className="text-4xl  font-semibold text-primary mb-6 leading-tight">
               {section.title || "We Provide Finnest Patient's Care & Amenities"}
             </h2>
 
@@ -54,7 +52,9 @@ export function AboutSection() {
                 </p>
               )}
             </div>
-
+            <h4 className="text-black font-normal  tracking-wider mb-3 text-lg">
+              {section.sub_title || "ABOUT US"}
+            </h4>
             {/* Checklist */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-5 gap-x-4 mb-8">
               {features.map((feature, index) => (
@@ -91,7 +91,7 @@ export function AboutSection() {
           >
             {/* Top Right Floating Image */}
             {section.image_2 && (
-              <div className="absolute -top-6 -right-6 md:-top-10 md:-right-10 z-20 rounded-3xl p-2 sm:p-3 border-8 border-white shadow-sm w-40 sm:w-48 bg-white overflow-hidden aspect-square">
+              <div className="absolute -top-6 -right-6 md:-top-10 md:-right-10 z-20 rounded-3xl  border-4 border-primary shadow-sm w-40 sm:w-48 bg-white overflow-hidden aspect-square">
                 <img
                   src={section.image_2}
                   alt="About Us Feature 2"
@@ -119,7 +119,7 @@ export function AboutSection() {
 
             {/* Bottom Left Floating Image */}
             {section.image_3 && (
-              <div className="absolute -bottom-6 -left-6 md:-bottom-10 md:-left-10 z-20 rounded-3xl p-2 sm:p-3 border-8 border-white shadow-sm w-40 sm:w-48 bg-white overflow-hidden aspect-square">
+              <div className="absolute -bottom-6 -left-6 md:-bottom-10 md:-left-10 z-20 rounded-3xl  border-4 border-primary shadow-sm w-40 sm:w-48 bg-white overflow-hidden aspect-square">
                 <img
                   src={section.image_3}
                   alt="About Us Feature 3"
