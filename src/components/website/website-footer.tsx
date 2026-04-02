@@ -154,7 +154,7 @@ export function WebsiteFooter() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4 relative pr-16 md:pr-0">
 
           <div className="text-[13px] text-blue-100/50 font-medium text-center md:text-left flex flex-col space-y-2">
-            <p className="text-blue-100/60">Copyright © {currentYear}. All Rights Reserved. MediPark Hospital PLC.</p>
+            <p className="text-blue-100/60">Copyright © {currentYear}. All Rights Reserved. MediPark Hospital LTD..</p>
             <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 text-primary">
               <Link to="/disclaimer" className="hover:text-white transition-colors">Disclaimer</Link>
               <span className="text-blue-100/20">|</span>
