@@ -7,36 +7,27 @@ interface InvestorCardProps {
   description: string;
 }
 
-export function InvestorCard({ image, name, designation, description }: InvestorCardProps) {
+export function InvestorCard({ image, name }: InvestorCardProps) {
   return (
-    <div className="group border border-blue-900 rounded-[22px] overflow-hidden min-w-[280px] lg:min-w-0 h-[222px] cursor-pointer perspective-1000">
-      {/* Flip Card Container */}
-      <div className="relative w-full h-full transition-transform duration-500 ease-in-out transform-style-preserve-3d group-hover:rotate-y-180">
-        {/* Front Face - Image */}
-        <div className="absolute inset-0 w-full h-full backface-hidden bg-primary p-0.5 rounded-[22px]">
-          <img
-            src={image}
-            alt={name}
-            className="w-full h-full object-cover rounded-[22px]"
-            onError={(e) => {
-              const target = e.target as HTMLImageElement;
-              target.src = "/vite.svg";
-            }}
-          />
-        </div>
+    <div className="group relative border-2 border-primary rounded-[22px] overflow-hidden min-w-[240px] lg:min-w-0 h-[240px] cursor-default transition-all duration-300 hover:shadow-xl">
+      {/* Front Face - Image */}
+      <div className="w-full h-full p-0.5 rounded-[22px]">
+        <img
+          src={image}
+          alt={name}
+          className="w-full h-full object-cover rounded-[20px]"
+          onError={(e) => {
+            const target = e.target as HTMLImageElement;
+            target.src = "/vite.svg";
+          }}
+        />
+      </div>
 
-        {/* Back Face - Details */}
-        <div className="absolute inset-0 w-full h-full backface-hidden bg-primary text-white p-6 flex flex-col items-center justify-center space-y-2 rounded-[22px] rotate-y-180">
-          <h3 className="text-base font-bold uppercase text-center leading-tight">
-            {name}
-          </h3>
-          <p className="text-sm text-center">
-            "{designation}"
-          </p>
-          <p className="text-xs text-center leading-relaxed">
-            {description}
-          </p>
-        </div>
+      {/* Hover Overlay - Name Only */}
+      <div className="absolute inset-0 w-full h-full bg-primary/80 text-white p-4 flex items-center justify-center rounded-[20px] opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+        <h3 className="text-lg font-bold uppercase text-center leading-tight tracking-wide">
+          {name}
+        </h3>
       </div>
     </div>
   );
