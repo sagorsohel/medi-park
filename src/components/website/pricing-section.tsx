@@ -43,10 +43,10 @@ function PricingCard({ plan }: PricingCardProps) {
       )}
 
       <div className="mb-6">
-        <div className="flex gap-1 items-baseline">
-          <span className={`text-2xl md:text-3xl font-bold ${isPopular ? "text-primary-foreground/90" : "text-primary/60"}`}>$</span>
-          <span className="text-[40px] md:text-[48px] font-extrabold tracking-tight">{plan.price}</span>
-          <span className={`text-sm md:text-base font-semibold ml-1 ${isPopular ? "text-primary-foreground/80" : "text-muted-foreground"}`}>
+        <div className="flex flex-wrap gap-x-1 items-baseline">
+          <span className={`text-2xl md:text-3xl font-bold ${isPopular ? "text-primary-foreground/90" : "text-primary/60"}`}>TK</span>
+          <span className="text-[40px] md:text-[48px] font-extrabold tracking-tight shrink-0">{plan.price}</span>
+          <span className={`text-sm md:text-base font-semibold ${isPopular ? "text-primary-foreground/80" : "text-muted-foreground"} whitespace-nowrap`}>
             /{plan.duration}
           </span>
         </div>

@@ -73,7 +73,8 @@ export default function MessageOfChairmanPage() {
                                 <div className="pt-8 mt-8 border-t border-gray-100">
                                     <p className="text-gray-500 mb-2">Best Wishes</p>
                                     <h3 className="text-xl font-bold text-[#1e3a8a] uppercase">{chairman.name}</h3>
-                                    <p className="text-[#10b981] font-medium">{chairman.designation}, BSH LTD..</p>
+                                    <p className="text-[#10b981] font-medium">{chairman.designation}, </p>
+                                    <p className="text-black font-medium">Bangladesh Specialized Hospital LTD. </p>
                                 </div>
                             </div>
                         </div>

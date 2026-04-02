@@ -82,6 +82,7 @@ export default function DirectorDetailPage() {
                                 <div className="pt-8 mt-8 border-t border-gray-100">
                                     <h3 className="text-xl font-bold text-[#1e3a8a] uppercase">{director.name}</h3>
                                     <p className="text-[#10b981] font-medium">{director.designation}</p>
+                                    <p className="text-black font-medium">Bangladesh Specialized Hospital LTD. </p>
                                 </div>
                             </div>
                         </div>
