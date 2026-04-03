@@ -1,7 +1,7 @@
 "use client";
 
 import { Link } from "react-router";
-import { useGetFooterContactQuery, useGetSocialLinksQuery } from "@/services/contactPageApi";
+import { useGetFooterContactQuery, useGetSocialLinksQuery, useGetBranchesQuery } from "@/services/contactPageApi";
 import { useMemo } from "react";
 import { Facebook, Youtube, Instagram, Linkedin, MapPin, Phone, Mail, ChevronRight, ChevronUp } from "lucide-react";
 
@@ -17,8 +17,17 @@ export function WebsiteFooter() {
   }, [socialLinksData]);
 
   const footerContact = footerContactData?.data;
-  const firstPhone = footerContact?.phone && footerContact.phone.length > 0 ? footerContact.phone[0] : "10633";
-  const email = footerContact?.email || "info@mediparkhospital.com";
+  const { data: branchesData } = useGetBranchesQuery();
+  
+  // Find the main branch
+  const mainBranch = useMemo(() => {
+    if (!branchesData?.data) return null;
+    return branchesData.data.find(branch => branch.is_main === 1) || branchesData.data[0];
+  }, [branchesData]);
+
+  const firstPhone = mainBranch?.phone || (footerContact?.phone && footerContact.phone.length > 0 ? footerContact.phone[0] : "10633");
+  const email = mainBranch?.email || footerContact?.email || "info@mediparkhospital.com";
+  const address = mainBranch?.address || "MediPark Hospital Dhaka, Plot # 81, Block-E, Bashundhara R/A, Dhaka 1229, Bangladesh";
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -101,16 +110,15 @@ export function WebsiteFooter() {
             <div className="space-y-4 mb-8 text-[14px] leading-relaxed">
               <div className="flex items-start">
                 <MapPin className="w-[18px] h-[18px] mr-3 text-white shrink-0 mt-0.5" />
-                <span>
-                  MediPark Hospital Dhaka, Plot # 81, Block-E,<br />
-                  Bashundhara R/A, Dhaka 1229, Bangladesh
+                <span className="whitespace-pre-wrap">
+                  {address}
                 </span>
               </div>
 
               <div className="flex items-start border-t border-white/10 pt-4">
                 <Phone className="w-[18px] h-[18px] mr-3 text-white shrink-0 mt-0.5" />
                 <span className="break-all whitespace-pre-wrap">
-                  {footerContact?.phone?.join(', ') || firstPhone}
+                  {mainBranch?.phone || (footerContact?.phone?.join(', ') || firstPhone)}
                 </span>
               </div>
 
