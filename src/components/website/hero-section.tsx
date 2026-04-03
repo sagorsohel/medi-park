@@ -141,15 +141,26 @@ export function HeroSection() {
           {activeSlides.map((slide) => (
             <SwiperSlide key={slide.id}>
               <div className="relative w-full h-full">
-                <img
-                  src={slide.background_image}
-                  alt={slide.title || "Hero Banner"}
-                  className="w-full h-full object-cover"
-                  onError={(e) => {
-                    const target = e.target as HTMLImageElement;
-                    target.src = "/vite.svg";
-                  }}
-                />
+                {slide.background_video ? (
+                  <video
+                    src={slide.background_video}
+                    className="w-full h-full object-cover"
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                  />
+                ) : (
+                  <img
+                    src={slide.background_image}
+                    alt={slide.title || "Hero Banner"}
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.src = "/vite.svg";
+                    }}
+                  />
+                )}
                 {/* Dynamic overlay with opacity from API */}
                 <div
                   className="absolute inset-0 bg-black"

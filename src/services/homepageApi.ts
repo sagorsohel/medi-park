@@ -5,6 +5,7 @@ export interface HeroSection {
   title: string;
   subtitle: string;
   background_image: string;
+  background_video?: string;
   opacity: string;
   serial: string;
   status: "active" | "inactive";
@@ -20,6 +21,7 @@ export interface CreateHeroSectionPayload {
   title: string;
   subtitle: string;
   background_image: string | File;
+  background_video?: string | File;
   opacity: string;
   serial: string;
   status?: "active" | "inactive";
@@ -29,6 +31,7 @@ export interface UpdateHeroSectionPayload {
   title?: string;
   subtitle?: string;
   background_image?: string | File;
+  background_video?: string | File;
   opacity?: string;
   serial?: string;
   status?: "active" | "inactive";
@@ -220,6 +223,9 @@ export const homepageApi = api.injectEndpoints({
         formData.append("title", body.title);
         formData.append("subtitle", body.subtitle);
         formData.append("background_image", body.background_image);
+        if (body.background_video) {
+          formData.append("background_video", body.background_video);
+        }
         formData.append("opacity", body.opacity);
         formData.append("serial", body.serial);
         if (body.status) {
@@ -250,6 +256,13 @@ export const homepageApi = api.injectEndpoints({
             formData.append("background_image", data.background_image);
           } else {
             formData.append("background_image", data.background_image);
+          }
+        }
+        if (data.background_video !== undefined) {
+          if (data.background_video instanceof File) {
+            formData.append("background_video", data.background_video);
+          } else {
+            formData.append("background_video", data.background_video);
           }
         }
         if (data.opacity !== undefined)

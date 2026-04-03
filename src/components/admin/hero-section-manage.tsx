@@ -19,6 +19,7 @@ import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 interface HeroSlide {
   id: number;
   image: string;
+  video: string;
   title: string;
   subtitle: string;
   overlayOpacity: number;
@@ -29,12 +30,14 @@ interface HeroSlide {
 interface DraftSlide {
   id: string; // temporary ID like 'draft-123'
   image: string;
+  video: string;
   title: string;
   subtitle: string;
   overlayOpacity: number;
   serial: string;
   status: 'active' | 'inactive';
   imageFile?: File;
+  videoFile?: File;
 }
 
 export function HeroSectionManage() {
@@ -52,7 +55,7 @@ export function HeroSectionManage() {
   const slideRefs = useRef<{ [key: number]: HTMLDivElement | null }>({});
 
   // Local state for editable slides (pending changes)
-  const [editableSlides, setEditableSlides] = useState<{ [key: number]: Partial<HeroSlide> & { imageFile?: File; originalImage?: string } }>({});
+  const [editableSlides, setEditableSlides] = useState<{ [key: number]: Partial<HeroSlide> & { imageFile?: File; videoFile?: File; originalImage?: string; originalVideo?: string } }>({});
   const [updatingSlides, setUpdatingSlides] = useState<{ [key: number]: boolean }>({});
 
   // Draft slides (new slides not yet created)
@@ -67,6 +70,7 @@ export function HeroSectionManage() {
       .map((section) => ({
         id: section.id,
         image: section.background_image,
+        video: section.background_video || "",
         title: section.title,
         subtitle: section.subtitle,
         overlayOpacity: Math.round(parseFloat(section.opacity) * 100),
@@ -105,6 +109,7 @@ export function HeroSectionManage() {
     const newDraft: DraftSlide = {
       id: draftId,
       image: "",
+      video: "",
       title: "",
       subtitle: "",
       overlayOpacity: 50,
@@ -162,6 +167,7 @@ export function HeroSectionManage() {
     if (editable.overlayOpacity !== undefined && editable.overlayOpacity !== slide.overlayOpacity) return true;
     if (editable.status !== undefined && editable.status !== slide.status) return true;
     if (editable.imageFile !== undefined) return true;
+    if (editable.videoFile !== undefined) return true;
 
     return false;
   };
@@ -191,6 +197,21 @@ export function HeroSectionManage() {
     }));
   };
 
+  const handleVideoChange = (id: number, file: File | null) => {
+    if (!file) return;
+
+    const previewUrl = URL.createObjectURL(file);
+
+    setEditableSlides(prev => ({
+      ...prev,
+      [id]: {
+        ...prev[id],
+        videoFile: file,
+        video: previewUrl,
+      }
+    }));
+  };
+
   const handleUpdateSlide = async (slide: HeroSlide) => {
     const editable = editableSlides[slide.id];
     if (!editable || !hasChanges(slide)) return;
@@ -202,6 +223,7 @@ export function HeroSectionManage() {
         title?: string;
         subtitle?: string;
         background_image?: string | File;
+        background_video?: string | File;
         opacity?: string;
         serial?: string;
         status?: 'active' | 'inactive';
@@ -213,6 +235,11 @@ export function HeroSectionManage() {
         updateData.background_image = editable.imageFile;
       } else if (editable.image !== undefined) {
         updateData.background_image = editable.image;
+      }
+      if (editable.videoFile !== undefined) {
+        updateData.background_video = editable.videoFile;
+      } else if (editable.video !== undefined) {
+        updateData.background_video = editable.video;
       }
       if (editable.overlayOpacity !== undefined) {
         updateData.opacity = (editable.overlayOpacity / 100).toString();
@@ -246,6 +273,7 @@ export function HeroSectionManage() {
         title: string;
         subtitle: string;
         background_image: string | File;
+        background_video?: string | File;
         opacity: string;
         serial: string;
         status: 'active' | 'inactive';
@@ -253,6 +281,7 @@ export function HeroSectionManage() {
         title: draft.title || "",
         subtitle: draft.subtitle || "",
         background_image: draft.imageFile || draft.image || "",
+        background_video: draft.videoFile || draft.video || undefined,
         opacity: (draft.overlayOpacity / 100).toString(),
         serial: draft.serial,
         status: draft.status,
@@ -298,6 +327,18 @@ export function HeroSectionManage() {
     setDraftSlides(prev => prev.map(draft =>
       draft.id === draftId
         ? { ...draft, imageFile: file, image: previewUrl }
+        : draft
+    ));
+  };
+
+  const handleDraftVideoChange = (draftId: string, file: File | null) => {
+    if (!file) return;
+
+    const previewUrl = URL.createObjectURL(file);
+
+    setDraftSlides(prev => prev.map(draft =>
+      draft.id === draftId
+        ? { ...draft, videoFile: file, video: previewUrl }
         : draft
     ));
   };
@@ -449,17 +490,31 @@ export function HeroSectionManage() {
               <CardContent className="p-6">
                 <div className="mb-4">
                   <div className="relative w-full h-48 rounded-lg overflow-hidden border border-gray-200 bg-gray-100">
-                    {draft.image ? (
+                    {draft.video ? (
+                      <video
+                        src={draft.video}
+                        className="w-full h-full object-cover"
+                        autoPlay
+                        muted
+                        loop
+                      />
+                    ) : draft.image ? (
+                      <img
+                        src={draft.image}
+                        alt="Draft slide"
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.src = "/vite.svg";
+                        }}
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-gray-400">
+                        <p>No media selected</p>
+                      </div>
+                    )}
+                    {(draft.image || draft.video) && (
                       <>
-                        <img
-                          src={draft.image}
-                          alt="Draft slide"
-                          className="w-full h-full object-cover"
-                          onError={(e) => {
-                            const target = e.target as HTMLImageElement;
-                            target.src = "/vite.svg";
-                          }}
-                        />
                         <div
                           className="absolute inset-0 bg-gray-950"
                           style={{ opacity: `${draft.overlayOpacity}%` }}
@@ -471,16 +526,12 @@ export function HeroSectionManage() {
                           </div>
                         </div>
                       </>
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center text-gray-400">
-                        <p>No image selected</p>
-                      </div>
                     )}
                   </div>
                 </div>
 
                 <div className="space-y-4">
-                  <Field>
+                   <Field>
                     <FieldLabel>Background Image</FieldLabel>
                     <FieldContent>
                       <div className="space-y-2">
@@ -499,6 +550,31 @@ export function HeroSectionManage() {
                         {draft.imageFile && (
                           <p className="text-xs text-green-600 mt-1">
                             Image selected: {draft.imageFile.name}
+                          </p>
+                        )}
+                      </div>
+                    </FieldContent>
+                  </Field>
+
+                  <Field>
+                    <FieldLabel>Background Video (Optional)</FieldLabel>
+                    <FieldContent>
+                      <div className="space-y-2">
+                        <Input
+                          type="file"
+                          accept="video/*"
+                          onChange={(e) => {
+                            const file = e.target.files?.[0];
+                            if (file) {
+                              handleDraftVideoChange(draft.id, file);
+                            }
+                          }}
+                          disabled={creatingSlides[draft.id]}
+                          className="cursor-pointer"
+                        />
+                        {draft.videoFile && (
+                          <p className="text-xs text-green-600 mt-1">
+                            Video selected: {draft.videoFile.name}
                           </p>
                         )}
                       </div>
@@ -625,15 +701,25 @@ export function HeroSectionManage() {
               <CardContent className="p-6">
                 <div className="mb-4">
                   <div className="relative w-full h-48 rounded-lg overflow-hidden border border-gray-200 bg-gray-100">
-                    <img
-                      src={getSlideValue(slide, 'image') || slide.image}
-                      alt={`Slide ${index + 1}`}
-                      className="w-full h-full object-cover"
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement;
-                        target.src = "/vite.svg";
-                      }}
-                    />
+                    {getSlideValue(slide, 'video') ? (
+                      <video
+                        src={getSlideValue(slide, 'video')}
+                        className="w-full h-full object-cover"
+                        autoPlay
+                        muted
+                        loop
+                      />
+                    ) : (
+                      <img
+                        src={getSlideValue(slide, 'image')}
+                        alt={`Slide ${index + 1}`}
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.src = "/vite.svg";
+                        }}
+                      />
+                    )}
                     <div
                       className="absolute inset-0 bg-gray-950"
                       style={{ opacity: `${getSlideValue(slide, 'overlayOpacity') ?? slide.overlayOpacity}%` }}
@@ -648,7 +734,7 @@ export function HeroSectionManage() {
                 </div>
 
                 <div className="space-y-4">
-                  <Field>
+                   <Field>
                     <FieldLabel>Background Image</FieldLabel>
                     <FieldContent>
                       <div className="space-y-2">
@@ -666,12 +752,42 @@ export function HeroSectionManage() {
                         />
                         {slide.image && !editableSlides[slide.id]?.imageFile && (
                           <p className="text-xs text-gray-500 mt-1">
-                            Current: {slide.image}
+                            Current Image: {slide.image.split('/').pop()}
                           </p>
                         )}
                         {editableSlides[slide.id]?.imageFile && (
                           <p className="text-xs text-green-600 mt-1">
                             New image selected: {editableSlides[slide.id].imageFile?.name}
+                          </p>
+                        )}
+                      </div>
+                    </FieldContent>
+                  </Field>
+
+                  <Field>
+                    <FieldLabel>Background Video</FieldLabel>
+                    <FieldContent>
+                      <div className="space-y-2">
+                        <Input
+                          type="file"
+                          accept="video/*"
+                          onChange={(e) => {
+                            const file = e.target.files?.[0];
+                            if (file) {
+                              handleVideoChange(slide.id, file);
+                            }
+                          }}
+                          disabled={updatingSlides[slide.id]}
+                          className="cursor-pointer"
+                        />
+                        {slide.video && !editableSlides[slide.id]?.videoFile && (
+                          <p className="text-xs text-gray-500 mt-1">
+                            Current Video: {slide.video.split('/').pop()}
+                          </p>
+                        )}
+                        {editableSlides[slide.id]?.videoFile && (
+                          <p className="text-xs text-green-600 mt-1">
+                            New video selected: {editableSlides[slide.id].videoFile?.name}
                           </p>
                         )}
                       </div>
@@ -752,16 +868,26 @@ export function HeroSectionManage() {
 
             <div className="relative w-full h-full overflow-hidden">
               {slides.map((slide, index) => (
-                <div
+                 <div
                   key={slide.id}
                   className={`absolute inset-0 transition-opacity duration-1000 ${index === currentPreviewIndex ? "opacity-100" : "opacity-0"
                     }`}
                 >
-                  <img
-                    src={slide.image}
-                    alt={`Slide ${index + 1}`}
-                    className="w-full h-full object-cover"
-                  />
+                  {slide.video ? (
+                    <video
+                      src={slide.video}
+                      className="w-full h-full object-cover"
+                      autoPlay
+                      muted
+                      loop
+                    />
+                  ) : (
+                    <img
+                      src={slide.image}
+                      alt={`Slide ${index + 1}`}
+                      className="w-full h-full object-cover"
+                    />
+                  )}
                   <div
                     className="absolute inset-0 bg-gray-950"
                     style={{ opacity: `${slide.overlayOpacity}%` }}
