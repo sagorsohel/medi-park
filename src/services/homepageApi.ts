@@ -441,10 +441,11 @@ export const homepageApi = api.injectEndpoints({
       providesTags: ["Banner"],
     }),
 
-    getFacilitiesPublic: builder.query<FacilitiesResponse, void>({
-      query: () => ({
+    getFacilitiesPublic: builder.query<FacilitiesResponse, { page?: number; limit?: number } | void>({
+      query: (params) => ({
         url: "/departments",
         method: "GET",
+        params: params || {},
       }),
       providesTags: ["Banner"],
       keepUnusedDataFor: 3600, // Cache for 60 minutes (3600 seconds)

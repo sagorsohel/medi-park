@@ -9,18 +9,18 @@ import { Button } from "@/components/ui/button";
 import { DynamicIcon } from "@/components/dynamic-icon";
 
 export function SpecialitiesSection() {
-  const { data } = useGetFacilitiesPublicQuery();
   const [currentPage, setCurrentPage] = useState(0);
+  const { data } = useGetFacilitiesPublicQuery({ page: currentPage, limit: 15 });
   console.log(data);
 
-  // Filter active facilities
+  // Filter active facilities (though API should ideally return only active ones for public)
   const activeFacilities = useMemo(() => {
     if (!data?.data) return [];
     return data.data.filter((facility) => facility.status === 'active');
   }, [data]);
 
-  // Only render if we have cached data
-  if (activeFacilities.length === 0) {
+  // Only render if we have data after loading
+  if (!data && activeFacilities.length === 0) {
     return null;
   }
 
@@ -28,7 +28,7 @@ export function SpecialitiesSection() {
   const cardsPerRow = 5;
   const rowsPerPage = 3;
   const cardsPerPage = cardsPerRow * rowsPerPage; // 15 cards
-  const totalPages = Math.ceil(activeFacilities.length / cardsPerPage);
+  const totalPages = data?.pagination?.total_page || 1;
 
   const handlePrevious = () => {
     setCurrentPage((prev) => Math.max(0, prev - 1));
@@ -38,11 +38,8 @@ export function SpecialitiesSection() {
     setCurrentPage((prev) => Math.min(totalPages - 1, prev + 1));
   };
 
-  // Get visible facilities for current page
-  const visibleFacilities = activeFacilities.slice(
-    currentPage * cardsPerPage,
-    (currentPage + 1) * cardsPerPage
-  );
+  // With server-side pagination, visibleFacilities is just activeFacilities
+  const visibleFacilities = activeFacilities;
 
   // Animation variants
   const containerVariants: Variants = {
