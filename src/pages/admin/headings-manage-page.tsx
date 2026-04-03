@@ -3,11 +3,13 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Field, FieldLabel, FieldContent } from "@/components/ui/field";
 import { Loader2, Save, ChevronLeft } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { useGetHeadingsQuery, useUpdateHeadingMutation, type UpdateHeadingPayload } from "@/services/headingApi";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router";
+import { IconSelector } from "@/components/admin/icon-selector";
 
 export default function HeadingsManagePage() {
   const navigate = useNavigate();
@@ -86,160 +88,195 @@ export default function HeadingsManagePage() {
 
   return (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="mb-8 flex items-center justify-between">
-        <div>
-          <div className="flex items-center gap-2 mb-2">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => navigate(-1)}
-              className="h-8 w-8 -ml-2"
-            >
-              <ChevronLeft className="h-5 w-5" />
-            </Button>
-            <h1 className="text-3xl font-bold text-gray-900">Website Headings & Contact</h1>
-          </div>
-          <p className="text-gray-600 ml-8">Manage website section titles, hero cards, and contact numbers</p>
-        </div>
-        <Button 
-          onClick={handleSubmit} 
-          disabled={isUpdating}
-          className="flex items-center gap-2"
+      <div className="mb-8">
+        <Button
+          variant="ghost"
+          onClick={() => navigate(-1)}
+          className="mb-4"
         >
-          {isUpdating ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
-          Save Changes
+          <ChevronLeft className="h-5 w-5 mr-2" />
+          Back to Dashboard
         </Button>
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">Website Headings & Contact</h1>
+            <p className="text-gray-600">Manage website section titles, hero cards, and contact numbers</p>
+          </div>
+          <Button
+            onClick={handleSubmit}
+            disabled={isUpdating}
+            className="flex items-center gap-2"
+          >
+            {isUpdating ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
+            {isUpdating ? "Saving..." : "Save Changes"}
+          </Button>
+        </div>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-8">
         {/* Contact Numbers */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          <h2 className="text-xl font-semibold mb-6 text-gray-800 border-b pb-2">Contact Numbers</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="space-y-2">
-              <Label htmlFor="whatsapp_number">WhatsApp Number</Label>
-              <Input
-                id="whatsapp_number"
-                value={formData.whatsapp_number}
-                onChange={(e) => handleInputChange("whatsapp_number", e.target.value)}
-                placeholder="e.g. +8801234567890"
-              />
+        <Card className="border-gray-200 shadow-sm">
+          <CardHeader className="bg-gray-50/50 border-b pb-4">
+            <CardTitle className="text-xl text-gray-800">Contact Numbers</CardTitle>
+            <CardDescription>Update global contact information for the website.</CardDescription>
+          </CardHeader>
+          <CardContent className="p-6 space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <Field>
+                <FieldLabel>WhatsApp Number</FieldLabel>
+                <FieldContent>
+                  <Input
+                    value={formData.whatsapp_number}
+                    onChange={(e) => handleInputChange("whatsapp_number", e.target.value)}
+                    placeholder="e.g. +8801234567890"
+                  />
+                </FieldContent>
+              </Field>
+              <Field>
+                <FieldLabel>Hotline Number</FieldLabel>
+                <FieldContent>
+                  <Input
+                    value={formData.hotline_number}
+                    onChange={(e) => handleInputChange("hotline_number", e.target.value)}
+                    placeholder="e.g. 10666"
+                  />
+                </FieldContent>
+              </Field>
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="hotline_number">Hotline Number</Label>
-              <Input
-                id="hotline_number"
-                value={formData.hotline_number}
-                onChange={(e) => handleInputChange("hotline_number", e.target.value)}
-                placeholder="e.g. 10666"
-              />
-            </div>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
 
         {/* Hero Section Cards */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          <h2 className="text-xl font-semibold mb-6 text-gray-800 border-b pb-2">Hero Section Quick Access Cards</h2>
-          <div className="space-y-6">
-            {[1, 2, 3, 4, 5].map((num) => (
-              <div key={num} className="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 rounded-lg bg-gray-50/50 border border-gray-100">
-                <div className="space-y-2">
-                  <Label htmlFor={`card_${num}_title`}>Card {num} Title</Label>
-                  <Input
-                    id={`card_${num}_title`}
-                    value={formData[`homepage_hero_section_card_${num === 1 ? 'one' : num === 2 ? 'two' : num === 3 ? 'three' : num === 4 ? 'four' : 'five'}_title` as keyof UpdateHeadingPayload]}
-                    onChange={(e) => handleInputChange(`homepage_hero_section_card_${num === 1 ? 'one' : num === 2 ? 'two' : num === 3 ? 'three' : num === 4 ? 'four' : 'five'}_title` as keyof UpdateHeadingPayload, e.target.value)}
-                    placeholder={`Enter card ${num} title`}
-                  />
+        <Card className="border-gray-200 shadow-sm">
+          <CardHeader className="bg-gray-50/50 border-b pb-4">
+            <CardTitle className="text-xl text-gray-800">Hero Section Quick Access Cards</CardTitle>
+            <CardDescription>Manage titles and icons for the five floating cards in the homepage hero section.</CardDescription>
+          </CardHeader>
+          <CardContent className="p-6 space-y-8">
+            {[1, 2, 3, 4, 5].map((num) => {
+              const num_text = num === 1 ? 'one' : num === 2 ? 'two' : num === 3 ? 'three' : num === 4 ? 'four' : 'five';
+              return (
+                <div key={num} className="p-4 rounded-lg bg-gray-50/30 border border-gray-100">
+                  <h3 className="font-semibold text-gray-700 mb-4 flex items-center gap-2">
+                    <span className="flex items-center justify-center w-6 h-6 rounded-full bg-primary text-white text-xs">{num}</span>
+                    Card {num === 1 ? 'One' : num === 2 ? 'Two' : num === 3 ? 'Three' : num === 4 ? 'Four' : 'Five'}
+                  </h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <Field>
+                      <FieldLabel>Card Title</FieldLabel>
+                      <FieldContent>
+                        <Input
+                          value={formData[`homepage_hero_section_card_${num_text}_title` as keyof UpdateHeadingPayload]}
+                          onChange={(e) => handleInputChange(`homepage_hero_section_card_${num_text}_title` as keyof UpdateHeadingPayload, e.target.value)}
+                          placeholder="Enter card title"
+                        />
+                      </FieldContent>
+                    </Field>
+                    <Field>
+                      <FieldLabel>Card Icon</FieldLabel>
+                      <FieldContent>
+                        <IconSelector
+                          value={formData[`homepage_hero_section_card_${num_text}_icon` as keyof UpdateHeadingPayload] || ""}
+                          onChange={(val) => handleInputChange(`homepage_hero_section_card_${num_text}_icon` as keyof UpdateHeadingPayload, val)}
+                        />
+                      </FieldContent>
+                    </Field>
+                  </div>
                 </div>
-                <div className="space-y-2">
-                  <Label htmlFor={`card_${num}_icon`}>Card {num} Icon (Lucide name or URL)</Label>
-                  <Input
-                    id={`card_${num}_icon`}
-                    value={formData[`homepage_hero_section_card_${num === 1 ? 'one' : num === 2 ? 'two' : num === 3 ? 'three' : num === 4 ? 'four' : 'five'}_icon` as keyof UpdateHeadingPayload]}
-                    onChange={(e) => handleInputChange(`homepage_hero_section_card_${num === 1 ? 'one' : num === 2 ? 'two' : num === 3 ? 'three' : num === 4 ? 'four' : 'five'}_icon` as keyof UpdateHeadingPayload, e.target.value)}
-                    placeholder={`Enter card ${num} icon`}
-                  />
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+              );
+            })}
+          </CardContent>
+        </Card>
 
         {/* Section Titles */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          <h2 className="text-xl font-semibold mb-6 text-gray-800 border-b pb-2">Website Section Titles</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="homepage_doctor_section_title">Doctor Section Title</Label>
-                <Input
-                  id="homepage_doctor_section_title"
-                  value={formData.homepage_doctor_section_title}
-                  onChange={(e) => handleInputChange("homepage_doctor_section_title", e.target.value)}
-                  placeholder="Enter title"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="homepage_news_and_media_section_title">News & Media Section Title</Label>
-                <Input
-                  id="homepage_news_and_media_section_title"
-                  value={formData.homepage_news_and_media_section_title}
-                  onChange={(e) => handleInputChange("homepage_news_and_media_section_title", e.target.value)}
-                  placeholder="Enter title"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="homepage_health_insight_section_title">Health Insight Section Title</Label>
-                <Input
-                  id="homepage_health_insight_section_title"
-                  value={formData.homepage_health_insight_section_title}
-                  onChange={(e) => handleInputChange("homepage_health_insight_section_title", e.target.value)}
-                  placeholder="Enter title"
-                />
-              </div>
+        <Card className="border-gray-200 shadow-sm">
+          <CardHeader className="bg-gray-50/50 border-b pb-4">
+            <CardTitle className="text-xl text-gray-800">Website Section Titles</CardTitle>
+            <CardDescription>Manage the main headings for various section modules on the homepage.</CardDescription>
+          </CardHeader>
+          <CardContent className="p-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+              <Field>
+                <FieldLabel>Doctor Section Title</FieldLabel>
+                <FieldContent>
+                  <Input
+                    value={formData.homepage_doctor_section_title}
+                    onChange={(e) => handleInputChange("homepage_doctor_section_title", e.target.value)}
+                    placeholder="Enter section title"
+                  />
+                </FieldContent>
+              </Field>
+              <Field>
+                <FieldLabel>Legacy Partner Section Title</FieldLabel>
+                <FieldContent>
+                  <Input
+                    value={formData.homepage_our_legacy_partner_section_title}
+                    onChange={(e) => handleInputChange("homepage_our_legacy_partner_section_title", e.target.value)}
+                    placeholder="Enter section title"
+                  />
+                </FieldContent>
+              </Field>
+              <Field>
+                <FieldLabel>News & Media Section Title</FieldLabel>
+                <FieldContent>
+                  <Input
+                    value={formData.homepage_news_and_media_section_title}
+                    onChange={(e) => handleInputChange("homepage_news_and_media_section_title", e.target.value)}
+                    placeholder="Enter section title"
+                  />
+                </FieldContent>
+              </Field>
+              <Field>
+                <FieldLabel>Footer Quick Links Column 1 Title</FieldLabel>
+                <FieldContent>
+                  <Input
+                    value={formData.homepage_footer_quick_links_first_column_title}
+                    onChange={(e) => handleInputChange("homepage_footer_quick_links_first_column_title", e.target.value)}
+                    placeholder="Enter column title"
+                  />
+                </FieldContent>
+              </Field>
+              <Field>
+                <FieldLabel>Health Insight Section Title</FieldLabel>
+                <FieldContent>
+                  <Input
+                    value={formData.homepage_health_insight_section_title}
+                    onChange={(e) => handleInputChange("homepage_health_insight_section_title", e.target.value)}
+                    placeholder="Enter section title"
+                  />
+                </FieldContent>
+              </Field>
+              <Field>
+                <FieldLabel>Footer Quick Links Column 2 Title</FieldLabel>
+                <FieldContent>
+                  <Input
+                    value={formData.homepage_footer_quick_links_second_column_title}
+                    onChange={(e) => handleInputChange("homepage_footer_quick_links_second_column_title", e.target.value)}
+                    placeholder="Enter column title"
+                  />
+                </FieldContent>
+              </Field>
             </div>
-
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="homepage_our_legacy_partner_section_title">Legacy Partner Section Title</Label>
-                <Input
-                  id="homepage_our_legacy_partner_section_title"
-                  value={formData.homepage_our_legacy_partner_section_title}
-                  onChange={(e) => handleInputChange("homepage_our_legacy_partner_section_title", e.target.value)}
-                  placeholder="Enter title"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="homepage_footer_quick_links_first_column_title">Footer Quick Links Column 1 Title</Label>
-                <Input
-                  id="homepage_footer_quick_links_first_column_title"
-                  value={formData.homepage_footer_quick_links_first_column_title}
-                  onChange={(e) => handleInputChange("homepage_footer_quick_links_first_column_title", e.target.value)}
-                  placeholder="Enter title"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="homepage_footer_quick_links_second_column_title">Footer Quick Links Column 2 Title</Label>
-                <Input
-                  id="homepage_footer_quick_links_second_column_title"
-                  value={formData.homepage_footer_quick_links_second_column_title}
-                  onChange={(e) => handleInputChange("homepage_footer_quick_links_second_column_title", e.target.value)}
-                  placeholder="Enter title"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
 
         <div className="flex justify-end pt-4">
-          <Button 
-            type="submit" 
+          <Button
+            type="submit"
             disabled={isUpdating}
-            className="min-w-[150px] h-11"
+            className="min-w-[180px] h-12 text-lg shadow-md hover:shadow-lg transition-all"
           >
-            {isUpdating && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
-            {isUpdating ? "Saving..." : "Save Changes"}
+            {isUpdating ? (
+              <>
+                <Loader2 className="h-5 w-5 mr-2 animate-spin" />
+                Saving...
+              </>
+            ) : (
+              <>
+                <Save className="h-5 w-5 mr-2" />
+                Save All Changes
+              </>
+            )}
           </Button>
         </div>
       </form>
