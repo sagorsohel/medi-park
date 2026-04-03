@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { Link } from "react-router";
-import { useGetFacilitiesPublicQuery } from "@/services/homepageApi";
+import { useGetFacilitiesPublicQuery, useGetHomepageSpecialitiesSectionQuery } from "@/services/homepageApi";
 import { motion, type Variants } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -10,19 +10,24 @@ import { DynamicIcon } from "@/components/dynamic-icon";
 
 export function SpecialitiesSection() {
   const [currentPage, setCurrentPage] = useState(1);
-  const { data } = useGetFacilitiesPublicQuery({ page: currentPage, limit: 15 }, {
+  const { data: homepageData } = useGetHomepageSpecialitiesSectionQuery();
+  const { data: allFacilitiesData } = useGetFacilitiesPublicQuery({ page: currentPage, limit: 15 }, {
     refetchOnMountOrArgChange: true,
   });
-  console.log(data);
 
-  // Filter active facilities (though API should ideally return only active ones for public)
+  // Filter active facilities from either homepage curated list or all facilities
   const activeFacilities = useMemo(() => {
-    if (!data?.data) return [];
-    return data.data.filter((facility) => facility.status === 'active');
-  }, [data]);
+    // If we have homepage section departments, use them (they are curated for this section)
+    if (homepageData?.data?.departments && homepageData.data.departments.length > 0) {
+      return homepageData.data.departments.filter((f) => f.status === 'active');
+    }
+    // Fallback to all facilities if not curated list (or while loading)
+    if (!allFacilitiesData?.data) return [];
+    return allFacilitiesData.data.filter((facility) => facility.status === 'active');
+  }, [homepageData, allFacilitiesData]);
 
   // Only render if we have data after loading
-  if (!data && activeFacilities.length === 0) {
+  if (!homepageData && !allFacilitiesData && activeFacilities.length === 0) {
     return null;
   }
 
@@ -30,7 +35,12 @@ export function SpecialitiesSection() {
   const cardsPerRow = 5;
   const rowsPerPage = 3;
   const cardsPerPage = cardsPerRow * rowsPerPage; // 15 cards
-  const totalPages = data?.pagination?.total_page || 1;
+
+  // If using curated list, we paginate locally. If using all facilities, we use server-side pagination info.
+  const isCurated = !!homepageData?.data?.departments && homepageData.data.departments.length > 0;
+  const totalPages = isCurated 
+    ? Math.ceil(activeFacilities.length / cardsPerPage) 
+    : (allFacilitiesData?.pagination?.total_page || 1);
 
   const handlePrevious = () => {
     setCurrentPage((prev) => Math.max(1, prev - 1));
@@ -40,8 +50,10 @@ export function SpecialitiesSection() {
     setCurrentPage((prev) => Math.min(totalPages, prev + 1));
   };
 
-  // With server-side pagination, visibleFacilities is just activeFacilities
-  const visibleFacilities = activeFacilities;
+  // Get visible facilities (slice for curated, all for server-paginated)
+  const visibleFacilities = isCurated 
+    ? activeFacilities.slice((currentPage - 1) * cardsPerPage, currentPage * cardsPerPage)
+    : activeFacilities;
 
   // Animation variants
   const containerVariants: Variants = {
@@ -90,8 +102,8 @@ export function SpecialitiesSection() {
           >
             <div className="relative w-full h-full rounded-xl overflow-hidden shadow-none">
               <img
-                src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=800&h=1000&fit=crop"
-                alt="Doctor and patient consultation"
+                src={homepageData?.data?.image_url || "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=800&h=1000&fit=crop"}
+                alt={homepageData?.data?.title || "Doctor and patient consultation"}
                 className="w-full h-full object-cover rounded-xl"
                 onError={(e) => {
                   const target = e.target as HTMLImageElement;
@@ -111,7 +123,7 @@ export function SpecialitiesSection() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.6 }}
               >
-                Our Specialities
+                {homepageData?.data?.title || "Our Specialities"}
               </motion.h2>
 
               {/* Facilities Grid */}

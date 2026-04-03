@@ -174,6 +174,8 @@ export interface SpecialitiesSection {
   id: number;
   title: string;
   image: string;
+  image_url: string;
+  departments: Facility[];
   status: "active" | "inactive";
 }
 
