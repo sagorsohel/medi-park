@@ -12,8 +12,12 @@ import { store } from '@/store'
 import { homepageApi } from '@/services/homepageApi'
 import { VideoSection } from '@/components/website/video-section'
 import { ContactMapSection } from '@/components/website/contact-map-section'
+import { useGetHeadingsQuery } from '@/services/headingApi'
 
 export default function HomePage() {
+  const { data: headingsData } = useGetHeadingsQuery();
+  const headings = headingsData?.data;
+
   // Prefetch hero sections data on mount to show immediately
   useEffect(() => {
     store.dispatch(homepageApi.endpoints.getHeroSectionsPublic.initiate());
@@ -31,7 +35,7 @@ export default function HomePage() {
       <SpecialitiesSection />
 
       {/* Doctors Section */}
-      <DoctorsSection />
+      <DoctorsSection title={headings?.homepage_doctor_section_title} />
 
 
 
@@ -39,16 +43,16 @@ export default function HomePage() {
       <PricingSection />
 
       {/* Media/News Section */}
-      <MediaSection />
+      <MediaSection title={headings?.homepage_news_and_media_section_title} />
 
       {/* CTA Section */}
       <CTASection />
 
       {/* Blog Section */}
-      <BlogSection />
+      <BlogSection title={headings?.homepage_health_insight_section_title} />
       <VideoSection />
       {/* Investor Section */}
-      <InvestorSection />
+      <InvestorSection title={headings?.homepage_our_legacy_partner_section_title} />
       <ContactMapSection />
     </div>
   )

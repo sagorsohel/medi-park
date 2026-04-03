@@ -14,6 +14,8 @@ import {
   ChevronRight
 } from "lucide-react";
 import { Link } from "react-router";
+import { useGetHeadingsQuery } from "@/services/headingApi";
+import { DynamicIcon } from "@/components/dynamic-icon";
 
 // Import Swiper styles
 // @ts-expect-error - CSS imports don't have type declarations
@@ -25,7 +27,71 @@ import "swiper/css/navigation";
 
 export function HeroSection() {
   const { data, isLoading } = useGetHeroSectionsPublicQuery();
+  const { data: headingsData } = useGetHeadingsQuery();
+  const headings = headingsData?.data;
+
   const [activeIndex, setActiveIndex] = useState(0);
+
+  const quickLinks = useMemo(() => {
+    const baseLinks = [
+      {
+        id: "one",
+        icon: Stethoscope,
+        label: "FIND A DOCTOR",
+        href: "/doctors",
+        bgClass: "bg-blue-50 hover:bg-blue-100/80",
+        textClass: "text-[#1e3a5f] group-hover:text-blue-700",
+        iconClass: "bg-blue-100 text-blue-600 group-hover:bg-blue-600 group-hover:text-white"
+      },
+      {
+        id: "two",
+        icon: CalendarDays,
+        label: "REQUEST AN APPOINTMENT",
+        href: "/appointment",
+        bgClass: "bg-emerald-50 hover:bg-emerald-100/80",
+        textClass: "text-[#1e3a5f] group-hover:text-emerald-700",
+        iconClass: "bg-emerald-100 text-emerald-600 group-hover:bg-emerald-600 group-hover:text-white"
+      },
+      {
+        id: "three",
+        icon: FileText,
+        label: "ONLINE REPORT",
+        href: "/reports",
+        bgClass: "bg-purple-50 hover:bg-purple-100/80",
+        textClass: "text-[#1e3a5f] group-hover:text-purple-700",
+        iconClass: "bg-purple-100 text-purple-600 group-hover:bg-purple-600 group-hover:text-white"
+      },
+      {
+        id: "four",
+        icon: Headset,
+        label: "TELE-ONLINE",
+        href: "/telemedicine",
+        bgClass: "bg-amber-50 hover:bg-amber-100/80",
+        textClass: "text-[#1e3a5f] group-hover:text-amber-700",
+        iconClass: "bg-amber-100 text-amber-600 group-hover:bg-amber-600 group-hover:text-white"
+      },
+      {
+        id: "five",
+        icon: Users,
+        label: "PATIENT & VISITORS GUIDE",
+        href: "/guide",
+        bgClass: "bg-rose-50 hover:bg-rose-100/80",
+        textClass: "text-[#1e3a5f] group-hover:text-rose-700",
+        iconClass: "bg-rose-100 text-rose-600 group-hover:bg-rose-600 group-hover:text-white"
+      },
+    ];
+
+    return baseLinks.map(link => {
+      const apiTitle = (headings as any)?.[`homepage_hero_section_card_${link.id}_title`];
+      const apiIcon = (headings as any)?.[`homepage_hero_section_card_${link.id}_icon`];
+
+      return {
+        ...link,
+        label: apiTitle || link.label,
+        icon: apiIcon || link.icon
+      };
+    });
+  }, [headings]);
 
   // Filter and sort active hero sections
   const activeSlides = useMemo(() => {
@@ -53,49 +119,6 @@ export function HeroSection() {
   if (activeSlides.length === 0) {
     return null;
   }
-
-  const quickLinks = [
-    {
-      icon: Stethoscope,
-      label: "FIND A DOCTOR",
-      href: "/doctors",
-      bgClass: "bg-blue-50 hover:bg-blue-100/80",
-      textClass: "text-[#1e3a5f] group-hover:text-blue-700",
-      iconClass: "bg-blue-100 text-blue-600 group-hover:bg-blue-600 group-hover:text-white"
-    },
-    {
-      icon: CalendarDays,
-      label: "REQUEST AN APPOINTMENT",
-      href: "/appointment",
-      bgClass: "bg-emerald-50 hover:bg-emerald-100/80",
-      textClass: "text-[#1e3a5f] group-hover:text-emerald-700",
-      iconClass: "bg-emerald-100 text-emerald-600 group-hover:bg-emerald-600 group-hover:text-white"
-    },
-    {
-      icon: FileText,
-      label: "ONLINE REPORT",
-      href: "/reports",
-      bgClass: "bg-purple-50 hover:bg-purple-100/80",
-      textClass: "text-[#1e3a5f] group-hover:text-purple-700",
-      iconClass: "bg-purple-100 text-purple-600 group-hover:bg-purple-600 group-hover:text-white"
-    },
-    {
-      icon: Headset,
-      label: "TELE-ONLINE",
-      href: "/telemedicine",
-      bgClass: "bg-amber-50 hover:bg-amber-100/80",
-      textClass: "text-[#1e3a5f] group-hover:text-amber-700",
-      iconClass: "bg-amber-100 text-amber-600 group-hover:bg-amber-600 group-hover:text-white"
-    },
-    {
-      icon: Users,
-      label: "PATIENT & VISITORS GUIDE",
-      href: "/guide",
-      bgClass: "bg-rose-50 hover:bg-rose-100/80",
-      textClass: "text-[#1e3a5f] group-hover:text-rose-700",
-      iconClass: "bg-rose-100 text-rose-600 group-hover:bg-rose-600 group-hover:text-white"
-    },
-  ];
 
   return (
     <div className="relative w-full h-auto md:h-[calc(100vh-80px)] overflow-hidden bg-white">
@@ -166,7 +189,11 @@ export function HeroSection() {
                     {link.label}
                   </span>
                   <div className={`w-11 h-11 md:w-12 md:h-12 rounded-full flex shrink-0 items-center justify-center group-hover:scale-110 transition-all duration-300 shadow-sm border border-white/50 ${link.iconClass}`}>
-                    <link.icon className="w-5 h-5 md:w-6 md:h-6" />
+                    {typeof link.icon === 'string' ? (
+                      <DynamicIcon name={link.icon} className="w-5 h-5 md:w-6 md:h-6" />
+                    ) : (
+                      <link.icon className="w-5 h-5 md:w-6 md:h-6" />
+                    )}
                   </div>
                 </Link>
               ))}

@@ -2,6 +2,7 @@
 
 import { Link } from "react-router";
 import { useGetFooterContactQuery, useGetSocialLinksQuery, useGetBranchesQuery } from "@/services/contactPageApi";
+import { useGetHeadingsQuery } from "@/services/headingApi";
 import { useMemo } from "react";
 import { Facebook, Youtube, Instagram, Linkedin, MapPin, Phone, Mail, ChevronRight, ChevronUp } from "lucide-react";
 
@@ -9,6 +10,7 @@ export function WebsiteFooter() {
   const currentYear = new Date().getFullYear();
   const { data: footerContactData } = useGetFooterContactQuery();
   const { data: socialLinksData } = useGetSocialLinksQuery(1);
+  const { data: headingsData } = useGetHeadingsQuery();
 
   // Get active social links
   const activeSocialLinks = useMemo(() => {
@@ -17,6 +19,7 @@ export function WebsiteFooter() {
   }, [socialLinksData]);
 
   const footerContact = footerContactData?.data;
+  const headings = headingsData?.data;
   const { data: branchesData } = useGetBranchesQuery();
   
   // Find the main branch
@@ -63,7 +66,9 @@ export function WebsiteFooter() {
 
           {/* Column 2: Quick Links 1 */}
           <div className="flex flex-col">
-            <h3 className="text-white text-lg font-bold mb-5 pt-2 uppercase">QUICK LINKS</h3>
+            <h3 className="text-white text-lg font-bold mb-5 pt-2 uppercase">
+              {headings?.homepage_footer_quick_links_first_column_title || "QUICK LINKS"}
+            </h3>
             <ul className="space-y-0">
               {[
                 { name: 'Services', to: '/services' },
@@ -84,7 +89,9 @@ export function WebsiteFooter() {
 
           {/* Column 3: Quick Links 2 */}
           <div className="flex flex-col">
-            <h3 className="text-white text-lg font-bold mb-5 pt-2 uppercase">QUICK LINKS</h3>
+            <h3 className="text-white text-lg font-bold mb-5 pt-2 uppercase">
+              {headings?.homepage_footer_quick_links_second_column_title || "QUICK LINKS"}
+            </h3>
             <ul className="space-y-0">
               {[
                 { name: 'News & Media', to: '/news' },

@@ -17,6 +17,7 @@ import { useGetSpecializedFacilitiesPublicQuery } from "@/services/homepageApi";
 import { useGetFutureVenturesPublicQuery } from "@/services/futureVenturesApi";
 import { useGetDirectorsQuery, type Director } from "@/services/directorApi";
 import { useGetFooterContactQuery, useGetSocialLinksQuery } from "@/services/contactPageApi";
+import { useGetHeadingsQuery } from "@/services/headingApi";
 import { DynamicIcon } from "@/components/dynamic-icon";
 
 export function WebsiteNavbar() {
@@ -25,6 +26,7 @@ export function WebsiteNavbar() {
 
   const { data: footerContactData } = useGetFooterContactQuery();
   const { data: socialLinksData } = useGetSocialLinksQuery(1);
+  const { data: headingsData } = useGetHeadingsQuery();
 
   // Get active social links
   const activeSocialLinks = useMemo(() => {
@@ -33,7 +35,10 @@ export function WebsiteNavbar() {
   }, [socialLinksData]);
 
   const footerContact = footerContactData?.data;
-  const firstPhone = footerContact?.phone && footerContact.phone.length > 0 ? footerContact.phone[0] : "10633";
+  const headings = headingsData?.data;
+  
+  const hotline = headings?.hotline_number || (footerContact?.phone && footerContact.phone.length > 0 ? footerContact.phone[0] : "10633");
+  const whatsapp = headings?.whatsapp_number || "8801805032998";
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
   const [departmentsOpen, setDepartmentsOpen] = useState<boolean>(false);
@@ -91,7 +96,7 @@ export function WebsiteNavbar() {
           <a href={activeSocialLinks.find(l => l.name.toLowerCase().includes('youtube'))?.link || '#'} className="hover:text-primary transition-colors"><Youtube className="w-[14px] h-[14px] fill-current" /></a>
         </div>
         <div className="font-bold tracking-[0.1em] flex items-center gap-2 uppercase">
-          [ Hotline - {firstPhone} ]
+          [ Hotline - {hotline} ]
         </div>
       </div>
 
@@ -321,7 +326,7 @@ export function WebsiteNavbar() {
           style={{ clipPath: 'polygon(12% 0, 100% 0, 100% 100%, 0% 100%)', width: '240px' }}
         >
           <a
-            href="https://wa.me/8801805032998"
+            href={`https://wa.me/${whatsapp?.replace(/\+/g, '')}`}
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-2 group transition-all"
@@ -464,7 +469,7 @@ export function WebsiteNavbar() {
 
                 <div className="pt-6 border-t border-gray-200">
                   <a
-                    href="https://wa.me/8801805032998"
+                    href={`https://wa.me/${whatsapp?.replace(/\+/g, '')}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center justify-center gap-3 p-4 bg-[#25D366]/10 rounded-lg hover:bg-[#25D366]/20 transition-all border border-[#25D366]/20"

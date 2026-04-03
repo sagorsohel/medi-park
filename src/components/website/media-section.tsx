@@ -9,7 +9,11 @@ import { useGetNewsPublicQuery } from "@/services/newsApi";
 import { motion, type Variants } from "framer-motion";
 import { NewsPublicCard } from "./news-public-card";
 
-export function MediaSection() {
+interface MediaSectionProps {
+  title?: string;
+}
+
+export function MediaSection({ title }: MediaSectionProps) {
   const { data } = useGetNewsPublicQuery(1);
   const navigate = useNavigate();
 
@@ -66,7 +70,11 @@ export function MediaSection() {
         {/* Title */}
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-extrabold text-primary mb-4">
-            News & <span className="text-primary">Media</span>
+            {title ? (
+              title
+            ) : (
+              <>News & <span className="text-primary">Media</span></>
+            )}
           </h2>
         </div>
 

@@ -7,7 +7,11 @@ import { useGetDoctorsQuery } from "@/services/doctorApi";
 import { Loader2 } from "lucide-react";
 import { useMemo } from "react";
 
-export function DoctorsSection() {
+interface DoctorsSectionProps {
+  title?: string;
+}
+
+export function DoctorsSection({ title }: DoctorsSectionProps) {
   const navigate = useNavigate();
   const { data, isLoading, error } = useGetDoctorsQuery(1);
   console.log(data);
@@ -60,7 +64,11 @@ export function DoctorsSection() {
         {/* Title */}
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-extrabold text-primary mb-4">
-            Our <span className="text-primary">Doctors</span>
+            {title ? (
+              title
+            ) : (
+              <>Our <span className="text-primary">Doctors</span></>
+            )}
           </h2>
 
         </div>

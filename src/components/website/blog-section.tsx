@@ -6,7 +6,11 @@ import { useGetBlogsPublicQuery } from "@/services/blogApi";
 import { Loader2 } from "lucide-react";
 import { BlogCard } from "./blog-card";
 
-export function BlogSection() {
+interface BlogSectionProps {
+  title?: string;
+}
+
+export function BlogSection({ title }: BlogSectionProps) {
   const { data, isLoading } = useGetBlogsPublicQuery(1);
 
   // Get first 3 active blog posts for the home page section
@@ -22,7 +26,9 @@ export function BlogSection() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-extrabold text-primary mb-4">
-              Health <span className="text-primary">Insight</span>
+              {title ? title : (
+                <>Health <span className="text-primary">Insight</span></>
+              )}
             </h2>
           </div>
           <div className="flex items-center justify-center py-20">
@@ -44,7 +50,9 @@ export function BlogSection() {
         {/* Title */}
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-extrabold text-primary mb-4">
-            Health <span className="text-primary">Insight</span>
+            {title ? title : (
+              <>Health <span className="text-primary">Insight</span></>
+            )}
           </h2>
         </div>
 

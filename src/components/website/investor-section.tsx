@@ -7,7 +7,11 @@ import { useMemo } from "react";
 import { useGetInvestorsQuery } from "@/services/investorApi";
 import { Loader2 } from "lucide-react";
 
-export function InvestorSection() {
+interface InvestorSectionProps {
+  title?: string;
+}
+
+export function InvestorSection({ title }: InvestorSectionProps) {
   const { data, isLoading } = useGetInvestorsQuery(1);
 
   console.log("investor section data", data);
@@ -29,7 +33,9 @@ export function InvestorSection() {
       <div className="w-full bg-blue-50 py-16 md:py-24">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl font-bold text-primary mb-2">Our Legacy Partner</h2>
+            <h2 className="text-4xl md:text-5xl font-bold text-primary mb-2">
+              {title || "Our Legacy Partner"}
+            </h2>
             <div className="w-0.5 h-8 bg-primary mx-auto mt-2" />
           </div>
           <div className="flex items-center justify-center py-12">
@@ -50,7 +56,13 @@ export function InvestorSection() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Title */}
         <div className="text-center mb-12">
-          <h2 className="text-4xl md:text-5xl font-bold text-primary mb-2">Our Legacy Partner</h2>
+          <h2 className="text-4xl md:text-5xl font-extrabold text-primary mb-4">
+            {title ? (
+              title
+            ) : (
+              <>Our Legacy Partner</>
+            )}
+          </h2>
           <div className="w-0.5 h-8 bg-primary mx-auto mt-2" />
         </div>
 
