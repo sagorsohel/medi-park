@@ -38,6 +38,8 @@ export default function HeadingsManagePage() {
     homepage_pricing_section_title: "",
     homepage_pricing_section_button_text: "",
     homepage_pricing_section_button_link: "",
+    our_values_title: "",
+    our_values_description: "",
   });
 
   useEffect(() => {
@@ -65,6 +67,8 @@ export default function HeadingsManagePage() {
         homepage_pricing_section_title: data.homepage_pricing_section_title || "",
         homepage_pricing_section_button_text: data.homepage_pricing_section_button_text || "",
         homepage_pricing_section_button_link: data.homepage_pricing_section_button_link || "",
+        our_values_title: data.our_values_title || "",
+        our_values_description: data.our_values_description || "",
       });
     }
   }, [headingData]);
@@ -272,7 +276,46 @@ export default function HeadingsManagePage() {
                   />
                 </FieldContent>
               </Field>
-
+              <Field>
+                <FieldLabel>Pricing Section Button Text</FieldLabel>
+                <FieldContent>
+                  <Input
+                    value={formData.homepage_pricing_section_button_text}
+                    onChange={(e) => handleInputChange("homepage_pricing_section_button_text", e.target.value)}
+                    placeholder="Explore All Packages"
+                  />
+                </FieldContent>
+              </Field>
+              <Field className="md:col-span-2">
+                <FieldLabel>Pricing Section Button Link</FieldLabel>
+                <FieldContent>
+                  <Input
+                    value={formData.homepage_pricing_section_button_link}
+                    onChange={(e) => handleInputChange("homepage_pricing_section_button_link", e.target.value)}
+                    placeholder="e.g. /packages"
+                  />
+                </FieldContent>
+              </Field>
+              <Field>
+                <FieldLabel>Our Values Section Title</FieldLabel>
+                <FieldContent>
+                  <Input
+                    value={formData.our_values_title}
+                    onChange={(e) => handleInputChange("our_values_title", e.target.value)}
+                    placeholder="e.g. Our Core Values"
+                  />
+                </FieldContent>
+              </Field>
+              <Field className="md:col-span-2">
+                <FieldLabel>Our Values Section Description</FieldLabel>
+                <FieldContent>
+                  <Input
+                    value={formData.our_values_description}
+                    onChange={(e) => handleInputChange("our_values_description", e.target.value)}
+                    placeholder="A brief introduction to your values"
+                  />
+                </FieldContent>
+              </Field>
             </div>
           </CardContent>
         </Card>

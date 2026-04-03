@@ -50,7 +50,7 @@ export const ourValuesApi = api.injectEndpoints({
     }),
     getOurValuesPublic: builder.query<OurValueResponse, void>({
       query: () => ({
-        url: "/our-values/active",
+        url: "/our-values",
         method: "GET",
       }),
       providesTags: ["OurValue"],
@@ -86,6 +86,13 @@ export const ourValuesApi = api.injectEndpoints({
       }),
       invalidatesTags: ["OurValue"],
     }),
+    getOurValueById: builder.query<SingleOurValueResponse, number>({
+      query: (id) => ({
+        url: `/our-values/${id}`,
+        method: "GET",
+      }),
+      providesTags: (result, error, id) => [{ type: "OurValue", id }],
+    }),
   }),
 });
 
@@ -96,4 +103,5 @@ export const {
   useUpdateOurValueMutation,
   useDeleteOurValueMutation,
   useSetOurValueActiveMutation,
+  useGetOurValueByIdQuery,
 } = ourValuesApi;

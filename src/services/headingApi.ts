@@ -23,6 +23,8 @@ export interface Heading {
   homepage_pricing_section_title?: string;
   homepage_pricing_section_button_text?: string;
   homepage_pricing_section_button_link?: string;
+  our_values_title?: string;
+  our_values_description?: string;
   created_at?: string;
   updated_at?: string;
 }
@@ -55,6 +57,8 @@ export interface UpdateHeadingPayload {
   homepage_pricing_section_title?: string;
   homepage_pricing_section_button_text?: string;
   homepage_pricing_section_button_link?: string;
+  our_values_title?: string;
+  our_values_description?: string;
 }
 
 export const headingApi = api.injectEndpoints({

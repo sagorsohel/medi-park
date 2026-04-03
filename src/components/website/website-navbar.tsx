@@ -16,6 +16,7 @@ import {
 import { useGetSpecializedFacilitiesPublicQuery } from "@/services/homepageApi";
 import { useGetFutureVenturesPublicQuery } from "@/services/futureVenturesApi";
 import { useGetDirectorsQuery, type Director } from "@/services/directorApi";
+import { useGetOurValuesPublicQuery } from "@/services/ourValuesApi";
 import { useGetFooterContactQuery, useGetSocialLinksQuery } from "@/services/contactPageApi";
 import { useGetHeadingsQuery } from "@/services/headingApi";
 import { DynamicIcon } from "@/components/dynamic-icon";
@@ -50,11 +51,13 @@ export function WebsiteNavbar() {
   const { data: specializedFacilitiesData } = useGetSpecializedFacilitiesPublicQuery();
   const { data: futureVenturesData } = useGetFutureVenturesPublicQuery(1);
   const { data: directorsData } = useGetDirectorsQuery({ limit: 100 });
+  const { data: valuesData } = useGetOurValuesPublicQuery();
 
   const activeSpecializedFacilities = specializedFacilitiesData?.data?.filter(f => f.status === 'active') || [];
   const activeFutureVentures = futureVenturesData?.data?.filter(f => f.status === 'active') || [];
 
   const directors = directorsData?.data || [];
+  const values = valuesData?.data || [];
   const keyDesignations = ["Chairman", "Managing Director", "Vice Chairman", "Deputy Managing Director"];
   const importantDirectors = directors.filter(d => keyDesignations.some(k => d.designation.includes(k) || k.includes(d.designation)));
 
@@ -173,7 +176,7 @@ export function WebsiteNavbar() {
                   </Link>
 
                   {/* Nested Flyout for Messages */}
-                  <div className="absolute left-[100%] top-0 w-[250px] bg-[#0B1B3D] border-l border-primary shadow-xl opacity-0 invisible group-hover/sub:opacity-100 group-hover/sub:visible transition-all duration-300">
+                  <div className="absolute left-full top-0 w-[250px] bg-[#0B1B3D] border-l border-primary shadow-xl opacity-0 invisible group-hover/sub:opacity-100 group-hover/sub:visible transition-all duration-300">
                     {sortedDirectors.map(director => (
                       <Link
                         key={director.id}
@@ -188,6 +191,36 @@ export function WebsiteNavbar() {
 
                 <Link to="/mission" className="block px-5 py-3.5 hover:bg-primary/10 hover:text-primary border-b border-gray-700/50 uppercase text-xs font-semibold transition-all">Mission</Link>
                 <Link to="/vision" className="block px-5 py-3.5 hover:bg-primary/10 hover:text-primary border-b border-gray-700/50 uppercase text-xs font-semibold transition-all">Vision</Link>
+                
+                {/* Our Values with Submenu */}
+                <div className="group/sub relative">
+                  <Link
+                    to="/our-values"
+                    className="flex items-center justify-between px-5 py-3.5 hover:bg-primary/10 hover:text-primary border-b border-gray-700/50 uppercase text-xs font-semibold transition-all"
+                  >
+                    {headings?.our_values_title || "Our Values"}
+                    <ChevronDown className="w-3.5 h-3.5 -rotate-90 group-hover/sub:text-primary" />
+                  </Link>
+
+                  {/* Nested Flyout for Values */}
+                  {values.length > 0 && (
+                    <div className="absolute left-full top-0 w-[250px] bg-[#0B1B3D] border-l border-primary shadow-xl opacity-0 invisible group-hover/sub:opacity-100 group-hover/sub:visible transition-all duration-300">
+                      {values.map(val => (
+                        <Link
+                          key={val.id}
+                          to={`/our-values/${val.id}`}
+                          className="block px-5 py-3.5 hover:bg-primary/10 hover:text-primary border-b border-gray-700/50 uppercase text-xs font-semibold transition-all last:border-b-0"
+                        >
+                          <div className="flex items-center gap-2">
+                            {val.icon && <DynamicIcon name={val.icon} className="w-3.5 h-3.5" />}
+                            {val.title}
+                          </div>
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
                 <Link to="/about" className="block px-5 py-3.5 hover:bg-primary/10 hover:text-primary uppercase text-xs font-semibold transition-all">Board of Directors</Link>
               </div>
             </div>
@@ -368,6 +401,15 @@ export function WebsiteNavbar() {
                       <Link to="/about" onClick={() => setMobileMenuOpen(false)} className="py-2.5 text-sm font-semibold text-gray-600 uppercase">About MSH</Link>
                       <Link to="/mission" onClick={() => setMobileMenuOpen(false)} className="py-2.5 text-sm font-semibold text-gray-600 uppercase">Mission</Link>
                       <Link to="/vision" onClick={() => setMobileMenuOpen(false)} className="py-2.5 text-sm font-semibold text-gray-600 uppercase">Vision</Link>
+                      <Link to="/our-values" onClick={() => setMobileMenuOpen(false)} className="py-2.5 text-sm font-semibold text-gray-600 uppercase">{headings?.our_values_title || "Our Values"}</Link>
+                      <div className="pl-4 flex flex-col border-l border-gray-100 ml-1">
+                        {values.map(val => (
+                          <Link key={val.id} to={`/our-values/${val.id}`} onClick={() => setMobileMenuOpen(false)} className="py-2 text-[13px] font-medium text-gray-500 uppercase flex items-center gap-2">
+                             {val.icon && <DynamicIcon name={val.icon} className="w-3 h-3" />}
+                             {val.title}
+                          </Link>
+                        ))}
+                      </div>
                       {sortedDirectors.map(director => (
                         <Link key={director.id} to={getDirectorLink(director)} onClick={() => setMobileMenuOpen(false)} className="py-2.5 text-sm font-semibold text-gray-600 uppercase">
                           {getDirectorLabel(director)}

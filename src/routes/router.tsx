@@ -88,6 +88,8 @@ import OurValuesManagePage from '@/pages/admin/our-values-manage-page'
 
 import PackageDetailPage from '@/pages/packages/package-detail-page'
 import PublicPackagesPage from '@/pages/packages/public-packages-page'
+import OurValuesPage from '@/pages/our-values/our-values-page'
+import OurValuesDetailsPage from '@/pages/our-values/our-values-details-page'
 
 const router = createBrowserRouter([
   // 🌐 Website routes (with website layout - sticky navbar & footer)
@@ -133,6 +135,8 @@ const router = createBrowserRouter([
       { path: "visitors-policy", element: <PublicVisitorsPolicyPage /> },
       { path: "packages", element: <PublicPackagesPage /> },
       { path: "packages/:id", element: <PackageDetailPage /> },
+      { path: "our-values", element: <OurValuesPage /> },
+      { path: "our-values/:id", element: <OurValuesDetailsPage /> },
     ],
   },
 
