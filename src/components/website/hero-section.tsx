@@ -141,9 +141,9 @@ export function HeroSection() {
           {activeSlides.map((slide) => (
             <SwiperSlide key={slide.id}>
               <div className="relative w-full h-full">
-                {slide.background_video ? (
+                {(slide.background_image?.toString() || '').match(/\.(mp4|webm|ogg)$/i) ? (
                   <video
-                    src={slide.background_video}
+                    src={slide.background_image}
                     className="w-full h-full object-cover"
                     autoPlay
                     muted
