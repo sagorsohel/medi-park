@@ -11,6 +11,7 @@ import { DynamicIcon } from "@/components/dynamic-icon";
 export function SpecialitiesSection() {
   const { data } = useGetFacilitiesPublicQuery();
   const [currentPage, setCurrentPage] = useState(0);
+  console.log(data);
 
   // Filter active facilities
   const activeFacilities = useMemo(() => {

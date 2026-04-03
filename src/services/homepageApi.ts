@@ -452,7 +452,7 @@ export const homepageApi = api.injectEndpoints({
 
     getSpecializedFacilitiesPublic: builder.query<FacilitiesResponse, void>({
       query: () => ({
-        url: "/departments?is_specialized=true",
+        url: "/departments?page=0",
         method: "GET",
       }),
       providesTags: ["Banner"],

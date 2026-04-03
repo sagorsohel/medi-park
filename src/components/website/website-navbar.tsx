@@ -13,7 +13,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { useGetFacilitiesPublicQuery, useGetSpecializedFacilitiesPublicQuery } from "@/services/homepageApi";
+import { useGetSpecializedFacilitiesPublicQuery } from "@/services/homepageApi";
 import { useGetFutureVenturesPublicQuery } from "@/services/futureVenturesApi";
 import { useGetDirectorsQuery, type Director } from "@/services/directorApi";
 import { useGetFooterContactQuery, useGetSocialLinksQuery } from "@/services/contactPageApi";
@@ -37,18 +37,15 @@ export function WebsiteNavbar() {
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
   const [departmentsOpen, setDepartmentsOpen] = useState<boolean>(false);
-  const [specializedDepartmentsOpen, setSpecializedDepartmentsOpen] = useState<boolean>(false);
-  const [futureVenturesOpen, setFutureVenturesOpen] = useState<boolean>(false);
+
   const [aboutOpen, setAboutOpen] = useState<boolean>(false);
   const [newsOpen, setNewsOpen] = useState<boolean>(false);
   const [visitorsOpen, setVisitorsOpen] = useState<boolean>(false);
 
-  const { data: facilitiesData } = useGetFacilitiesPublicQuery();
   const { data: specializedFacilitiesData } = useGetSpecializedFacilitiesPublicQuery();
   const { data: futureVenturesData } = useGetFutureVenturesPublicQuery(1);
   const { data: directorsData } = useGetDirectorsQuery({ limit: 100 });
 
-  const activeFacilities = facilitiesData?.data?.filter(f => f.status === 'active') || [];
   const activeSpecializedFacilities = specializedFacilitiesData?.data?.filter(f => f.status === 'active') || [];
   const activeFutureVentures = futureVenturesData?.data?.filter(f => f.status === 'active') || [];
 
@@ -162,20 +159,20 @@ export function WebsiteNavbar() {
               <div className="absolute top-full left-0 w-[250px] bg-[#0B1B3D] text-white shadow-[0_10px_30px_rgba(0,0,0,0.1)] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top border-t-[3px] border-primary z-50">
                 {/* About MSH with Submenu */}
                 <div className="group/sub relative">
-                  <Link 
-                    to="/about" 
+                  <Link
+                    to="/about"
                     className="flex items-center justify-between px-5 py-3.5 hover:bg-primary/10 hover:text-primary border-b border-gray-700/50 uppercase text-xs font-semibold transition-all"
                   >
                     About MSH
                     <ChevronDown className="w-3.5 h-3.5 -rotate-90 group-hover/sub:text-primary" />
                   </Link>
-                  
+
                   {/* Nested Flyout for Messages */}
                   <div className="absolute left-[100%] top-0 w-[250px] bg-[#0B1B3D] border-l border-primary shadow-xl opacity-0 invisible group-hover/sub:opacity-100 group-hover/sub:visible transition-all duration-300">
                     {sortedDirectors.map(director => (
-                      <Link 
-                        key={director.id} 
-                        to={getDirectorLink(director)} 
+                      <Link
+                        key={director.id}
+                        to={getDirectorLink(director)}
                         className="block px-5 py-3.5 hover:bg-primary/10 hover:text-primary border-b border-gray-700/50 uppercase text-xs font-semibold transition-all last:border-b-0"
                       >
                         {getDirectorLabel(director)}
@@ -208,9 +205,9 @@ export function WebsiteNavbar() {
                     <h3 className="text-xl font-bold text-primary uppercase tracking-wide">Our Speciality Departments</h3>
                     <Link to="/facilities" className="text-[13px] font-bold text-white hover:text-primary hover:underline uppercase transition-colors">View All Departments</Link>
                   </div>
-                  {activeFacilities.length > 0 ? (
+                  {activeSpecializedFacilities.length > 0 ? (
                     <div className="grid grid-cols-4 gap-x-8 gap-y-4">
-                      {activeFacilities.map((facility) => (
+                      {activeSpecializedFacilities.map((facility) => (
                         <Link
                           key={facility.id}
                           to={`/facilities/${facility.id}`}
@@ -387,7 +384,7 @@ export function WebsiteNavbar() {
                   </CollapsibleTrigger>
                   <CollapsibleContent className="bg-gray-50 border-b border-gray-100">
                     <div className="py-2 pl-4 flex flex-col max-h-[40vh] overflow-y-auto">
-                      {activeFacilities.map((facility) => (
+                      {activeSpecializedFacilities.map((facility) => (
                         <Link
                           key={facility.id}
                           to={`/facilities/${facility.id}`}

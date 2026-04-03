@@ -52,7 +52,7 @@ export default function FacilitiesPage() {
 
     const handleUpdateSpecialities = async () => {
         try {
-            const sectionId = specialitiesData?.data?.id || 1; 
+            const sectionId = specialitiesData?.data?.id || 1;
             await updateSpecialities({
                 id: sectionId,
                 data: {
@@ -155,13 +155,13 @@ export default function FacilitiesPage() {
                         Update the title and background image for the specialities section on the homepage.
                     </CardDescription>
                 </CardHeader>
-                <CardContent className="pt-6">
+                <CardContent className="p-6">
                     {isLoadingSpecialities ? (
                         <div className="flex items-center justify-center p-8">
                             <Loader2 className="h-8 w-8 animate-spin text-primary" />
                         </div>
                     ) : (
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 ">
                             {/* Left Side: Form */}
                             <div className="space-y-6">
                                 <div className="space-y-2">
@@ -175,7 +175,7 @@ export default function FacilitiesPage() {
                                         onChange={(e) => setSpecialitiesTitle(e.target.value)}
                                     />
                                 </div>
-                                
+
                                 <div className="space-y-2">
                                     <Label className="text-base font-semibold">Background Image</Label>
                                     <div className="flex items-center gap-4">
@@ -198,8 +198,8 @@ export default function FacilitiesPage() {
                                     </div>
                                 </div>
 
-                                <Button 
-                                    onClick={handleUpdateSpecialities} 
+                                <Button
+                                    onClick={handleUpdateSpecialities}
                                     disabled={isUpdatingSpecialities}
                                     className="w-full sm:w-auto flex items-center gap-2"
                                 >
