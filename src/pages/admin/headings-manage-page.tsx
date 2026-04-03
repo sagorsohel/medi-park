@@ -272,7 +272,26 @@ export default function HeadingsManagePage() {
                   />
                 </FieldContent>
               </Field>
-
+              <Field>
+                <FieldLabel>Pricing Section Button Text</FieldLabel>
+                <FieldContent>
+                  <Input
+                    value={formData.homepage_pricing_section_button_text}
+                    onChange={(e) => handleInputChange("homepage_pricing_section_button_text", e.target.value)}
+                    placeholder="Explore All Packages"
+                  />
+                </FieldContent>
+              </Field>
+              <Field className="md:col-span-2">
+                <FieldLabel>Pricing Section Button Link</FieldLabel>
+                <FieldContent>
+                  <Input
+                    value={formData.homepage_pricing_section_button_link}
+                    onChange={(e) => handleInputChange("homepage_pricing_section_button_link", e.target.value)}
+                    placeholder="e.g. /packages"
+                  />
+                </FieldContent>
+              </Field>
             </div>
           </CardContent>
         </Card>

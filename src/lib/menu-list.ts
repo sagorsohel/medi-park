@@ -15,7 +15,8 @@ import {
   CreditCard,
   Building,
   Type,
-  DollarSign
+  DollarSign,
+  Heart
 } from "lucide-react";
 
 type Submenu = {
@@ -117,6 +118,12 @@ export function getMenuList(_pathname: string): Group[] {
           href: "/admin/website/about",
           label: "About Us",
           icon: Phone,
+          submenus: []
+        },
+        {
+          href: "/admin/website/our-values",
+          label: "Our Values",
+          icon: Heart,
           submenus: []
         },
         {
