@@ -37,8 +37,8 @@ export default function FacilitiesPage() {
     useEffect(() => {
         if (specialitiesData?.data) {
             setSpecialitiesTitle(specialitiesData.data.title || "");
-            setSpecialitiesImage(specialitiesData.data.image || null);
-            setPreviewImage(specialitiesData.data.image || null);
+            setSpecialitiesImage(specialitiesData.data.image_url || null);
+            setPreviewImage(specialitiesData.data.image_url || null);
         }
     }, [specialitiesData]);
 
