@@ -14,6 +14,7 @@ import {
   Image,
   CreditCard,
   Building,
+  Type,
   DollarSign
 } from "lucide-react";
 
@@ -188,6 +189,12 @@ export function getMenuList(_pathname: string): Group[] {
           href: "/admin/homepage-pricings",
           label: "Homepage Pricings",
           icon: DollarSign,
+          submenus: []
+        },
+        {
+          href: "/admin/headings",
+          label: "Headings & Contact",
+          icon: Type,
           submenus: []
         },
         // {

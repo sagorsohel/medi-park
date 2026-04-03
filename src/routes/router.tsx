@@ -83,6 +83,7 @@ import AddPackagePagePage from '@/pages/admin/package-pages/add-package-page'
 import RoomRentsManagePage from '@/pages/admin/room-rents/room-rents-page'
 import HomepagePricingsPage from '@/pages/admin/homepage-pricings/homepage-pricings-page'
 import AddHomepagePricingPage from '@/pages/admin/homepage-pricings/add-homepage-pricing-page'
+import HeadingsManagePage from '@/pages/admin/headings-manage-page'
 
 import PackageDetailPage from '@/pages/packages/package-detail-page'
 import PublicPackagesPage from '@/pages/packages/public-packages-page'
@@ -214,6 +215,7 @@ const router = createBrowserRouter([
       { path: "homepage-pricings", element: <HomepagePricingsPage /> },
       { path: "homepage-pricings/new", element: <AddHomepagePricingPage /> },
       { path: "homepage-pricings/edit/:id", element: <AddHomepagePricingPage /> },
+      { path: "headings", element: <HeadingsManagePage /> },
     ],
   },
 

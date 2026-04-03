@@ -188,7 +188,7 @@ export default function FacilityDetailPage() {
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="prose prose-lg max-w-none text-gray-700 leading-relaxed"
+                className="prose prose-lg max-w-none text-gray-700 leading-relaxed wrap-break-word"
               >
                 <div dangerouslySetInnerHTML={{ __html: facility.short_description }} />
               </motion.div>
@@ -199,7 +199,7 @@ export default function FacilityDetailPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
-                className="prose prose-lg max-w-none text-gray-700 leading-relaxed mt-6"
+                className="prose prose-lg max-w-none text-gray-700 leading-relaxed mt-6 wrap-break-word"
               >
                 <div dangerouslySetInnerHTML={{ __html: facility.description1 }} />
               </motion.div>
@@ -241,7 +241,7 @@ export default function FacilityDetailPage() {
                       <CollapsibleContent className="overflow-hidden data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down">
                         <div className="px-4 pb-4 border-t border-gray-100">
                           <div
-                            className="text-gray-700 prose max-w-none pt-4"
+                            className="text-gray-700 prose max-w-none pt-4 wrap-break-word"
                             dangerouslySetInnerHTML={{ __html: accordion.description }}
                           />
                         </div>
@@ -320,7 +320,7 @@ export default function FacilityDetailPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
-                className="prose prose-lg max-w-none text-gray-700 leading-relaxed mt-6"
+                className="prose prose-lg max-w-none text-gray-700 leading-relaxed mt-6 wrap-break-word"
               >
                 <div dangerouslySetInnerHTML={{ __html: facility.description2 }} />
               </motion.div>
@@ -333,12 +333,12 @@ export default function FacilityDetailPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
-              className="mb-12"
+              className="my-12"
             >
-              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-6">
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-6 wrap-break-word">
                 IMPORTANT POINTS ABOUT TESTS/PROCEDURES/SURGERIES, YOUR REPORTS & BILLING ENQUIRIES
               </h2>
-              <div className="prose prose-lg max-w-none text-gray-700">
+              <div className="prose prose-lg max-w-none text-gray-700 wrap-break-word">
                 <div dangerouslySetInnerHTML={{ __html: facility.footer }} />
               </div>
             </motion.div>
