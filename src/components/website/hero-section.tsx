@@ -138,37 +138,40 @@ export function HeroSection() {
           className="h-full w-full group"
           onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
         >
-          {activeSlides.map((slide) => (
-            <SwiperSlide key={slide.id}>
-              <div className="relative w-full h-full">
-                {(slide.background_image?.toString() || '').match(/\.(mp4|webm|ogg)$/i) ? (
-                  <video
-                    src={slide.background_image}
-                    className="w-full h-full object-cover"
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
+          {activeSlides.map((slide) => {
+            const isVideo = (slide.background_image?.toString() || '').match(/\.(mp4|webm|ogg)$/i);
+            return (
+              <SwiperSlide key={slide.id} data-swiper-autoplay={isVideo ? 30000 : 5000}>
+                <div className="relative w-full h-full">
+                  {(slide.background_image?.toString() || '').match(/\.(mp4|webm|ogg)$/i) ? (
+                    <video
+                      src={slide.background_image}
+                      className="w-full h-full object-cover"
+                      autoPlay
+                      muted
+                      loop
+                      playsInline
+                    />
+                  ) : (
+                    <img
+                      src={slide.background_image}
+                      alt={slide.title || "Hero Banner"}
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.src = "/vite.svg";
+                      }}
+                    />
+                  )}
+                  {/* Dynamic overlay with opacity from API */}
+                  <div
+                    className="absolute inset-0 bg-black"
+                    style={{ opacity: slide.opacity ? parseFloat(slide.opacity) : 0 }}
                   />
-                ) : (
-                  <img
-                    src={slide.background_image}
-                    alt={slide.title || "Hero Banner"}
-                    className="w-full h-full object-cover"
-                    onError={(e) => {
-                      const target = e.target as HTMLImageElement;
-                      target.src = "/vite.svg";
-                    }}
-                  />
-                )}
-                {/* Dynamic overlay with opacity from API */}
-                <div
-                  className="absolute inset-0 bg-black"
-                  style={{ opacity: slide.opacity ? parseFloat(slide.opacity) : 0 }}
-                />
-              </div>
-            </SwiperSlide>
-          ))}
+                </div>
+              </SwiperSlide>
+            );
+          })}
         </Swiper>
 
         {/* Custom Navigation Buttons */}
