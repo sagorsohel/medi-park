@@ -35,6 +35,9 @@ export default function HeadingsManagePage() {
     homepage_footer_quick_links_second_column_title: "",
     whatsapp_number: "",
     hotline_number: "",
+    homepage_pricing_section_title: "",
+    homepage_pricing_section_button_text: "",
+    homepage_pricing_section_button_link: "",
   });
 
   useEffect(() => {
@@ -59,6 +62,9 @@ export default function HeadingsManagePage() {
         homepage_footer_quick_links_second_column_title: data.homepage_footer_quick_links_second_column_title || "",
         whatsapp_number: data.whatsapp_number || "",
         hotline_number: data.hotline_number || "",
+        homepage_pricing_section_title: data.homepage_pricing_section_title || "",
+        homepage_pricing_section_button_text: data.homepage_pricing_section_button_text || "",
+        homepage_pricing_section_button_link: data.homepage_pricing_section_button_link || "",
       });
     }
   }, [headingData]);
@@ -256,6 +262,17 @@ export default function HeadingsManagePage() {
                   />
                 </FieldContent>
               </Field>
+              <Field>
+                <FieldLabel>Pricing Section Title</FieldLabel>
+                <FieldContent>
+                  <Input
+                    value={formData.homepage_pricing_section_title}
+                    onChange={(e) => handleInputChange("homepage_pricing_section_title", e.target.value)}
+                    placeholder="Enter pricing section title"
+                  />
+                </FieldContent>
+              </Field>
+
             </div>
           </CardContent>
         </Card>

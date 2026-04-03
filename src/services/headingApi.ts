@@ -20,6 +20,9 @@ export interface Heading {
   homepage_footer_quick_links_second_column_title?: string;
   whatsapp_number?: string;
   hotline_number?: string;
+  homepage_pricing_section_title?: string;
+  homepage_pricing_section_button_text?: string;
+  homepage_pricing_section_button_link?: string;
   created_at?: string;
   updated_at?: string;
 }
@@ -49,6 +52,9 @@ export interface UpdateHeadingPayload {
   homepage_footer_quick_links_second_column_title?: string;
   whatsapp_number?: string;
   hotline_number?: string;
+  homepage_pricing_section_title?: string;
+  homepage_pricing_section_button_text?: string;
+  homepage_pricing_section_button_link?: string;
 }
 
 export const headingApi = api.injectEndpoints({

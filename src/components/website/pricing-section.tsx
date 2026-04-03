@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/carousel";
 
 import { useGetHomepagePricingsQuery, type HomepagePricing } from "@/services/homepagePricingApi";
+import { useGetHeadingsQuery } from "@/services/headingApi";
 
 
 interface PricingCardProps {
@@ -82,6 +83,9 @@ function PricingCard({ plan }: PricingCardProps) {
 
 export function PricingSection() {
   const { data, isLoading } = useGetHomepagePricingsQuery(1);
+  const { data: headingData } = useGetHeadingsQuery();
+  const headings = headingData?.data;
+
   const activePlansRaw = data?.data?.filter(p => p.status === "active") || [];
 
   const regularPlans = activePlansRaw.filter(p => !p.highlight);
@@ -110,7 +114,9 @@ export function PricingSection() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Title */}
         <div className="text-center mb-16 md:mb-24">
-          <h2 className="text-4xl md:text-5xl font-extrabold text-primary mb-4 tracking-tight">Our Pricing Plans</h2>
+          <h2 className="text-4xl md:text-5xl font-extrabold text-primary mb-4 tracking-tight">
+            {headings?.homepage_pricing_section_title || "Our Pricing Plans"}
+          </h2>
           <div className="w-20 h-1.5 bg-primary mx-auto rounded-full" />
         </div>
 
@@ -155,16 +161,18 @@ export function PricingSection() {
           </div>
         </div>
 
-        {/* View All Packages Link */}
-        <div className="mt-16 text-center">
-          <Link
-            to="/packages"
-            className="inline-flex items-center gap-2 bg-primary text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-primary/90 transition-all shadow-lg hover:shadow-xl active:scale-95 group"
-          >
-            Explore All Packages
-            <span className="group-hover:translate-x-1 transition-transform">→</span>
-          </Link>
-        </div>
+        {/* Dynamic Button Link */}
+        {(headings?.homepage_pricing_section_button_text || "Explore All Packages") && (
+          <div className="mt-16 text-center">
+            <Link
+              to={headings?.homepage_pricing_section_button_link || "/packages"}
+              className="inline-flex items-center gap-2 bg-primary text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-primary/90 transition-all shadow-lg hover:shadow-xl active:scale-95 group"
+            >
+              {headings?.homepage_pricing_section_button_text || "Explore All Packages"}
+              <span className="group-hover:translate-x-1 transition-transform">→</span>
+            </Link>
+          </div>
+        )}
       </div>
     </div>
   );
