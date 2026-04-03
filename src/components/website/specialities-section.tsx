@@ -9,8 +9,10 @@ import { Button } from "@/components/ui/button";
 import { DynamicIcon } from "@/components/dynamic-icon";
 
 export function SpecialitiesSection() {
-  const [currentPage, setCurrentPage] = useState(0);
-  const { data } = useGetFacilitiesPublicQuery({ page: currentPage, limit: 15 });
+  const [currentPage, setCurrentPage] = useState(1);
+  const { data } = useGetFacilitiesPublicQuery({ page: currentPage, limit: 15 }, {
+    refetchOnMountOrArgChange: true,
+  });
   console.log(data);
 
   // Filter active facilities (though API should ideally return only active ones for public)
@@ -31,11 +33,11 @@ export function SpecialitiesSection() {
   const totalPages = data?.pagination?.total_page || 1;
 
   const handlePrevious = () => {
-    setCurrentPage((prev) => Math.max(0, prev - 1));
+    setCurrentPage((prev) => Math.max(1, prev - 1));
   };
 
   const handleNext = () => {
-    setCurrentPage((prev) => Math.min(totalPages - 1, prev + 1));
+    setCurrentPage((prev) => Math.min(totalPages, prev + 1));
   };
 
   // With server-side pagination, visibleFacilities is just activeFacilities
@@ -173,8 +175,8 @@ export function SpecialitiesSection() {
               <div className="flex items-center gap-3">
                 <button
                   onClick={handlePrevious}
-                  disabled={currentPage === 0}
-                  className={`w-10 h-10 rounded-full flex items-center justify-center border transition-all duration-300 ${currentPage === 0
+                  disabled={currentPage === 1}
+                  className={`w-10 h-10 rounded-full flex items-center justify-center border transition-all duration-300 ${currentPage === 1
                     ? "border-gray-300 text-gray-300 cursor-not-allowed"
                     : "border-[#84CC16] text-[#84CC16] hover:bg-[#84CC16] hover:text-white"
                     }`}
@@ -184,8 +186,8 @@ export function SpecialitiesSection() {
                 </button>
                 <button
                   onClick={handleNext}
-                  disabled={currentPage >= totalPages - 1}
-                  className={`w-10 h-10 rounded-full flex items-center justify-center border transition-all duration-300 ${currentPage >= totalPages - 1
+                  disabled={currentPage >= totalPages}
+                  className={`w-10 h-10 rounded-full flex items-center justify-center border transition-all duration-300 ${currentPage >= totalPages
                     ? "border-gray-300 text-gray-300 cursor-not-allowed"
                     : "border-[#84CC16] text-[#84CC16] hover:bg-[#84CC16] hover:text-white"
                     }`}
