@@ -29,6 +29,7 @@ export function WebsiteFooter() {
   }, [branchesData]);
 
   const firstPhone = mainBranch?.phone || (footerContact?.phone && footerContact.phone.length > 0 ? footerContact.phone[0] : "10633");
+  const hotline = headings?.hotline_number || firstPhone;
   const email = mainBranch?.email || footerContact?.email || "info@mediparkhospital.com";
   const address = mainBranch?.address || "MediPark Hospital Dhaka, Plot # 81, Block-E, Bashundhara R/A, Dhaka 1229, Bangladesh";
 
@@ -60,7 +61,7 @@ export function WebsiteFooter() {
               MediPark Hospital has all the characteristics of a world-class hospital with wide range of services and specialists, equipments and technology, ambience and service quality.
             </p>
             <div className="font-bold tracking-[0.1em] flex items-center gap-2 text-white uppercase mt-4">
-              [ Hotline - {firstPhone} ]
+              [ Hotline - {hotline} ]
             </div>
           </div>
 
