@@ -108,7 +108,7 @@ export function DoctorsSection({ title }: DoctorsSectionProps) {
             }}
             className="bg-transparent text-primary border-2 border-primary hover:bg-primary hover:text-white px-10 py-7 text-lg font-bold rounded-full transition-all duration-300 shadow-sm hover:shadow-lg"
           >
-            View All Doctors
+            View All {title || "Doctors"}
           </Button>
         </div>
       </div>

@@ -78,7 +78,7 @@ export function BlogSection({ title }: BlogSectionProps) {
             to="/health-insight"
             className="inline-flex items-center justify-center px-10 py-4 border-2 border-primary text-primary font-bold rounded-full hover:bg-primary hover:text-white transition-all duration-300 shadow-sm hover:shadow-lg"
           >
-            Explore All Insights
+            Explore All {title || "Insights"}
           </Link>
         </div>
       </div>

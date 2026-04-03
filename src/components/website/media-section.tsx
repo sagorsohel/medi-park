@@ -193,7 +193,7 @@ export function MediaSection({ title }: MediaSectionProps) {
             }}
             className="bg-primary text-white hover:bg-blue-800 px-8 py-6 text-lg rounded-lg"
           >
-            View all Medipark News
+            View all {title || "Medipark News"}
           </Button>
         </motion.div>
       </div>

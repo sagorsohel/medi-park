@@ -102,7 +102,7 @@ export function InvestorSection({ title }: InvestorSectionProps) {
             className="bg-blue-100 text-primary border border-blue-900 hover:bg-blue-200 px-8 py-6 text-lg font-semibold rounded-lg"
             asChild
           >
-            <Link to="/investors">View All Our Legacy Partner</Link>
+            <Link to="/investors">View All {title || "Our Legacy Partner"}</Link>
           </Button>
         </div>
       </div>
