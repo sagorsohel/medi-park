@@ -48,7 +48,12 @@ export function getMenuList(_pathname: string): Group[] {
           label: "Dashboard",
           icon: LayoutGrid,
           submenus: []
-        },
+        }
+      ]
+    },
+    {
+      groupLabel: "General Administration",
+      menus: [
         {
           href: "/admin/doctor",
           label: "Doctor",
@@ -76,7 +81,7 @@ export function getMenuList(_pathname: string): Group[] {
       ]
     },
     {
-      groupLabel: "Website Manage",
+      groupLabel: "Page Management",
       menus: [
         {
           href: "/admin/website/home",
@@ -97,50 +102,42 @@ export function getMenuList(_pathname: string): Group[] {
           submenus: []
         },
         {
-          href: "/admin/website/careers",
-          label: "Careers",
-          icon: Briefcase,
-          submenus: []
-        },
-        {
-          href: "/admin/job-posts",
-          label: "Job Posts",
-          icon: FileText,
-          submenus: []
-        },
-        {
-          href: "/admin/website/facilities",
-          label: "Departments",
-          icon: Building,
-          submenus: []
-        },
-        {
-          href: "/admin/website/news",
-          label: "News",
-          icon: FileText,
-          submenus: []
-        },
-        {
-          href: "/admin/website/gellery",
-          label: "Gallery",
-          icon: Image,
-          submenus: []
-        },
-        {
           href: "/admin/website/contact",
-          label: "Contact",
+          label: "Contact Enquiry",
           icon: Phone,
-          submenus: []
-        },
-        {
-          href: "/admin/website/health-insight",
-          label: "Health Insight",
-          icon: Package,
           submenus: []
         },
         {
           href: "/admin/future-ventures",
           label: "Future Ventures",
+          icon: Building,
+          submenus: []
+        },
+      ]
+    },
+    {
+      groupLabel: "Career & Human Resources",
+      menus: [
+        {
+          href: "/admin/website/careers",
+          label: "Careers Page",
+          icon: Briefcase,
+          submenus: []
+        },
+        {
+          href: "/admin/job-posts",
+          label: "Job Postings",
+          icon: FileText,
+          submenus: []
+        },
+      ]
+    },
+    {
+      groupLabel: "Clinical & Services",
+      menus: [
+        {
+          href: "/admin/website/facilities",
+          label: "Departments",
           icon: Building,
           submenus: []
         },
@@ -162,6 +159,34 @@ export function getMenuList(_pathname: string): Group[] {
           icon: FileText,
           submenus: []
         },
+      ]
+    },
+    {
+      groupLabel: "Media & Health Insights",
+      menus: [
+        {
+          href: "/admin/website/news",
+          label: "Latest News",
+          icon: FileText,
+          submenus: []
+        },
+        {
+          href: "/admin/website/gellery",
+          label: "Gallery",
+          icon: Image,
+          submenus: []
+        },
+        {
+          href: "/admin/website/health-insight",
+          label: "Health insight",
+          icon: Package,
+          submenus: []
+        },
+      ]
+    },
+    {
+      groupLabel: "Pricing & Settings",
+      menus: [
         {
           href: "/admin/homepage-pricings",
           label: "Homepage Pricings",
@@ -174,19 +199,9 @@ export function getMenuList(_pathname: string): Group[] {
           icon: Type,
           submenus: []
         },
-        // {
-        //   href: "/admin/website/inventory-2",
-        //   label: "Inventory",
-        //   icon: Package,
-        //   submenus: []
-        // },
-        // {
-        //   href: "/admin/website/inventory-3",
-        //   label: "Inventory",
-        //   icon: Package,
-        //   submenus: []
-        // }
       ]
     }
   ];
 }
+
+
