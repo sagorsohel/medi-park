@@ -3,6 +3,8 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Link } from "react-router";
+import { Skeleton } from "@/components/ui/skeleton";
+
 
 interface DoctorProfileCardProps {
   id: string | number;
@@ -68,6 +70,32 @@ export function DoctorProfileCard({
             >
               <Link to={`/doctors/${id}`}>View Doctor Profile</Link>
             </Button>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+export function DoctorSkeleton() {
+  return (
+    <Card className="overflow-hidden p-0">
+      <CardContent className="p-2">
+        <div className="flex flex-col md:flex-row gap-6">
+          {/* Image */}
+          <div className="">
+            <Skeleton className="w-44 h-44 md:w-40 md:h-40 rounded-lg border-4 border-gray-100" />
+          </div>
+
+          {/* Content */}
+          <div className="grow flex flex-col justify-between py-2">
+            <div>
+              <Skeleton className="h-7 w-3/4 mb-4" />
+              <Skeleton className="h-4 w-full mb-2" />
+              <Skeleton className="h-4 w-5/6 mb-4" />
+              <Skeleton className="h-5 w-1/2 mb-6" />
+            </div>
+            <Skeleton className="h-10 w-full md:w-40 rounded-[40px]" />
           </div>
         </div>
       </CardContent>

@@ -38,8 +38,8 @@ export function SpecialitiesSection() {
 
   // If using curated list, we paginate locally. If using all facilities, we use server-side pagination info.
   const isCurated = !!homepageData?.data?.departments && homepageData.data.departments.length > 0;
-  const totalPages = isCurated 
-    ? Math.ceil(activeFacilities.length / cardsPerPage) 
+  const totalPages = isCurated
+    ? Math.ceil(activeFacilities.length / cardsPerPage)
     : (allFacilitiesData?.pagination?.total_page || 1);
 
   const handlePrevious = () => {
@@ -51,7 +51,7 @@ export function SpecialitiesSection() {
   };
 
   // Get visible facilities (slice for curated, all for server-paginated)
-  const visibleFacilities = isCurated 
+  const visibleFacilities = isCurated
     ? activeFacilities.slice((currentPage - 1) * cardsPerPage, currentPage * cardsPerPage)
     : activeFacilities;
 
@@ -91,7 +91,7 @@ export function SpecialitiesSection() {
   return (
     <div className="relative w-full bg-white py-12 md:py-20 overflow-hidden">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 xl:grid-cols-[400px_1fr] gap-8 lg:gap-12 items-start">
+        <div className="flex flex-col sm:flex-row items-center  gap-8 lg:gap-12 ">
           {/* Left Side - Image */}
           <motion.div
             className="hidden xl:block relative h-full min-h-[600px]"
@@ -100,11 +100,11 @@ export function SpecialitiesSection() {
             viewport={{ once: true, margin: "-100px" }}
             variants={imageVariants}
           >
-            <div className="relative w-full h-full rounded-xl overflow-hidden shadow-none">
+            <div className="relative w-full h-[80%] rounded-xl overflow-hidden shadow-none">
               <img
                 src={homepageData?.data?.image_url || "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=800&h=1000&fit=crop"}
                 alt={homepageData?.data?.title || "Doctor and patient consultation"}
-                className="w-full h-full object-cover rounded-xl"
+                className="w-full h-[80%] object-cover rounded-xl"
                 onError={(e) => {
                   const target = e.target as HTMLImageElement;
                   target.src = "/vite.svg";

@@ -233,11 +233,27 @@ export interface UpdateInvestorPayload {
 
 export const investorApi = api.injectEndpoints({
   endpoints: (builder) => ({
-    getInvestors: builder.query<InvestorsResponse, number | void>({
-      query: (page = 1) => ({
-        url: `/investors?page=${page}`,
-        method: "GET",
-      }),
+    getInvestors: builder.query<InvestorsResponse, { page?: number | string; search?: string } | number | void>({
+      query: (arg) => {
+        const params: Record<string, string | number> = { page: 1 };
+
+        if (typeof arg === "number") {
+          params.page = arg;
+        } else if (arg && typeof arg === "object") {
+          if (arg.page !== undefined) {
+             params.page = typeof arg.page === 'object' ? 1 : Number(arg.page) || 1;
+          }
+          if (arg.search !== undefined) {
+             params.search = typeof arg.search === 'object' ? "" : String(arg.search);
+          }
+        }
+
+        return {
+          url: "/investors",
+          params,
+          method: "GET",
+        };
+      },
       providesTags: (result) =>
         result?.data
           ? [

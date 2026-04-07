@@ -1,4 +1,4 @@
-import { api } from "@/services/baseApi";
+import { api } from "./baseApi";
 
 export interface WhoWeAre {
   id: number;

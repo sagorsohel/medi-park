@@ -1,44 +1,41 @@
-import { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { PageHeroSection } from '@/components/website/page-hero-section'
 import { BreadcrumbSection } from '@/components/website/breadcrumb-section'
-import { InvestorCard } from '@/components/website/investor-card'
-import { Button } from '@/components/ui/button'
+import { InvestorCard, InvestorSkeleton } from '@/components/website/investor-card'
 import { useGetInvestorsQuery } from '@/services/investorApi'
-import { Loader2, Search } from 'lucide-react'
+import { Search } from 'lucide-react'
 import { Input } from "@/components/ui/input";
+import { useDebounce } from "@/hooks/use-debounce";
+import { DataTablePagination } from "@/components/ui/data-table-pagination";
 
 export default function InvestorsPage() {
-  const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
-  const { data, isLoading, isFetching } = useGetInvestorsQuery(currentPage);
+  const [currentPage, setCurrentPage] = useState(1);
+  const debouncedSearch = useDebounce(searchTerm, 500);
+
+  const { data, isLoading, isFetching } = useGetInvestorsQuery({
+    search: debouncedSearch,
+    page: currentPage
+  });
+
+  // Reset to page 1 when search term changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [debouncedSearch]);
 
   // Map and filter investors
-  const filteredInvestors = useMemo(() => {
+  const mappedInvestors = useMemo(() => {
     if (!data?.data) return [];
     
-    const allMapped = data.data.map((investor) => ({
+    return data.data.map((investor) => ({
       id: investor.id,
       image: investor.image || investor.applicant_image || "/vite.svg",
       name: investor.investor_name || investor.applicant_full_name || "Investor",
       role: investor.profession || investor.organization || "Investor"
     }));
+  }, [data]);
 
-    if (!searchTerm) return allMapped;
-
-    return allMapped.filter(inv => 
-      inv.name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-  }, [data, searchTerm]);
-
-  // Check if there are more pages to load
-  const hasMorePages = data?.pagination?.next_page !== null;
-  const isLoadingMore = isFetching && currentPage > 1;
-
-  const handleLoadMore = () => {
-    if (hasMorePages && !isLoadingMore) {
-      setCurrentPage((prev) => prev + 1);
-    }
-  };
+  const pagination = data?.pagination;
 
   return (
     <div className="w-full bg-gray-50 min-h-screen">
@@ -71,30 +68,31 @@ export default function InvestorsPage() {
           </div>
 
           {/* Loading State */}
-          {isLoading && currentPage === 1 ? (
-            <div className="flex items-center justify-center py-16">
-              <Loader2 className="h-8 w-8 animate-spin text-primary" />
+          {(isLoading || isFetching) ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {[...Array(8)].map((_, i) => (
+                <InvestorSkeleton key={i} />
+              ))}
             </div>
-          ) : filteredInvestors.length === 0 ? (
+          ) : mappedInvestors.length === 0 ? (
             <div className="text-center py-20 bg-gray-50 rounded-3xl border-2 border-dashed border-gray-200">
               <p className="text-gray-500 text-lg font-medium">
                 {searchTerm ? `No legacy partners matching "${searchTerm}" found.` : "No legacy partners found."}
               </p>
               {searchTerm && (
-                <Button 
-                   variant="link" 
-                   className="mt-2 text-primary"
+                <button 
+                   className="mt-2 text-primary font-bold hover:underline"
                    onClick={() => setSearchTerm("")}
                 >
-                  Clear search
-                </Button>
+                  Clear search filters
+                </button>
               )}
             </div>
           ) : (
             <>
               {/* Investor Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                {filteredInvestors.map((investor) => (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+                {mappedInvestors.map((investor) => (
                   <div key={investor.id}>
                     <InvestorCard
                       image={investor.image}
@@ -106,30 +104,16 @@ export default function InvestorsPage() {
                 ))}
               </div>
 
-              {/* Load More Button - Only show if not searching or if there are truly more pages (search is client-side) */}
-              {!searchTerm && hasMorePages && (
-                <div className="text-center mt-12">
-                  <Button
-                    className="bg-primary hover:bg-blue-800 text-white px-10 py-7 text-lg font-bold rounded-xl shadow-lg transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
-                    onClick={handleLoadMore}
-                    disabled={isLoadingMore}
-                  >
-                    {isLoadingMore ? (
-                      <>
-                        <Loader2 className="w-5 h-5 mr-2 animate-spin inline" />
-                        Loading...
-                      </>
-                    ) : (
-                      "Load More Partners"
-                    )}
-                  </Button>
-                </div>
-              )}
-
-              {/* Show total count */}
-              {!searchTerm && data?.pagination && (
-                <div className="text-center mt-6 text-sm text-gray-400 font-medium">
-                  Showing {filteredInvestors.length} of {data.pagination.total_count} legacy partners
+              {/* Pagination */}
+              {pagination && pagination.total_page > 1 && (
+                <div className="mt-12 pt-8 border-t border-gray-100">
+                  <DataTablePagination
+                    currentPage={pagination.current_page}
+                    totalPages={pagination.total_page}
+                    totalEntries={pagination.total_count}
+                    entriesPerPage={pagination.per_page}
+                    onPageChange={setCurrentPage}
+                  />
                 </div>
               )}
             </>

@@ -1,5 +1,8 @@
 "use client";
 
+import { Skeleton } from "@/components/ui/skeleton";
+
+
 interface InvestorCardProps {
   image: string;
   name: string;
@@ -28,6 +31,18 @@ export function InvestorCard({ image, name }: InvestorCardProps) {
         <h3 className="text-lg font-bold uppercase text-center leading-tight tracking-wide">
           {name}
         </h3>
+      </div>
+    </div>
+  );
+}
+
+
+
+export function InvestorSkeleton() {
+  return (
+    <div className="group relative border-2 border-gray-100 rounded-[22px] overflow-hidden min-w-[240px] lg:min-w-0 h-[240px] cursor-default">
+      <div className="w-full h-full p-0.5 rounded-[22px]">
+        <Skeleton className="w-full h-full rounded-[20px]" />
       </div>
     </div>
   );

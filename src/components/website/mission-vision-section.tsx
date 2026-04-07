@@ -1,6 +1,8 @@
 "use client";
 
-import { useGetMissionActiveQuery, useGetVisionActiveQuery } from "@/services/aboutPageApi";
+import { aboutPageApi } from "../../services/aboutPageApi";
+// @ts-ignore
+const { useGetMissionActiveQuery, useGetVisionActiveQuery } = aboutPageApi;
 import { useGetOurValuesPublicQuery } from "@/services/ourValuesApi";
 import { useGetHeadingsQuery } from "@/services/headingApi";
 import { motion } from "framer-motion";

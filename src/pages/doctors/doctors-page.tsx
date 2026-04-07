@@ -2,15 +2,29 @@ import React, { useMemo, useState } from 'react'
 import { PageHeroSection } from '@/components/website/page-hero-section'
 import { BreadcrumbSection } from '@/components/website/breadcrumb-section'
 import { DoctorProfileCard } from '@/components/website/doctor-profile-card'
-import { User, Loader2, Search } from 'lucide-react'
+import { User, Search } from 'lucide-react'
 import { useGetDoctorsQuery } from '@/services/doctorApi'
 import { Input } from "@/components/ui/input";
+import { useDebounce } from '@/hooks/use-debounce';
+import { DoctorSkeleton } from '@/components/website/doctor-profile-card';
+import { DataTablePagination } from "@/components/ui/data-table-pagination";
 
 export default function DoctorsPage() {
   const [searchTerm, setSearchTerm] = useState("");
-  const { data, isLoading } = useGetDoctorsQuery(1);
+  const [currentPage, setCurrentPage] = useState(1);
+  const debouncedSearch = useDebounce(searchTerm, 500);
+  
+  const { data, isLoading, isFetching } = useGetDoctorsQuery({ 
+    search: debouncedSearch,
+    page: currentPage 
+  });
 
-  // Group doctors by department after filtering
+  // Reset to page 1 when search term changes
+  React.useEffect(() => {
+    setCurrentPage(1);
+  }, [debouncedSearch]);
+
+  // Group doctors by department
   const filteredDepartments = useMemo(() => {
     if (!data?.data) return [];
 
@@ -28,15 +42,7 @@ export default function DoctorsPage() {
       }>;
     }>();
 
-    // First filter doctors then group
-    const filteredDoctors = data.data.filter(doctor => {
-        const name = (doctor.doctor_name || "").toLowerCase();
-        const dept = (doctor.department || "").toLowerCase();
-        const search = searchTerm.toLowerCase();
-        return name.includes(search) || dept.includes(search);
-    });
-
-    filteredDoctors.forEach((doctor) => {
+    data.data.forEach((doctor) => {
       const deptName = doctor.department || "Other";
       
       // Format qualifications from education array
@@ -79,7 +85,9 @@ export default function DoctorsPage() {
     });
 
     return Array.from(departmentMap.values());
-  }, [data, searchTerm]);
+  }, [data]);
+
+  const pagination = data?.pagination;
 
   return (
     <div className="w-full">
@@ -105,15 +113,19 @@ export default function DoctorsPage() {
                 type="text"
                 placeholder="Search by name or department..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={(e) => {
+                  setSearchTerm(e.target.value);
+                }}
                 className="pl-10 h-12 border-gray-200 shadow-sm focus:border-primary focus:ring-primary rounded-xl"
               />
             </div>
           </div>
 
-          {isLoading ? (
-            <div className="flex items-center justify-center py-16">
-              <Loader2 className="h-10 w-10 animate-spin text-primary" />
+          {(isLoading || isFetching) ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {[...Array(6)].map((_, i) => (
+                <DoctorSkeleton key={i} />
+              ))}
             </div>
           ) : filteredDepartments.length === 0 ? (
             <div className="text-center py-20 bg-gray-50 rounded-3xl border-2 border-dashed border-gray-200">
@@ -130,41 +142,56 @@ export default function DoctorsPage() {
                )}
             </div>
           ) : (
-            filteredDepartments.map((department) => (
-            <div key={department.id} className="mb-16 last:mb-0">
-              {/* Department Header */}
-              <div className="flex items-center justify-between mb-8 pb-4 border-b-2 border-gray-100/80">
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary">
-                    {department.icon}
+            <>
+              {filteredDepartments.map((department) => (
+                <div key={department.id} className="mb-16 last:mb-0">
+                  {/* Department Header */}
+                  <div className="flex items-center justify-between mb-8 pb-4 border-b-2 border-gray-100/80">
+                    <div className="flex items-center gap-4">
+                      <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary">
+                        {department.icon}
+                      </div>
+                      <h2 className="text-2xl md:text-3xl font-black text-[#0B1B3D]">
+                        {department.name}
+                      </h2>
+                    </div>
+                    <div className="px-5 py-1.5 rounded-full border border-primary/20 bg-primary/5">
+                      <span className="text-primary font-black text-sm">
+                        {department.doctors.length} {department.doctors.length === 1 ? 'DOCTOR' : 'DOCTORS'}
+                      </span>
+                    </div>
                   </div>
-                  <h2 className="text-2xl md:text-3xl font-black text-[#0B1B3D]">
-                    {department.name}
-                  </h2>
-                </div>
-                <div className="px-5 py-1.5 rounded-full border border-primary/20 bg-primary/5">
-                  <span className="text-primary font-black text-sm">
-                    {department.doctors.length} {department.doctors.length === 1 ? 'DOCTOR' : 'DOCTORS'}
-                  </span>
-                </div>
-              </div>
 
-              {/* Doctors Grid */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                {department.doctors.map((doctor) => (
-                  <DoctorProfileCard
-                    key={doctor.id}
-                    id={doctor.id}
-                    image={doctor.image}
-                    name={doctor.name}
-                    qualifications={doctor.qualifications}
-                    role={doctor.role}
-                    department={doctor.department}
+                  {/* Doctors Grid */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    {department.doctors.map((doctor) => (
+                      <DoctorProfileCard
+                        key={doctor.id}
+                        id={doctor.id}
+                        image={doctor.image}
+                        name={doctor.name}
+                        qualifications={doctor.qualifications}
+                        role={doctor.role}
+                        department={doctor.department}
+                      />
+                    ))}
+                  </div>
+                </div>
+              ))}
+
+              {/* Pagination */}
+              {pagination && pagination.total_page > 1 && (
+                <div className="mt-12 pt-8 border-t border-gray-100">
+                  <DataTablePagination
+                    currentPage={pagination.current_page}
+                    totalPages={pagination.total_page}
+                    totalEntries={pagination.total_count}
+                    entriesPerPage={pagination.per_page}
+                    onPageChange={setCurrentPage}
                   />
-                ))}
-              </div>
-            </div>
-            ))
+                </div>
+              )}
+            </>
           )}
         </div>
       </section>
