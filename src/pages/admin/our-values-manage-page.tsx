@@ -225,8 +225,8 @@ export default function OurValuesManagePage() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {data?.data?.map((value) => (
-          <Card key={value.id} className="group relative overflow-hidden transition-all hover:shadow-xl hover:border-primary/30 border-gray-200">
-            <div className={`absolute top-0 left-0 w-1 h-full ${Boolean(value.status) ? 'bg-primary' : 'bg-gray-300'}`} />
+          <Card key={value.id} className="group border-l-6 border-l-primary! rounded-l-none! rounded-r-2xl! relative overflow-hidden transition-all hover:shadow-xl hover:border-primary/30 border-gray-200">
+            {/* <div className={`absolute top-0 left-0 w-1 h-full ${Boolean(value.status) ? 'bg-primary' : 'bg-gray-300'}`} /> */}
 
             <CardHeader className="p-4!">
               <div className="flex justify-between items-start">
