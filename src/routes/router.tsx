@@ -146,7 +146,7 @@ const router = createBrowserRouter([
 
   // 🧭 CRM Auth routes
   {
-    path: "/crm/login",
+    path: "/accounting/software/login",
     element: <CRMLoginPage />,
   },
 
