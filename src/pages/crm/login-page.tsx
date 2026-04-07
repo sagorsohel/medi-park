@@ -54,7 +54,7 @@ export default function CRMLoginPage() {
           <div className="bg-white/20 p-2 rounded-lg backdrop-blur-sm">
             <ShieldCheck className="h-8 w-8" />
           </div>
-          <span className="text-2xl font-bold tracking-tight">MediPark CRM</span>
+          <span className="text-2xl font-bold tracking-tight">Accounting Software</span>
         </div>
         
         <div className="space-y-6">
@@ -63,9 +63,7 @@ export default function CRMLoginPage() {
             <span className="text-secondary">Partners & Shares</span> <br/>
             Effectively.
           </h1>
-          <p className="text-xl text-primary-foreground/80 max-w-md">
-            The unified portal for investor management, installment tracking, and share distributions.
-          </p>
+            The unified portal for financial management, installment tracking, and share distributions.
         </div>
 
         <div className="text-sm text-primary-foreground/60">
@@ -78,7 +76,7 @@ export default function CRMLoginPage() {
         <div className="w-full max-w-md space-y-8">
           <div className="text-center lg:text-left space-y-2">
             <h2 className="text-3xl font-bold text-slate-900 tracking-tight">Welcome Back</h2>
-            <p className="text-slate-500 font-medium">Please enter your CRM credentials to continue</p>
+            <p className="text-slate-500 font-medium">Please enter your accounting credentials to continue</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
@@ -132,7 +130,7 @@ export default function CRMLoginPage() {
               disabled={isLoading}
               className="w-full h-14 text-lg font-bold bg-primary hover:bg-primary/90 text-white rounded-xl shadow-lg shadow-primary/20 transition-all active:scale-[0.98]"
             >
-              {isLoading ? "Authenticating..." : "Login to CRM"}
+              {isLoading ? "Authenticating..." : "Login to Accounting Soft"}
             </Button>
 
             <div className="text-center pt-4">

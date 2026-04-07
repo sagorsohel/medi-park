@@ -49,8 +49,8 @@ export default function CRMDashboardPage() {
     <div className="space-y-8 p-1 sm:p-6 lg:p-8 animate-in fade-in duration-500">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="space-y-1">
-          <h1 className="text-3xl font-black text-slate-900 tracking-tight">CRM Dashboard</h1>
-          <p className="text-slate-500 font-medium">Welcome back, {user?.name || "CRM Admin"}!</p>
+          <h1 className="text-3xl font-black text-slate-900 tracking-tight">Accounting Dashboard</h1>
+          <p className="text-slate-500 font-medium">Welcome back, {user?.name || "Accounting Admin"}!</p>
         </div>
         <div className="flex items-center gap-2 text-sm font-semibold text-slate-500 bg-white px-4 py-2 rounded-xl border-2 border-slate-100/50 shadow-sm">
           <UserCheck className="h-4 w-4 text-emerald-500" />

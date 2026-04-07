@@ -35,7 +35,7 @@ export function CRMUserNav() {
 
               <div className="bg-white rounded-lg px-3 py-1 flex-1 min-w-[120px] text-left">
                 <p className="text-sm font-black text-slate-900 leading-none mb-1 truncate">
-                  {user?.name || 'CRM Admin'}
+                  {user?.name || 'Accounting Admin'}
                 </p>
                 <div className="flex items-center gap-1.5">
                    <ShieldCheck className="h-3 w-3 text-emerald-500" />
@@ -51,9 +51,9 @@ export function CRMUserNav() {
       <DropdownMenuContent className="w-56 mt-2 rounded-[22px] border-2 border-slate-50 p-2 shadow-2xl" align="end" forceMount>
         <DropdownMenuLabel className="font-normal p-3">
           <div className="flex flex-col space-y-1">
-            <p className="text-sm font-black leading-none">{user?.name || 'CRM User'}</p>
+            <p className="text-sm font-black leading-none">{user?.name || 'Accounting User'}</p>
             <p className="text-xs font-medium leading-none text-slate-500">
-              {user?.email || 'crm@medipark.com'}
+              {user?.email || 'accounting@medipark.com'}
             </p>
           </div>
         </DropdownMenuLabel>
@@ -61,13 +61,13 @@ export function CRMUserNav() {
         <DropdownMenuGroup className="p-1">
           <DropdownMenuItem className="rounded-xl font-bold py-2.5 text-slate-600 focus:bg-slate-50 focus:text-primary transition-colors" onClick={() => navigate('/crm/dashboard')}>
             <LayoutGrid className="mr-3 h-4 w-4" />
-            <span>CRM Dashboard</span>
+            <span>Accounting System</span>
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator className="bg-slate-50" />
         <DropdownMenuItem onClick={handleLogout} className="rounded-xl font-bold py-2.5 text-red-600 focus:bg-red-50 focus:text-red-700 transition-colors">
           <LogOut className="mr-3 h-4 w-4" />
-          <span>Exit CRM</span>
+          <span>Exit System</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

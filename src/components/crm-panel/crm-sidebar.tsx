@@ -45,7 +45,7 @@ export function CRMSidebar() {
             >
                 <div className="flex flex-col items-start">
                     <span className="text-xl font-black text-primary leading-none tracking-tight">MediPark</span>
-                    <span className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] mt-1 pl-0.5">CRM Portal</span>
+                    <span className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] mt-1 pl-0.5">Accounting Soft</span>
                 </div>
             </div>
           </Link>

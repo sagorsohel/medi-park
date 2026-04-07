@@ -14,7 +14,7 @@ export function CRMNavbar({ title }: CRMNavbarProps) {
         <div className="flex items-center gap-4">
            <div className="flex flex-col items-start lg:hidden">
               <span className="text-xl font-black text-primary leading-none tracking-tight">MediPark</span>
-              <span className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] mt-1 pl-0.5">CRM Portal</span>
+              <span className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] mt-1 pl-0.5">Accounting Soft</span>
            </div>
            
            <div className="hidden lg:flex items-center gap-2 bg-white px-4 py-2 rounded-xl border border-slate-100 shadow-sm transition-all hover:shadow-md">
