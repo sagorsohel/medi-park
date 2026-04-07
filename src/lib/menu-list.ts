@@ -50,36 +50,6 @@ export function getMenuList(_pathname: string): Group[] {
           submenus: []
         },
         {
-          href: "/admin/investor",
-          label: "Investors",
-          icon: Building2,
-          submenus: []
-        },
-        {
-          href: "/admin/installment-rules",
-          label: "Installment Rules",
-          icon: CreditCard,
-          submenus: []
-        },
-        {
-          href: "/admin/share-manage",
-          label: "Share Manage",
-          icon: Building2,
-          submenus: []
-        },
-        // {
-        //   href: "/admin/hr",
-        //   label: "HR",
-        //   icon: Briefcase,
-        //   submenus: []
-        // },
-        // {
-        //   href: "/admin/staff",
-        //   label: "Staff",
-        //   icon: UserCog,
-        //   submenus: []
-        // },
-        {
           href: "/admin/doctor",
           label: "Doctor",
           icon: Stethoscope,

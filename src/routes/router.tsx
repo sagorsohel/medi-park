@@ -91,6 +91,10 @@ import PublicPackagesPage from '@/pages/packages/public-packages-page'
 import OurValuesPage from '@/pages/our-values/our-values-page'
 import OurValuesDetailsPage from '@/pages/our-values/our-values-details-page'
 
+import CRMLoginPage from '../pages/crm/login-page'
+import CRMDashboardPage from '../pages/crm/dashboard-page'
+import CRMPanelLayout from '@/components/crm-panel/crm-panel-layout'
+
 const router = createBrowserRouter([
   // 🌐 Website routes (with website layout - sticky navbar & footer)
   {
@@ -137,6 +141,30 @@ const router = createBrowserRouter([
       { path: "packages/:id", element: <PackageDetailPage /> },
       { path: "our-values", element: <OurValuesPage /> },
       { path: "our-values/:id", element: <OurValuesDetailsPage /> },
+    ],
+  },
+
+  // 🧭 CRM Auth routes
+  {
+    path: "/crm/login",
+    element: <CRMLoginPage />,
+  },
+
+  // 🧭 CRM Portal routes
+  {
+    path: "/crm",
+    element: <CRMPanelLayout />,
+    children: [
+      { path: "dashboard", element: <CRMDashboardPage /> },
+      { path: "investor", element: <InvestorPage /> },
+      { path: "investor/new", element: <AddInvestorPage /> },
+      { path: "investor/edit/:id", element: <AddInvestorPage /> },
+      { path: "investor/view/:id", element: <AddInvestorPage /> },
+      { path: "installment-rules", element: <InstallmentRulesPage /> },
+      { path: "installment-rules/new", element: <AddInstallmentRulePage /> },
+      { path: "installment-rules/edit/:id", element: <AddInstallmentRulePage /> },
+      { path: "installment-rules/view/:id", element: <AddInstallmentRulePage /> },
+      { path: "share-manage", element: <ShareManagePage /> },
     ],
   },
 
@@ -188,14 +216,6 @@ const router = createBrowserRouter([
       { path: "doctor/new", element: <AddDoctorPage /> },
       { path: "doctor/edit/:id", element: <AddDoctorPage /> },
       { path: "doctor/view/:id", element: <AddDoctorPage /> },
-      { path: "investor", element: <InvestorPage /> },
-      { path: "investor/new", element: <AddInvestorPage /> },
-      { path: "investor/edit/:id", element: <AddInvestorPage /> },
-      { path: "investor/view/:id", element: <AddInvestorPage /> },
-      { path: "installment-rules", element: <InstallmentRulesPage /> },
-      { path: "installment-rules/new", element: <AddInstallmentRulePage /> },
-      { path: "installment-rules/edit/:id", element: <AddInstallmentRulePage /> },
-      { path: "installment-rules/view/:id", element: <AddInstallmentRulePage /> },
       { path: "health-insight", element: <BlogPage /> },
       { path: "health-insight/new", element: <AddBlogPage /> },
       { path: "health-insight/edit/:id", element: <AddBlogPage /> },
@@ -204,7 +224,6 @@ const router = createBrowserRouter([
       { path: "directors/new", element: <AddDirectorPage /> },
       { path: "directors/edit/:id", element: <AddDirectorPage /> },
       { path: "directors/view/:id", element: <AddDirectorPage /> },
-      { path: "share-manage", element: <ShareManagePage /> },
       { path: "health-checkup", element: <HealthCheckupManagePage /> },
       { path: "health-checkup/new", element: <AddHealthCheckupPage /> },
       { path: "health-checkup/edit/:id", element: <AddHealthCheckupPage /> },
@@ -255,4 +274,4 @@ const router = createBrowserRouter([
   },
 ]);
 
-export default router
+export default router;
