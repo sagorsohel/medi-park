@@ -1,32 +1,16 @@
 "use client";
 import { Menu } from "@/components/admin-panel/menu";
 import { SidebarToggle } from "@/components/admin-panel/sidebar-toggle";
-import { Button } from "@/components/ui/button";
 import { useSidebar } from "@/hooks/use-sidebar";
 import { useStore } from "@/hooks/use-store";
 import { cn } from "@/lib/utils";
-import { Link, useNavigate } from "react-router";
-import { Edit, Eye, LogOut } from "lucide-react";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { logout } from "@/store/slices/authSlice";
-import {
-  Tooltip,
-  TooltipTrigger,
-  TooltipContent,
-  TooltipProvider
-} from "@/components/ui/tooltip";
+import { Link } from "react-router";
+
 
 export function Sidebar() {
   // All hooks must be called before any conditional returns
   const sidebar = useStore(useSidebar, (x) => x);
-  const navigate = useNavigate();
-  const dispatch = useAppDispatch();
-  const { user } = useAppSelector((state) => state.auth);
 
-  const handleLogout = () => {
-    dispatch(logout());
-    navigate('/');
-  };
 
   // Early return after all hooks
   if (!sidebar) return null;
@@ -79,131 +63,6 @@ export function Sidebar() {
           <Menu isOpen={getOpenState()} />
         </div>
 
-        {/* Profile Section - Fixed at bottom */}
-        <div className={cn(
-          "shrink-0 pt-4 pb-3 px-2 rounded-[12px] bg-sidebar",
-          !getOpenState() && "px-2"
-        )}>
-          <div className={cn(
-            "transition-[transform,opacity,display] ease-in-out duration-300",
-            !getOpenState()
-              ? "-translate-x-96 opacity-0 hidden"
-              : "translate-x-0 opacity-100"
-          )}>
-            <p className="text-sm font-semibold text-muted-foreground mb-3 px-2">Profile</p>
-            <div className="bg-sidebar-accent/10 rounded-lg p-3  shadow-sm border border-sidebar-border">
-              <div className="flex items-center gap-4">
-                <img src="https://cdn-icons-png.flaticon.com/512/9187/9187604.png" alt="" className="size-[47px] object-cover rounded-lg border p-1" />
-                <div>
-                  <p className="text-sm text-sidebar-foreground font-medium truncate mb-1">
-                    {user?.email || "user@example.com"}
-                  </p>
-
-                  <p className="text-sm text-sidebar-foreground font-medium capitalize">
-                    {user?.roles?.[0]?.name || "Admin"}
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-center gap-2 px-2 pt-2">
-                <TooltipProvider disableHoverableContent>
-                  <Tooltip delayDuration={100}>
-                    <TooltipTrigger asChild>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-8 w-8"
-                        onClick={() => {/* Handle edit */ }}
-                      >
-                        <Edit className="h-4 w-4" />
-                      </Button>
-                    </TooltipTrigger>
-                    <TooltipContent side="right">Edit</TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-                <TooltipProvider disableHoverableContent>
-                  <Tooltip delayDuration={100}>
-                    <TooltipTrigger asChild>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-8 w-8"
-                        onClick={() => {/* Handle view */ }}
-                      >
-                        <Eye className="h-4 w-4" />
-                      </Button>
-                    </TooltipTrigger>
-                    <TooltipContent side="right">View</TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-                <TooltipProvider disableHoverableContent>
-                  <Tooltip delayDuration={100}>
-                    <TooltipTrigger asChild>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-8 w-8"
-                        onClick={handleLogout}
-                      >
-                        <LogOut className="h-4 w-4" />
-                      </Button>
-                    </TooltipTrigger>
-                    <TooltipContent side="right">Log Out</TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              </div>
-            </div>
-
-          </div>
-          {!getOpenState() && (
-            <div className="flex flex-col items-center gap-2">
-              <TooltipProvider disableHoverableContent>
-                <Tooltip delayDuration={100}>
-                  <TooltipTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-8 w-8"
-                      onClick={() => {/* Handle edit */ }}
-                    >
-                      <Edit className="h-4 w-4" />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent side="right">Edit</TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-              <TooltipProvider disableHoverableContent>
-                <Tooltip delayDuration={100}>
-                  <TooltipTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-8 w-8"
-                      onClick={() => {/* Handle view */ }}
-                    >
-                      <Eye className="h-4 w-4" />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent side="right">View</TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-              <TooltipProvider disableHoverableContent>
-                <Tooltip delayDuration={100}>
-                  <TooltipTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-8 w-8"
-                      onClick={handleLogout}
-                    >
-                      <LogOut className="h-4 w-4" />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent side="right">Log Out</TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            </div>
-          )}
-        </div>
       </div>
     </aside>
   );
