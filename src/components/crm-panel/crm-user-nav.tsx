@@ -20,7 +20,7 @@ export function CRMUserNav() {
 
   const handleLogout = () => {
     dispatch(logout());
-    navigate('/crm/login');
+    navigate('/accounting/software/login');
   };
 
   return (
@@ -59,7 +59,7 @@ export function CRMUserNav() {
         </DropdownMenuLabel>
         <DropdownMenuSeparator className="bg-slate-50" />
         <DropdownMenuGroup className="p-1">
-          <DropdownMenuItem className="rounded-xl font-bold py-2.5 text-slate-600 focus:bg-slate-50 focus:text-primary transition-colors" onClick={() => navigate('/crm/dashboard')}>
+          <DropdownMenuItem className="rounded-xl font-bold py-2.5 text-slate-600 focus:bg-slate-50 focus:text-primary transition-colors" onClick={() => navigate('/accounting/software/dashboard')}>
             <LayoutGrid className="mr-3 h-4 w-4" />
             <span>Accounting System</span>
           </DropdownMenuItem>

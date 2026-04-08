@@ -239,7 +239,7 @@ export default function AddInvestorPage() {
                 await createInvestor(payload).unwrap();
                 toast.success("Investor created successfully!");
             }
-            navigate("/admin/investor");
+            navigate("/accounting/software/investor");
         } catch (error: any) {
             console.error("Error saving investor:", error);
             const errorMessage =

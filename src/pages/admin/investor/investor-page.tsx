@@ -100,24 +100,24 @@ export default function InvestorPage() {
             setDeleteConfirmOpen(true);
         } else if (action === "edit") {
             if (investor?.investorId) {
-                navigate(`/admin/investor/edit/${investor.investorId}`);
+                navigate(`/accounting/software/investor/edit/${investor.investorId}`);
         } else {
             // Fallback: try to find in raw data by ID
             const rawInvestor = data?.data?.find((i: Investor) => i.id.toString() === id);
             if (rawInvestor) {
-                navigate(`/admin/investor/edit/${rawInvestor.id}`);
+                navigate(`/accounting/software/investor/edit/${rawInvestor.id}`);
             } else {
                 toast.error("Investor not found");
             }
         }
     } else if (action === "view") {
         if (investor?.investorId) {
-            navigate(`/admin/investor/view/${investor.investorId}`);
+            navigate(`/accounting/software/investor/view/${investor.investorId}`);
         } else {
             // Fallback: try to find in raw data by ID
             const rawInvestor = data?.data?.find((i: Investor) => i.id.toString() === id);
             if (rawInvestor) {
-                navigate(`/admin/investor/view/${rawInvestor.id}`);
+                navigate(`/accounting/software/investor/view/${rawInvestor.id}`);
             } else {
                 toast.error("Investor not found");
             }
@@ -177,7 +177,7 @@ export default function InvestorPage() {
                     <h1 className="text-3xl font-bold text-gray-900 mb-2">Investor</h1>
                     <p className="text-gray-600">Here's what happening in your update</p>
                 </div>
-                <Button onClick={() => navigate("/admin/investor/new")}>Add New</Button>
+                <Button onClick={() => navigate("/accounting/software/investor/new")}>Add New</Button>
             </div>
 
             {/* Filters */}

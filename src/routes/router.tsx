@@ -152,7 +152,7 @@ const router = createBrowserRouter([
 
   // 🧭 CRM Portal routes
   {
-    path: "/crm",
+    path: "/accounting/software",
     element: <CRMPanelLayout />,
     children: [
       { path: "dashboard", element: <CRMDashboardPage /> },

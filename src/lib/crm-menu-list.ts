@@ -31,9 +31,9 @@ export function getCRMMenuList(pathname: string): Group[] {
       groupLabel: "",
       menus: [
         {
-          href: "/crm/dashboard",
+          href: "/accounting/software/dashboard",
           label: "Dashboard",
-          active: pathname.includes("/crm/dashboard"),
+          active: pathname.includes("/accounting/software/dashboard"),
           icon: LayoutGrid,
           submenus: []
         }
@@ -43,23 +43,23 @@ export function getCRMMenuList(pathname: string): Group[] {
       groupLabel: "Management",
       menus: [
         {
-          href: "/crm/investor",
+          href: "/accounting/software/investor",
           label: "Investors",
-          active: pathname.includes("/crm/investor"),
+          active: pathname.includes("/accounting/software/investor"),
           icon: Users,
           submenus: []
         },
         {
-          href: "/crm/installment-rules",
+          href: "/accounting/software/installment-rules",
           label: "Installment Rules",
-          active: pathname.includes("/crm/installment-rules"),
+          active: pathname.includes("/accounting/software/installment-rules"),
           icon: HandCoins,
           submenus: []
         },
         {
-          href: "/crm/share-manage",
+          href: "/accounting/software/share-manage",
           label: "Share Manage",
-          active: pathname.includes("/crm/share-manage"),
+          active: pathname.includes("/accounting/software/share-manage"),
           icon: Share2,
           submenus: []
         }

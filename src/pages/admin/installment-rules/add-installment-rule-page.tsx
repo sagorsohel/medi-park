@@ -148,7 +148,7 @@ export default function AddInstallmentRulePage() {
                 await createRule(payload).unwrap();
                 toast.success("Installment rule created successfully!");
             }
-            navigate("/admin/installment-rules");
+            navigate("/accounting/software/installment-rules");
         } catch (error: unknown) {
             console.error("Failed to save installment rule:", error);
             const errorMessage = 
@@ -176,7 +176,7 @@ export default function AddInstallmentRulePage() {
             <div className="mb-6">
                 <Button
                     variant="ghost"
-                    onClick={() => navigate("/admin/installment-rules")}
+                    onClick={() => navigate("/accounting/software/installment-rules")}
                     className="mb-4"
                 >
                     <ChevronLeft className="w-4 h-4 mr-2" />
@@ -397,7 +397,7 @@ export default function AddInstallmentRulePage() {
                         <Button
                             type="button"
                             variant="outline"
-                            onClick={() => navigate("/admin/installment-rules")}
+                            onClick={() => navigate("/accounting/software/installment-rules")}
                         >
                             Cancel
                         </Button>

@@ -35,7 +35,7 @@ export default function CRMLoginPage() {
         token: result.data.token,
       }));
 
-      navigate('/crm/dashboard', { replace: true });
+      navigate('/accounting/software/dashboard', { replace: true });
     } catch (err: unknown) {
       if (err && typeof err === 'object' && 'data' in err) {
         const errorData = err.data as { message?: string };

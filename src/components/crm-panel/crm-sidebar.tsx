@@ -29,7 +29,7 @@ export function CRMSidebar() {
       >
         <div className="shrink-0 px-4 p-3 border-4 border-sidebar-border bg-sidebar rounded-[12px]">
           <Link
-            to="/crm/dashboard"
+            to="/accounting/software/dashboard"
             className={cn(
               "flex items-center gap-3 transition-opacity duration-300",
               !getOpenState() ? "justify-center" : "justify-start"

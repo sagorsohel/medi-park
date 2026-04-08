@@ -100,13 +100,13 @@ export default function InstallmentRulesPage() {
             setDeleteConfirmOpen(true);
         } else if (action === "edit") {
             if (rule?.ruleId) {
-                navigate(`/admin/installment-rules/edit/${rule.ruleId}`);
+                navigate(`/accounting/software/installment-rules/edit/${rule.ruleId}`);
             } else {
                 toast.error("Rule not found");
             }
         } else if (action === "view") {
             if (rule?.ruleId) {
-                navigate(`/admin/installment-rules/view/${rule.ruleId}`);
+                navigate(`/accounting/software/installment-rules/view/${rule.ruleId}`);
             } else {
                 toast.error("Rule not found");
             }
@@ -155,7 +155,7 @@ export default function InstallmentRulesPage() {
                     <h1 className="text-3xl font-bold text-gray-900 mb-2">Installment Rules</h1>
                     <p className="text-gray-600">Manage installment payment plans</p>
                 </div>
-                <Button onClick={() => navigate("/admin/installment-rules/new")}>Add New</Button>
+                <Button onClick={() => navigate("/accounting/software/installment-rules/new")}>Add New</Button>
             </div>
 
             {/* Filters */}

@@ -14,7 +14,7 @@ export default function CRMDashboardPage() {
       color: "text-blue-600",
       bg: "bg-blue-50",
       change: "+12.5%",
-      href: "/crm/investor"
+      href: "/accounting/software/investor"
     },
     {
       title: "Shared Capital",
@@ -23,7 +23,7 @@ export default function CRMDashboardPage() {
       color: "text-emerald-600",
       bg: "bg-emerald-50",
       change: "+8.2%",
-      href: "/crm/share-manage"
+      href: "/accounting/software/share-manage"
     },
     {
       title: "Pending Installments",
@@ -32,7 +32,7 @@ export default function CRMDashboardPage() {
       color: "text-orange-600",
       bg: "bg-orange-50",
       change: "-5.4%",
-      href: "/crm/installment-rules"
+      href: "/accounting/software/installment-rules"
     },
     {
       title: "Growth",
@@ -41,7 +41,7 @@ export default function CRMDashboardPage() {
       color: "text-purple-600",
       bg: "bg-purple-50",
       change: "+1.2%",
-      href: "/crm/dashboard"
+      href: "/accounting/software/dashboard"
     }
   ];
 
@@ -84,7 +84,7 @@ export default function CRMDashboardPage() {
          <Card className="border-2 border-slate-100 rounded-[22px] overflow-hidden bg-white shadow-sm">
            <CardHeader className="border-b-2 border-slate-50/80 p-6 flex flex-row items-center justify-between">
              <CardTitle className="text-lg font-black text-slate-900 tracking-tight">Recent Investors</CardTitle>
-             <Link to="/crm/investor" className="text-sm font-bold text-primary hover:underline">View All</Link>
+             <Link to="/accounting/software/investor" className="text-sm font-bold text-primary hover:underline">View All</Link>
            </CardHeader>
            <CardContent className="p-0">
              <div className="divide-y divide-slate-50">
@@ -121,7 +121,7 @@ export default function CRMDashboardPage() {
                <h3 className="font-black text-slate-900">System is Secure</h3>
                <p className="text-sm text-slate-500 font-medium">All shares and transactions are encrypted <br/>and backed up to the main server.</p>
              </div>
-             <Link to="/crm/share-manage">
+             <Link to="/accounting/software/share-manage">
               <button className="bg-slate-900 text-white rounded-xl px-6 py-2.5 text-sm font-bold shadow-lg hover:shadow-slate-200 transition-all active:scale-95">
                 Audit Transaction Log
               </button>
