@@ -149,15 +149,22 @@ export default function AddInstallmentRulePage() {
                 toast.success("Installment rule created successfully!");
             }
             navigate("/accounting/software/installment-rules");
-        } catch (error: unknown) {
+        } catch (error: any) {
             console.error("Failed to save installment rule:", error);
-            const errorMessage = 
-                (error && typeof error === "object" && "data" in error && 
-                 error.data && typeof error.data === "object" && "message" in error.data &&
-                 typeof error.data.message === "string")
-                    ? error.data.message
-                    : "Failed to save installment rule. Please try again.";
-            toast.error(errorMessage);
+            
+            // Handle validation errors from backend
+            if (error?.data?.errors) {
+                Object.values(error.data.errors).forEach((messages: any) => {
+                    if (Array.isArray(messages)) {
+                        messages.forEach((msg: string) => toast.error(msg));
+                    } else {
+                        toast.error(messages);
+                    }
+                });
+            } else {
+                const errorMessage = error?.data?.message || "Failed to save installment rule. Please try again.";
+                toast.error(errorMessage);
+            }
         }
     };
 
@@ -191,7 +198,7 @@ export default function AddInstallmentRulePage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {/* Name */}
                     <div className="md:col-span-2">
-                        <Label htmlFor="name">Name *</Label>
+                        <Label htmlFor="name">Name <span className="text-red-500">*</span></Label>
                         <Input
                             id="name"
                             value={formData.name}
@@ -203,7 +210,7 @@ export default function AddInstallmentRulePage() {
 
                     {/* Payment Type */}
                     <div>
-                        <Label htmlFor="payment_type">Payment Type *</Label>
+                        <Label htmlFor="payment_type">Payment Type <span className="text-red-500">*</span></Label>
                         <Select
                             value={formData.payment_type || undefined}
                             onValueChange={(value) => handleChange("payment_type", value)}
@@ -240,7 +247,7 @@ export default function AddInstallmentRulePage() {
 
                     {/* Regular Price */}
                     <div>
-                        <Label htmlFor="regular_price">Regular Price *</Label>
+                        <Label htmlFor="regular_price">Regular Price <span className="text-red-500">*</span></Label>
                         <Input
                             id="regular_price"
                             type="number"
@@ -265,7 +272,7 @@ export default function AddInstallmentRulePage() {
 
                     {/* Offer Price */}
                     <div>
-                        <Label htmlFor="offer_price">Offer Price *</Label>
+                        <Label htmlFor="offer_price">Offer Price <span className="text-red-500">*</span></Label>
                         <Input
                             id="offer_price"
                             type="number"
@@ -278,7 +285,9 @@ export default function AddInstallmentRulePage() {
 
                     {/* Down Payment Amount */}
                     <div>
-                        <Label htmlFor="down_payment_amount">Down Payment Amount</Label>
+                        <Label htmlFor="down_payment_amount">
+                            Down Payment Amount {formData.payment_type === "down_payment" && <span className="text-red-500">*</span>}
+                        </Label>
                         <Input
                             id="down_payment_amount"
                             type="number"
@@ -290,7 +299,9 @@ export default function AddInstallmentRulePage() {
 
                     {/* EMI Amount */}
                     <div>
-                        <Label htmlFor="emi_amount">EMI Amount</Label>
+                        <Label htmlFor="emi_amount">
+                            EMI Amount {(formData.payment_type === "down_payment" || formData.payment_type === "installment") && <span className="text-red-500">*</span>}
+                        </Label>
                         <Input
                             id="emi_amount"
                             type="number"
@@ -302,7 +313,9 @@ export default function AddInstallmentRulePage() {
 
                     {/* Duration (Months) */}
                     <div>
-                        <Label htmlFor="duration_months">Duration (Months)</Label>
+                        <Label htmlFor="duration_months">
+                            Duration (Months) {(formData.payment_type === "down_payment" || formData.payment_type === "installment") && <span className="text-red-500">*</span>}
+                        </Label>
                         <Input
                             id="duration_months"
                             type="number"

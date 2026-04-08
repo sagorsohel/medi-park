@@ -90,9 +90,9 @@ export const installmentRulesApi = api.injectEndpoints({
       providesTags: (result) =>
         result?.data
           ? [
-              ...result.data.map(({ id }) => ({ type: "InstallmentRule" as const, id })),
-              { type: "InstallmentRule", id: "LIST" },
-            ]
+            ...result.data.map(({ id }) => ({ type: "InstallmentRule" as const, id })),
+            { type: "InstallmentRule", id: "LIST" },
+          ]
           : [{ type: "InstallmentRule", id: "LIST" }],
     }),
     getInstallmentRuleById: builder.query<SingleInstallmentRuleResponse, number>({
@@ -116,7 +116,7 @@ export const installmentRulesApi = api.injectEndpoints({
     >({
       query: ({ id, data }) => ({
         url: `/installment-rules/${id}`,
-        method: "PUT",
+        method: "PATCH",
         body: data,
       }),
       invalidatesTags: (result, error, arg) => [
