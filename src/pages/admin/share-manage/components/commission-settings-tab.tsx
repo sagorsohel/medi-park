@@ -43,7 +43,14 @@ export function CommissionSettingsTab() {
 
     const handleUpdate = async (level: number, percentage: number) => {
         try {
-            await updateSettings({ level, percentage }).unwrap();
+            // Construct payload with all levels as the backend requires all fields
+            const payload: Record<string, number> = {};
+            settings.forEach((item) => {
+                const key = `level_${item.level}_commission_percentage`;
+                payload[key] = item.level === level ? percentage : parseFloat(item.percentage);
+            });
+
+            await updateSettings(payload).unwrap();
             toast.success(`Level ${level} updated successfully`);
         } catch (error) {
             toast.error("Failed to update commission setting");

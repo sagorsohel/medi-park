@@ -97,7 +97,7 @@ export const shareManageApi = api.injectEndpoints({
             },
             providesTags: ["CommissionSetting"],
         }),
-        updateCommissionSettings: builder.mutation<void, { level: number; percentage: number }>({
+        updateCommissionSettings: builder.mutation<void, Record<string, number>>({
             query: (data) => ({
                 url: `/commission-settings`,
                 method: "POST",
