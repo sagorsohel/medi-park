@@ -1,9 +1,9 @@
-import { useParams } from "react-router";
+import { Link, useParams } from "react-router";
 import { PageHeroSection } from '@/components/website/page-hero-section'
 import { BreadcrumbSection } from '@/components/website/breadcrumb-section'
 import { Card, CardContent } from '@/components/ui/card'
 import { useGetDoctorByIdQuery } from '@/services/doctorApi'
-import { Loader2 } from 'lucide-react'
+import { Loader2, Calendar } from 'lucide-react'
 import { useMemo } from 'react'
 
 export default function DoctorDetailPage() {
@@ -144,7 +144,17 @@ export default function DoctorDetailPage() {
                       </h1>
                       <p className="text-gray-600 mb-2">{doctor.qualifications}</p>
                       <p className="text-lg font-semibold text-gray-900 mb-2">{doctor.role}</p>
-                      <p className="text-blue-600 underline">{doctor.department}</p>
+                      <p className="text-blue-600 underline mb-5">{doctor.department}</p>
+
+                      <Link
+                        to="http://localhost:5000/appointment"
+
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 px-6 py-3 bg-[#0B1B3D] text-white hover:bg-primary rounded-xl font-extrabold text-xs uppercase tracking-widest shadow-md hover:shadow-lg transition-all duration-300"
+                      >
+                        <Calendar className="w-4 h-4" />
+                        Book Appointment
+                      </Link>
                     </div>
                     {/* Logo */}
                     <div className="hidden md:block">
