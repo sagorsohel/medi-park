@@ -13,6 +13,7 @@ import { homepageApi } from '@/services/homepageApi'
 import { VideoSection } from '@/components/website/video-section'
 import { ContactMapSection } from '@/components/website/contact-map-section'
 import { useGetHeadingsQuery } from '@/services/headingApi'
+import { StatsSection } from '@/components/website/stats-section'
 
 export default function HomePage() {
   const { data: headingsData } = useGetHeadingsQuery();
@@ -31,6 +32,7 @@ export default function HomePage() {
       {/* About Section */}
       <AboutSection />
 
+
       {/* Specialities Section */}
       <SpecialitiesSection />
 
@@ -41,6 +43,9 @@ export default function HomePage() {
 
       {/* Pricing Section */}
       <PricingSection />
+
+      {/* Stats Section */}
+      <StatsSection />
 
       {/* Media/News Section */}
       <MediaSection title={headings?.homepage_news_and_media_section_title} />
