@@ -4,9 +4,8 @@ import { NavLink, Link } from "react-router";
 import { useAppSelector, useAppDispatch } from "@/store/hooks";
 import { logout } from "@/store/slices/authSlice";
 import { Button } from "@/components/ui/button";
-import { Menu, ChevronDown, Facebook, Linkedin, Youtube, Phone, MessageCircle, Instagram } from "lucide-react";
-import { FaWhatsapp } from "react-icons/fa6";
-import { useState, useEffect, useMemo } from "react";
+import { Menu, ChevronDown, Facebook, Linkedin, Youtube, Instagram } from "lucide-react";
+import { useState, useMemo } from "react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import {
   Collapsible,
@@ -37,7 +36,7 @@ export function WebsiteNavbar() {
 
   const footerContact = footerContactData?.data;
   const headings = headingsData?.data;
-  
+
   const hotline = headings?.hotline_number || (footerContact?.phone && footerContact.phone.length > 0 ? footerContact.phone[0] : "10633");
   const whatsapp = headings?.whatsapp_number || "8801805032998";
 
@@ -49,9 +48,9 @@ export function WebsiteNavbar() {
   const [visitorsOpen, setVisitorsOpen] = useState<boolean>(false);
 
   const { data: specializedFacilitiesData } = useGetSpecializedFacilitiesPublicQuery();
-  const { data: futureVenturesData } = useGetFutureVenturesPublicQuery(1);
   const { data: directorsData } = useGetDirectorsQuery({ limit: 100 });
   const { data: valuesData } = useGetOurValuesPublicQuery();
+  const { data: futureVenturesData } = useGetFutureVenturesPublicQuery(1);
 
   const activeSpecializedFacilities = specializedFacilitiesData?.data?.filter(f => f.status === 'active') || [];
   const activeFutureVentures = futureVenturesData?.data?.filter(f => f.status === 'active') || [];
@@ -164,39 +163,45 @@ export function WebsiteNavbar() {
                   </span>
                 )}
               </NavLink>
-              <div className="absolute top-full left-0 w-[250px] bg-[#0B1B3D] text-white shadow-[0_10px_30px_rgba(0,0,0,0.1)] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top border-t-[3px] border-primary z-50">
+              <div className="absolute top-full left-0 w-[260px] bg-[#0B1B3D] text-white shadow-[0_10px_30px_rgba(0,0,0,0.1)] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top border-t-[3px] border-primary z-50">
                 {/* About MSH with Submenu */}
                 <div className="group/sub relative">
                   <Link
                     to="/about"
-                    className="flex items-center justify-between px-5 py-3.5 hover:bg-primary/10 hover:text-primary border-b border-gray-700/50 uppercase text-xs font-semibold transition-all"
+                    className="flex items-center justify-between px-5 py-3.5 hover:bg-primary/5 hover:text-primary border-b border-gray-100 uppercase text-xs font-semibold transition-colors"
                   >
-                    About MSH
+                    About Medipark
                     <ChevronDown className="w-3.5 h-3.5 -rotate-90 group-hover/sub:text-primary" />
                   </Link>
 
-                  {/* Nested Flyout for Messages */}
-                  <div className="absolute left-full top-0 w-[250px] bg-[#0B1B3D] border-l border-primary shadow-xl opacity-0 invisible group-hover/sub:opacity-100 group-hover/sub:visible transition-all duration-300">
+                  {/* Nested Flyout for Messages & Board of Directors */}
+                  <div className="absolute left-full top-0 w-[260px] bg-[#0B1B3D] border-l border-primary shadow-xl opacity-0 invisible group-hover/sub:opacity-100 group-hover/sub:visible transition-all duration-300">
                     {sortedDirectors.map(director => (
                       <Link
                         key={director.id}
                         to={getDirectorLink(director)}
-                        className="block px-5 py-3.5 hover:bg-primary/10 hover:text-primary border-b border-gray-700/50 uppercase text-xs font-semibold transition-all last:border-b-0"
+                        className="block px-5 py-3.5 hover:bg-primary/5 hover:text-primary border-b border-gray-100 uppercase text-xs font-semibold transition-colors"
                       >
                         {getDirectorLabel(director)}
                       </Link>
                     ))}
+                    <Link
+                      to="/about"
+                      className="block px-5 py-3.5 hover:bg-primary/5 hover:text-primary uppercase text-xs font-semibold transition-colors"
+                    >
+                      Board of Directors
+                    </Link>
                   </div>
                 </div>
 
-                <Link to="/mission" className="block px-5 py-3.5 hover:bg-primary/10 hover:text-primary border-b border-gray-700/50 uppercase text-xs font-semibold transition-all">Mission</Link>
-                <Link to="/vision" className="block px-5 py-3.5 hover:bg-primary/10 hover:text-primary border-b border-gray-700/50 uppercase text-xs font-semibold transition-all">Vision</Link>
-                
+                <Link to="/mission" className="block px-5 py-3.5 hover:bg-primary/5 hover:text-primary border-b border-gray-100 uppercase text-xs font-semibold transition-colors">Mission</Link>
+                <Link to="/vision" className="block px-5 py-3.5 hover:bg-primary/5 hover:text-primary border-b border-gray-100 uppercase text-xs font-semibold transition-colors">Vision</Link>
+
                 {/* Our Values with Submenu */}
                 <div className="group/sub relative">
                   <Link
                     to="/our-values"
-                    className="flex items-center justify-between px-5 py-3.5 hover:bg-primary/10 hover:text-primary border-b border-gray-700/50 uppercase text-xs font-semibold transition-all"
+                    className="flex items-center justify-between px-5 py-3.5 hover:bg-primary/5 hover:text-primary uppercase text-xs font-semibold transition-colors"
                   >
                     {headings?.our_values_title || "Our Values"}
                     <ChevronDown className="w-3.5 h-3.5 -rotate-90 group-hover/sub:text-primary" />
@@ -204,12 +209,12 @@ export function WebsiteNavbar() {
 
                   {/* Nested Flyout for Values */}
                   {values.length > 0 && (
-                    <div className="absolute left-full top-0 w-[250px] bg-[#0B1B3D] border-l border-primary shadow-xl opacity-0 invisible group-hover/sub:opacity-100 group-hover/sub:visible transition-all duration-300">
+                    <div className="absolute left-full top-0 w-[260px] bg-[#0B1B3D] border-l border-primary shadow-xl opacity-0 invisible group-hover/sub:opacity-100 group-hover/sub:visible transition-all duration-300">
                       {values.map(val => (
                         <Link
                           key={val.id}
                           to={`/our-values/${val.id}`}
-                          className="block px-5 py-3.5 hover:bg-primary/10 hover:text-primary border-b border-gray-700/50 uppercase text-xs font-semibold transition-all last:border-b-0"
+                          className="block px-5 py-3.5 hover:bg-primary/5 hover:text-primary border-b border-gray-100 uppercase text-xs font-semibold transition-colors last:border-b-0"
                         >
                           <div className="flex items-center gap-2">
                             {val.icon && <DynamicIcon name={val.icon} className="w-3.5 h-3.5" />}
@@ -220,8 +225,6 @@ export function WebsiteNavbar() {
                     </div>
                   )}
                 </div>
-
-                <Link to="/about" className="block px-5 py-3.5 hover:bg-primary/10 hover:text-primary uppercase text-xs font-semibold transition-all">Board of Directors</Link>
               </div>
             </div>
 
@@ -237,7 +240,7 @@ export function WebsiteNavbar() {
                   DEPARTMENTS <ChevronDown className="w-4 h-4 transition-transform group-hover:rotate-180" />
                 </span>
               </div>
-              <div className="absolute top-full left-0 w-full bg-[#234687] text-white shadow-[0_10px_30px_rgba(0,0,0,0.1)] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 border-t-[3px] border-primary p-8 z-50">
+              <div className="absolute top-full left-0 w-full bg-[#0B1B3D] text-white shadow-[0_10px_30px_rgba(0,0,0,0.1)] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 border-t-[3px] border-primary p-8 z-50">
                 <div className="max-w-7xl mx-auto">
                   <div className="flex justify-between items-center mb-6 pb-2 border-b border-gray-100">
                     <h3 className="text-xl font-bold text-primary uppercase tracking-wide">Our Speciality Departments</h3>
@@ -249,7 +252,7 @@ export function WebsiteNavbar() {
                         <Link
                           key={facility.id}
                           to={`/facilities/${facility.id}`}
-                          className="text-[13px] font-semibold text-white hover:text-[#00A884] transition-colors py-1.5 flex items-center gap-3 group/item"
+                          className="text-[13px] font-semibold text-white hover:bg-primary/5 hover:text-primary border-b border-gray-100 transition-colors py-2 px-3 flex items-center gap-3 group/item"
                         >
                           {facility.icon ? (
                             <DynamicIcon
@@ -293,6 +296,33 @@ export function WebsiteNavbar() {
                 <Link to="/equipments" className="block px-5 py-3.5 hover:bg-primary/5 hover:text-primary border-b border-gray-100 uppercase text-xs font-semibold transition-colors">Equipments</Link>
                 <Link to="/health-tips" className="block px-5 py-3.5 hover:bg-primary/5 hover:text-primary border-b border-gray-100 uppercase text-xs font-semibold transition-colors">Health Tips</Link>
                 <Link to="/visitors-policy" className="block px-5 py-3.5 hover:bg-primary/5 hover:text-primary border-b border-gray-100 uppercase text-xs font-semibold transition-colors">Visitors Policy</Link>
+
+                {/* Future Ventures with Submenu */}
+                <div className="group/sub relative">
+                  <Link
+                    to="/future-ventures"
+                    className="flex items-center justify-between px-5 py-3.5 hover:bg-primary/5 hover:text-primary border-b border-gray-100 uppercase text-xs font-semibold transition-colors"
+                  >
+                    Future Ventures
+                    <ChevronDown className="w-3.5 h-3.5 -rotate-90 group-hover/sub:text-primary" />
+                  </Link>
+
+                  {/* Nested Flyout for Future Ventures */}
+                  {activeFutureVentures.length > 0 && (
+                    <div className="absolute left-full top-0 w-[260px] bg-[#0B1B3D] border-l border-primary shadow-xl opacity-0 invisible group-hover/sub:opacity-100 group-hover/sub:visible transition-all duration-300">
+                      {activeFutureVentures.map(venture => (
+                        <Link
+                          key={venture.id}
+                          to={`/future-ventures/${venture.id}`}
+                          className="block px-5 py-3.5 hover:bg-primary/5 hover:text-primary border-b border-gray-100 uppercase text-xs font-semibold transition-colors last:border-b-0"
+                        >
+                          {venture.title}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
                 <Link to="/feedback" className="block px-5 py-3.5 hover:bg-primary/5 hover:text-primary uppercase text-xs font-semibold transition-colors">Feedback</Link>
               </div>
             </div>
@@ -398,24 +428,26 @@ export function WebsiteNavbar() {
                   </CollapsibleTrigger>
                   <CollapsibleContent className="bg-gray-50 border-b border-gray-100">
                     <div className="py-2 pl-4 flex flex-col">
-                      <Link to="/about" onClick={() => setMobileMenuOpen(false)} className="py-2.5 text-sm font-semibold text-gray-600 uppercase">About MSH</Link>
+                      <Link to="/about" onClick={() => setMobileMenuOpen(false)} className="py-2.5 text-sm font-semibold text-gray-600 uppercase">About Medipark</Link>
+                      <div className="pl-4 flex flex-col border-l border-gray-100 ml-1 mb-2">
+                        {sortedDirectors.map(director => (
+                          <Link key={director.id} to={getDirectorLink(director)} onClick={() => setMobileMenuOpen(false)} className="py-2 text-[13px] font-medium text-gray-500 uppercase">
+                            {getDirectorLabel(director)}
+                          </Link>
+                        ))}
+                        <Link to="/about" onClick={() => setMobileMenuOpen(false)} className="py-2 text-[13px] font-medium text-gray-500 uppercase">Board of Directors</Link>
+                      </div>
                       <Link to="/mission" onClick={() => setMobileMenuOpen(false)} className="py-2.5 text-sm font-semibold text-gray-600 uppercase">Mission</Link>
                       <Link to="/vision" onClick={() => setMobileMenuOpen(false)} className="py-2.5 text-sm font-semibold text-gray-600 uppercase">Vision</Link>
                       <Link to="/our-values" onClick={() => setMobileMenuOpen(false)} className="py-2.5 text-sm font-semibold text-gray-600 uppercase">{headings?.our_values_title || "Our Values"}</Link>
                       <div className="pl-4 flex flex-col border-l border-gray-100 ml-1">
                         {values.map(val => (
                           <Link key={val.id} to={`/our-values/${val.id}`} onClick={() => setMobileMenuOpen(false)} className="py-2 text-[13px] font-medium text-gray-500 uppercase flex items-center gap-2">
-                             {val.icon && <DynamicIcon name={val.icon} className="w-3 h-3" />}
-                             {val.title}
+                            {val.icon && <DynamicIcon name={val.icon} className="w-3 h-3" />}
+                            {val.title}
                           </Link>
                         ))}
                       </div>
-                      {sortedDirectors.map(director => (
-                        <Link key={director.id} to={getDirectorLink(director)} onClick={() => setMobileMenuOpen(false)} className="py-2.5 text-sm font-semibold text-gray-600 uppercase">
-                          {getDirectorLabel(director)}
-                        </Link>
-                      ))}
-                      <Link to="/about" onClick={() => setMobileMenuOpen(false)} className="py-2.5 text-sm font-semibold text-gray-600 uppercase">Board of Directors</Link>
                     </div>
                   </CollapsibleContent>
                 </Collapsible>
@@ -464,6 +496,18 @@ export function WebsiteNavbar() {
                       <Link to="/equipments" onClick={() => setMobileMenuOpen(false)} className="py-2.5 text-sm font-semibold text-gray-600 uppercase">Equipments</Link>
                       <Link to="/health-tips" onClick={() => setMobileMenuOpen(false)} className="py-2.5 text-sm font-semibold text-gray-600 uppercase">Health Tips</Link>
                       <Link to="/visitors-policy" onClick={() => setMobileMenuOpen(false)} className="py-2.5 text-sm font-semibold text-gray-600 uppercase">Visitors Policy</Link>
+
+                      <Link to="/future-ventures" onClick={() => setMobileMenuOpen(false)} className="py-2.5 text-sm font-semibold text-gray-600 uppercase">Future Ventures</Link>
+                      {activeFutureVentures.length > 0 && (
+                        <div className="pl-4 flex flex-col border-l border-gray-100 ml-1 mb-2">
+                          {activeFutureVentures.map(venture => (
+                            <Link key={venture.id} to={`/future-ventures/${venture.id}`} onClick={() => setMobileMenuOpen(false)} className="py-2 text-[13px] font-medium text-gray-500 uppercase">
+                              {venture.title}
+                            </Link>
+                          ))}
+                        </div>
+                      )}
+
                       <Link to="/feedback" onClick={() => setMobileMenuOpen(false)} className="py-2.5 text-sm font-semibold text-gray-600 uppercase">Feedback</Link>
                     </div>
                   </CollapsibleContent>
