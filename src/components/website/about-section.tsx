@@ -34,10 +34,12 @@ export function AboutSection() {
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.6 }}
           >
-            {/* Title / Subtitle */}
+            {/* Highlighted Subtitle Badge */}
 
-            <h2 className="text-4xl  font-semibold text-primary mb-6 leading-tight">
-              {section.title || "We Provide Finnest Patient's Care & Amenities"}
+
+            {/* Stylish Bold Title */}
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-[#0B1B3D] mb-6 leading-[1.15] tracking-tight">
+              {section.title || "We Provide Finest Patient's Care & Amenities"}
             </h2>
 
             {/* Main Content */}
@@ -52,10 +54,12 @@ export function AboutSection() {
                 </p>
               )}
             </div>
-            <h4 className="text-black font-normal  tracking-wider mb-3 text-lg">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 text-primary border border-primary/20 text-[11px] font-extrabold tracking-widest uppercase mb-4 shadow-sm w-fit">
+
               {section.sub_title || "ABOUT US"}
-            </h4>
+            </div>
             {/* Checklist */}
+
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-5 gap-x-4 mb-8">
               {features.map((feature, index) => (
                 <div key={index} className="flex items-center text-[#0B1B3D] font-medium text-[16px]">
