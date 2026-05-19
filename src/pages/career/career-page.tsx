@@ -152,7 +152,7 @@ export default function CareerPage() {
       </section>
 
       {/* Employee Engagement & Events Section */}
-      {events.length > 0 && (
+      {/* {events.length > 0 && (
         <section className="w-full bg-white py-16">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 className="text-4xl font-bold text-primary mb-12 text-center">
@@ -180,7 +180,7 @@ export default function CareerPage() {
             </div>
           </div>
         </section>
-      )}
+      )} */}
     </div>
   )
 }
