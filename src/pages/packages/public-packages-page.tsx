@@ -27,9 +27,8 @@ function PackageDetailsCard({ plan }: { plan: HomepagePricing }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.5 }}
-      className={`relative flex flex-col md:flex-row rounded-3xl overflow-hidden border shadow-sm transition-all hover:shadow-xl ${
-        isPopular ? "border-primary/30 ring-1 ring-primary/10" : "border-gray-100"
-      }`}
+      className={`relative flex flex-col md:flex-row rounded-3xl overflow-hidden border shadow-sm transition-all hover:shadow-xl ${isPopular ? "border-primary/30 ring-1 ring-primary/10" : "border-gray-100"
+        }`}
     >
       {isPopular && (
         <div className="absolute top-0 right-0">
@@ -40,9 +39,8 @@ function PackageDetailsCard({ plan }: { plan: HomepagePricing }) {
       )}
 
       {/* Pricing Header Area */}
-      <div className={`p-8 md:w-1/3 flex flex-col justify-center items-center text-center border-r border-gray-50 bg-gradient-to-br ${
-        isPopular ? "from-primary/5 to-transparent" : "from-gray-50/50 to-transparent"
-      }`}>
+      <div className={`p-8 md:w-1/3 flex flex-col justify-center items-center text-center border-r border-gray-50 bg-gradient-to-br ${isPopular ? "from-primary/5 to-transparent" : "from-gray-50/50 to-transparent"
+        }`}>
         <h3 className="text-2xl font-bold text-gray-900 mb-2">{plan.title}</h3>
         <div className="flex items-baseline gap-1 mb-4">
           <span className="text-xl font-bold text-primary">TK</span>
@@ -52,12 +50,11 @@ function PackageDetailsCard({ plan }: { plan: HomepagePricing }) {
         <p className="text-gray-600 text-sm mb-8 max-w-[200px] leading-relaxed">
           {plan.description}
         </p>
-        <Link 
+        <Link
           to={`/packages/${plan.id}`}
           state={{ plan }}
-          className={`w-full py-4 rounded-xl font-bold text-lg shadow-sm text-center block transition-all ${
-            isPopular ? "bg-primary text-white hover:bg-primary/90" : "bg-[#0B1B3D] text-white hover:bg-[#0B1B3D]/90"
-          }`}
+          className={`w-full py-4 rounded-xl font-bold text-lg shadow-sm text-center block transition-all ${isPopular ? "bg-primary text-white hover:bg-primary/90" : "bg-[#0B1B3D] text-white hover:bg-[#0B1B3D]/90"
+            }`}
         >
           Select Package
         </Link>
@@ -118,11 +115,11 @@ export default function PublicPackagesPage() {
   return (
     <div className="w-full bg-white">
       {/* Hero Section */}
-      <PageHeroSection
+      {/* <PageHeroSection
         image="/navbar-logo.png" // Using a safe default or placeholder
         heading="Packages & Plans"
         alt="Health Packages"
-      />
+      /> */}
 
       {/* Breadcrumb Section */}
       <BreadcrumbSection currentPage="Packages" />
