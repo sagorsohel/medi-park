@@ -18,13 +18,20 @@ export function InvestorSection({ title }: InvestorSectionProps) {
   // Get all investors from API
   const investors = useMemo(() => {
     if (!data?.data) return [];
-    return data.data.map((investor) => ({
-      id: investor.id,
-      image: investor.image || investor.applicant_image || "/vite.svg",
-      name: investor.investor_name || investor.applicant_full_name || "Investor",
-      designation: investor.profession || investor.organization || "Investor",
-      description: investor.about || "MediPark Hospital Investor",
-    }));
+    return data.data.map((investor) => {
+      const address = investor.present_address || investor.permanent_address || "";
+      const addressParts = address.split(/[\n,\r]/).map(p => p.trim()).filter(Boolean);
+      const district = addressParts.length > 0 ? addressParts[addressParts.length - 1] : "";
+
+      return {
+        id: investor.id,
+        image: investor.image || investor.applicant_image || "/vite.svg",
+        name: investor.investor_name || investor.applicant_full_name || "Investor",
+        designation: investor.profession || investor.organization || "Investor",
+        description: investor.about || "MediPark Hospital Investor",
+        district: district,
+      };
+    });
   }, [data]);
 
   // Show loading state
@@ -78,6 +85,7 @@ export function InvestorSection({ title }: InvestorSectionProps) {
                     name={investor.name}
                     designation={investor.designation}
                     description={investor.description}
+                    district={investor.district}
                   />
                 </div>
               ))}
@@ -89,6 +97,7 @@ export function InvestorSection({ title }: InvestorSectionProps) {
                     name={investor.name}
                     designation={investor.designation}
                     description={investor.description}
+                    district={investor.district}
                   />
                 </div>
               ))}

@@ -27,12 +27,19 @@ export default function InvestorsPage() {
   const mappedInvestors = useMemo(() => {
     if (!data?.data) return [];
     
-    return data.data.map((investor) => ({
-      id: investor.id,
-      image: investor.image || investor.applicant_image || "/vite.svg",
-      name: investor.investor_name || investor.applicant_full_name || "Investor",
-      role: investor.profession || investor.organization || "Investor"
-    }));
+    return data.data.map((investor) => {
+      const address = investor.present_address || investor.permanent_address || "";
+      const addressParts = address.split(/[\n,\r]/).map(p => p.trim()).filter(Boolean);
+      const district = addressParts.length > 0 ? addressParts[addressParts.length - 1] : "";
+
+      return {
+        id: investor.id,
+        image: investor.image || investor.applicant_image || "/vite.svg",
+        name: investor.investor_name || investor.applicant_full_name || "Investor",
+        role: investor.profession || investor.organization || "Investor",
+        district: district,
+      };
+    });
   }, [data]);
 
   const pagination = data?.pagination;
@@ -99,6 +106,7 @@ export default function InvestorsPage() {
                       name={investor.name}
                       designation={investor.role}
                       description=""
+                      district={investor.district}
                     />
                   </div>
                 ))}

@@ -8,9 +8,10 @@ interface InvestorCardProps {
   name: string;
   designation: string;
   description: string;
+  district?: string;
 }
 
-export function InvestorCard({ image, name }: InvestorCardProps) {
+export function InvestorCard({ image, name, district }: InvestorCardProps) {
   return (
     <div className="group relative border-2 border-primary rounded-[22px] overflow-hidden min-w-[240px] lg:min-w-0 h-[240px] cursor-default transition-all duration-300 hover:shadow-xl">
       {/* Front Face - Image */}
@@ -26,11 +27,16 @@ export function InvestorCard({ image, name }: InvestorCardProps) {
         />
       </div>
 
-      {/* Hover Overlay - Name Only */}
-      <div className="absolute inset-0 w-full h-full bg-primary/80 text-white p-4 flex items-center justify-center rounded-[20px] opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+      {/* Hover Overlay - Name and District */}
+      <div className="absolute inset-0 w-full h-full bg-primary/80 text-white p-4 flex flex-col items-center justify-center rounded-[20px] opacity-0 group-hover:opacity-100 transition-opacity duration-300">
         <h3 className="text-lg font-bold uppercase text-center leading-tight tracking-wide">
           {name}
         </h3>
+        {district && (
+          <p className="text-sm font-medium mt-2 text-blue-100 uppercase tracking-wider text-center">
+            {district}
+          </p>
+        )}
       </div>
     </div>
   );
