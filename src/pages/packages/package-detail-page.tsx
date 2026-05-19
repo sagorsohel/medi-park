@@ -148,7 +148,7 @@ export default function PackageDetailPage() {
                     Purchase Now
                   </Button>
                   <Link to="/packages" className="block w-full">
-                    <Button variant="outline" className="w-full border-2 border-white/10 hover:bg-white/5 text-white font-bold h-16 rounded-2xl">
+                    <Button variant="outline" className="w-full border-2 border-white/10! hover:bg-white/5  hover:text-white text-black font-bold h-16 rounded-2xl">
                       View Other Plans
                     </Button>
                   </Link>
