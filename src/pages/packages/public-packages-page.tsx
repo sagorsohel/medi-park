@@ -42,14 +42,27 @@ function PackageDetailsCard({ plan }: { plan: HomepagePricing }) {
       <div className={`p-8 md:w-1/3 flex flex-col justify-center items-center text-center border-r border-gray-50 bg-gradient-to-br ${isPopular ? "from-primary/5 to-transparent" : "from-gray-50/50 to-transparent"
         }`}>
         <h3 className="text-2xl font-bold text-gray-900 mb-2">{plan.title}</h3>
-        <div className="flex items-baseline gap-1 mb-4">
-          <span className="text-xl font-bold text-primary">TK</span>
-          <span className="text-5xl font-black text-gray-900">{plan.price}</span>
-          <span className="text-gray-500 font-medium">/{plan.duration}</span>
-        </div>
+
         <p className="text-gray-600 text-sm mb-8 max-w-[200px] leading-relaxed">
           {plan.description}
         </p>
+        <div className="flex items-baseline gap-1.5 mb-4 flex-wrap justify-center">
+          <span className="text-xl font-bold text-primary">TK</span>
+          {plan.final_price && Number(plan.final_price) > 0 ? (
+            <>
+              <span className="text-5xl font-black text-gray-900">{plan.final_price}</span>
+              <span className="text-xl font-bold text-gray-400 line-through">{plan.price}</span>
+            </>
+          ) : (
+            <span className="text-5xl font-black text-gray-900">{plan.price}</span>
+          )}
+          <span className="text-gray-500 font-medium">/{plan.duration}</span>
+        </div>
+        {plan.discount_price && Number(plan.discount_price) > 0 && (
+          <div className="text-xs font-bold text-green-600 bg-green-50 px-3 py-1 rounded-full border border-green-200 mb-4">
+            TK {plan.discount_price} Discount
+          </div>
+        )}
         <Link
           to={`/packages/${plan.id}`}
           state={{ plan }}

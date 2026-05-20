@@ -53,7 +53,7 @@ export function WebsiteFooter() {
                 onError={(e) => {
                   const target = e.target as HTMLImageElement;
                   target.src = "/logo.png";
-                  target.className = "h-[60px] md:h-[80px] w-auto object-contain brightness-0 invert";
+                  target.className = "h-[60px]  md:h-[80px] w-auto object-contain brightness-0 invert";
                 }}
               />
             </Link>

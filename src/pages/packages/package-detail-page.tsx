@@ -63,10 +63,22 @@ export default function PackageDetailPage() {
                   <h1 className="text-3xl md:text-5xl font-black text-[#0B1B3D] tracking-tight">{plan.title}</h1>
                 </div>
                 <div className="text-left md:text-right">
-                  <div className="flex items-baseline gap-1 md:justify-end">
+                  <div className="flex items-baseline gap-1.5 md:justify-end flex-wrap">
                     <span className="text-2xl font-bold text-primary">TK</span>
-                    <span className="text-5xl md:text-6xl font-black text-[#0B1B3D]">{plan.price}</span>
+                    {plan.final_price && Number(plan.final_price) > 0 ? (
+                      <>
+                        <span className="text-5xl md:text-6xl font-black text-[#0B1B3D]">{plan.final_price}</span>
+                        <span className="text-2xl font-bold text-gray-400 line-through">{plan.price}</span>
+                      </>
+                    ) : (
+                      <span className="text-5xl md:text-6xl font-black text-[#0B1B3D]">{plan.price}</span>
+                    )}
                   </div>
+                  {plan.discount_price && Number(plan.discount_price) > 0 && (
+                    <div className="text-xs font-bold text-green-600 bg-green-50 px-3 py-1 rounded-full border border-green-200 mt-1 w-fit md:ml-auto">
+                      TK {plan.discount_price} Discount
+                    </div>
+                  )}
                   <p className="text-gray-400 font-bold uppercase text-sm tracking-widest mt-1">Per {plan.duration}</p>
                 </div>
               </div>

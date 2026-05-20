@@ -163,10 +163,17 @@ export default function HomepagePricingsPage() {
                                         </button>
                                     </div>
 
-                                    <div className="mb-6 flex items-end gap-1">
-                                        <span className="text-4xl font-black text-gray-900">${pricing.price}</span>
-                                        <span className="text-gray-500 font-medium pb-1.5">/{pricing.duration}</span>
-                                    </div>
+                                    <div className="mb-6 flex items-end gap-2 flex-wrap">
+                                         {pricing.final_price && Number(pricing.final_price) > 0 ? (
+                                             <>
+                                                 <span className="text-4xl font-black text-gray-900">${pricing.final_price}</span>
+                                                 <span className="text-xl text-gray-400 line-through pb-1">${pricing.price}</span>
+                                             </>
+                                         ) : (
+                                             <span className="text-4xl font-black text-gray-900">${pricing.price}</span>
+                                         )}
+                                         <span className="text-gray-500 font-medium pb-1.5">/{pricing.duration}</span>
+                                     </div>
 
                                     {/* Features List Layout */}
                                     <div className="grow space-y-4 mb-8 bg-gray-50/50 p-6 rounded-2xl border border-gray-100 min-h-[220px]">

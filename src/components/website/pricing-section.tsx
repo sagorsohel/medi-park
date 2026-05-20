@@ -43,17 +43,33 @@ function PricingCard({ plan }: PricingCardProps) {
       )}
 
       <div className="mb-6">
-        <div className="flex flex-wrap gap-x-1 items-baseline">
+        <div className="flex flex-wrap gap-x-1.5 items-baseline">
+          <h3 className="text-xl md:text-2xl font-bold mb-2 mt-2">{plan.title}</h3>
+          <p className={`text-sm md:text-md font-medium leading-relaxed ${isPopular ? "text-primary-foreground/90" : "text-primary/70"}`}>
+            {plan.description}
+          </p>
           <span className={`text-2xl md:text-3xl font-bold ${isPopular ? "text-primary-foreground/90" : "text-primary/60"}`}>TK</span>
-          <span className="text-[40px] md:text-[48px] font-extrabold tracking-tight shrink-0">{plan.price}</span>
+          {plan.final_price && Number(plan.final_price) > 0 ? (
+            <>
+              <span className="text-[40px] md:text-[48px] font-extrabold tracking-tight shrink-0">{plan.final_price}</span>
+              <span className={`text-xl font-bold line-through ${isPopular ? "text-primary-foreground/60" : "text-muted-foreground/70"} shrink-0`}>{plan.price}</span>
+            </>
+          ) : (
+            <span className="text-[40px] md:text-[48px] font-extrabold tracking-tight shrink-0">{plan.price}</span>
+          )}
           <span className={`text-sm md:text-base font-semibold ${isPopular ? "text-primary-foreground/80" : "text-muted-foreground"} whitespace-nowrap`}>
             /{plan.duration}
           </span>
         </div>
-        <h3 className="text-xl md:text-2xl font-bold mb-2 mt-2">{plan.title}</h3>
-        <p className={`text-sm md:text-md font-medium leading-relaxed ${isPopular ? "text-primary-foreground/90" : "text-primary/70"}`}>
-          {plan.description}
-        </p>
+        {plan.discount_price && Number(plan.discount_price) > 0 && (
+          <div className={`text-xs font-bold px-3 py-1 rounded-full border w-fit mt-2 ${isPopular
+              ? "bg-white/20 text-white border-white/30"
+              : "bg-green-50 text-green-700 border-green-200"
+            }`}>
+            TK {plan.discount_price} Discount
+          </div>
+        )}
+
       </div>
 
       <ul className="space-y-4 mb-8 flex-1">

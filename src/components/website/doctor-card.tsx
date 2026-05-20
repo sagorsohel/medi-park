@@ -66,9 +66,7 @@ export function DoctorCard({
         </h3>
 
         {/* Degrees */}
-        <p className="text-[12px] font-semibold text-gray-500 mt-1 line-clamp-1 italic">
-          {degrees || "MBBS, Medical Specialist"}
-        </p>
+
 
         {/* Divider */}
         <div className="w-full h-px bg-gray-100 my-4" />

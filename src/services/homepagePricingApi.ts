@@ -4,7 +4,9 @@ export interface HomepagePricing {
     id: number;
     title: string;
     price: number | string;
-    duration: string;
+    discount_price?: number | string | null;
+    final_price?: number | string | null;
+    duration: "month" | "year" | "half yearly" | "quatarly" | "one time" | string;
     description: string;
     features: string[];
     highlight: boolean | number;

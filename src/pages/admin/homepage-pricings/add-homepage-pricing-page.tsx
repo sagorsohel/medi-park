@@ -29,6 +29,8 @@ export default function AddHomepagePricingPage() {
     const [formData, setFormData] = useState({
         title: "",
         price: "" as string | number,
+        discount_price: "" as string | number,
+        final_price: "" as string | number,
         duration: "month",
         description: "",
         highlight: false,
@@ -46,7 +48,9 @@ export default function AddHomepagePricingPage() {
             const item = itemData.data;
             setFormData({
                 title: item.title || "",
-                price: item.price !== null ? item.price : "",
+                price: item.price !== null && item.price !== undefined ? item.price : "",
+                discount_price: item.discount_price !== null && item.discount_price !== undefined ? item.discount_price : "",
+                final_price: item.final_price !== null && item.final_price !== undefined ? item.final_price : "",
                 duration: item.duration || "month",
                 description: item.description || "",
                 highlight: Boolean(item.highlight),
@@ -95,6 +99,9 @@ export default function AddHomepagePricingPage() {
 
         const payload = {
             ...formData,
+            price: formData.price !== "" ? Number(formData.price) : "",
+            discount_price: formData.discount_price !== "" ? Number(formData.discount_price) : null,
+            final_price: formData.final_price !== "" ? Number(formData.final_price) : null,
             features: featuresList, // Array format will be parsed correctly in backend natively
             highlight: formData.highlight ? 1 : 0
         };
@@ -156,7 +163,7 @@ export default function AddHomepagePricingPage() {
                 <form onSubmit={handleSubmit} className="p-10 space-y-8">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-10">
                         {/* Upper fields */}
-                        <div className="col-span-1 md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-y-10 gap-x-8">
+                        <div className="col-span-1 md:col-span-2 grid grid-cols-1 gap-y-8">
                             <div className="space-y-3">
                                 <Label htmlFor="title" className="text-sm font-bold text-gray-700 ml-1">Title *</Label>
                                 <Input
@@ -169,9 +176,9 @@ export default function AddHomepagePricingPage() {
                                 />
                             </div>
 
-                            <div className="grid grid-cols-2 gap-4">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
                                 <div className="space-y-3">
-                                    <Label htmlFor="price" className="text-sm font-bold text-gray-700 ml-1">Price *</Label>
+                                    <Label htmlFor="price" className="text-sm font-bold text-gray-700 ml-1">Regular Price *</Label>
                                     <Input
                                         id="price"
                                         type="number"
@@ -179,6 +186,28 @@ export default function AddHomepagePricingPage() {
                                         onChange={(e) => handleChange("price", e.target.value)}
                                         required
                                         placeholder="e.g. 50"
+                                        className="h-14 rounded-2xl border-gray-200 bg-gray-50/50 focus:bg-white focus:ring-4 focus:ring-primary/10 transition-all text-lg font-medium"
+                                    />
+                                </div>
+                                <div className="space-y-3">
+                                    <Label htmlFor="discount_price" className="text-sm font-bold text-gray-700 ml-1">Discount Price</Label>
+                                    <Input
+                                        id="discount_price"
+                                        type="number"
+                                        value={formData.discount_price}
+                                        onChange={(e) => handleChange("discount_price", e.target.value)}
+                                        placeholder="e.g. 10"
+                                        className="h-14 rounded-2xl border-gray-200 bg-gray-50/50 focus:bg-white focus:ring-4 focus:ring-primary/10 transition-all text-lg font-medium"
+                                    />
+                                </div>
+                                <div className="space-y-3">
+                                    <Label htmlFor="final_price" className="text-sm font-bold text-gray-700 ml-1">Final Price</Label>
+                                    <Input
+                                        id="final_price"
+                                        type="number"
+                                        value={formData.final_price}
+                                        onChange={(e) => handleChange("final_price", e.target.value)}
+                                        placeholder="e.g. 40"
                                         className="h-14 rounded-2xl border-gray-200 bg-gray-50/50 focus:bg-white focus:ring-4 focus:ring-primary/10 transition-all text-lg font-medium"
                                     />
                                 </div>
@@ -193,10 +222,19 @@ export default function AddHomepagePricingPage() {
                                         </SelectTrigger>
                                         <SelectContent className="rounded-2xl border-gray-100 shadow-xl">
                                             <SelectItem value="month" className="py-3 rounded-xl focus:bg-primary/5 cursor-pointer">
-                                                <span className="font-semibold text-gray-700">Month / month</span>
+                                                <span className="font-semibold text-gray-700">Monthly</span>
                                             </SelectItem>
                                             <SelectItem value="year" className="py-3 rounded-xl focus:bg-primary/5 cursor-pointer">
-                                                <span className="font-semibold text-gray-700">Year / year</span>
+                                                <span className="font-semibold text-gray-700">Yearly</span>
+                                            </SelectItem>
+                                            <SelectItem value="half yearly" className="py-3 rounded-xl focus:bg-primary/5 cursor-pointer">
+                                                <span className="font-semibold text-gray-700">Half Yearly</span>
+                                            </SelectItem>
+                                            <SelectItem value="quatarly" className="py-3 rounded-xl focus:bg-primary/5 cursor-pointer">
+                                                <span className="font-semibold text-gray-700">Quarterly</span>
+                                            </SelectItem>
+                                            <SelectItem value="one time" className="py-3 rounded-xl focus:bg-primary/5 cursor-pointer">
+                                                <span className="font-semibold text-gray-700">One Time</span>
                                             </SelectItem>
                                         </SelectContent>
                                     </Select>
