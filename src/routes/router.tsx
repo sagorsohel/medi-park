@@ -65,6 +65,8 @@ import DirectorDetailPage from '@/pages/about/director-detail-page'
 import ShareManagePage from '@/pages/admin/share-manage/share-manage-page'
 import ExpensesPage from '@/pages/admin/expenses/expenses-page'
 import AddExpensePage from '@/pages/admin/expenses/add-expense-page'
+import VendorsPage from '@/pages/admin/vendors/vendors-page'
+import AddVendorPage from '@/pages/admin/vendors/add-vendor-page'
 import AppointmentPage from '@/pages/appointment/appointment-page'
 import ReportsPage from '@/pages/reports/reports-page'
 import TelemedicinePage from '@/pages/telemedicine/telemedicine-page'
@@ -171,6 +173,10 @@ const router = createBrowserRouter([
       { path: "expenses/new", element: <AddExpensePage /> },
       { path: "expenses/edit/:id", element: <AddExpensePage /> },
       { path: "expenses/view/:id", element: <AddExpensePage /> },
+      { path: "vendors", element: <VendorsPage /> },
+      { path: "vendors/new", element: <AddVendorPage /> },
+      { path: "vendors/edit/:id", element: <AddVendorPage /> },
+      { path: "vendors/view/:id", element: <AddVendorPage /> },
     ],
   },
 

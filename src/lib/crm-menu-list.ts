@@ -4,6 +4,7 @@ import {
   HandCoins,
   Share2,
   Receipt,
+  Truck,
   type LucideIcon
 } from "lucide-react";
 
@@ -69,6 +70,13 @@ export function getCRMMenuList(pathname: string): Group[] {
           label: "Expenses",
           active: pathname.includes("/accounting/software/expenses"),
           icon: Receipt,
+          submenus: []
+        },
+        {
+          href: "/accounting/software/vendors",
+          label: "Vendors",
+          active: pathname.includes("/accounting/software/vendors"),
+          icon: Truck,
           submenus: []
         }
       ]
