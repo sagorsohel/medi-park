@@ -43,11 +43,11 @@ function PricingCard({ plan }: PricingCardProps) {
       )}
 
       <div className="mb-6">
+        <h3 className="text-xl md:text-2xl font-bold mb-2 mt-2">{plan.title}</h3>
+        <p className={`text-sm md:text-md font-medium leading-relaxed mb-4 ${isPopular ? "text-primary-foreground/90" : "text-primary/70"}`}>
+          {plan.description}
+        </p>
         <div className="flex flex-wrap gap-x-1.5 items-baseline">
-          <h3 className="text-xl md:text-2xl font-bold mb-2 mt-2">{plan.title}</h3>
-          <p className={`text-sm md:text-md font-medium leading-relaxed ${isPopular ? "text-primary-foreground/90" : "text-primary/70"}`}>
-            {plan.description}
-          </p>
           <span className={`text-2xl md:text-3xl font-bold ${isPopular ? "text-primary-foreground/90" : "text-primary/60"}`}>TK</span>
           {plan.final_price && Number(plan.final_price) > 0 ? (
             <>
@@ -62,14 +62,13 @@ function PricingCard({ plan }: PricingCardProps) {
           </span>
         </div>
         {plan.discount_price && Number(plan.discount_price) > 0 && (
-          <div className={`text-xs font-bold px-3 py-1 rounded-full border w-fit mt-2 ${isPopular
+          <div className={`text-xs font-bold px-3 py-1 rounded-full border w-fit mt-3 ${isPopular
               ? "bg-white/20 text-white border-white/30"
               : "bg-green-50 text-green-700 border-green-200"
             }`}>
             TK {plan.discount_price} Discount
           </div>
         )}
-
       </div>
 
       <ul className="space-y-4 mb-8 flex-1">
