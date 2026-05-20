@@ -3,14 +3,15 @@ import { tokenManager } from '@/lib/tokenManager'
 import { logout } from '@/store/slices/authSlice'
 import type { RootState } from '@/store/index'
 
+const baseUrl = 'https://resupply-clamshell-curtain.ngrok-free.dev/api'
 // const baseUrl = 'http://api.mediparkhospital.com/api'
-const baseUrl = 'http://api.mediparkhospital.com/api'
 // const baseUrl = 'http://192.168.0.8:8000/api' // For local development
 
 // Common headers for JSON requests
 const getCommonHeaders = (token: string | null, isFormData = false) => {
   const headers = new Headers({
     'Accept': 'application/json',
+    'ngrok-skip-browser-warning': '69420',
   })
 
   if (!isFormData) {

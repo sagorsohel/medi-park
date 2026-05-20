@@ -3,6 +3,7 @@ import {
   LayoutGrid,
   HandCoins,
   Share2,
+  Receipt,
   type LucideIcon
 } from "lucide-react";
 
@@ -61,6 +62,13 @@ export function getCRMMenuList(pathname: string): Group[] {
           label: "Share Manage",
           active: pathname.includes("/accounting/software/share-manage"),
           icon: Share2,
+          submenus: []
+        },
+        {
+          href: "/accounting/software/expenses",
+          label: "Expenses",
+          active: pathname.includes("/accounting/software/expenses"),
+          icon: Receipt,
           submenus: []
         }
       ]
