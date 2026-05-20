@@ -4,7 +4,7 @@ import { Link } from "react-router";
 import { useGetFooterContactQuery, useGetSocialLinksQuery, useGetBranchesQuery } from "@/services/contactPageApi";
 import { useGetHeadingsQuery } from "@/services/headingApi";
 import { useMemo } from "react";
-import { Facebook, Youtube, Instagram, Linkedin, MapPin, Phone, Mail, ChevronRight, ChevronUp } from "lucide-react";
+import { Facebook, Youtube, Linkedin, MapPin, Phone, Mail, ChevronRight, ChevronUp } from "lucide-react";
 
 export function WebsiteFooter() {
   const currentYear = new Date().getFullYear();
@@ -21,7 +21,7 @@ export function WebsiteFooter() {
   const footerContact = footerContactData?.data;
   const headings = headingsData?.data;
   const { data: branchesData } = useGetBranchesQuery();
-  
+
   // Find the main branch
   const mainBranch = useMemo(() => {
     if (!branchesData?.data) return null;
@@ -78,7 +78,7 @@ export function WebsiteFooter() {
                 { name: 'Contact', to: '/contacts' },
                 { name: 'Health Package', to: '/health-package' },
               ].map((link, i) => (
-                <li key={i} className="border-b-2 border-white/10 transition-colors hover:border-white/30">
+                <li key={i} className="border-b border-white transition-colors">
                   <Link to={link.to} className="flex items-center  py-3 group hover:text-white transition-colors text-[16px]">
                     <ChevronRight className="w-4 h-4 mr-2.5 text-primary shrink-0 transition-transform group-hover:translate-x-1" />
                     {link.name}
@@ -101,7 +101,7 @@ export function WebsiteFooter() {
                 { name: 'Patient Stories', to: '/patient-stories' },
                 { name: 'About Us', to: '/about' },
               ].map((link, i) => (
-                <li key={i} className="border-b-2 border-white/10 transition-colors hover:border-white/30">
+                <li key={i} className="border-b border-white transition-colors">
                   <Link to={link.to} className="flex items-center  py-3 group hover:text-white transition-colors text-[16px]">
                     <ChevronRight className="w-4 h-4 mr-2.5 text-primary shrink-0 transition-transform group-hover:translate-x-1" />
                     {link.name}
@@ -170,7 +170,7 @@ export function WebsiteFooter() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4 relative pr-16 md:pr-0">
 
           <div className="text-[13px] text-blue-100/50 font-medium text-center md:text-left flex flex-col space-y-2">
-            <p className="text-blue-100/60">Copyright © {currentYear}. All Rights Reserved. MediPark Hospital LTD..</p>
+            <p className="text-blue-100/60">Copyright © {currentYear}. All Rights Reserved. MediPark Hospital Ltd.</p>
             <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 text-primary">
               <Link to="/disclaimer" className="hover:text-white transition-colors">Disclaimer</Link>
               <span className="text-blue-100/20">|</span>
