@@ -16,7 +16,8 @@ import {
   Building,
   Type,
   DollarSign,
-  Heart
+  Heart,
+  Bell
 } from "lucide-react";
 
 type Submenu = {
@@ -180,6 +181,12 @@ export function getMenuList(_pathname: string): Group[] {
           href: "/admin/website/health-insight",
           label: "Health insight",
           icon: Package,
+          submenus: []
+        },
+        {
+          href: "/admin/notices",
+          label: "Notice Board",
+          icon: Bell,
           submenus: []
         },
       ]

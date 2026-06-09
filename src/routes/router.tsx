@@ -67,6 +67,8 @@ import ExpensesPage from '@/pages/admin/expenses/expenses-page'
 import AddExpensePage from '@/pages/admin/expenses/add-expense-page'
 import VendorsPage from '@/pages/admin/vendors/vendors-page'
 import AddVendorPage from '@/pages/admin/vendors/add-vendor-page'
+import EquipmentPagesPage from '@/pages/admin/equipment-pages/equipment-pages'
+import AddEquipmentPagePage from '@/pages/admin/equipment-pages/add-equipment-page'
 import AppointmentPage from '@/pages/appointment/appointment-page'
 import ReportsPage from '@/pages/reports/reports-page'
 import TelemedicinePage from '@/pages/telemedicine/telemedicine-page'
@@ -89,6 +91,8 @@ import HomepagePricingsPage from '@/pages/admin/homepage-pricings/homepage-prici
 import AddHomepagePricingPage from '@/pages/admin/homepage-pricings/add-homepage-pricing-page'
 import HeadingsManagePage from '@/pages/admin/headings-manage-page'
 import OurValuesManagePage from '@/pages/admin/our-values-manage-page'
+import NoticesPage from '@/pages/admin/notices/notices-page'
+import AddNoticePage from '@/pages/admin/notices/add-notice-page'
 
 import PackageDetailPage from '@/pages/packages/package-detail-page'
 import PublicPackagesPage from '@/pages/packages/public-packages-page'
@@ -177,6 +181,10 @@ const router = createBrowserRouter([
       { path: "vendors/new", element: <AddVendorPage /> },
       { path: "vendors/edit/:id", element: <AddVendorPage /> },
       { path: "vendors/view/:id", element: <AddVendorPage /> },
+      { path: "equipment-pages", element: <EquipmentPagesPage /> },
+      { path: "equipment-pages/new", element: <AddEquipmentPagePage /> },
+      { path: "equipment-pages/edit/:id", element: <AddEquipmentPagePage /> },
+      { path: "equipment-pages/view/:id", element: <AddEquipmentPagePage /> },
     ],
   },
 
@@ -253,6 +261,10 @@ const router = createBrowserRouter([
       { path: "homepage-pricings/edit/:id", element: <AddHomepagePricingPage /> },
       { path: "headings", element: <HeadingsManagePage /> },
       { path: "website/our-values", element: <OurValuesManagePage /> },
+      { path: "notices", element: <NoticesPage /> },
+      { path: "notices/new", element: <AddNoticePage /> },
+      { path: "notices/edit/:id", element: <AddNoticePage /> },
+      { path: "notices/view/:id", element: <AddNoticePage /> },
     ],
   },
 
