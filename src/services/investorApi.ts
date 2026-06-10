@@ -7,6 +7,8 @@ export interface Investor {
   applicant_full_name?: string;
   fathers_name?: string;
   mothers_name?: string;
+  father_alive?: number | boolean | null;
+  mother_alive?: number | boolean | null;
   spouses_name?: string;
   investor_name: string;
   email_address: string;
@@ -554,6 +556,25 @@ export const investorApi = api.injectEndpoints({
         { type: "InvestorFamilyMember" as const, id: `LIST_${investorId}` },
       ],
     }),
+    updateParentStatus: builder.mutation<
+      { success: boolean; message: string; data: any },
+      { id: number; father_alive?: boolean | number; mother_alive?: boolean | number }
+    >({
+      query: ({ id, father_alive, mother_alive }) => {
+        const body: any = {};
+        if (father_alive !== undefined) body.father_alive = father_alive ? 1 : 0;
+        if (mother_alive !== undefined) body.mother_alive = mother_alive ? 1 : 0;
+        return {
+          url: `/investors/${id}/parent-status`,
+          method: "PATCH",
+          body,
+        };
+      },
+      invalidatesTags: (result, error, { id }) => [
+        { type: "Investor", id },
+        { type: "Investor", id: "LIST" },
+      ],
+    }),
   }),
 });
 
@@ -567,5 +588,6 @@ export const {
   useCreateInvestorFamilyMemberMutation,
   useUpdateInvestorFamilyMemberMutation,
   useDeleteInvestorFamilyMemberMutation,
+  useUpdateParentStatusMutation,
 } = investorApi;
 

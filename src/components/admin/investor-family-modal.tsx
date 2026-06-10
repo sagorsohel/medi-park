@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import {
   Dialog,
   DialogContent,
@@ -29,6 +29,8 @@ import {
   useCreateInvestorFamilyMemberMutation,
   useUpdateInvestorFamilyMemberMutation,
   useDeleteInvestorFamilyMemberMutation,
+  useGetInvestorByIdQuery,
+  useUpdateParentStatusMutation,
   type InvestorFamilyMember,
 } from "@/services/investorApi";
 import toast from "react-hot-toast";
@@ -50,6 +52,36 @@ export function InvestorFamilyModal({
   const { data: familyData, isLoading, refetch } = useGetInvestorFamilyMembersQuery(investorId, {
     skip: !open || !investorId,
   });
+
+  const { data: investorData, refetch: refetchInvestor } = useGetInvestorByIdQuery(investorId, {
+    skip: !open || !investorId,
+  });
+  const [updateParentStatus, { isLoading: isUpdatingParent }] = useUpdateParentStatusMutation();
+
+  const investorInfo = investorData?.data;
+  const [localFatherAlive, setLocalFatherAlive] = useState(true);
+  const [localMotherAlive, setLocalMotherAlive] = useState(true);
+
+  // Safe parent alive status checker
+  const isParentAlive = (val: any) => {
+    if (val === undefined || val === null) return true;
+    return val === true || val === 1 || val === "1" || val === "true";
+  };
+
+  const lastInitializedId = useRef<number | null>(null);
+
+  useEffect(() => {
+    if (investorInfo) {
+      if (lastInitializedId.current !== investorId) {
+        setLocalFatherAlive(isParentAlive(investorInfo.father_alive));
+        setLocalMotherAlive(isParentAlive(investorInfo.mother_alive));
+        lastInitializedId.current = investorId;
+      }
+    } else {
+      // If investorInfo is not loaded, reset ref so it initializes when loaded
+      lastInitializedId.current = null;
+    }
+  }, [investorInfo, investorId]);
 
   const [createFamilyMember, { isLoading: isCreating }] = useCreateInvestorFamilyMemberMutation();
   const [updateFamilyMember, { isLoading: isUpdating }] = useUpdateInvestorFamilyMemberMutation();
@@ -81,9 +113,19 @@ export function InvestorFamilyModal({
     return "child";
   };
 
-  const takenRelationships = familyMembers
-    .filter((m) => !editingMember || m.id !== editingMember.id)
-    .map((m) => m.relationship);
+  const takenRelationships = useMemo(() => {
+    const taken = familyMembers
+      .filter((m) => !editingMember || m.id !== editingMember.id)
+      .map((m) => m.relationship);
+
+    if (!localFatherAlive) {
+      taken.push("father");
+    }
+    if (!localMotherAlive) {
+      taken.push("mother");
+    }
+    return taken;
+  }, [familyMembers, editingMember, localFatherAlive, localMotherAlive]);
 
   // Reset Form
   const resetForm = () => {
@@ -91,6 +133,8 @@ export function InvestorFamilyModal({
     setName("");
     
     const taken = familyMembers.map((m) => m.relationship);
+    if (!localFatherAlive) taken.push("father");
+    if (!localMotherAlive) taken.push("mother");
     setRelationship(getFirstAvailableRelationship(taken));
     
     setMobileNumber("");
@@ -215,9 +259,11 @@ export function InvestorFamilyModal({
       resetForm();
     } else {
       const taken = familyMembers.map((m) => m.relationship);
+      if (!localFatherAlive) taken.push("father");
+      if (!localMotherAlive) taken.push("mother");
       setRelationship(getFirstAvailableRelationship(taken));
     }
-  }, [open, familyMembers]);
+  }, [open, familyMembers, localFatherAlive, localMotherAlive]);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -371,6 +417,64 @@ export function InvestorFamilyModal({
                 {editingMember ? "Modify Member Details" : "Register Family Member"}
               </h3>
 
+              {/* Parent Alive Status Settings */}
+              <div className="bg-slate-100/70 border border-slate-200/50 p-4 rounded-xl space-y-3 shadow-xs">
+                <h4 className="font-extrabold text-xs text-[#0B1B3D] uppercase tracking-wider">Investor's Parent Status</h4>
+                <div className="grid grid-cols-2 gap-4">
+                  <label className="flex items-center gap-2 text-xs font-bold text-gray-700 cursor-pointer select-none">
+                    <input
+                      type="checkbox"
+                      checked={localFatherAlive}
+                      disabled={isUpdatingParent}
+                      onChange={async (e) => {
+                        const checked = e.target.checked;
+                        setLocalFatherAlive(checked);
+                        try {
+                          await updateParentStatus({
+                            id: investorId,
+                            father_alive: checked,
+                            mother_alive: localMotherAlive,
+                          }).unwrap();
+                          toast.success("Investor father status updated");
+                          refetchInvestor();
+                        } catch (err) {
+                          setLocalFatherAlive(!checked);
+                          toast.error("Failed to update father status");
+                        }
+                      }}
+                      className="w-4 h-4 text-[#0B1B3D] focus:ring-[#0B1B3D] rounded border-input"
+                    />
+                    <span>Father is Alive</span>
+                  </label>
+                  
+                  <label className="flex items-center gap-2 text-xs font-bold text-gray-700 cursor-pointer select-none">
+                    <input
+                      type="checkbox"
+                      checked={localMotherAlive}
+                      disabled={isUpdatingParent}
+                      onChange={async (e) => {
+                        const checked = e.target.checked;
+                        setLocalMotherAlive(checked);
+                        try {
+                          await updateParentStatus({
+                            id: investorId,
+                            father_alive: localFatherAlive,
+                            mother_alive: checked,
+                          }).unwrap();
+                          toast.success("Investor mother status updated");
+                          refetchInvestor();
+                        } catch (err) {
+                          setLocalMotherAlive(!checked);
+                          toast.error("Failed to update mother status");
+                        }
+                      }}
+                      className="w-4 h-4 text-[#0B1B3D] focus:ring-[#0B1B3D] rounded border-input"
+                    />
+                    <span>Mother is Alive</span>
+                  </label>
+                </div>
+              </div>
+
               {/* Avatar Field with upload */}
               <div className="flex flex-col items-center space-y-2 py-2">
                 <div className="relative group cursor-pointer">
@@ -425,10 +529,10 @@ export function InvestorFamilyModal({
                   </option>
                   <option value="child">Child</option>
                   <option value="father" disabled={takenRelationships.includes("father")}>
-                    Father {takenRelationships.includes("father") ? "(Already exists)" : ""}
+                    Father {!localFatherAlive ? " (Deceased in profile)" : takenRelationships.includes("father") ? " (Already exists)" : ""}
                   </option>
                   <option value="mother" disabled={takenRelationships.includes("mother")}>
-                    Mother {takenRelationships.includes("mother") ? "(Already exists)" : ""}
+                    Mother {!localMotherAlive ? " (Deceased in profile)" : takenRelationships.includes("mother") ? " (Already exists)" : ""}
                   </option>
                 </select>
               </div>
