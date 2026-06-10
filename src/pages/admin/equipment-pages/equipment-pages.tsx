@@ -210,7 +210,7 @@ export default function EquipmentPagesPage() {
               </thead>
               <tbody className="divide-y divide-gray-50 text-sm">
                 {records.map((record) => {
-                  const totalPrice = record.quantity * record.unit_price;
+                  const totalPrice = (record.quantity ?? 0) * (record.unit_price ?? 0);
                   return (
                     <tr key={record.id} className="hover:bg-gray-50/50 transition-colors">
                       {/* Title & Purchase Info */}
@@ -226,7 +226,7 @@ export default function EquipmentPagesPage() {
                               year: "numeric",
                               month: "short",
                               day: "numeric",
-                            })}
+                              })}
                           </div>
                         )}
                       </td>
@@ -246,7 +246,7 @@ export default function EquipmentPagesPage() {
                       <td className="px-6 py-4">
                         <div className="font-bold text-slate-900">${totalPrice.toLocaleString()}</div>
                         <div className="text-gray-400 text-xs mt-0.5">
-                          {record.quantity} pcs @ ${record.unit_price.toLocaleString()}
+                          {record.quantity ?? 0} pcs @ ${(record.unit_price ?? 0).toLocaleString()}
                         </div>
                       </td>
 
@@ -255,17 +255,17 @@ export default function EquipmentPagesPage() {
                         <Badge
                           variant="outline"
                           className={
-                            record.status === "active"
+                            (record.status || "inactive") === "active"
                               ? "bg-green-50 text-green-700 border-green-200 font-bold px-3 py-1"
                               : "bg-red-50 text-red-700 border-red-200 font-bold px-3 py-1"
                           }
                         >
                           <div
                             className={`w-1.5 h-1.5 rounded-full mr-2 ${
-                              record.status === "active" ? "bg-green-500" : "bg-red-500"
+                              (record.status || "inactive") === "active" ? "bg-green-500" : "bg-red-500"
                             }`}
                           />
-                          {record.status.toUpperCase()}
+                          {(record.status || "inactive").toUpperCase()}
                         </Badge>
                       </td>
 

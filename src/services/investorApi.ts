@@ -72,6 +72,20 @@ export interface Investor {
   updated_at: string;
 }
 
+export interface InvestorFamilyMember {
+  id: number;
+  investor_id: number;
+  name: string;
+  relationship: "mother" | "father" | "child" | "wife";
+  mobile_number?: string | null;
+  nid_number?: string | null;
+  date_of_birth?: string | null;
+  is_alive: boolean | number;
+  image?: string | null;
+  created_at?: string;
+  updated_at?: string;
+}
+
 export interface InvestorPagination {
   per_page: number;
   total_count: number;
@@ -439,6 +453,89 @@ export const investorApi = api.injectEndpoints({
         { type: "Investor", id: "LIST" },
       ],
     }),
+    getInvestorFamilyMembers: builder.query<
+      { success: boolean; message: string; data: InvestorFamilyMember[] },
+      number
+    >({
+      query: (investorId) => ({
+        url: `/investors/${investorId}/family-members`,
+        method: "GET",
+      }),
+      providesTags: (result, error, investorId) =>
+        result?.data
+          ? [
+              ...result.data.map(({ id }) => ({ type: "InvestorFamilyMember" as const, id })),
+              { type: "InvestorFamilyMember", id: `LIST_${investorId}` },
+            ]
+          : [{ type: "InvestorFamilyMember", id: `LIST_${investorId}` }],
+    }),
+    createInvestorFamilyMember: builder.mutation<
+      { success: boolean; message: string; data: InvestorFamilyMember },
+      { investorId: number; data: any }
+    >({
+      query: ({ investorId, data }) => {
+        const formData = new FormData();
+        formData.append("name", data.name);
+        formData.append("relationship", data.relationship);
+        if (data.mobile_number) formData.append("mobile_number", data.mobile_number);
+        if (data.nid_number) formData.append("nid_number", data.nid_number);
+        if (data.date_of_birth) formData.append("date_of_birth", data.date_of_birth);
+        formData.append("is_alive", data.is_alive ? "1" : "0");
+        if (data.image) formData.append("image", data.image);
+
+        return {
+          url: `/investors/${investorId}/family-members`,
+          method: "POST",
+          body: formData,
+        };
+      },
+      invalidatesTags: (result, error, { investorId }) => [
+        { type: "InvestorFamilyMember" as const, id: `LIST_${investorId}` },
+      ],
+    }),
+    updateInvestorFamilyMember: builder.mutation<
+      { success: boolean; message: string; data: InvestorFamilyMember },
+      { investorId: number; familyMemberId: number; data: any }
+    >({
+      query: ({ investorId, familyMemberId, data }) => {
+        const formData = new FormData();
+        if (data.name !== undefined) formData.append("name", data.name);
+        if (data.relationship !== undefined) formData.append("relationship", data.relationship);
+        if (data.mobile_number !== undefined) formData.append("mobile_number", data.mobile_number || "");
+        if (data.nid_number !== undefined) formData.append("nid_number", data.nid_number || "");
+        if (data.date_of_birth !== undefined) formData.append("date_of_birth", data.date_of_birth || "");
+        if (data.is_alive !== undefined) formData.append("is_alive", data.is_alive ? "1" : "0");
+        if (data.image !== undefined) {
+          if (data.image) {
+            formData.append("image", data.image);
+          } else {
+            formData.append("image", "");
+          }
+        }
+        return {
+          url: `/investors/${investorId}/family-members/${familyMemberId}`,
+          method: "POST",
+          body: formData,
+        };
+      },
+      invalidatesTags: (result, error, { investorId, familyMemberId }) => [
+        { type: "InvestorFamilyMember" as const, id: familyMemberId },
+        { type: "InvestorFamilyMember" as const, id: `LIST_${investorId}` },
+      ],
+    }),
+    deleteInvestorFamilyMember: builder.mutation<
+      { success: boolean; message: string },
+      { investorId: number; familyMemberId: number }
+    >({
+      query: ({ investorId, familyMemberId }) => ({
+        url: `/investors/${investorId}/family-members/${familyMemberId}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: (result, error, { investorId, familyMemberId }) => [
+        { type: "InvestorFamilyMember" as const, id: familyMemberId },
+        { type: "InvestorFamilyMember" as const, id: `LIST_${investorId}` },
+      ],
+    }),
   }),
 });
 
@@ -448,5 +545,9 @@ export const {
   useCreateInvestorMutation,
   useUpdateInvestorMutation,
   useDeleteInvestorMutation,
+  useGetInvestorFamilyMembersQuery,
+  useCreateInvestorFamilyMemberMutation,
+  useUpdateInvestorFamilyMemberMutation,
+  useDeleteInvestorFamilyMemberMutation,
 } = investorApi;
 

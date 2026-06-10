@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 import { useGetInvestorsQuery, useDeleteInvestorMutation, type Investor } from "@/services/investorApi";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
+import { InvestorFamilyModal } from "@/components/admin/investor-family-modal";
 import toast from "react-hot-toast";
 
 export default function InvestorPage() {
@@ -19,6 +20,9 @@ export default function InvestorPage() {
     const [filter, setFilter] = useState<string>("all");
     const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
     const [investorToDelete, setInvestorToDelete] = useState<string | null>(null);
+    const [familyModalOpen, setFamilyModalOpen] = useState(false);
+    const [selectedInvestorId, setSelectedInvestorId] = useState<number | null>(null);
+    const [selectedInvestorName, setSelectedInvestorName] = useState("");
 
     const { data, isLoading, refetch } = useGetInvestorsQuery(currentPage);
     const [deleteInvestor] = useDeleteInvestorMutation();
@@ -98,6 +102,21 @@ export default function InvestorPage() {
         if (action === "delete") {
             setInvestorToDelete(id);
             setDeleteConfirmOpen(true);
+        } else if (action === "family") {
+            if (investor?.investorId) {
+                setSelectedInvestorId(investor.investorId);
+                setSelectedInvestorName(investor.applicant_full_name);
+                setFamilyModalOpen(true);
+            } else {
+                const rawInvestor = data?.data?.find((i: Investor) => i.id.toString() === id);
+                if (rawInvestor) {
+                    setSelectedInvestorId(rawInvestor.id);
+                    setSelectedInvestorName(rawInvestor.applicant_full_name || rawInvestor.investor_name || "N/A");
+                    setFamilyModalOpen(true);
+                } else {
+                    toast.error("Investor not found");
+                }
+            }
         } else if (action === "edit") {
             if (investor?.investorId) {
                 navigate(`/accounting/software/investor/edit/${investor.investorId}`);
@@ -229,6 +248,15 @@ export default function InvestorPage() {
                 cancelText="Cancel"
                 variant="destructive"
             />
+
+            {selectedInvestorId && (
+                <InvestorFamilyModal
+                    open={familyModalOpen}
+                    onOpenChange={setFamilyModalOpen}
+                    investorId={selectedInvestorId}
+                    investorName={selectedInvestorName}
+                />
+            )}
         </div>
     );
 }

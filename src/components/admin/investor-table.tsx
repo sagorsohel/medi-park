@@ -147,6 +147,9 @@ export function InvestorTable({
                                         </Button>
                                     </DropdownMenuTrigger>
                                     <DropdownMenuContent align="end">
+                                        <DropdownMenuItem onClick={() => onAction(investor.id, "family")}>
+                                            Family Members
+                                        </DropdownMenuItem>
                                         <DropdownMenuItem onClick={() => onAction(investor.id, "edit")}>
                                             Edit
                                         </DropdownMenuItem>
