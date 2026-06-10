@@ -65,6 +65,10 @@ export function InvestorFamilyModal({
   const [isAlive, setIsAlive] = useState(true);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [nidFrontFile, setNidFrontFile] = useState<File | null>(null);
+  const [nidFrontPreview, setNidFrontPreview] = useState<string | null>(null);
+  const [nidBackFile, setNidBackFile] = useState<File | null>(null);
+  const [nidBackPreview, setNidBackPreview] = useState<string | null>(null);
 
   const familyMembers = familyData?.data || [];
 
@@ -95,6 +99,10 @@ export function InvestorFamilyModal({
     setIsAlive(true);
     setImageFile(null);
     setImagePreview(null);
+    setNidFrontFile(null);
+    setNidFrontPreview(null);
+    setNidBackFile(null);
+    setNidBackPreview(null);
   };
 
   // Auto-adjust relationship if currently selected one gets registered/taken
@@ -115,6 +123,10 @@ export function InvestorFamilyModal({
     setIsAlive(Boolean(member.is_alive));
     setImageFile(null);
     setImagePreview(member.image || null);
+    setNidFrontFile(null);
+    setNidFrontPreview(member.nid_front_image || null);
+    setNidBackFile(null);
+    setNidBackPreview(member.nid_back_image || null);
   };
 
   // Handle image changes
@@ -137,7 +149,7 @@ export function InvestorFamilyModal({
       return;
     }
     if (!isAlive) {
-      toast.error("Family member status must be alive");
+      toast.error("Family member must be alive to be registered (system validation).");
       return;
     }
 
@@ -156,6 +168,8 @@ export function InvestorFamilyModal({
     if (nidNumber.trim()) payload.nid_number = nidNumber.trim();
     if (dateOfBirth) payload.date_of_birth = dateOfBirth;
     if (imageFile) payload.image = imageFile;
+    if (nidFrontFile) payload.nid_front_image = nidFrontFile;
+    if (nidBackFile) payload.nid_back_image = nidBackFile;
 
     try {
       if (editingMember) {
@@ -269,10 +283,15 @@ export function InvestorFamilyModal({
                         <span className="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-slate-100 text-[#0B1B3D] border border-slate-200">
                           {member.relationship}
                         </span>
-                        {Boolean(member.is_alive) && (
+                        {Boolean(member.is_alive) ? (
                           <span className="flex items-center gap-1 text-[10px] font-semibold text-green-600">
                             <span className="w-1.5 h-1.5 rounded-full bg-green-500" />
                             Alive
+                          </span>
+                        ) : (
+                          <span className="flex items-center gap-1 text-[10px] font-semibold text-red-500">
+                            <span className="w-1.5 h-1.5 rounded-full bg-red-500" />
+                            Dead
                           </span>
                         )}
                       </div>
@@ -301,6 +320,23 @@ export function InvestorFamilyModal({
                           </div>
                         )}
                       </div>
+
+                      {(member.nid_front_image || member.nid_back_image) && (
+                        <div className="flex gap-2 mt-2 pt-2 border-t border-gray-50">
+                          {member.nid_front_image && (
+                            <div className="relative group/nid w-16 h-10 border border-gray-100 rounded-md overflow-hidden bg-slate-50 cursor-pointer shadow-xs">
+                              <img src={member.nid_front_image} className="w-full h-full object-cover animate-fade-in" alt="NID Front" />
+                              <span className="absolute bottom-0 inset-x-0 bg-black/60 text-[8px] text-white text-center py-0.5 opacity-0 group-hover/nid:opacity-100 transition-opacity">Front</span>
+                            </div>
+                          )}
+                          {member.nid_back_image && (
+                            <div className="relative group/nid w-16 h-10 border border-gray-100 rounded-md overflow-hidden bg-slate-50 cursor-pointer shadow-xs">
+                              <img src={member.nid_back_image} className="w-full h-full object-cover animate-fade-in" alt="NID Back" />
+                              <span className="absolute bottom-0 inset-x-0 bg-black/60 text-[8px] text-white text-center py-0.5 opacity-0 group-hover/nid:opacity-100 transition-opacity">Back</span>
+                            </div>
+                          )}
+                        </div>
+                      )}
                     </div>
 
                     <div className="flex items-center gap-1.5">
@@ -433,19 +469,109 @@ export function InvestorFamilyModal({
                 />
               </div>
 
-              {/* Is Alive (accepted rule validation) */}
-              <div className="flex items-center space-x-2.5 pt-1">
-                <input
-                  id="fam-is-alive"
-                  type="checkbox"
-                  checked={isAlive}
-                  onChange={(e) => setIsAlive(e.target.checked)}
-                  className="w-4 h-4 text-primary border-input rounded focus:ring-primary accent-[#0B1B3D]"
-                  required
-                />
-                <Label htmlFor="fam-is-alive" className="text-xs font-semibold text-gray-700 cursor-pointer flex items-center gap-1.5 select-none">
-                  Family member is currently alive <span className="text-[10px] text-red-500">(Required)</span>
-                </Label>
+              {/* Is Alive (Radio Selection) */}
+              <div className="space-y-2 pt-1">
+                <Label className="text-xs font-bold text-gray-700 block">Status *</Label>
+                <div className="flex items-center gap-6">
+                  <label className="flex items-center gap-2 text-xs font-semibold text-gray-700 cursor-pointer select-none">
+                    <input
+                      type="radio"
+                      name="is_alive_radio"
+                      checked={isAlive === true}
+                      onChange={() => setIsAlive(true)}
+                      className="w-4 h-4 text-[#0B1B3D] focus:ring-[#0B1B3D]"
+                    />
+                    <span>Alive</span>
+                  </label>
+                  <label className="flex items-center gap-2 text-xs font-semibold text-gray-700 cursor-pointer select-none">
+                    <input
+                      type="radio"
+                      name="is_alive_radio"
+                      checked={isAlive === false}
+                      onChange={() => setIsAlive(false)}
+                      className="w-4 h-4 text-[#0B1B3D] focus:ring-[#0B1B3D]"
+                    />
+                    <span>Dead</span>
+                  </label>
+                </div>
+                {!isAlive && (
+                  <p className="text-[10px] text-red-500 font-medium mt-1">
+                    ⚠️ The backend validator requires family members to be alive for registration.
+                  </p>
+                )}
+              </div>
+
+              {/* NID Images Upload */}
+              <div className="grid grid-cols-2 gap-4 border-t border-gray-100 pt-4">
+                <div className="space-y-1.5">
+                  <Label className="text-xs font-bold text-gray-700">NID Front Image</Label>
+                  <div className="relative border border-dashed border-gray-300 rounded-lg p-2 bg-white flex flex-col items-center justify-center min-h-[90px] hover:border-gray-400 transition-colors cursor-pointer group">
+                    {nidFrontPreview ? (
+                      <div className="relative w-full h-16 rounded overflow-hidden">
+                        <img src={nidFrontPreview} className="w-full h-full object-cover" alt="NID Front Preview" />
+                        <label
+                          htmlFor="nid-front-upload"
+                          className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer text-[10px] text-white font-bold"
+                        >
+                          Change
+                        </label>
+                      </div>
+                    ) : (
+                      <label htmlFor="nid-front-upload" className="flex flex-col items-center justify-center w-full h-full cursor-pointer py-1">
+                        <Camera className="w-5 h-5 text-gray-400 mb-1" />
+                        <span className="text-[10px] text-gray-500 font-semibold">Upload Front</span>
+                      </label>
+                    )}
+                    <input
+                      id="nid-front-upload"
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          setNidFrontFile(file);
+                          setNidFrontPreview(URL.createObjectURL(file));
+                        }
+                      }}
+                      className="hidden"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-1.5">
+                  <Label className="text-xs font-bold text-gray-700">NID Back Image</Label>
+                  <div className="relative border border-dashed border-gray-300 rounded-lg p-2 bg-white flex flex-col items-center justify-center min-h-[90px] hover:border-gray-400 transition-colors cursor-pointer group">
+                    {nidBackPreview ? (
+                      <div className="relative w-full h-16 rounded overflow-hidden">
+                        <img src={nidBackPreview} className="w-full h-full object-cover" alt="NID Back Preview" />
+                        <label
+                          htmlFor="nid-back-upload"
+                          className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer text-[10px] text-white font-bold"
+                        >
+                          Change
+                        </label>
+                      </div>
+                    ) : (
+                      <label htmlFor="nid-back-upload" className="flex flex-col items-center justify-center w-full h-full cursor-pointer py-1">
+                        <Camera className="w-5 h-5 text-gray-400 mb-1" />
+                        <span className="text-[10px] text-gray-500 font-semibold">Upload Back</span>
+                      </label>
+                    )}
+                    <input
+                      id="nid-back-upload"
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          setNidBackFile(file);
+                          setNidBackPreview(URL.createObjectURL(file));
+                        }
+                      }}
+                      className="hidden"
+                    />
+                  </div>
+                </div>
               </div>
             </div>
 

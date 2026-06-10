@@ -82,6 +82,8 @@ export interface InvestorFamilyMember {
   date_of_birth?: string | null;
   is_alive: boolean | number;
   image?: string | null;
+  nid_front_image?: string | null;
+  nid_back_image?: string | null;
   created_at?: string;
   updated_at?: string;
 }
@@ -482,6 +484,8 @@ export const investorApi = api.injectEndpoints({
         if (data.date_of_birth) formData.append("date_of_birth", data.date_of_birth);
         formData.append("is_alive", data.is_alive ? "1" : "0");
         if (data.image) formData.append("image", data.image);
+        if (data.nid_front_image) formData.append("nid_front_image", data.nid_front_image);
+        if (data.nid_back_image) formData.append("nid_back_image", data.nid_back_image);
 
         return {
           url: `/investors/${investorId}/family-members`,
@@ -510,6 +514,20 @@ export const investorApi = api.injectEndpoints({
             formData.append("image", data.image);
           } else {
             formData.append("image", "");
+          }
+        }
+        if (data.nid_front_image !== undefined) {
+          if (data.nid_front_image) {
+            formData.append("nid_front_image", data.nid_front_image);
+          } else {
+            formData.append("nid_front_image", "");
+          }
+        }
+        if (data.nid_back_image !== undefined) {
+          if (data.nid_back_image) {
+            formData.append("nid_back_image", data.nid_back_image);
+          } else {
+            formData.append("nid_back_image", "");
           }
         }
         return {
