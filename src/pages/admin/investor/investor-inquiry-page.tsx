@@ -1,5 +1,7 @@
-import { useState } from "react";
-import { useGetInvestorAllDataQuery } from "@/services/investorApi";
+import { useState, useEffect, useRef } from "react";
+import { useGetInvestorAllDataQuery, useGetInvestorsQuery } from "@/services/investorApi";
+import type { Investor } from "@/services/investorApi";
+import { useDebounce } from "@/hooks/use-debounce";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -22,22 +24,61 @@ import {
 import toast from "react-hot-toast";
 
 export default function InvestorInquiryPage() {
-  const [searchId, setSearchId] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [showSuggestions, setShowSuggestions] = useState(false);
   const [queryId, setQueryId] = useState<string | null>(null);
+
+  const suggestionsRef = useRef<HTMLDivElement>(null);
+  const debouncedSearch = useDebounce(searchTerm, 300);
+
+  // Fetch investor suggestions as the user types
+  const { data: suggestionsResponse, isFetching: isSearchingSuggestions } = useGetInvestorsQuery(
+    { search: debouncedSearch },
+    { skip: debouncedSearch.trim().length < 2 }
+  );
 
   const { data: allDataResponse, isLoading, error } = useGetInvestorAllDataQuery(
     queryId!,
     { skip: !queryId }
   );
 
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (suggestionsRef.current && !suggestionsRef.current.contains(event.target as Node)) {
+        setShowSuggestions(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  const handleSelectInvestor = (item: Investor) => {
+    setSearchTerm(item.applicant_full_name || item.investor_name);
+    setQueryId(String(item.id));
+    setShowSuggestions(false);
+  };
+
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    const cleanId = searchId.trim();
-    if (!cleanId) {
-      toast.error("Please enter a valid Investor ID.");
+    const cleanTerm = searchTerm.trim();
+    if (!cleanTerm) {
+      toast.error("Please enter a name, file number, or ID.");
       return;
     }
-    setQueryId(cleanId);
+    // If it's a pure number, search directly by ID
+    if (/^\d+$/.test(cleanTerm)) {
+      setQueryId(cleanTerm);
+      setShowSuggestions(false);
+    } else {
+      // Fallback: Use the first suggestion result if available
+      if (suggestionsResponse?.data && suggestionsResponse.data.length > 0) {
+        handleSelectInvestor(suggestionsResponse.data[0]);
+      } else {
+        toast.error("No matching investor found. Please select a suggestion.");
+      }
+    }
   };
 
   const investor = allDataResponse?.data?.personal;
@@ -55,24 +96,74 @@ export default function InvestorInquiryPage() {
 
       {/* Search Box */}
       <form onSubmit={handleSearch} className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm max-w-xl flex gap-3 items-end">
-        <div className="flex-1 space-y-1.5">
-          <Label htmlFor="searchId" className="font-bold text-gray-700">Enter Investor ID (e.g. 1)</Label>
+        <div className="flex-1 space-y-1.5 relative" ref={suggestionsRef}>
+          <Label htmlFor="searchTerm" className="font-bold text-gray-700">Search Investor by Name, File Number, or ID</Label>
           <div className="relative">
             <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
             <Input
-              id="searchId"
+              id="searchTerm"
               type="text"
-              pattern="[0-9]*"
-              value={searchId}
-              onChange={(e) => setSearchId(e.target.value)}
-              placeholder="e.g. 1"
+              value={searchTerm}
+              onChange={(e) => {
+                setSearchTerm(e.target.value);
+                setShowSuggestions(true);
+              }}
+              onFocus={() => setShowSuggestions(true)}
+              placeholder="Type investor name, file number, or ID..."
               className="pl-10 h-11"
+              autoComplete="off"
             />
           </div>
+
+          {/* Suggestions Dropdown */}
+          {showSuggestions && searchTerm.trim().length >= 2 && (
+            <div className="absolute z-50 left-0 right-0 mt-1 bg-white border border-gray-200 rounded-xl shadow-lg max-h-60 overflow-y-auto divide-y divide-gray-100">
+              {isSearchingSuggestions ? (
+                <div className="p-3 text-center text-xs text-gray-500 flex items-center justify-center gap-2">
+                  <Loader2 className="w-3.5 h-3.5 animate-spin" /> Searching...
+                </div>
+              ) : suggestionsResponse?.data && suggestionsResponse.data.length > 0 ? (
+                suggestionsResponse.data.map((item) => (
+                  <button
+                    key={item.id}
+                    type="button"
+                    className="w-full px-4 py-3 text-left hover:bg-gray-50 transition-colors flex items-center gap-3"
+                    onClick={() => handleSelectInvestor(item)}
+                  >
+                    {item.applicant_image ? (
+                      <img
+                        src={item.applicant_image}
+                        alt={item.applicant_full_name || item.investor_name}
+                        className="w-8 h-8 rounded-full object-cover border border-gray-100"
+                      />
+                    ) : (
+                      <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-400">
+                        <User className="w-4 h-4" />
+                      </div>
+                    )}
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs font-bold text-gray-900 truncate">
+                        {item.applicant_full_name || item.investor_name}
+                      </p>
+                      <p className="text-[10px] text-gray-500 truncate flex items-center gap-1.5 mt-0.5">
+                        <span>File: {item.file_number || "-"}</span>
+                        <span>•</span>
+                        <span>ID: {item.id}</span>
+                      </p>
+                    </div>
+                  </button>
+                ))
+              ) : (
+                <div className="p-3 text-center text-xs text-gray-500">
+                  No matching investors found
+                </div>
+              )}
+            </div>
+          )}
         </div>
         <Button
           type="submit"
-          className="bg-[#0B1B3D] hover:bg-[#0B1B3D]/95 text-white h-11 px-6 font-semibold"
+          className="bg-[#0B1B3D] hover:bg-[#0B1B3D]/95 text-white h-11 px-6 font-semibold shrink-0"
           disabled={isLoading}
         >
           {isLoading && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
