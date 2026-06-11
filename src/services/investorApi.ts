@@ -11,7 +11,9 @@ export interface Investor {
   mother_alive?: number | boolean | null;
   spouses_name?: string;
   investor_name: string;
+  email?: string;
   email_address: string;
+  project_name?: string;
   mobile_number: string;
   gender: string | null;
   date_of_birth: string | null;
@@ -247,6 +249,30 @@ export interface UpdateInvestorPayload {
   reference_name_b?: string;
   rest_amount?: string;
   rest_amount_in_words?: string;
+}
+
+export interface InvestorAllData {
+  personal: Investor;
+  family_members: InvestorFamilyMember[];
+  installments: any[];
+  summary: {
+    total_amount: number;
+    paid_amount: number;
+    due_amount: number;
+    installment_dues: number;
+    booking_money: number;
+    down_payment: number;
+    installment_per_month: number;
+    next_installment_date: string | null;
+    number_of_hss: number;
+    price_per_hss: number;
+  };
+}
+
+export interface InvestorAllDataResponse {
+  success: boolean;
+  message: string;
+  data: InvestorAllData;
 }
 
 export const investorApi = api.injectEndpoints({
@@ -575,6 +601,13 @@ export const investorApi = api.injectEndpoints({
         { type: "Investor", id: "LIST" },
       ],
     }),
+    getInvestorAllData: builder.query<InvestorAllDataResponse, number | string>({
+      query: (id) => ({
+        url: `/investors/${id}/all-data`,
+        method: "GET",
+      }),
+      providesTags: (result, error, id) => [{ type: "Investor", id }],
+    }),
   }),
 });
 
@@ -589,5 +622,6 @@ export const {
   useUpdateInvestorFamilyMemberMutation,
   useDeleteInvestorFamilyMemberMutation,
   useUpdateParentStatusMutation,
+  useGetInvestorAllDataQuery,
 } = investorApi;
 

@@ -24,6 +24,7 @@ import DoctorPage from '../pages/admin/doctor/doctor-page'
 import AddDoctorPage from '../pages/admin/doctor/add-doctor-page'
 import InvestorPage from '../pages/admin/investor/investor-page'
 import AddInvestorPage from '../pages/admin/investor/add-investor-page'
+import InvestorInquiryPage from '../pages/admin/investor/investor-inquiry-page'
 import InstallmentRulesPage from '../pages/admin/installment-rules/installment-rules-page'
 import AddInstallmentRulePage from '../pages/admin/installment-rules/add-installment-rule-page'
 import BlogPage from '../pages/admin/health-insight/blog-page'
@@ -189,6 +190,7 @@ const router = createBrowserRouter([
       { path: "employees/new", element: <AddStaffPage /> },
       { path: "employees/edit/:id", element: <AddStaffPage /> },
       { path: "employees/view/:id", element: <AddStaffPage /> },
+      { path: "investor-inquiry", element: <InvestorInquiryPage /> },
     ],
   },
 
