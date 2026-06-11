@@ -3,8 +3,8 @@ import { tokenManager } from '@/lib/tokenManager'
 import { logout } from '@/store/slices/authSlice'
 import type { RootState } from '@/store/index'
 
-// const baseUrl = 'https://api.mediparkhospital.com/api'
-const baseUrl = 'https://resupply-clamshell-curtain.ngrok-free.dev/api'
+const baseUrl = 'https://api.mediparkhospital.com/api'
+// const baseUrl = 'https://resupply-clamshell-curtain.ngrok-free.dev/api'
 // const baseUrl = 'http://192.168.0.8:8000/api' // For local development
 
 // Common headers for JSON requests
