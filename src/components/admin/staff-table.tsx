@@ -52,11 +52,11 @@ export function StaffTable({
   }, [someSelected]);
 
   return (
-    <div className="overflow-x-auto">
-      <table className="w-full border-collapse min-w-[1200px]">
+    <div className="overflow-x-auto w-full">
+      <table className="w-full border-collapse">
         <thead>
           <tr className="bg-muted/50">
-            <th className="px-4 py-3 text-left border-b">
+            <th className="px-4 py-3 text-left border-b w-[50px]">
               <input
                 ref={checkboxRef}
                 type="checkbox"
@@ -66,128 +66,124 @@ export function StaffTable({
               />
             </th>
             <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700 border-b whitespace-nowrap">
-              ID No
+              Employee / Info
             </th>
             <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700 border-b whitespace-nowrap">
-              Image
+              Designation & Salary
             </th>
             <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700 border-b whitespace-nowrap">
-              Staff Name
+              Contact & Address
             </th>
-            <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700 border-b whitespace-nowrap">
-              Role
-            </th>
-            <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700 border-b whitespace-nowrap">
-              Joining Date
-            </th>
-            <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700 border-b whitespace-nowrap">
-              Address
-            </th>
-            <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700 border-b whitespace-nowrap">
-              Mobile No
-            </th>
-            <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700 border-b whitespace-nowrap">
-              Email
-            </th>
-            <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700 border-b whitespace-nowrap">
-              Salary
-            </th>
-            <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700 border-b whitespace-nowrap">
+            <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700 border-b whitespace-nowrap w-[100px]">
               Status
             </th>
-            <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700 border-b whitespace-nowrap">
+            <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700 border-b whitespace-nowrap w-[100px]">
               Action
             </th>
           </tr>
         </thead>
         <tbody>
-          {staff.map((member) => (
-            <tr key={member.id} className="bg-card hover:bg-muted/50 border-b">
-              <td className="px-4 py-3">
-                <input
-                  type="checkbox"
-                  checked={selectedIds.includes(member.id)}
-                  onChange={(e) => onSelectOne(member.id, e.target.checked)}
-                  className="w-4 h-4 text-primary border-input rounded focus:ring-primary"
-                />
-              </td>
-              <td className="px-4 py-3 text-sm text-gray-700 whitespace-nowrap">
-                {member.id}
-              </td>
-              <td className="px-4 py-3 whitespace-nowrap">
-                <Avatar className="w-10 h-10">
-                  <AvatarImage src={member.image} alt={member.name} />
-                  <AvatarFallback className="bg-secondary text-primary">
-                    {member.name
-                      .split(" ")
-                      .map((n) => n[0])
-                      .join("")
-                      .toUpperCase()
-                      .slice(0, 2)}
-                  </AvatarFallback>
-                </Avatar>
-              </td>
-              <td className="px-4 py-3 text-sm text-gray-700 whitespace-nowrap">
-                {member.name}
-              </td>
-              <td className="px-4 py-3 text-sm text-gray-700 whitespace-nowrap">
-                {member.role}
-              </td>
-              <td className="px-4 py-3 text-sm text-gray-700 whitespace-nowrap">
-                {member.joiningDate}
-              </td>
-              <td className="px-4 py-3 text-sm text-gray-700 whitespace-nowrap">
-                {member.address}
-              </td>
-              <td className="px-4 py-3 text-sm text-gray-700 whitespace-nowrap">
-                {member.mobileNo}
-              </td>
-              <td className="px-4 py-3 text-sm text-gray-700 whitespace-nowrap">
-                {member.email}
-              </td>
-              <td className="px-4 py-3 text-sm text-gray-700 whitespace-nowrap">
-                {member.salary}
-              </td>
-              <td className="px-4 py-3 whitespace-nowrap">
-                <label className="relative inline-flex items-center cursor-pointer">
+          {staff.map((member) => {
+            const displaySalary = isNaN(Number(member.salary))
+              ? member.salary
+              : Number(member.salary).toLocaleString(undefined, {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                });
+
+            return (
+              <tr key={member.id} className="bg-card hover:bg-muted/50 border-b">
+                <td className="px-4 py-3">
                   <input
                     type="checkbox"
-                    checked={member.status}
-                    onChange={(e) => onStatusChange(member.id, e.target.checked)}
-                    className="sr-only peer"
+                    checked={selectedIds.includes(member.id)}
+                    onChange={(e) => onSelectOne(member.id, e.target.checked)}
+                    className="w-4 h-4 text-primary border-input rounded focus:ring-primary"
                   />
-                  <div className="w-11 h-6 bg-input peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/50 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-                </label>
-              </td>
-              <td className="px-4 py-3 whitespace-nowrap">
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button
-                      variant="outline"
-                      className="bg-white border-gray-300 rounded-lg px-3 py-1.5 text-sm flex items-center gap-1"
-                    >
-                      Action
-                      <ChevronDown className="w-3 h-3" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuItem onClick={() => onAction(member.id, "edit")}>
-                      Edit
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => onAction(member.id, "view")}>
-                      View
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => onAction(member.id, "delete")}>
-                      Delete
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </td>
-            </tr>
-          ))}
+                </td>
+                <td className="px-4 py-3">
+                  <div className="flex items-center gap-3">
+                    <Avatar className="w-10 h-10 shrink-0">
+                      <AvatarImage src={member.image} alt={member.name} />
+                      <AvatarFallback className="bg-secondary text-primary">
+                        {member.name
+                          .split(" ")
+                          .map((n) => n[0])
+                          .join("")
+                          .toUpperCase()
+                          .slice(0, 2)}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div className="flex flex-col">
+                      <span className="font-semibold text-gray-900 text-sm">{member.name}</span>
+                      <span className="text-xs text-gray-500 flex items-center gap-1.5 mt-0.5">
+                        <span className="bg-slate-100 text-slate-700 px-1.5 py-0.5 rounded font-mono text-[10px]">
+                          {member.id}
+                        </span>
+                        <span className="text-gray-300">|</span>
+                        <span>{member.email}</span>
+                      </span>
+                    </div>
+                  </div>
+                </td>
+                <td className="px-4 py-3 text-sm">
+                  <div className="flex flex-col">
+                    <span className="font-semibold text-gray-950">{member.role}</span>
+                    <span className="text-xs text-gray-500 mt-0.5">
+                      Salary: <span className="font-medium text-gray-700">${displaySalary}</span>
+                      <span className="text-gray-300 mx-1.5">|</span>
+                      Joined: {member.joiningDate}
+                    </span>
+                  </div>
+                </td>
+                <td className="px-4 py-3 text-sm">
+                  <div className="flex flex-col">
+                    <span className="font-medium text-gray-800">{member.mobileNo}</span>
+                    <span className="text-xs text-gray-500 truncate max-w-[200px] mt-0.5" title={member.address}>
+                      {member.address}
+                    </span>
+                  </div>
+                </td>
+                <td className="px-4 py-3 whitespace-nowrap">
+                  <label className="relative inline-flex items-center cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={member.status}
+                      onChange={(e) => onStatusChange(member.id, e.target.checked)}
+                      className="sr-only peer"
+                    />
+                    <div className="w-11 h-6 bg-input peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/50 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                  </label>
+                </td>
+                <td className="px-4 py-3 whitespace-nowrap">
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className="bg-white border-gray-300 rounded-lg px-3 py-1.5 text-sm flex items-center gap-1"
+                      >
+                        Action
+                        <ChevronDown className="w-3 h-3" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem onClick={() => onAction(member.id, "edit")}>
+                        Edit
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => onAction(member.id, "view")}>
+                        View
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => onAction(member.id, "delete")}>
+                        Delete
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </div>
   );
 }
-

@@ -3,7 +3,7 @@ import { tokenManager } from '@/lib/tokenManager'
 import { logout } from '@/store/slices/authSlice'
 import type { RootState } from '@/store/index'
 
-// const baseUrl = 'https://resupply-clamshell-curtain.ngrok-free.dev/api'
+// const baseUrl = 'https://api.mediparkhospital.com/api'
 const baseUrl = 'https://resupply-clamshell-curtain.ngrok-free.dev/api'
 // const baseUrl = 'http://192.168.0.8:8000/api' // For local development
 
@@ -140,6 +140,6 @@ export const api = createApi({
     return await rawBaseQuery(args, apiObj, extraOptions)
   },
 
-  tagTypes: ['User', 'Admin', 'Size', 'Color', 'Brand', 'Category', 'Product', 'Banner', 'Order', 'Branch', 'Country', 'Unit', 'Customer', 'Subcategory', 'Supplier', 'Expense', 'Purchase', 'Sale', 'Contact', 'Stock', 'ProfitLoss', 'Dashboard', 'AboutWhoWeAre', 'AboutMission', 'AboutVision', 'AboutTransformingHealthcare', 'AboutMRCPPACES', 'AboutPageBanner', 'News', 'NewsPageBanner', 'GalleryPageBanner', 'Gallery', 'ContactPageBanner', 'ContactBranch', 'ContactMessage', 'BlogPageBanner', 'Blog', 'Doctor', 'Director', 'Investor', 'InstallmentRule', 'FutureVenture', 'ShareTransfer', 'CommissionSetting', 'HealthCheckup', 'Equipment', 'HealthCheckupPackage', 'PackagePage', 'RoomRent', 'HomepagePricing', 'CareerPage', 'JobDetail', 'JobApplication', 'VideoLink', 'Heading', "OurValue", "HomepageStats", "Vendor", "EquipmentPage", "Notice", "InvestorFamilyMember"],
+  tagTypes: ['User', 'Admin', 'Size', 'Color', 'Brand', 'Category', 'Product', 'Banner', 'Order', 'Branch', 'Country', 'Unit', 'Customer', 'Subcategory', 'Supplier', 'Expense', 'Purchase', 'Sale', 'Contact', 'Stock', 'ProfitLoss', 'Dashboard', 'AboutWhoWeAre', 'AboutMission', 'AboutVision', 'AboutTransformingHealthcare', 'AboutMRCPPACES', 'AboutPageBanner', 'News', 'NewsPageBanner', 'GalleryPageBanner', 'Gallery', 'ContactPageBanner', 'ContactBranch', 'ContactMessage', 'BlogPageBanner', 'Blog', 'Doctor', 'Director', 'Investor', 'InstallmentRule', 'FutureVenture', 'ShareTransfer', 'CommissionSetting', 'HealthCheckup', 'Equipment', 'HealthCheckupPackage', 'PackagePage', 'RoomRent', 'HomepagePricing', 'CareerPage', 'JobDetail', 'JobApplication', 'VideoLink', 'Heading', "OurValue", "HomepageStats", "Vendor", "EquipmentPage", "Notice", "InvestorFamilyMember", "Employee", "EmployeeDepartment"],
   endpoints: () => ({}),
 })

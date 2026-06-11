@@ -6,6 +6,7 @@ import {
   Receipt,
   Truck,
   ShoppingCart,
+  UserCheck,
   type LucideIcon
 } from "lucide-react";
 
@@ -85,6 +86,13 @@ export function getCRMMenuList(pathname: string): Group[] {
           label: "Equipment Purchases",
           active: pathname.includes("/accounting/software/equipment-pages"),
           icon: ShoppingCart,
+          submenus: []
+        },
+        {
+          href: "/accounting/software/employees",
+          label: "Employees",
+          active: pathname.includes("/accounting/software/employees"),
+          icon: UserCheck,
           submenus: []
         }
       ]
