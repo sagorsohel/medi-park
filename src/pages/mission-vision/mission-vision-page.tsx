@@ -81,8 +81,8 @@ export default function MissionVisionPage() {
               {/* Text */}
               <div className="max-w-4xl mx-auto px-4">
                 <div 
-                  className="text-base md:text-lg text-gray-700 leading-relaxed text-justify prose prose-lg max-w-none"
-                  dangerouslySetInnerHTML={{ __html: mission.paragraph }}
+                  className="text-base md:text-lg text-gray-700 leading-relaxed prose prose-lg max-w-none"
+                  dangerouslySetInnerHTML={{ __html: (mission.paragraph || "").replace(/&nbsp;/g, " ").replace(/\u00a0/g, " ") }}
                 />
               </div>
             </motion.div>
@@ -122,8 +122,8 @@ export default function MissionVisionPage() {
               {/* Text */}
               <div className="max-w-4xl mx-auto px-4">
                 <div 
-                  className="text-base md:text-lg text-gray-700 leading-relaxed text-justify prose prose-lg max-w-none"
-                  dangerouslySetInnerHTML={{ __html: vision.paragraph }}
+                  className="text-base md:text-lg text-gray-700 leading-relaxed prose prose-lg max-w-none"
+                  dangerouslySetInnerHTML={{ __html: (vision.paragraph || "").replace(/&nbsp;/g, " ").replace(/\u00a0/g, " ") }}
                 />
               </div>
             </motion.div>

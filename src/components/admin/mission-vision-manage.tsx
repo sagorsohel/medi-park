@@ -17,37 +17,37 @@ import ReactQuill from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css';
 
 const quillModules = {
-    toolbar: [
-        [{ header: [1, 2, 3, 4, 5, 6, false] }],
-        [{ font: [] }],
-        [{ size: [] }],
-        ["bold", "italic", "underline", "strike", "blockquote"],
-        [{ list: "ordered" }, { list: "bullet" }, { indent: "-1" }, { indent: "+1" }],
-        ["link", "image", "video"],
-        [{ color: [] }, { background: [] }],
-        [{ align: [] }],
-        ["clean"],
-    ],
+  toolbar: [
+    [{ header: [1, 2, 3, 4, 5, 6, false] }],
+    [{ font: [] }],
+    [{ size: [] }],
+    ["bold", "italic", "underline", "strike", "blockquote"],
+    [{ list: "ordered" }, { list: "bullet" }, { indent: "-1" }, { indent: "+1" }],
+    ["link", "image", "video"],
+    [{ color: [] }, { background: [] }],
+    [{ align: [] }],
+    ["clean"],
+  ],
 };
 
 const quillFormats = [
-    "header",
-    "font",
-    "size",
-    "bold",
-    "italic",
-    "underline",
-    "strike",
-    "blockquote",
-    "list",
-    "bullet",
-    "indent",
-    "link",
-    "image",
-    "video",
-    "color",
-    "background",
-    "align",
+  "header",
+  "font",
+  "size",
+  "bold",
+  "italic",
+  "underline",
+  "strike",
+  "blockquote",
+  "list",
+  "bullet",
+  "indent",
+  "link",
+  "image",
+  "video",
+  "color",
+  "background",
+  "align",
 ];
 
 interface EditableMVState {
@@ -111,37 +111,41 @@ function SectionCard({
       </CardHeader>
       <CardContent className="space-y-6 pt-6 p-6">
         {/* Preview similar to website section */}
-        <div className="w-full">
-          <div className="text-center mb-4">
-            <h2 className="text-3xl md:text-4xl font-bold text-primary mb-2">
-              {editable.title || label}
-            </h2>
-            <div className="w-0.5 h-8 bg-gray-600 mx-auto mt-2" />
-          </div>
-          <div className="flex justify-center mb-6">
-            <div className="w-full max-w-5xl rounded-[12px] overflow-hidden shadow-sm border border-gray-200">
+        <div className="w-full pb-6 border-b border-gray-100">
+          <p className="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-4">Preview (similar to website section)</p>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center bg-gray-50/50 p-6 rounded-2xl border border-gray-150 w-full min-w-0">
+            {/* Left Side: Image */}
+            <div className="w-full min-w-0 rounded-xl overflow-hidden shadow-md border border-gray-200 bg-white">
               {editable.image ? (
                 <img
                   src={editable.image}
                   alt={editable.title || label}
-                  className="w-full h-[280px] p-4 rounded-[12px] object-cover"
+                  className="w-full h-[240px] sm:h-[300px] object-cover"
                   onError={(e) => {
                     const target = e.target as HTMLImageElement;
                     target.src = "/vite.svg";
                   }}
                 />
               ) : (
-                <div className="w-full h-[280px] flex items-center justify-center text-gray-400 bg-primary/30 rounded-t-lg">
+                <div className="w-full h-[240px] sm:h-[300px] flex items-center justify-center text-gray-400 bg-gray-100">
                   No image
                 </div>
               )}
             </div>
-          </div>
-          <div className="max-w-4xl mx-auto px-2">
-            <div 
-              className="text-base md:text-lg text-gray-700 leading-relaxed text-justify prose prose-p:text-gray-700"
-              dangerouslySetInnerHTML={{ __html: editable.paragraph || "Add description here..." }}
-            />
+
+            {/* Right Side: Title & Description */}
+            <div className="flex flex-col justify-center min-w-0 w-full">
+              <div className="mb-4">
+                <h3 className="text-2xl md:text-3xl font-bold text-primary mb-2">
+                  {editable.title || label}
+                </h3>
+                <div className="w-12 h-1 bg-primary rounded-full" />
+              </div>
+              <div
+                className="text-base text-gray-700 leading-relaxed prose prose-p:text-gray-700 max-w-sm"
+                dangerouslySetInnerHTML={{ __html: (editable.paragraph || "Add description here...").replace(/&nbsp;/g, " ").replace(/\u00a0/g, " ") }}
+              />
+            </div>
           </div>
         </div>
 
@@ -298,10 +302,10 @@ export function MissionVisionManage() {
           setMissionEdit((prev) =>
             prev
               ? {
-                  ...prev,
-                  imageFile: file || undefined,
-                  image: file ? URL.createObjectURL(file) : prev.image,
-                }
+                ...prev,
+                imageFile: file || undefined,
+                image: file ? URL.createObjectURL(file) : prev.image,
+              }
               : prev,
           )
         }
@@ -320,10 +324,10 @@ export function MissionVisionManage() {
           setVisionEdit((prev) =>
             prev
               ? {
-                  ...prev,
-                  imageFile: file || undefined,
-                  image: file ? URL.createObjectURL(file) : prev.image,
-                }
+                ...prev,
+                imageFile: file || undefined,
+                image: file ? URL.createObjectURL(file) : prev.image,
+              }
               : prev,
           )
         }

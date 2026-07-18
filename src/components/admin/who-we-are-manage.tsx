@@ -163,7 +163,7 @@ export function WhoWeAreManage() {
         <CardContent className="space-y-6 pt-6 p-6">
           {/* Preview similar to website section */}
           <div className="relative w-full bg-primary py-10 rounded-xl overflow-hidden">
-            <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="w-full px-4 sm:px-6 lg:px-8">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 mb-8">
                 {[editable.image_1, editable.image_2, editable.image_3].map((img, idx) => (
                   <div key={idx} className="relative group flex justify-center">
@@ -191,7 +191,7 @@ export function WhoWeAreManage() {
                 <h1 className="text-3xl md:text-4xl font-bold text-white mb-3">{editable.title || "Who We Are"}</h1>
                 <div 
                   className="text-base md:text-lg text-white leading-relaxed max-w-4xl mx-auto prose prose-invert prose-p:text-white"
-                  dangerouslySetInnerHTML={{ __html: editable.paragraph || "Add your paragraph here..." }}
+                  dangerouslySetInnerHTML={{ __html: (editable.paragraph || "Add your paragraph here...").replace(/&nbsp;/g, " ").replace(/\u00a0/g, " ") }}
                 />
               </div>
             </div>

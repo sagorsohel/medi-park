@@ -48,7 +48,7 @@ export function MissionVisionSection() {
             <div className="mt-8 px-4 sm:px-8 md:px-10">
               <div
                 className="text-[#0B1B3D] text-[15px] md:text-base leading-relaxed w-full mx-auto font-medium"
-                dangerouslySetInnerHTML={{ __html: vision.paragraph || "To become the leading tertiary & quaternary care hospital chain, providing best-in-class, private healthcare of international standards, accessible to Bangladeshi citizens." }}
+                dangerouslySetInnerHTML={{ __html: (vision.paragraph || "To become the leading tertiary & quaternary care hospital chain, providing best-in-class, private healthcare of international standards, accessible to Bangladeshi citizens.").replace(/&nbsp;/g, " ").replace(/\u00a0/g, " ") }}
               />
             </div>
           </motion.div>
@@ -69,7 +69,7 @@ export function MissionVisionSection() {
             <div className="mt-8 px-4 sm:px-8 md:px-10">
               <div
                 className="text-[#0B1B3D] text-[15px] md:text-base leading-relaxed w-full mx-auto font-medium"
-                dangerouslySetInnerHTML={{ __html: mission.paragraph || "Set up quaternary care capabilities in all specialties so that Bangladeshi citizens do not need to travel out of country for medical treatments." }}
+                dangerouslySetInnerHTML={{ __html: (mission.paragraph || "Set up quaternary care capabilities in all specialties so that Bangladeshi citizens do not need to travel out of country for medical treatments.").replace(/&nbsp;/g, " ").replace(/\u00a0/g, " ") }}
               />
             </div>
           </motion.div>

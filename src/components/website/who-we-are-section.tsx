@@ -67,7 +67,7 @@ export function WhoWeAreSection() {
             <div className="pl-6 md:pl-8 pr-8 border-l-[3px] border-primary mb-12">
               <div
                 className="text-gray-600 text-base md:text-lg leading-relaxed   max-w-4xl"
-                dangerouslySetInnerHTML={{ __html: record.paragraph || "" }}
+                dangerouslySetInnerHTML={{ __html: (record.paragraph || "").replace(/&nbsp;/g, " ").replace(/\u00a0/g, " ") }}
               />
             </div>
 

@@ -9,7 +9,7 @@ import { VideoLinkManage } from "@/components/admin/video-link-manage";
 
 export default function AboutPageManage() {
     return (
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
 
 
