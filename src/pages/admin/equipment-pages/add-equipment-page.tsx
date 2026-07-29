@@ -139,8 +139,8 @@ export default function AddEquipmentPagePage() {
     }
   };
 
-  const equipments = equipmentsData?.data ?? [];
-  const vendors = vendorsData?.data ?? [];
+  const equipments = Array.isArray(equipmentsData) ? equipmentsData : (equipmentsData?.data ?? []);
+  const vendors = Array.isArray(vendorsData) ? vendorsData : (vendorsData?.data ?? []);
 
   if ((isRecordLoading && id) || isEquipmentsLoading || isVendorsLoading) {
     return (

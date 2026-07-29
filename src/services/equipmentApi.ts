@@ -19,16 +19,16 @@ export interface Equipment {
     equipment_category?: EquipmentCategory;
 }
 
-export interface EquipmentCategoryResponse {
-    success: boolean;
-    message: string;
+export type EquipmentCategoryResponse = EquipmentCategory[] | {
+    success?: boolean;
+    message?: string;
     data: EquipmentCategory[];
-}
+};
 
-export interface EquipmentResponse {
-    success: boolean;
-    message: string;
-    pagination: {
+export type EquipmentResponse = Equipment[] | {
+    success?: boolean;
+    message?: string;
+    pagination?: {
         per_page: number;
         total_count: number;
         total_page: number;
@@ -38,7 +38,7 @@ export interface EquipmentResponse {
         previous_page: number | null;
     };
     data: Equipment[];
-}
+};
 
 export const equipmentApi = api.injectEndpoints({
     endpoints: (builder) => ({

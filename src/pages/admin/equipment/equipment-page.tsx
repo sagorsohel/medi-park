@@ -37,6 +37,8 @@ import {
     useCreateEquipmentMutation,
     useUpdateEquipmentMutation,
     useDeleteEquipmentMutation,
+    type EquipmentCategory,
+    type Equipment,
 } from "@/services/equipmentApi";
 import { Loader2, Plus, Edit2, Trash2, PlusCircle, X } from "lucide-react";
 import toast from "react-hot-toast";
@@ -102,6 +104,10 @@ function CategoriesTab() {
 
     const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
     const [categoryToDelete, setCategoryToDelete] = useState<number | null>(null);
+
+    const categoryList: EquipmentCategory[] = Array.isArray(data)
+        ? data
+        : (Array.isArray((data as any)?.data) ? (data as any).data : []);
 
     const handleAdd = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -209,7 +215,7 @@ function CategoriesTab() {
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {data?.data.map((cat) => (
+                            {categoryList.map((cat) => (
                                 <TableRow key={cat.id} className="hover:bg-gray-50/30 transition-colors">
                                     <TableCell className="font-medium py-4">{cat.name}</TableCell>
                                     <TableCell className="py-4">
@@ -305,6 +311,15 @@ function ItemsTab() {
     const [currentPage, setCurrentPage] = useState(1);
     const { data: categories } = useGetEquipmentCategoriesQuery();
     const { data: equipments, isLoading } = useGetEquipmentsQuery(currentPage);
+
+    const categoryList: EquipmentCategory[] = Array.isArray(categories)
+        ? categories
+        : (Array.isArray((categories as any)?.data) ? (categories as any).data : []);
+
+    const equipmentList: Equipment[] = Array.isArray(equipments)
+        ? equipments
+        : (Array.isArray((equipments as any)?.data) ? (equipments as any).data : []);
+
     const [createEquipment] = useCreateEquipmentMutation();
     const [updateEquipment] = useUpdateEquipmentMutation();
     const [deleteEquipment] = useDeleteEquipmentMutation();
@@ -316,7 +331,7 @@ function ItemsTab() {
     const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
     const [itemToDelete, setItemToDelete] = useState<number | null>(null);
 
-    const metadata = equipments?.pagination;
+    const metadata = (equipments as any)?.pagination;
 
     // For Add (one category, Multiple names)
     const [addForm, setAddForm] = useState({
@@ -427,7 +442,7 @@ function ItemsTab() {
                                         <SelectValue placeholder="Choose a category" />
                                     </SelectTrigger>
                                     <SelectContent className="rounded-2xl border-gray-100 shadow-xl">
-                                        {categories?.data.map(c => (
+                                        {categoryList.map(c => (
                                             <SelectItem key={c.id} value={c.id.toString()} className="py-3 rounded-xl font-medium">
                                                 {c.name}
                                             </SelectItem>
@@ -539,8 +554,8 @@ function ItemsTab() {
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {equipments?.data.map((item) => {
-                                const categoryName = item.equipment_category?.name || categories?.data.find(c => c.id === item.equipment_category_id)?.name;
+                            {equipmentList.map((item) => {
+                                const categoryName = item.equipment_category?.name || categoryList.find(c => c.id === item.equipment_category_id)?.name;
                                 return (
                                     <TableRow key={item.id} className="hover:bg-gray-50/30">
                                         <TableCell className="font-semibold py-4 text-gray-900">{item.name}</TableCell>
@@ -642,7 +657,7 @@ function ItemsTab() {
                                     <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent className="rounded-xl">
-                                    {categories?.data.map(c => (
+                                    {categoryList.map(c => (
                                         <SelectItem key={c.id} value={c.id.toString()}>{c.name}</SelectItem>
                                     ))}
                                 </SelectContent>
