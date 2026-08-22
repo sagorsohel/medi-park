@@ -7,137 +7,43 @@ const baseUrl = 'https://api.mediparkhospital.com/api'
 // const baseUrl = 'https://resupply-clamshell-curtain.ngrok-free.dev/api'
 // const baseUrl = 'http://192.168.0.8:8000/api' // For local development
 
-// Common headers for JSON requests
-const getCommonHeaders = (token: string | null, isFormData = false) => {
-  const headers = new Headers({
-    'Accept': 'application/json',
-    'ngrok-skip-browser-warning': '69420',
-  })
-
-  if (!isFormData) {
-    headers.set('Content-Type', 'application/json')
-  }
-
-  if (token) {
-    headers.set('Authorization', `Bearer ${token}`)
-  }
-
-  return headers
-}
-
 const rawBaseQuery = fetchBaseQuery({
   baseUrl,
   credentials: 'same-origin',
   prepareHeaders: (headers, { getState }) => {
-    const token = tokenManager.getAccessToken() || (getState() as RootState).auth.token
+    const token = tokenManager.getAccessToken() || (getState() as RootState)?.auth?.token
 
-    if (!token) {
-      console.warn('[api.baseQuery] No auth token found')
+    // Attach Authorization header if token exists, otherwise proceed as public request
+    if (token) {
+      headers.set('Authorization', `Bearer ${token}`)
     }
 
-    // RTK Query headers object does not know if payload is FormData, so we skip Content-Type
-    // The actual check is done in baseQuery below
+    headers.set('Accept', 'application/json')
+    headers.set('ngrok-skip-browser-warning', '69420')
+
     return headers
   },
 })
-
-const PUBLIC_PATHS = [
-  '/public/',
-  '/auth/login',
-  '/auth/register',
-  '/auth/forgot-password',
-  '/auth/reset-password',
-  '/admin/login',
-  '/user/login',
-  '/user/register',
-  '/user/send-otp',
-  '/user/verify-otp',
-  '/user/reset-password',
-  // Public homepage endpoints
-  '/homepage-hero-sections/active',
-  '/homepage-about-us-sections/active',
-  '/homepage-facilities/active',
-  '/homepage-cta-sections/active',
-  // Public website endpoints
-  '/doctors',
-  '/health-insight',
-  '/news',
-  '/investors',
-  '/gallery',
-  '/pricing',
-  '/homepage-pricings',
-  '/health-checkup-packages',
-  '/room-rents',
-  '/equipment',
-  '/contact',
-  '/homepage-hero-sections/active',
-  '/homepage-about-us-sections/active',
-  '/homepage-facilities/active',
-  '/homepage-cta-sections/active',
-  '/homepage-cta-sections/active',
-
-  '/future-ventures',
-  "/departments",
-
-  // Public about page endpoints
-  '/about-us-page-banner-sections',
-  '/about-us-page-who-we-are-sections/active',
-  '/about-us-page-our-mission-sections/active',
-  '/about-us-page-our-vision-sections/active',
-  '/about-us-page-after-our-vision-sections/active',
-  '/about-us-page-2nd-after-our-vision-sections/active',
-  '/directors',
-  '/career-pages',
-  '/job-details',
-  '/job-applications',
-  '/homepage-stats/active',
-]
 
 export const api = createApi({
   reducerPath: 'api',
 
   baseQuery: async (args, apiObj, extraOptions) => {
-    const token = tokenManager.getAccessToken()
-    // Allow login endpoints and public endpoints without token
-    const isLoginEndpoint = apiObj.endpoint === 'adminLogin' || apiObj.endpoint === 'userLogin' || apiObj.endpoint === 'login'
-    const isPublicEndpoint = typeof args === 'object' && args !== null &&
-      typeof args.url === 'string' && PUBLIC_PATHS.some((path) => args.url.includes(path))
+    const result = await rawBaseQuery(args, apiObj, extraOptions)
 
-    // Also check if endpoint name contains "Public" (for public queries)
-    const isPublicQuery = typeof apiObj.endpoint === 'string' && apiObj.endpoint.toLowerCase().includes('public')
-
-    if (!token && !isLoginEndpoint && !isPublicEndpoint && !isPublicQuery) {
-      // Only redirect if it's an admin route, not public website routes
+    // Handle 401 status for admin routes to redirect expired sessions
+    if (result.error && result.error.status === 401) {
       const isAdminRoute = typeof window !== 'undefined' && window.location.pathname.startsWith('/admin')
       if (isAdminRoute) {
-        console.warn('[api.baseQuery] Request blocked - no token:', apiObj.endpoint)
         apiObj.dispatch(logout())
-        if (typeof window !== 'undefined') {
+        tokenManager.clearTokens()
+        if (typeof window !== 'undefined' && !window.location.pathname.includes('/admin/login')) {
           window.location.href = '/admin/login'
         }
-        return { error: { status: 401, data: 'No auth token' } }
       }
-      // For public routes, just return error without redirect
-      return { error: { status: 401, data: 'No auth token' } }
     }
 
-    // Adjust headers for FormData
-    if (typeof args === 'object' && args !== null && args.body instanceof FormData) {
-      // Don't set Content-Type for FormData
-      const headers = getCommonHeaders(token, true)
-      const newArgs = { ...args, headers }
-      return await rawBaseQuery(newArgs, apiObj, extraOptions)
-    }
-
-    // Otherwise, normal JSON request
-    const headers = getCommonHeaders(token)
-    if (typeof args === 'string') {
-      args = { url: args, headers }
-    } else if (typeof args === 'object' && args !== null) {
-      args = { ...args, headers }
-    }
-
-    return await rawBaseQuery(args, apiObj, extraOptions)
+    return result
   },
 
   tagTypes: ['User', 'Admin', 'Size', 'Color', 'Brand', 'Category', 'Product', 'Banner', 'Order', 'Branch', 'Country', 'Unit', 'Customer', 'Subcategory', 'Supplier', 'Expense', 'Purchase', 'Sale', 'Contact', 'Stock', 'ProfitLoss', 'Dashboard', 'AboutWhoWeAre', 'AboutMission', 'AboutVision', 'AboutTransformingHealthcare', 'AboutMRCPPACES', 'AboutPageBanner', 'News', 'NewsPageBanner', 'GalleryPageBanner', 'Gallery', 'ContactPageBanner', 'ContactBranch', 'ContactMessage', 'BlogPageBanner', 'Blog', 'Doctor', 'Director', 'Investor', 'InstallmentRule', 'FutureVenture', 'ShareTransfer', 'CommissionSetting', 'HealthCheckup', 'Equipment', 'HealthCheckupPackage', 'PackagePage', 'RoomRent', 'HomepagePricing', 'CareerPage', 'JobDetail', 'JobApplication', 'VideoLink', 'Heading', "OurValue", "HomepageStats", "Vendor", "EquipmentPage", "Notice", "InvestorFamilyMember", "Employee", "EmployeeDepartment"],
