@@ -5,10 +5,12 @@ import { BreadcrumbSection } from "@/components/website/breadcrumb-section";
 
 export default function PublicEquipmentsPage() {
     const { data: equipmentsData, isLoading } = useGetEquipmentsPublicQuery();
-    const equipments = equipmentsData?.data || [];
+    const equipments: Equipment[] = Array.isArray(equipmentsData)
+        ? equipmentsData
+        : (Array.isArray((equipmentsData as any)?.data) ? (equipmentsData as any).data : []);
 
     // Group equipments by category name
-    const categorizedEquipments = equipments.reduce((acc, eq) => {
+    const categorizedEquipments = equipments.reduce((acc: Record<string, Equipment[]>, eq: Equipment) => {
         const catName = eq.equipment_category?.name || "Other Equipments";
         if (!acc[catName]) acc[catName] = [];
         acc[catName].push(eq);
@@ -53,7 +55,7 @@ export default function PublicEquipmentsPage() {
                                         {category}
                                     </h3>
                                     <ul className="space-y-3.5">
-                                        {categorizedEquipments[category].map((item) => (
+                                        {categorizedEquipments[category].map((item: Equipment) => (
                                             <li key={item.id} className="flex items-start">
                                                 <ArrowRightCircle className="w-4 h-4 shrink-0 text-[#00A884] mr-2.5 mt-[2px]" />
                                                 <span className="text-[#3fc0ad] hover:text-[#00A884] transition-colors text-[14.5px] font-medium leading-relaxed">
