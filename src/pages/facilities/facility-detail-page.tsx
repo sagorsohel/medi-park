@@ -314,18 +314,23 @@ export default function FacilityDetailPage() {
             </motion.div>
           )}
 
-          <div>
-            {facility.description2 && (
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
-                className="prose prose-lg max-w-none text-gray-700 leading-relaxed mt-6 wrap-break-word"
-              >
-                <div dangerouslySetInnerHTML={{ __html: facility.description2 }} />
-              </motion.div>
-            )}
-          </div>
+          {/* Department Wise Rich Text Section after Doctor List */}
+          {facility.description2 && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="my-12 p-8 md:p-10 rounded-3xl bg-slate-50 border border-slate-200/80 shadow-sm"
+            >
+              <h2 className="text-2xl md:text-3xl font-bold text-[#0B1B3D] mb-6 border-b pb-4 border-slate-200">
+                About {facility.title} Department & Care
+              </h2>
+              <div 
+                className="prose prose-lg max-w-none text-gray-700 leading-relaxed wrap-break-word"
+                dangerouslySetInnerHTML={{ __html: facility.description2 }}
+              />
+            </motion.div>
+          )}
 
           {/* Important Points Section */}
           {facility.footer && (

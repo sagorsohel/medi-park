@@ -99,6 +99,7 @@ import PackageDetailPage from '@/pages/packages/package-detail-page'
 import PublicPackagesPage from '@/pages/packages/public-packages-page'
 import OurValuesPage from '@/pages/our-values/our-values-page'
 import OurValuesDetailsPage from '@/pages/our-values/our-values-details-page'
+import FeedbackPage from '@/pages/feedback/feedback-page'
 
 import CRMLoginPage from '../pages/crm/login-page'
 import CRMDashboardPage from '../pages/crm/dashboard-page'
@@ -150,6 +151,7 @@ const router = createBrowserRouter([
       { path: "packages/:id", element: <PackageDetailPage /> },
       { path: "our-values", element: <OurValuesPage /> },
       { path: "our-values/:id", element: <OurValuesDetailsPage /> },
+      { path: "feedback", element: <FeedbackPage /> },
     ],
   },
 

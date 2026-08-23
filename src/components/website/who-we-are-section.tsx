@@ -58,15 +58,15 @@ export function WhoWeAreSection() {
               <h4 className="text-primary font-bold uppercase tracking-widest text-sm mb-4">
                 More About Us
               </h4>
-              <h2 className="text-4xl md:text-5xl lg:text-[50px] font-bold text-[#0B1B3D] leading-tight lg:leading-[1.15]">
+              <h2 className="text-3xl md:text-5xl lg:text-[46px] font-bold text-[#0B1B3D] leading-tight lg:leading-[1.15] break-words">
                 {record.title || "We Are A Clinic, Provide Excellence In Personalized Care"}
               </h2>
             </div>
 
             {/* Content Paragraph */}
-            <div className="pl-6 md:pl-8 pr-8 border-l-[3px] border-primary mb-12">
+            <div className="pl-6 md:pl-8 pr-4 sm:pr-8 border-l-[3px] border-primary mb-12">
               <div
-                className="text-gray-600 text-base md:text-lg leading-relaxed   max-w-4xl"
+                className="text-gray-600 text-base md:text-lg leading-relaxed max-w-4xl break-words overflow-wrap"
                 dangerouslySetInnerHTML={{ __html: (record.paragraph || "").replace(/&nbsp;/g, " ").replace(/\u00a0/g, " ") }}
               />
             </div>

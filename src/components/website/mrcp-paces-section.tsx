@@ -97,7 +97,7 @@ export function MRCPPACESSection() {
           >
             {/* Subtitle */}
             <motion.h2
-              className="text-3xl md:text-4xl lg:text-5xl font-bold text-primary mb-6 md:mb-8 text-left"
+              className="text-3xl md:text-4xl lg:text-5xl font-bold text-primary mb-6 md:mb-8 text-left break-words"
               variants={titleVariants}
             >
               {section.title}
@@ -109,8 +109,8 @@ export function MRCPPACESSection() {
               variants={textVariants}
             >
               <div 
-                className="text-base md:text-lg text-gray-700 leading-relaxed text-justify prose prose-lg max-w-none"
-                dangerouslySetInnerHTML={{ __html: section.paragraph }}
+                className="text-base md:text-lg text-gray-700 leading-relaxed text-justify prose prose-lg max-w-none break-words overflow-wrap"
+                dangerouslySetInnerHTML={{ __html: (section.paragraph || '').replace(/&nbsp;/g, ' ').replace(/\u00a0/g, ' ') }}
               />
             </motion.div>
           </motion.div>

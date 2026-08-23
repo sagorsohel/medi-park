@@ -38,7 +38,8 @@ export function WebsiteNavbar() {
   const headings = headingsData?.data;
 
   const hotline = headings?.hotline_number || (footerContact?.phone && footerContact.phone.length > 0 ? footerContact.phone[0] : "10633");
-  const whatsapp = headings?.whatsapp_number || "8801805032998";
+  const rawWhatsapp = headings?.whatsapp_number || (footerContact?.phone && footerContact.phone.length > 0 ? footerContact.phone[0] : "8801805032998");
+  const whatsapp = rawWhatsapp.replace(/[^0-9]/g, '');
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
   const [departmentsOpen, setDepartmentsOpen] = useState<boolean>(false);
@@ -291,7 +292,7 @@ export function WebsiteNavbar() {
                 <Link to="/services" className="block px-5 py-3.5 hover:bg-primary/5 hover:text-primary border-b border-gray-100 uppercase text-xs font-semibold transition-colors">Services</Link>
                 <Link to="/facilities" className="block px-5 py-3.5 hover:bg-primary/5 hover:text-primary border-b border-gray-100 uppercase text-xs font-semibold transition-colors">Facilities</Link>
                 <Link to="/health-checkup" className="block px-5 py-3.5 hover:bg-primary/5 hover:text-primary border-b border-gray-100 uppercase text-xs font-semibold transition-colors">Health Check Up</Link>
-                <Link to="/packages" className="block px-5 py-3.5 hover:bg-primary/5 hover:text-primary border-b border-gray-100 uppercase text-xs font-semibold transition-colors">Packages</Link>
+                <Link to="/packages" className="block px-5 py-3.5 hover:bg-primary/5 hover:text-primary border-b border-gray-100 uppercase text-xs font-semibold transition-colors">Health Checkup Packages</Link>
                 <Link to="/room-rent" className="block px-5 py-3.5 hover:bg-primary/5 hover:text-primary border-b border-gray-100 uppercase text-xs font-semibold transition-colors">Room Rent</Link>
                 <Link to="/equipments" className="block px-5 py-3.5 hover:bg-primary/5 hover:text-primary border-b border-gray-100 uppercase text-xs font-semibold transition-colors">Equipments</Link>
                 <Link to="/health-tips" className="block px-5 py-3.5 hover:bg-primary/5 hover:text-primary border-b border-gray-100 uppercase text-xs font-semibold transition-colors">Health Tips</Link>
@@ -491,7 +492,7 @@ export function WebsiteNavbar() {
                       <Link to="/services" onClick={() => setMobileMenuOpen(false)} className="py-2.5 text-sm font-semibold text-gray-600 uppercase">Services</Link>
                       <Link to="/facilities" onClick={() => setMobileMenuOpen(false)} className="py-2.5 text-sm font-semibold text-gray-600 uppercase">Facilities</Link>
                       <Link to="/health-checkup" onClick={() => setMobileMenuOpen(false)} className="py-2.5 text-sm font-semibold text-gray-600 uppercase">Health Check Up</Link>
-                      <Link to="/packages" onClick={() => setMobileMenuOpen(false)} className="py-2.5 text-sm font-semibold text-gray-600 uppercase">Packages</Link>
+                      <Link to="/packages" onClick={() => setMobileMenuOpen(false)} className="py-2.5 text-sm font-semibold text-gray-600 uppercase">Health Checkup Packages</Link>
                       <Link to="/room-rent" onClick={() => setMobileMenuOpen(false)} className="py-2.5 text-sm font-semibold text-gray-600 uppercase">Room Rent</Link>
                       <Link to="/equipments" onClick={() => setMobileMenuOpen(false)} className="py-2.5 text-sm font-semibold text-gray-600 uppercase">Equipments</Link>
                       <Link to="/health-tips" onClick={() => setMobileMenuOpen(false)} className="py-2.5 text-sm font-semibold text-gray-600 uppercase">Health Tips</Link>

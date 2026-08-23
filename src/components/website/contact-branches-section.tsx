@@ -42,16 +42,19 @@ export function ContactBranchesSection() {
 
             {/* Main Content - Two Columns */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-12">
-              {/* Left Column - Map Placeholder */}
+              {/* Left Column - Real Google Map */}
               <div className="w-full">
-                <div className="w-full h-[400px] md:h-[500px] bg-white border-2 border-gray-200 rounded-lg flex flex-col items-center justify-center p-8">
-                  <div className="w-20 h-20 rounded-full bg-gradient-to-br from-primary to-blue-700 flex items-center justify-center mb-4">
-                    <MapPin className="w-10 h-10 text-white" />
-                  </div>
-                  <h3 className="text-xl font-bold text-gray-800 mb-2">Interactive Map</h3>
-                  <p className="text-gray-500 text-center text-sm">
-                    Map integration would be implemented here
-                  </p>
+                <div className="w-full h-[380px] md:h-[450px] bg-gray-100 border border-gray-200 rounded-2xl overflow-hidden shadow-md">
+                  <iframe
+                    src={`https://maps.google.com/maps?q=${encodeURIComponent(branch.address || branch.name)}&t=&z=15&ie=UTF8&iwloc=&output=embed`}
+                    width="100%"
+                    height="100%"
+                    style={{ border: 0 }}
+                    allowFullScreen
+                    loading="lazy"
+                    title={branch.name}
+                    className="w-full h-full"
+                  />
                 </div>
               </div>
 

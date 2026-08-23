@@ -1,7 +1,7 @@
 "use client";
 
 import { Link } from "react-router";
-import { Stethoscope, Calendar } from "lucide-react";
+import { Stethoscope, Calendar, Building2 } from "lucide-react";
 
 interface DoctorCardProps {
   id: number;
@@ -30,12 +30,16 @@ export function DoctorCard({
   specialties,
   totalExperience = "1+ Year",
 }: DoctorCardProps) {
-  return (
-    <div className="group relative flex flex-col w-full max-w-[360px] overflow-hidden rounded-2xl bg-white border border-gray-100 shadow-sm hover:shadow-[0_20px_40px_rgba(11,27,61,0.08)] hover:-translate-y-1.5 transition-all duration-500 ease-out bg-gradient-to-b from-white to-gray-50/50">
+  const displayDegrees = degrees && degrees !== name ? degrees : "";
+  const displayRole = specialization || badge || "Consultant Specialist";
+  const displayDept = specialties || "Medical Department";
 
-      {/* Top Part: Image and Experience / Status Badges */}
-      <div className="relative p-5 pb-0 flex justify-center">
-        <div className="relative w-full h-[220px] rounded-2xl overflow-hidden shadow-md border border-gray-50 bg-gray-50/50">
+  return (
+    <div className="group relative flex flex-col w-full max-w-[360px] overflow-hidden rounded-3xl bg-white border border-slate-200/80 shadow-md hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-500 ease-out">
+
+      {/* Top Part: Image and Experience / Status Badges - Clickable Link to Doctor Details */}
+      <Link to={`/doctors/${id}`} className="relative p-5 pb-0 flex justify-center bg-slate-50/50 block">
+        <div className="relative w-full h-[220px] rounded-2xl overflow-hidden shadow-inner border border-gray-100 bg-gray-100">
           <img
             src={image}
             alt={name}
@@ -47,70 +51,62 @@ export function DoctorCard({
           />
 
           {/* Subtle overlay on the image */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-300" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-300" />
 
           {/* Experience Badge on Top-Right */}
-          <div className="absolute top-3 right-3 bg-[#0B1B3D]/95 backdrop-blur-sm text-white px-3 py-1 rounded-full text-[10px] font-extrabold tracking-widest shadow-lg border border-white/10 uppercase">
+          <div className="absolute top-3 right-3 bg-[#0B1B3D]/95 backdrop-blur-sm text-amber-300 px-3 py-1 rounded-full text-[10px] font-extrabold tracking-widest shadow-lg border border-amber-400/20 uppercase">
             {totalExperience} Exp
           </div>
-
-
         </div>
-      </div>
+      </Link>
 
-      {/* Middle Part: Name, Degrees, Designation & Department Info */}
-      <div className="flex flex-col p-5 pt-4 flex-1">
-        {/* Name */}
-        <h3 className="text-lg font-extrabold text-gray-900 leading-snug group-hover:text-primary transition-colors duration-300 truncate">
-          {name}
-        </h3>
+      {/* Middle Part: Doctor Chamber Room Door Nameplate Design - Clickable Link */}
+      <Link to={`/doctors/${id}`} className="flex flex-col p-5 pt-4 flex-1 block">
+        {/* Nameplate Plaque Box */}
+        <div className="relative rounded-2xl p-4 bg-gradient-to-b from-[#0B1B3D] via-[#0E224D] to-[#081530] text-white border-2 border-amber-400/40 shadow-[0_8px_20px_rgba(11,27,61,0.25)] transition-all duration-300 group-hover:border-amber-400/70">
+          {/* Decorative Corner Rivets / Screws */}
+          <div className="absolute top-2 left-2 w-1.5 h-1.5 rounded-full bg-amber-300/80 shadow-[inset_0_1px_1px_rgba(0,0,0,0.6)]" />
+          <div className="absolute top-2 right-2 w-1.5 h-1.5 rounded-full bg-amber-300/80 shadow-[inset_0_1px_1px_rgba(0,0,0,0.6)]" />
+          <div className="absolute bottom-2 left-2 w-1.5 h-1.5 rounded-full bg-amber-300/80 shadow-[inset_0_1px_1px_rgba(0,0,0,0.6)]" />
+          <div className="absolute bottom-2 right-2 w-1.5 h-1.5 rounded-full bg-amber-300/80 shadow-[inset_0_1px_1px_rgba(0,0,0,0.6)]" />
 
-        {/* Degrees */}
+          {/* Doctor Name */}
+          <h3 className="text-base font-extrabold text-amber-300 tracking-wide text-center leading-snug truncate uppercase drop-shadow-sm px-2">
+            {name}
+          </h3>
 
+          {/* Qualifications / Degrees */}
+          {displayDegrees && (
+            <p className="text-[11px] font-medium text-slate-200 text-center mt-1 leading-tight tracking-normal line-clamp-1 italic px-2">
+              {displayDegrees}
+            </p>
+          )}
 
-        {/* Divider */}
-        <div className="w-full h-px bg-gray-100 my-4" />
+          {/* Gold Divider Line */}
+          <div className="w-24 h-[1px] bg-gradient-to-r from-transparent via-amber-400/60 to-transparent mx-auto my-2.5" />
 
-        {/* Info Details List */}
-        <div className="flex flex-col gap-3">
-          {/* Designation Detail */}
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-primary/5 rounded-xl text-primary group-hover:bg-primary group-hover:text-white transition-all duration-300">
-              <Stethoscope className="w-4 h-4" />
+          {/* Designation & Department */}
+          <div className="flex flex-col gap-1.5 text-center px-1">
+            <div className="flex items-center justify-center gap-1.5 text-xs font-bold text-white tracking-wide truncate">
+              <Stethoscope className="w-3.5 h-3.5 text-amber-300 shrink-0" />
+              <span className="truncate">{displayRole}</span>
             </div>
-            <div className="flex flex-col min-w-0">
-              <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider leading-none">Designation</span>
-              <span className="text-xs font-bold text-gray-700 truncate mt-0.5">
-                {specialization || badge || "Consultant Specialist"}
-              </span>
-            </div>
-          </div>
-
-          {/* Department Detail */}
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-emerald-500/5 rounded-xl text-emerald-500 group-hover:bg-emerald-500 group-hover:text-white transition-all duration-300">
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-              </svg>
-            </div>
-            <div className="flex flex-col min-w-0">
-              <span className="text-[10px] text-emerald-600 font-bold uppercase tracking-wider leading-none">Department</span>
-              <span className="text-xs font-bold text-gray-700 truncate mt-0.5">
-                {specialties || "General Medicine Department"}
-              </span>
+            <div className="flex items-center justify-center gap-1.5 text-[11px] font-medium text-emerald-300 truncate">
+              <Building2 className="w-3.5 h-3.5 text-emerald-300 shrink-0" />
+              <span className="truncate">{displayDept}</span>
             </div>
           </div>
         </div>
-      </div>
+      </Link>
 
-      {/* Bottom Part: Action Button */}
+      {/* Bottom Part: Action Button linking to Doctor Details */}
       <div className="p-5 pt-0 mt-auto">
         <Link
           to={`/doctors/${id}`}
-          className="flex items-center gap-2.5 w-full justify-center py-3 bg-[#0B1B3D] text-white hover:bg-primary hover:text-white rounded-xl font-bold text-[12px] uppercase tracking-wider shadow-md hover:shadow-lg transition-all duration-300 group-hover:scale-[1.01]"
+          className="flex items-center gap-2.5 w-full justify-center py-3 bg-[#0B1B3D] hover:bg-primary text-white rounded-xl font-bold text-[12px] uppercase tracking-wider shadow-md hover:shadow-lg transition-all duration-300 group-hover:scale-[1.01]"
         >
           <Calendar className="w-4 h-4" />
-          Book Appointment
+          View Details & Appointment
         </Link>
       </div>
     </div>

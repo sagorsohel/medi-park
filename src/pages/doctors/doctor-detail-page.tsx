@@ -12,64 +12,95 @@ export default function DoctorDetailPage() {
   const { data, isLoading, error } = useGetDoctorByIdQuery(doctorId, { skip: !doctorId });
 
   // Format doctor data for display
+  // Format doctor data for display
   const doctor = useMemo(() => {
     if (!data?.data) return null;
 
     const doctorData = data.data;
 
+    // Safe parse education
+    let parsedEducation: any[] = [];
+    if (typeof doctorData.education === "string") {
+      try {
+        const parsed = JSON.parse(doctorData.education);
+        parsedEducation = Array.isArray(parsed) ? parsed : [];
+      } catch (e) {
+        parsedEducation = [];
+      }
+    } else if (Array.isArray(doctorData.education)) {
+      parsedEducation = doctorData.education;
+    }
+
     // Format qualifications from education array
     let qualifications = "";
-    if (doctorData.education && Array.isArray(doctorData.education) && doctorData.education.length > 0) {
-      qualifications = doctorData.education
+    if (parsedEducation.length > 0) {
+      qualifications = parsedEducation
         .map(edu => {
+          if (!edu) return "";
           const parts = [];
           if (edu.qualification) parts.push(edu.qualification);
           if (edu.institute_name) parts.push(`(${edu.institute_name})`);
           return parts.join(" ");
         })
-        .filter(q => q)
+        .filter(Boolean)
         .join(", ");
+    }
+
+    // Safe parse experience
+    let parsedExperience: any[] = [];
+    if (typeof doctorData.experience === "string") {
+      try {
+        const parsed = JSON.parse(doctorData.experience);
+        parsedExperience = Array.isArray(parsed) ? parsed : [];
+      } catch (e) {
+        parsedExperience = [];
+      }
+    } else if (Array.isArray(doctorData.experience)) {
+      parsedExperience = doctorData.experience;
     }
 
     // Build areas of expertise from about, experience, and education
     const areasOfExpertise: string[] = [];
 
-    if (doctorData.about) {
+    if (doctorData.about && typeof doctorData.about === "string") {
       areasOfExpertise.push(doctorData.about);
     }
 
-    if (doctorData.experience && Array.isArray(doctorData.experience)) {
-      doctorData.experience.forEach((exp: { hospital?: string; duration?: string; year?: string; designation?: string }) => {
-        if (exp.hospital || exp.duration) {
-          const expText = `Worked at ${exp.hospital || "various hospitals"}${exp.duration ? ` for ${exp.duration}` : ""}${exp.year ? ` (${exp.year})` : ""}`;
+    if (parsedExperience.length > 0) {
+      parsedExperience.forEach((exp: any) => {
+        if (exp && (exp.hospital || exp.duration || exp.hospital_name)) {
+          const hosp = exp.hospital || exp.hospital_name || "medical center";
+          const expText = `Worked at ${hosp}${exp.duration || exp.no_of_years ? ` for ${exp.duration || exp.no_of_years}` : ""}${exp.year ? ` (${exp.year})` : ""}`;
           areasOfExpertise.push(expText);
         }
       });
     }
 
-    // Split about text into paragraphs if it contains multiple sentences
-    if (doctorData.about && doctorData.about.includes('.')) {
-      const sentences = doctorData.about.split('.').filter(s => s.trim());
+    // Split about text into sentences if text is long
+    if (doctorData.about && typeof doctorData.about === "string" && doctorData.about.includes('.')) {
+      const sentences = doctorData.about.split('.').map(s => s.trim()).filter(Boolean);
       if (sentences.length > 0) {
-        areasOfExpertise.length = 0; // Clear the about we added
+        areasOfExpertise.length = 0;
         sentences.forEach(sentence => {
-          if (sentence.trim()) areasOfExpertise.push(sentence.trim() + '.');
+          areasOfExpertise.push(sentence + '.');
         });
       }
     }
 
-    if (areasOfExpertise.length === 0 && !doctorData.about) {
+    if (areasOfExpertise.length === 0) {
       areasOfExpertise.push("Experienced medical professional with extensive clinical expertise.");
     }
 
     return {
-      ...doctorData, // spread existing logic
+      ...doctorData,
       id: doctorData.id,
       image: doctorData.image || "/vite.svg",
       name: doctorData.doctor_name || "Doctor",
       qualifications: qualifications || doctorData.specialist || "Medical Professional",
       role: doctorData.specialist || "Consultant",
       department: doctorData.department || "General",
+      education: parsedEducation,
+      experience: parsedExperience,
       areasOfExpertise,
     };
   }, [data]);
@@ -147,9 +178,7 @@ export default function DoctorDetailPage() {
                       <p className="text-blue-600 underline mb-5">{doctor.department}</p>
 
                       <Link
-                        to="http://localhost:5000/appointment"
-
-                        rel="noopener noreferrer"
+                        to="/appointment"
                         className="inline-flex items-center gap-2 px-6 py-3 bg-[#0B1B3D] text-white hover:bg-primary rounded-xl font-extrabold text-xs uppercase tracking-widest shadow-md hover:shadow-lg transition-all duration-300"
                       >
                         <Calendar className="w-4 h-4" />

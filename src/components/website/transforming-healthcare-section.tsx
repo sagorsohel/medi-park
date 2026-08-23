@@ -71,7 +71,7 @@ export function TransformingHealthcareSection() {
           viewport={{ once: true, margin: "-100px" }}
           variants={titleVariants}
         >
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-primary">
+          <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold text-primary break-words leading-tight px-4">
             {section.title}
           </h2>
         </motion.div>
@@ -82,7 +82,7 @@ export function TransformingHealthcareSection() {
             {images.map((image, index) => (
               <motion.div
                 key={index}
-                className="rounded-lg overflow-hidden shadow-sm border border-gray-200"
+                className="rounded-2xl overflow-hidden shadow-md border border-gray-200"
                 custom={index}
                 initial="hidden"
                 whileInView="visible"
@@ -92,7 +92,7 @@ export function TransformingHealthcareSection() {
                 <img
                   src={image}
                   alt={`${section.title} ${index + 1}`}
-                  className="w-full h-[300px] object-cover"
+                  className="w-full h-[260px] md:h-[300px] object-cover hover:scale-105 transition-transform duration-500"
                   onError={(e) => {
                     const target = e.target as HTMLImageElement;
                     target.src = "/vite.svg";
@@ -105,15 +105,15 @@ export function TransformingHealthcareSection() {
 
         {/* Descriptive Paragraph */}
         <motion.div
-          className="max-w-4xl mx-auto"
+          className="max-w-4xl mx-auto px-4"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-50px" }}
           variants={textVariants}
         >
           <div 
-            className="text-base md:text-lg text-primary leading-relaxed text-justify prose prose-lg max-w-none"
-            dangerouslySetInnerHTML={{ __html: section.paragraph }}
+            className="text-base md:text-lg text-gray-800 leading-relaxed text-center prose prose-lg max-w-none break-words overflow-wrap"
+            dangerouslySetInnerHTML={{ __html: (section.paragraph || '').replace(/&nbsp;/g, ' ').replace(/\u00a0/g, ' ') }}
           />
         </motion.div>
       </div>

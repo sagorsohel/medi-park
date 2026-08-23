@@ -52,8 +52,11 @@ export const roomRentApi = api.injectEndpoints({
         updateRoomRent: builder.mutation<any, { id: number; data: { bed_name?: string; charges?: string | number; status?: string } }>({
             query: ({ id, data }) => ({
                 url: `/room-rents/${id}`,
-                method: "PUT",
-                body: data,
+                method: "POST",
+                body: {
+                    ...data,
+                    _method: "PUT",
+                },
             }),
             invalidatesTags: ["RoomRent"],
         }),

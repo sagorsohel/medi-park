@@ -12,8 +12,9 @@ export function ContactMapSection() {
     return branchesData.data.find(branch => branch.is_main === 1) || branchesData.data[0];
   }, [branchesData]);
 
-  // Coordinates for Forest Hills, Queens, NY (based on the map image or use mainBranch if available)
-  const mapEmbedUrl = `https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3648.5!2d90.42!3d23.82!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjPCsDQ5JzEyLjAiTiA5MMKwMjUnMTIuMCJF!5e0!3m2!1sen!2sus!4v1234567890123!5m2!1sen!2sus`;
+  // Coordinates / Address query pointing directly to hospital location
+  const addressQuery = encodeURIComponent(mainBranch?.address || "MediPark Specialized Hospital, Plot # 81, Block-E, Bashundhara R/A, Dhaka 1229, Bangladesh");
+  const mapEmbedUrl = `https://maps.google.com/maps?q=${addressQuery}&t=&z=16&ie=UTF8&iwloc=&output=embed`;
 
   return (
     <div className="w-full bg-white relative">

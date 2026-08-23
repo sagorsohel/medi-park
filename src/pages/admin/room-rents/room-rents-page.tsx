@@ -123,6 +123,10 @@ export default function RoomRentsManagePage() {
 
     const handleUpdate = async (e: React.FormEvent) => {
         e.preventDefault();
+        if (!selectedItem?.id) {
+            toast.error("No item selected for edit");
+            return;
+        }
         try {
             await updateRoomRent({
                 id: selectedItem.id,
@@ -135,6 +139,7 @@ export default function RoomRentsManagePage() {
             toast.success("Room Rent updated successfully");
             setIsEditOpen(false);
         } catch (error: any) {
+            console.error("Update room rent error:", error);
             if (error?.data?.message) {
                 toast.error(error.data.message);
             } else {

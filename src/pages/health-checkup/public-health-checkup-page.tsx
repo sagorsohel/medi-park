@@ -38,7 +38,7 @@ export default function PublicHealthCheckupPage() {
                     {/* Left Side Component (Packages) */}
                     <div className="flex-1 w-full">
                         <h2 className="text-[21px] font-bold text-[#1e293b] mb-8 tracking-wide">
-                            BSH HEALTH CHECK-UP SERVICES (PACKAGES)
+                            MEDIPARK HEALTH CHECK-UP SERVICES (PACKAGES)
                         </h2>
 
                         {packagesLoading ? (

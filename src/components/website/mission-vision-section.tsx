@@ -41,7 +41,7 @@ export function MissionVisionSection() {
             transition={{ duration: 0.6, ease: "easeOut" }}
           >
             <div className="inline-block relative w-full px-4 sm:px-8 md:px-10">
-              <h3 className="w-full px-6 md:px-12 py-4 bg-white shadow-[0_0_20px_rgba(0,0,0,0.08)] border-2 border-transparent hover:border-blue-50 text-[#0B1B3D] font-bold text-lg md:text-xl uppercase tracking-widest inline-block transition-colors">
+              <h3 className="w-full px-6 md:px-12 py-4 bg-[#0B1B3D] text-white shadow-lg rounded-2xl border-2 border-primary/40 font-bold text-lg md:text-xl uppercase tracking-widest inline-block transition-all hover:bg-primary">
                 {vision.title || "OUR VISION"}
               </h3>
             </div>
@@ -62,7 +62,7 @@ export function MissionVisionSection() {
             transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
           >
             <div className="inline-block relative w-full px-4 sm:px-8 md:px-10">
-              <h3 className="w-full px-6 md:px-12 py-4 bg-white shadow-[0_0_20px_rgba(0,0,0,0.08)] border-2 border-transparent hover:border-blue-50 text-[#0B1B3D] font-bold text-lg md:text-xl uppercase tracking-widest inline-block transition-colors">
+              <h3 className="w-full px-6 md:px-12 py-4 bg-[#0B1B3D] text-white shadow-lg rounded-2xl border-2 border-primary/40 font-bold text-lg md:text-xl uppercase tracking-widest inline-block transition-all hover:bg-primary">
                 {mission.title || "OUR MISSION"}
               </h3>
             </div>
@@ -88,7 +88,7 @@ export function MissionVisionSection() {
               transition={{ duration: 0.6, ease: "easeOut" }}
             >
               <div className="inline-block relative mb-8 px-4 sm:px-8 md:px-10 min-w-[300px] sm:min-w-[400px]">
-                <h3 className="w-full px-6 md:px-12 py-4 bg-white shadow-[0_0_20px_rgba(0,0,0,0.08)] border-2 border-transparent hover:border-blue-50 text-[#0B1B3D] font-bold text-lg md:text-xl uppercase tracking-widest inline-block transition-colors">
+                <h3 className="w-full px-6 md:px-12 py-4 bg-[#0B1B3D] text-white shadow-lg rounded-2xl border-2 border-primary/40 font-bold text-lg md:text-xl uppercase tracking-widest inline-block transition-all hover:bg-primary">
                   {headings?.our_values_title || "OUR VALUES"}
                 </h3>
               </div>
