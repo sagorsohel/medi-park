@@ -12,24 +12,30 @@ export default function DoctorDetailPage() {
   const { data, isLoading, error } = useGetDoctorByIdQuery(doctorId, { skip: !doctorId });
 
   // Format doctor data for display
-  // Format doctor data for display
   const doctor = useMemo(() => {
     if (!data?.data) return null;
 
     const doctorData = data.data;
 
-    // Safe parse education
-    let parsedEducation: any[] = [];
-    if (typeof doctorData.education === "string") {
-      try {
-        const parsed = JSON.parse(doctorData.education);
-        parsedEducation = Array.isArray(parsed) ? parsed : [];
-      } catch (e) {
-        parsedEducation = [];
+    // Safe parse helper
+    const safeParseArray = (val: any) => {
+      if (Array.isArray(val)) return val;
+      if (typeof val === "string") {
+        try {
+          const parsed = JSON.parse(val);
+          return Array.isArray(parsed) ? parsed : [];
+        } catch {
+          return val.includes(",") ? val.split(",").map((s: string) => s.trim()) : [val];
+        }
       }
-    } else if (Array.isArray(doctorData.education)) {
-      parsedEducation = doctorData.education;
-    }
+      return [];
+    };
+
+    const parsedEducation = safeParseArray(doctorData.education);
+    const parsedExperience = safeParseArray(doctorData.experience);
+    const parsedAwards = safeParseArray(doctorData.awards);
+    const parsedMembership = safeParseArray(doctorData.membership);
+    const parsedLanguages = safeParseArray(doctorData.known_languages);
 
     // Format qualifications from education array
     let qualifications = "";
@@ -37,6 +43,7 @@ export default function DoctorDetailPage() {
       qualifications = parsedEducation
         .map(edu => {
           if (!edu) return "";
+          if (typeof edu === "string") return edu;
           const parts = [];
           if (edu.qualification) parts.push(edu.qualification);
           if (edu.institute_name) parts.push(`(${edu.institute_name})`);
@@ -44,19 +51,6 @@ export default function DoctorDetailPage() {
         })
         .filter(Boolean)
         .join(", ");
-    }
-
-    // Safe parse experience
-    let parsedExperience: any[] = [];
-    if (typeof doctorData.experience === "string") {
-      try {
-        const parsed = JSON.parse(doctorData.experience);
-        parsedExperience = Array.isArray(parsed) ? parsed : [];
-      } catch (e) {
-        parsedExperience = [];
-      }
-    } else if (Array.isArray(doctorData.experience)) {
-      parsedExperience = doctorData.experience;
     }
 
     // Build areas of expertise from about, experience, and education
@@ -68,9 +62,14 @@ export default function DoctorDetailPage() {
 
     if (parsedExperience.length > 0) {
       parsedExperience.forEach((exp: any) => {
-        if (exp && (exp.hospital || exp.duration || exp.hospital_name)) {
+        if (!exp) return;
+        if (typeof exp === "string") {
+          areasOfExpertise.push(exp);
+          return;
+        }
+        if (exp.hospital || exp.duration || exp.hospital_name || exp.designation) {
           const hosp = exp.hospital || exp.hospital_name || "medical center";
-          const expText = `Worked at ${hosp}${exp.duration || exp.no_of_years ? ` for ${exp.duration || exp.no_of_years}` : ""}${exp.year ? ` (${exp.year})` : ""}`;
+          const expText = `${exp.designation ? `${exp.designation} at ` : "Worked at "}${hosp}${exp.duration || exp.no_of_years ? ` for ${exp.duration || exp.no_of_years}` : ""}${exp.year ? ` (${exp.year})` : ""}`;
           areasOfExpertise.push(expText);
         }
       });
@@ -101,6 +100,9 @@ export default function DoctorDetailPage() {
       department: doctorData.department || "General",
       education: parsedEducation,
       experience: parsedExperience,
+      awards: parsedAwards,
+      membership: parsedMembership,
+      known_languages: parsedLanguages,
       areasOfExpertise,
     };
   }, [data]);
@@ -138,7 +140,7 @@ export default function DoctorDetailPage() {
   }
 
   return (
-    <div className="w-full">
+    <div className="w-full bg-[#f8fafc] min-h-screen">
       {/* Hero Section */}
       <PageHeroSection image={doctor.image || "/hero1.png"} heading={'Doctor'} alt={`${doctor.name} Hero`} />
 
@@ -146,14 +148,14 @@ export default function DoctorDetailPage() {
       <BreadcrumbSection currentPage={doctor.name} />
 
       {/* Doctor Detail Content */}
-      <section className="w-full bg-white py-16">
+      <section className="w-full py-16">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <Card className="border-2 border-blue-900 p-0">
-            <CardContent className="p-6">
-              <div className="flex flex-col md:flex-row gap-8">
+          <Card className="border border-slate-200 shadow-xl rounded-3xl overflow-hidden bg-white">
+            <CardContent className="p-6 sm:p-10">
+              <div className="flex flex-col md:flex-row gap-8 items-start">
                 {/* Image */}
-                <div className="shrink-0">
-                  <div className="sm:w-64 w-full h-64 rounded-lg overflow-hidden border-4 border-gray-200">
+                <div className="shrink-0 w-full md:w-auto flex justify-center">
+                  <div className="sm:w-64 w-full h-72 rounded-2xl overflow-hidden border-2 border-slate-100 shadow-md bg-slate-50">
                     <img
                       src={doctor.image}
                       alt={doctor.name}
@@ -167,98 +169,95 @@ export default function DoctorDetailPage() {
                 </div>
 
                 {/* Content */}
-                <div className="flex-1">
-                  <div className="flex justify-between items-start mb-4">
+                <div className="flex-1 w-full">
+                  <div className="flex justify-between items-start mb-6">
                     <div>
-                      <h1 className="text-3xl font-bold text-primary mb-3">
+                      <h1 className="text-3xl sm:text-4xl font-extrabold text-[#0B1B3D] mb-2 tracking-tight">
                         {doctor.name}
                       </h1>
-                      <p className="text-gray-600 mb-2">{doctor.qualifications}</p>
-                      <p className="text-lg font-semibold text-gray-900 mb-2">{doctor.role}</p>
-                      <p className="text-blue-600 underline mb-5">{doctor.department}</p>
+                      {doctor.qualifications && (
+                        <p className="text-slate-600 font-medium text-base mb-1">{doctor.qualifications}</p>
+                      )}
+                      <p className="text-lg font-bold text-primary mb-1">{doctor.role}</p>
+                      <p className="text-sm font-semibold text-emerald-600 mb-5">{doctor.department}</p>
 
                       <Link
                         to="/appointment"
-                        className="inline-flex items-center gap-2 px-6 py-3 bg-[#0B1B3D] text-white hover:bg-primary rounded-xl font-extrabold text-xs uppercase tracking-widest shadow-md hover:shadow-lg transition-all duration-300"
+                        className="inline-flex items-center gap-2 px-8 py-3.5 bg-[#0B1B3D] hover:bg-primary text-white rounded-xl font-bold text-xs uppercase tracking-widest shadow-md hover:shadow-lg transition-all duration-300"
                       >
                         <Calendar className="w-4 h-4" />
                         Book Appointment
                       </Link>
                     </div>
+
                     {/* Logo */}
                     <div className="hidden md:block">
                       <div className="flex items-center gap-2">
-                        <img src="/color-logo.png" className="object-cover " alt="" />
+                        <img src="/color-logo.png" className="object-contain h-12" alt="MediPark Logo" />
                       </div>
                     </div>
                   </div>
 
                   {/* Personal & Contact Details */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 mt-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8 mt-6 p-5 rounded-2xl bg-slate-50 border border-slate-100">
                     {data?.data?.doctor_identity_number && (
                       <div className="flex flex-col">
-                        <span className="text-sm font-semibold text-gray-500 uppercase">Doctor ID</span>
-                        <span className="text-gray-900 font-medium">{data.data.doctor_identity_number}</span>
+                        <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">Doctor ID</span>
+                        <span className="text-gray-900 font-semibold text-sm mt-0.5">{data.data.doctor_identity_number}</span>
                       </div>
                     )}
                     {data?.data?.registration_number && (
                       <div className="flex flex-col">
-                        <span className="text-sm font-semibold text-gray-500 uppercase">Registration No.</span>
-                        <span className="text-gray-900 font-medium">{data.data.registration_number}</span>
+                        <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">Registration No.</span>
+                        <span className="text-gray-900 font-semibold text-sm mt-0.5">{data.data.registration_number}</span>
                       </div>
                     )}
                     {data?.data?.gender && (
                       <div className="flex flex-col">
-                        <span className="text-sm font-semibold text-gray-500 uppercase">Gender</span>
-                        <span className="text-gray-900 font-medium capitalize">{data.data.gender}</span>
-                      </div>
-                    )}
-                    {data?.data?.date_of_birth && (
-                      <div className="flex flex-col">
-                        <span className="text-sm font-semibold text-gray-500 uppercase">Date of Birth</span>
-                        <span className="text-gray-900 font-medium">{data.data.date_of_birth}</span>
+                        <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">Gender</span>
+                        <span className="text-gray-900 font-semibold text-sm mt-0.5 capitalize">{data.data.gender}</span>
                       </div>
                     )}
                     {data?.data?.mobile_number && (
                       <div className="flex flex-col">
-                        <span className="text-sm font-semibold text-gray-500 uppercase">Mobile</span>
-                        <span className="text-gray-900 font-medium">{data.data.mobile_number}</span>
+                        <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">Mobile</span>
+                        <span className="text-gray-900 font-semibold text-sm mt-0.5">{data.data.mobile_number}</span>
                       </div>
                     )}
                     {data?.data?.email_address && (
                       <div className="flex flex-col">
-                        <span className="text-sm font-semibold text-gray-500 uppercase">Email</span>
-                        <span className="text-gray-900 font-medium">{data.data.email_address}</span>
+                        <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">Email</span>
+                        <span className="text-gray-900 font-semibold text-sm mt-0.5">{data.data.email_address}</span>
                       </div>
                     )}
                   </div>
 
                   {/* Addresses */}
                   {(data?.data?.present_address || data?.data?.permanent_address) && (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8 p-4 bg-gray-50 rounded-lg">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8 p-5 rounded-2xl bg-slate-50 border border-slate-100">
                       {data?.data?.present_address && (
                         <div>
-                          <span className="text-sm font-semibold text-gray-500 uppercase block mb-1">Present Address</span>
-                          <span className="text-gray-800 text-sm whitespace-pre-line">{data.data.present_address}</span>
+                          <span className="text-xs font-bold text-gray-400 uppercase tracking-wider block mb-1">Present Address</span>
+                          <span className="text-gray-800 text-sm whitespace-pre-line font-medium">{data.data.present_address}</span>
                         </div>
                       )}
                       {data?.data?.permanent_address && (
                         <div>
-                          <span className="text-sm font-semibold text-gray-500 uppercase block mb-1">Permanent Address</span>
-                          <span className="text-gray-800 text-sm whitespace-pre-line">{data.data.permanent_address}</span>
+                          <span className="text-xs font-bold text-gray-400 uppercase tracking-wider block mb-1">Permanent Address</span>
+                          <span className="text-gray-800 text-sm whitespace-pre-line font-medium">{data.data.permanent_address}</span>
                         </div>
                       )}
                     </div>
                   )}
 
                   {/* Areas of Expertise / About */}
-                  {doctor.areasOfExpertise.length > 0 && (
-                    <div className="mb-6">
-                      <h2 className="text-xl font-bold text-gray-900 mb-2">About</h2>
-                      <ul className="flex flex-col gap-1 text-gray-700">
+                  {doctor.areasOfExpertise && doctor.areasOfExpertise.length > 0 && (
+                    <div className="mb-8">
+                      <h2 className="text-lg font-bold text-[#0B1B3D] mb-3">About & Expertise</h2>
+                      <ul className="flex flex-col gap-2 text-gray-700">
                         {doctor.areasOfExpertise.map((expertise: string, index: number) => (
-                          <li key={index} className="flex items-start">
-                            <span className="mr-2 text-primary">•</span>
+                          <li key={index} className="flex items-start text-sm leading-relaxed">
+                            <span className="mr-2 text-primary font-bold">•</span>
                             <span>{expertise}</span>
                           </li>
                         ))}
@@ -267,121 +266,182 @@ export default function DoctorDetailPage() {
                   )}
 
                   {/* Known Languages */}
-                  {data?.data?.known_languages && Array.isArray(data.data.known_languages) && data.data.known_languages.length > 0 && (
-                    <div className="mb-6">
-                      <h2 className="text-xl font-bold text-gray-900 mb-2">Known Languages</h2>
+                  {doctor.known_languages && doctor.known_languages.length > 0 && (
+                    <div className="mb-8">
+                      <h2 className="text-lg font-bold text-[#0B1B3D] mb-3">Known Languages</h2>
                       <div className="flex flex-wrap gap-2">
-                        {data.data.known_languages.map((lang: string, index: number) => (
-                          <span key={index} className="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm font-medium">
-                            {lang}
-                          </span>
-                        ))}
+                        {doctor.known_languages.map((lang: any, index: number) => {
+                          const langText = typeof lang === 'string'
+                            ? lang
+                            : typeof lang === 'object' && lang
+                            ? (lang.name || lang.title || lang.language || Object.values(lang).join(" "))
+                            : String(lang);
+
+                          return (
+                            <span key={index} className="px-3.5 py-1 bg-primary/10 text-primary rounded-full text-xs font-bold uppercase tracking-wide">
+                              {langText}
+                            </span>
+                          );
+                        })}
                       </div>
                     </div>
                   )}
 
                   {/* Education */}
-                  {data?.data?.education && Array.isArray(data.data.education) && data.data.education.length > 0 && (
-                    <div className="mb-6">
-                      <h2 className="text-xl font-bold text-gray-900 mb-4">Education</h2>
-                      <ul className="flex flex-col gap-4">
-                        {data.data.education.map((edu: { qualification?: string; institute_name?: string; year?: string }, index: number) => (
-                          <li key={index} className="flex items-start gap-4 p-4 bg-gray-50 rounded-lg border-l-4 border-primary shadow-sm hover:shadow-md transition-shadow">
-                            <div className="flex-1 space-y-2">
-                              {edu.qualification && (
-                                <div className="flex flex-col sm:flex-row sm:items-start gap-1">
-                                  <span className="text-sm font-semibold text-primary min-w-[120px]">Qualification:</span>
-                                  <span className="text-base font-medium text-gray-900">{edu.qualification}</span>
-                                </div>
-                              )}
-                              {edu.institute_name && (
-                                <div className="flex flex-col sm:flex-row sm:items-start gap-1">
-                                  <span className="text-sm font-semibold text-primary min-w-[120px]">Institute:</span>
-                                  <span className="text-sm text-gray-700">{edu.institute_name}</span>
-                                </div>
-                              )}
-                              {edu.year && (
-                                <div className="flex flex-col sm:flex-row sm:items-start gap-1">
-                                  <span className="text-sm font-semibold text-primary min-w-[120px]">Year:</span>
-                                  <span className="text-sm text-gray-600">{edu.year}</span>
-                                </div>
-                              )}
-                            </div>
-                          </li>
-                        ))}
+                  {doctor.education && doctor.education.length > 0 && (
+                    <div className="mb-8">
+                      <h2 className="text-lg font-bold text-[#0B1B3D] mb-4">Education</h2>
+                      <ul className="flex flex-col gap-3">
+                        {doctor.education.map((edu: any, index: number) => {
+                          if (typeof edu === "string") {
+                            return (
+                              <li key={index} className="p-4 bg-slate-50 rounded-xl border-l-4 border-primary text-sm font-medium text-gray-800">
+                                {edu}
+                              </li>
+                            );
+                          }
+                          return (
+                            <li key={index} className="flex items-start gap-4 p-4 bg-slate-50 rounded-xl border-l-4 border-primary shadow-sm">
+                              <div className="flex-1 space-y-1.5">
+                                {edu.qualification && (
+                                  <div className="flex flex-col sm:flex-row sm:items-start gap-1">
+                                    <span className="text-xs font-bold text-primary min-w-[120px] uppercase">Qualification:</span>
+                                    <span className="text-sm font-semibold text-gray-900">{edu.qualification}</span>
+                                  </div>
+                                )}
+                                {edu.institute_name && (
+                                  <div className="flex flex-col sm:flex-row sm:items-start gap-1">
+                                    <span className="text-xs font-bold text-primary min-w-[120px] uppercase">Institute:</span>
+                                    <span className="text-sm text-gray-700">{edu.institute_name}</span>
+                                  </div>
+                                )}
+                                {edu.year && (
+                                  <div className="flex flex-col sm:flex-row sm:items-start gap-1">
+                                    <span className="text-xs font-bold text-primary min-w-[120px] uppercase">Year:</span>
+                                    <span className="text-xs text-gray-600 font-medium">{edu.year}</span>
+                                  </div>
+                                )}
+                              </div>
+                            </li>
+                          );
+                        })}
                       </ul>
                     </div>
                   )}
 
                   {/* Experience */}
-                  {data?.data?.experience && Array.isArray(data.data.experience) && data.data.experience.length > 0 && (
-                    <div className="mb-6">
-                      <h2 className="text-xl font-bold text-gray-900 mb-4">Experience</h2>
-                      <ul className="flex flex-col gap-4">
-                        {data.data.experience.map((exp: { hospital?: string; duration?: string; year?: string; designation?: string }, index: number) => (
-                          <li key={index} className="flex items-start gap-4 p-4 bg-gray-50 rounded-lg border-l-4 border-primary shadow-sm hover:shadow-md transition-shadow">
-                            <div className="flex-1 space-y-2">
-                              {exp.designation && (
-                                <div className="flex flex-col sm:flex-row sm:items-start gap-1">
-                                  <span className="text-sm font-semibold text-primary min-w-[120px]">Designation:</span>
-                                  <span className="text-base font-medium text-gray-900">{exp.designation}</span>
-                                </div>
-                              )}
-                              {exp.hospital && (
-                                <div className="flex flex-col sm:flex-row sm:items-start gap-1">
-                                  <span className="text-sm font-semibold text-primary min-w-[120px]">Hospital:</span>
-                                  <span className="text-gray-700">{exp.hospital}</span>
-                                </div>
-                              )}
-                              {exp.duration && (
-                                <div className="flex flex-col sm:flex-row sm:items-start gap-1">
-                                  <span className="text-sm font-semibold text-primary min-w-[120px]">Duration:</span>
-                                  <span className="text-sm text-gray-600">{exp.duration}</span>
-                                </div>
-                              )}
-                              {exp.year && (
-                                <div className="flex flex-col sm:flex-row sm:items-start gap-1">
-                                  <span className="text-sm font-semibold text-primary min-w-[120px]">Year:</span>
-                                  <span className="text-sm text-gray-600">{exp.year}</span>
-                                </div>
-                              )}
-                            </div>
-                          </li>
-                        ))}
+                  {doctor.experience && doctor.experience.length > 0 && (
+                    <div className="mb-8">
+                      <h2 className="text-lg font-bold text-[#0B1B3D] mb-4">Experience</h2>
+                      <ul className="flex flex-col gap-3">
+                        {doctor.experience.map((exp: any, index: number) => {
+                          if (typeof exp === "string") {
+                            return (
+                              <li key={index} className="p-4 bg-slate-50 rounded-xl border-l-4 border-emerald-500 text-sm font-medium text-gray-800">
+                                {exp}
+                              </li>
+                            );
+                          }
+                          return (
+                            <li key={index} className="flex items-start gap-4 p-4 bg-slate-50 rounded-xl border-l-4 border-emerald-500 shadow-sm">
+                              <div className="flex-1 space-y-1.5">
+                                {(exp.designation || exp.title) && (
+                                  <div className="flex flex-col sm:flex-row sm:items-start gap-1">
+                                    <span className="text-xs font-bold text-emerald-600 min-w-[120px] uppercase">Designation:</span>
+                                    <span className="text-sm font-semibold text-gray-900">{exp.designation || exp.title}</span>
+                                  </div>
+                                )}
+                                {(exp.hospital || exp.hospital_name || exp.company) && (
+                                  <div className="flex flex-col sm:flex-row sm:items-start gap-1">
+                                    <span className="text-xs font-bold text-emerald-600 min-w-[120px] uppercase">Hospital/Org:</span>
+                                    <span className="text-sm text-gray-700">{exp.hospital || exp.hospital_name || exp.company}</span>
+                                  </div>
+                                )}
+                                {(exp.duration || exp.no_of_years) && (
+                                  <div className="flex flex-col sm:flex-row sm:items-start gap-1">
+                                    <span className="text-xs font-bold text-emerald-600 min-w-[120px] uppercase">Duration:</span>
+                                    <span className="text-xs text-gray-600 font-medium">{exp.duration || exp.no_of_years}</span>
+                                  </div>
+                                )}
+                                {exp.year && (
+                                  <div className="flex flex-col sm:flex-row sm:items-start gap-1">
+                                    <span className="text-xs font-bold text-emerald-600 min-w-[120px] uppercase">Year:</span>
+                                    <span className="text-xs text-gray-600 font-medium">{exp.year}</span>
+                                  </div>
+                                )}
+                              </div>
+                            </li>
+                          );
+                        })}
                       </ul>
                     </div>
                   )}
 
                   {/* Awards */}
-                  {data?.data?.awards && Array.isArray(data.data.awards) && data.data.awards.length > 0 && (
-                    <div className="mb-6">
-                      <h2 className="text-xl font-bold text-gray-900 mb-4">Awards</h2>
+                  {doctor.awards && doctor.awards.length > 0 && (
+                    <div className="mb-8">
+                      <h2 className="text-lg font-bold text-[#0B1B3D] mb-4">Awards & Recognitions</h2>
                       <ul className="flex flex-col gap-3">
-                        {data.data.awards.map((award: string, index: number) => (
-                          <li key={index} className="flex items-start gap-3 p-4 bg-gray-50 rounded-lg shadow-sm">
-                            <span className="mt-1 text-[#00A884]">
-                              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path><path d="M4 22h16"></path><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path></svg>
-                            </span>
-                            <span className="text-base text-gray-800 font-medium">{award}</span>
-                          </li>
-                        ))}
+                        {doctor.awards.map((award: any, index: number) => {
+                          const awardTitle = typeof award === 'string'
+                            ? award
+                            : typeof award === 'object' && award
+                            ? (award.title || award.name || award.description || "Award")
+                            : String(award);
+
+                          const awardYear = typeof award === 'object' && award?.year ? award.year : null;
+                          const awardDesc = typeof award === 'object' && award?.description && award.description !== awardTitle ? award.description : null;
+
+                          return (
+                            <li key={index} className="flex items-start gap-3 p-4 bg-slate-50 rounded-xl shadow-sm border border-slate-100">
+                              <span className="mt-0.5 text-amber-500">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>
+                              </span>
+                              <div className="flex-1">
+                                <div className="flex items-baseline gap-2">
+                                  <span className="text-sm text-gray-900 font-bold">{awardTitle}</span>
+                                  {awardYear && <span className="text-xs text-gray-500 font-medium">({awardYear})</span>}
+                                </div>
+                                {awardDesc && <p className="text-xs text-gray-600 mt-1">{awardDesc}</p>}
+                              </div>
+                            </li>
+                          );
+                        })}
                       </ul>
                     </div>
                   )}
 
                   {/* Membership */}
-                  {data?.data?.membership && Array.isArray(data.data.membership) && data.data.membership.length > 0 && (
-                    <div className="mb-6">
-                      <h2 className="text-xl font-bold text-gray-900 mb-4">Membership</h2>
+                  {doctor.membership && doctor.membership.length > 0 && (
+                    <div className="mb-8">
+                      <h2 className="text-lg font-bold text-[#0B1B3D] mb-4">Professional Memberships</h2>
                       <ul className="flex flex-col gap-3">
-                        {data.data.membership.map((mem: string, index: number) => (
-                          <li key={index} className="flex items-start gap-3 p-4 bg-gray-50 rounded-lg shadow-sm">
-                            <span className="mt-1 text-primary">
-                              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-                            </span>
-                            <span className="text-base text-gray-800 font-medium">{mem}</span>
-                          </li>
-                        ))}
+                        {doctor.membership.map((mem: any, index: number) => {
+                          const memTitle = typeof mem === 'string'
+                            ? mem
+                            : typeof mem === 'object' && mem
+                            ? (mem.title || mem.name || mem.organization || "Member")
+                            : String(mem);
+
+                          const memOrg = typeof mem === 'object' && mem?.organization && mem.organization !== memTitle ? mem.organization : null;
+                          const memRole = typeof mem === 'object' && mem?.role ? mem.role : null;
+
+                          return (
+                            <li key={index} className="flex items-start gap-3 p-4 bg-slate-50 rounded-xl shadow-sm border border-slate-100">
+                              <span className="mt-0.5 text-primary">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                              </span>
+                              <div className="flex-1">
+                                <span className="text-sm text-gray-900 font-bold">{memTitle}</span>
+                                {(memOrg || memRole) && (
+                                  <p className="text-xs text-gray-600 mt-0.5">
+                                    {[memRole, memOrg].filter(Boolean).join(" - ")}
+                                  </p>
+                                )}
+                              </div>
+                            </li>
+                          );
+                        })}
                       </ul>
                     </div>
                   )}
@@ -389,21 +449,21 @@ export default function DoctorDetailPage() {
                   {/* Social Media Links */}
                   {data?.data?.social_media && typeof data.data.social_media === 'object' && !Array.isArray(data.data.social_media) && Object.keys(data.data.social_media).length > 0 && (
                     <div className="pt-6 mt-4 border-t border-gray-100">
-                      <h2 className="text-base text-gray-500 uppercase font-bold tracking-wide mb-4">Connect</h2>
-                      <div className="flex items-center gap-4">
+                      <h2 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">Connect with Doctor</h2>
+                      <div className="flex items-center gap-3">
                         {data.data.social_media.facebook && (
-                          <a href={data.data.social_media.facebook} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-blue-600 transition-colors bg-gray-50 p-3 rounded-full hover:bg-blue-50">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+                          <a href={data.data.social_media.facebook} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-blue-600 transition-colors bg-slate-50 p-2.5 rounded-full hover:bg-blue-50">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
                           </a>
                         )}
                         {data.data.social_media.twitter && (
-                          <a href={data.data.social_media.twitter} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-blue-400 transition-colors bg-gray-50 p-3 rounded-full hover:bg-blue-50">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"></path></svg>
+                          <a href={data.data.social_media.twitter} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-blue-400 transition-colors bg-slate-50 p-2.5 rounded-full hover:bg-blue-50">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"></path></svg>
                           </a>
                         )}
                         {data.data.social_media.linkedin && (
-                          <a href={data.data.social_media.linkedin} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-blue-700 transition-colors bg-gray-50 p-3 rounded-full hover:bg-blue-50">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect width="4" height="12" x="2" y="9"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+                          <a href={data.data.social_media.linkedin} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-blue-700 transition-colors bg-slate-50 p-2.5 rounded-full hover:bg-blue-50">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect width="4" height="12" x="2" y="9"></rect><circle cx="4" cy="4" r="2"></circle></svg>
                           </a>
                         )}
                       </div>
@@ -418,4 +478,3 @@ export default function DoctorDetailPage() {
     </div>
   )
 }
-
